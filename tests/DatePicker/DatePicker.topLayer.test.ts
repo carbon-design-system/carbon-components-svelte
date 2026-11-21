@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
-import { positionFlatpickrCalendarFixed } from "../../src/DatePicker/date-picker-top-layer.js";
+import { positionCalendarFixed } from "../../src/DatePicker/date-picker-top-layer.js";
 import { user } from "../utils/user";
 import DatePickerHost from "./DatePickerHost.test.svelte";
 import { clickNextMonth, openCalendar } from "./helpers";
@@ -95,7 +95,7 @@ describe("DatePicker inside Popover", () => {
  * the two mis-fires the right-align decision and overhangs the calendar past
  * the real right edge by the gutter width.
  */
-describe("positionFlatpickrCalendarFixed", () => {
+describe("positionCalendarFixed", () => {
   const stubClientWidth = (value: number) => {
     Object.defineProperty(document.documentElement, "clientWidth", {
       configurable: true,
@@ -138,7 +138,7 @@ describe("positionFlatpickrCalendarFixed", () => {
       _input: positionElement,
     } as unknown as import("../../src/DatePicker/calendar").CalendarInstance;
 
-    positionFlatpickrCalendarFixed(instance, positionElement);
+    positionCalendarFixed(instance, positionElement);
 
     expect(calendarContainer.classList.contains("rightMost")).toBe(true);
     expect(calendarContainer.style.left).toBe("auto");
@@ -174,7 +174,7 @@ describe("positionFlatpickrCalendarFixed", () => {
       _input: positionElement,
     } as unknown as import("../../src/DatePicker/calendar").CalendarInstance;
 
-    positionFlatpickrCalendarFixed(instance, positionElement);
+    positionCalendarFixed(instance, positionElement);
 
     expect(calendarContainer.classList.contains("rightMost")).toBe(false);
     expect(calendarContainer.style.left).toBe("100px");
@@ -209,7 +209,7 @@ describe("positionFlatpickrCalendarFixed", () => {
       _input: positionElement,
     } as unknown as import("../../src/DatePicker/calendar").CalendarInstance;
 
-    positionFlatpickrCalendarFixed(instance, positionElement);
+    positionCalendarFixed(instance, positionElement);
 
     expect(calendarContainer.classList.contains("arrowBottom")).toBe(true);
     // input top (450) - calendar height (300) - 2px gap
@@ -230,7 +230,7 @@ describe("positionFlatpickrCalendarFixed", () => {
         value: 288,
       });
       calendarContainer.appendChild(document.createElement("div"));
-      positionFlatpickrCalendarFixed(
+      positionCalendarFixed(
         {
           calendarContainer,
           _positionElement: positionElement,

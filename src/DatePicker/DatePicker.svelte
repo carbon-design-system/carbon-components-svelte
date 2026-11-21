@@ -210,7 +210,7 @@
    * equals a string or `Date`, falls within a `{ from, to }` range, or a
    * predicate function returns `true`. Strings follow `dateFormat`.
    * When `enabledDates` is also non-empty, `enabledDates` takes priority and
-   * `disabledDates` is ignored, matching flatpickr.
+   * `disabledDates` is ignored.
    * Reassign the array to update an open calendar; mutating it in place
    * (`push`) is not reactive. If the currently selected date becomes
    * disabled by a rule change, it stays selected.
@@ -222,8 +222,7 @@
   /**
    * Specify the only dates to enable in the calendar; every other date is
    * disabled. Takes the same rule shapes as `disabledDates`. When both are
-   * non-empty, `enabledDates` takes priority and `disabledDates` is ignored,
-   * matching flatpickr.
+   * non-empty, `enabledDates` takes priority and `disabledDates` is ignored.
    * Reassign the array to update an open calendar; mutating it in place
    * (`push`) is not reactive. If the currently selected date becomes
    * disabled by a rule change, it stays selected.
@@ -511,7 +510,7 @@
   import {
     getTopLayerAncestor,
     isEventTargetInsidePortaledCalendar,
-    positionFlatpickrCalendarFixed,
+    positionCalendarFixed,
   } from "./date-picker-top-layer.js";
   import { getPropWarnings, getShortWarning } from "./unsupported-options.js";
 
@@ -692,9 +691,7 @@
     calendarUsesFixedPositioning = !!topLayerAncestor;
     engine.set({
       appendTo: topLayerAncestor ?? undefined,
-      position: topLayerAncestor
-        ? positionFlatpickrCalendarFixed
-        : propOptions.position,
+      position: topLayerAncestor ? positionCalendarFixed : propOptions.position,
       static: false,
     });
   }
@@ -853,7 +850,7 @@
     // coalesce to one pass per frame. Capture catches scroll on any ancestor;
     // passive tells the browser the handler never blocks scrolling.
     const reposition = rafThrottle(() => {
-      if (engine) positionFlatpickrCalendarFixed(engine);
+      if (engine) positionCalendarFixed(engine);
     });
     onCalendarReposition = reposition;
     unlistenReposition = addPooledListener(
@@ -1539,7 +1536,7 @@
                 static: false,
                 ...(topLayerAncestor && {
                   appendTo: topLayerAncestor,
-                  position: positionFlatpickrCalendarFixed,
+                  position: positionCalendarFixed,
                 }),
               }
             : { appendTo: datePickerRef }),
