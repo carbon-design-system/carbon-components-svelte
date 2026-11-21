@@ -2,7 +2,7 @@
 import { createCalendarEngine } from "./calendar.js";
 
 /**
- * Minimal calendar instance shape used by the Carbon hooks.
+ * The calendar instance the hooks below receive.
  * @typedef {import("./calendar.js").CalendarInstance} CalendarInstance
  */
 
@@ -120,11 +120,9 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
    * the label would point at nothing once the calendar is rebuilt without
    * one.
    *
-   * @param {Date[]} _s
-   * @param {string} _d
    * @param {CalendarInstance} instance
    */
-  function disconnectAltInputObserver(_s, _d, instance) {
+  function disconnectAltInputObserver(instance) {
     altInputObserver?.disconnect();
     altInputObserver = undefined;
     if (instance?.altInput?.id) {
@@ -152,11 +150,9 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
   }
 
   /**
-   * @param {Date[]} _s
-   * @param {string} _d
    * @param {CalendarInstance} instance
    */
-  function prepareOnReady(_s, _d, instance) {
+  function prepareOnReady(instance) {
     // `altInput` hides the original input and shows a generated one.
     // Hand it the id so the label and `for` clicks reach a visible field.
     if (instance.altInput && instance.input.id) {
@@ -182,11 +178,9 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
    * Sends the dates on show: whole months in the day grid, the year in the
    * month grid, or the twelve years in the year grid.
    *
-   * @param {Date[]} _s
-   * @param {string} _d
    * @param {CalendarInstance} instance
    */
-  function emitView(_s, _d, instance) {
+  function emitView(instance) {
     const { pickerMode, showMonths = 1 } = instance.config;
     const year = instance.currentYear;
     let start;
@@ -209,13 +203,17 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
   }
 
   const carbonHooks = {
-    onChange: [() => dispatch("change")],
-    onClose: [() => dispatch("close")],
-    onOpen: [() => dispatch("open")],
-    onMonthChange: [emitView],
-    onYearChange: [emitView],
-    onReady: [prepareOnReady, emitView],
-    onDestroy: [disconnectAltInputObserver],
+    onChange: () => dispatch("change"),
+    onClose: () => dispatch("close"),
+    onOpen: () => dispatch("open"),
+    onMonthChange: emitView,
+    onYearChange: emitView,
+    /** @param {CalendarInstance} instance */
+    onReady: (instance) => {
+      prepareOnReady(instance);
+      emitView(instance);
+    },
+    onDestroy: disconnectAltInputObserver,
   };
 
   // Building moves the input into the calendar's wrapper, which blurs it.
