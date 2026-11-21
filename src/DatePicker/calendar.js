@@ -1120,11 +1120,9 @@ export function createCalendarEngine(element, userConfig = {}) {
     const isYear = pickerMode === "year";
     const container = createElement(
       "div",
-      isYear
-        ? "bx--date-picker__grid bx--date-picker__grid--years"
-        : isQuarter
-          ? "bx--date-picker__grid bx--date-picker__grid--quarters"
-          : "bx--date-picker__grid bx--date-picker__grid--months",
+      isQuarter
+        ? "bx--date-picker__grid bx--date-picker__grid--quarters"
+        : "bx--date-picker__grid",
     );
     container.tabIndex = -1;
     container.setAttribute("role", "listbox");
@@ -1405,7 +1403,6 @@ export function createCalendarEngine(element, userConfig = {}) {
     const container = createElement("div", "bx--date-picker__calendar");
     self.calendarContainer = container;
     container.tabIndex = -1;
-    toggleClass(container, "bx--date-picker__calendar--range", isRange);
     toggleClass(
       container,
       "bx--date-picker__calendar--animate",
