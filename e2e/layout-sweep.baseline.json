@@ -456,6 +456,230 @@
     "message": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1): bordered box inside 1px outline div[data-testid=\"data-table-radio-deselect\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
   },
   {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(1) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(7)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(1) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(7): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(2) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(3)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(2) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(3): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container:nth-of-type(1) > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--described:nth-of-type(3)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--described:nth-of-type(3): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(1)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(1): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container:nth-of-type(1) > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(3)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(3): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(5)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(5): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container:nth-of-type(1) > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(2)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(2): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(3)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(3): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(4)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(4): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(5)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(5): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(6)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(6): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(7)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(7): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(4) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(5)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(4) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(5): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days:nth-of-type(1) > div.bx--date-picker__week:nth-of-type(5) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(7)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days:nth-of-type(1) > div.bx--date-picker__week:nth-of-type(5) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(7): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--multi-month:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(1) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(7)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(1) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(7): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(2) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(3)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(2) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(3): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(1)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(1): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(5)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(5): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(2)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(2): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(3)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(3): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(4)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(4): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(5)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(5): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(6)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(6): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(7)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--week:nth-of-type(7): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(4) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(5)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(4) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(5): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "rings",
+    "path": "div.bx--date-picker__body:nth-of-type(2) > div.bx--date-picker__main > div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days",
+    "message": "2 rings in div.bx--date-picker__body:nth-of-type(2) > div.bx--date-picker__main > div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days, at most 1 allowed"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 624px, clientWidth 320px"
+  },
+  {
+    "fixture": "date-picker-calendar-states.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"week-numbers-two-months\"]",
+    "message": "div[data-testid=\"week-numbers-two-months\"]: spans 16px to 624px"
+  },
+  {
     "fixture": "date-picker-fit.html",
     "variant": "320",
     "check": "overflow",
