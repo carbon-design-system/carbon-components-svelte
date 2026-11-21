@@ -205,7 +205,7 @@ Set `monthLabel="short"` to show the abbreviated month name from the active `loc
 
 ### Enable open animation
 
-By default, the calendar appears instantly with no animation. Set `animate` to animate the calendar as it opens and closes.
+By default, the calendar appears instantly with no animation. Set `animate` to slide the calendar in as it opens. It still appears instantly when the system asks for reduced motion.
 
 <FileSource src="/framed/DatePicker/DatePickerEnableAnimation" />
 
