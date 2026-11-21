@@ -1182,10 +1182,9 @@
   }
 
   /**
-   * flatpickr keeps `selectedDateElem` and `todayDateElem` after a redraw
-   * replaces them (a month change), and sets `todayDateElem` even when
-   * today is disabled, which is not focusable. Same test as flatpickr's own
-   * `isInView`, against the whole container so month and year cells count.
+   * The calendar sets `todayDateElem` even when today is disabled, which
+   * can't take focus. Same test as the calendar's own `isInView`, against
+   * the whole container so month and year cells count.
    *
    * @param {HTMLElement | undefined} elem
    */
@@ -1532,9 +1531,6 @@
           if (event === "error" || event === "view") {
             return dispatch(event, eventDetail);
           }
-          // An inline calendar is always visible. flatpickr still reports a
-          // `close` after each selection, which would be misleading.
-          if (usesInline && (event === "open" || event === "close")) return;
           if (event === "open") {
             calendarOpen = true;
             open = true;

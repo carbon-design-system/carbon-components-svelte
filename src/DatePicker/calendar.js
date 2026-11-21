@@ -1882,6 +1882,8 @@ export function createCalendarEngine(element, userConfig = {}) {
   self.open = open;
 
   function close() {
+    // An inline calendar never opens, so it never closes either.
+    if (config.inline) return;
     self.isOpen = false;
     self.calendarContainer?.classList.remove("bx--date-picker__calendar--open");
     if (self._input) self._input.classList.remove("active");
