@@ -136,7 +136,7 @@
         <Column>
           <div class="metrics-grid">
             <DocMetric
-              value="100+"
+              value="130+"
               label="Components"
               caption="From inputs to data tables"
             />
@@ -226,7 +226,7 @@
                   borderRight
                   borderBottom
                   title="Carbon Components Svelte"
-                  subtitle="100+ components"
+                  subtitle="130+ components"
                   target="_blank"
                   href="https://github.com/carbon-design-system/carbon-components-svelte"
                 />
