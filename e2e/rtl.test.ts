@@ -163,7 +163,8 @@ function inlineGaps(locator: Locator, dir: "rtl" | "ltr") {
       const prev = rects[index];
       const gap =
         dir === "ltr" ? rect.left - prev.right : prev.left - rect.right;
-      return Math.round(gap * 100) / 100;
+      // `|| 0`: a gap of -0.001 rounds to -0, which `toEqual` tells from 0.
+      return Math.round(gap * 100) / 100 || 0;
     });
   }, dir);
 }
