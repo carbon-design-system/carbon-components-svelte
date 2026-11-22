@@ -684,7 +684,7 @@ $ai-label-sizes: (
       input[type="number"],
     #{$scope}.#{$prefix}--number__input-wrapper--decorator.#{$prefix}--number__input-wrapper--warning
       input[type="text"] {
-      padding-inline-end: to-rem($steppers + 72px);
+      --ccs-number-input-end: #{to-rem($steppers + 72px)};
     }
   }
 
@@ -699,7 +699,7 @@ $ai-label-sizes: (
   .#{$prefix}--number--readonly.#{$prefix}--number--nosteppers
     .#{$prefix}--number__input-wrapper--decorator
     input[type="text"] {
-    padding-inline-end: to-rem(72px);
+    --ccs-number-input-end: #{to-rem(72px)};
   }
 
   // A divider between the label and the steppers, as in v11. The first
