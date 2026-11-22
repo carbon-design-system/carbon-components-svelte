@@ -834,6 +834,14 @@
   .#{$prefix}--slider__range-label {
     unicode-bidi: plaintext;
   }
+
+  // Safari places the caret in a value with no strong character ("-5") as
+  // if it ran right to left in a right-to-left page (#5740), as in
+  // NumberInput. A slider value is a number, and its padding and alignment
+  // are physical, so it runs left to right.
+  .#{$prefix}--slider-text-input {
+    direction: ltr;
+  }
 }
 
 @include exports("slider-plaintext") {
