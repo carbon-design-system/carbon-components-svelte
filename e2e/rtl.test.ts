@@ -1500,13 +1500,6 @@ test.describe("right-to-left text fields", () => {
   test("keeps Slider's minus signs in front of the numbers", async ({
     page,
   }) => {
-    // Safari draws a field's neutral text ("-5", "3 / 4") left to right but
-    // places the caret as if it ran right to left:
-    // https://github.com/carbon-design-system/carbon-components-svelte/issues/5740
-    test.fixme(
-      browserName === "webkit",
-      "Safari misplaces the caret in neutral text in RTL fields (#5740)",
-    );
     await setDirection(page, "rtl");
     const inputs = page.locator(
       "[data-testid=slider] .bx--slider-text-input, [data-testid=range-slider] .bx--slider-text-input",
