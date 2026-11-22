@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.114.5](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.4...v0.114.5) (2026-11-22)
+
+### Bug Fixes
+
+- **number-input:** put the caret where Safari users click in RTL ([1eab94f](https://github.com/carbon-design-system/carbon-components-svelte/commit/1eab94fa13d2b2b53a0bc29526e6e20840e1e030))
+- **slider:** put the caret where Safari users click in RTL ([ac42dc2](https://github.com/carbon-design-system/carbon-components-svelte/commit/ac42dc2b5a77dcc8f3a19bcf419c7623b38dee7d))
+
+### Performance
+
+- **list-box:** let builds drop VirtualWindow for virtualize={false} ([350ceeb](https://github.com/carbon-design-system/carbon-components-svelte/commit/350ceebd9d8fe3b5784875348e479d1e5675337e))
+- **loading:** split the spinner from the overlay ([43ce239](https://github.com/carbon-design-system/carbon-components-svelte/commit/43ce239ff430d486e6c34bc942081c15ca7996b3))
+- **overflow-menu:** let builds drop the tooltip a menu never shows ([5a4d6ef](https://github.com/carbon-design-system/carbon-components-svelte/commit/5a4d6efbf2df3855127e1eb26ff24943e1455e6b))
+- **pagination-nav:** list a long overflow's pages on demand ([2846b0d](https://github.com/carbon-design-system/carbon-components-svelte/commit/2846b0df7a9df5efd5152552162c39868fb3f6bc))
+
 ### [0.114.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.3...v0.114.4) (2026-11-21)
 
 ### Bug Fixes
