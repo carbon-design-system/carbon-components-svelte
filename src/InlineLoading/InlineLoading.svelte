@@ -44,7 +44,7 @@
   export let size = "md";
 
   import { createEventDispatcher, onMount } from "svelte";
-  import Loading from "../Loading/Loading.svelte";
+  import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import { createLoadingDelay } from "../utils/delayed-loading.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
@@ -162,10 +162,9 @@
         ></polyline>
       </svg>
     {:else if shownStatus === "inactive" || shownStatus === "active"}
-      <Loading
+      <LoadingSpinner
         small
         description={shownIconDescription}
-        withOverlay={false}
         active={shownStatus === "active"}
       />
     {/if}
