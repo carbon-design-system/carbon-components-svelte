@@ -109,7 +109,7 @@
     "@typescript/native-preview": "^7.0.0-dev.20260707.2",
     "acorn": "^8.19.0",
     "bivium": "^0.4.0",
-    "carbon-icons-svelte": "^13.17.0",
+    "carbon-icons-svelte": "^13.18.2",
     "crassus": "^0.3.2",
     "flatpickr": "4.6.13",
     "jsdom": "^30.1.3",

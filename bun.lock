@@ -22,7 +22,7 @@
         "@typescript/native-preview": "^7.0.0-dev.20260707.2",
         "acorn": "^8.19.0",
         "bivium": "^0.4.0",
-        "carbon-icons-svelte": "^13.17.0",
+        "carbon-icons-svelte": "^13.18.2",
         "crassus": "^0.3.2",
         "flatpickr": "4.6.13",
         "jsdom": "^30.1.3",
@@ -229,7 +229,7 @@
 
     "bun-types": ["bun-types@1.4.4", "", { "dependencies": { "@types/node": "*", "undici-types": "*" } }, "sha512-yjrJh5oGX7mMPKGd19YXyIjmEuj4G4zNC30bs7PM9Az7NQ3ndF3j6hbeRdvJTRQEhJ/FYQwW0a2moweEi2hMxQ=="],
 
-    "carbon-icons-svelte": ["carbon-icons-svelte@13.17.0", "", {}, "sha512-lFpkXDgkOupXQ/SVw3ZORH4vY5+abNYrm5s/9PB1cni45wnpIE3eXdcqgdM5znj+tWdkurwHcY6IUBMmosP5nw=="],
+    "carbon-icons-svelte": ["carbon-icons-svelte@13.18.2", "", {}, "sha512-PrCD7TzKZNzGVBmUIy7tex/42tJ4mTRvqUpE5vpv3S1KL463dwiE6E3BnaBZVKaDMNLIp/NT4dIdAfnY7vTEGA=="],
 
     "chai": ["chai@6.3.0", "", {}, "sha512-XWAtwJ6OHO+tj0EKCs0Y2UamnyOxseZWltU4x2U2wh8g4AigdjwvtUjvLP2tqkA/avxHEtzxNaqGq/YGNwckKg=="],
 
