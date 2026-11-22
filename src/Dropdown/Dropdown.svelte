@@ -1255,7 +1255,10 @@
           .filter(Boolean)
           .join(" ") || undefined}
       >
-        {#if isVirtualized}
+        <!-- `isVirtualized` comes out of the window state, which a build-time
+             specializer can't run. `shouldVirtualize` lets it drop VirtualWindow
+             for `virtualize={false}`. -->
+        {#if shouldVirtualize && isVirtualized}
           <VirtualWindow
             {totalHeight}
             {offsetY}
