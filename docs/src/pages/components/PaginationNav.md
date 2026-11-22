@@ -40,6 +40,8 @@ Specify the total number of pages with `total`.
 
 Control the number of visible page numbers with `shown`. Pages that don't fit collapse into an overflow menu.
 
+An overflow menu of more than 1,000 pages lists them once it is focused or pressed, so a long nav doesn't put every page in the DOM up front.
+
 <PaginationNav total={100} shown={5} />
 
 ## Navigation buttons
