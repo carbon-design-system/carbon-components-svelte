@@ -7,8 +7,8 @@
         "@ibm/plex-mono": "1.1.0",
         "@ibm/plex-sans": "1.1.0",
         "@sveltejs/vite-plugin-svelte": "^7.3.1",
-        "carbon-icons-svelte": "^13.17.0",
-        "carbon-pictograms-svelte": "^13.21.0",
+        "carbon-icons-svelte": "^13.18.2",
+        "carbon-pictograms-svelte": "^13.21.1",
         "svelte": "^5.57.3",
         "svelte-ast": "^0.12.0",
         "vite": "^8.3.5",
@@ -78,9 +78,9 @@
 
     "axobject-query": ["axobject-query@4.1.0", "", {}, "sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ=="],
 
-    "carbon-icons-svelte": ["carbon-icons-svelte@13.17.0", "", {}, "sha512-lFpkXDgkOupXQ/SVw3ZORH4vY5+abNYrm5s/9PB1cni45wnpIE3eXdcqgdM5znj+tWdkurwHcY6IUBMmosP5nw=="],
+    "carbon-icons-svelte": ["carbon-icons-svelte@13.18.2", "", {}, "sha512-PrCD7TzKZNzGVBmUIy7tex/42tJ4mTRvqUpE5vpv3S1KL463dwiE6E3BnaBZVKaDMNLIp/NT4dIdAfnY7vTEGA=="],
 
-    "carbon-pictograms-svelte": ["carbon-pictograms-svelte@13.21.0", "", {}, "sha512-CfIPP1HrqAwrrmTzESDAwLAIxUK7Hw18IJARKYDPnAbxAf/I75TTKd+ZUziz8YkV0Jt4KWZ2NgV7n4fAqNNEng=="],
+    "carbon-pictograms-svelte": ["carbon-pictograms-svelte@13.21.1", "", {}, "sha512-7tAkGmhfjEDTd60XWvaBxF+I42i9NOzDT7mi33gxLYY9A8ZVjmgwIEsqPExRKjTxq5ZDERHcqqNCyI64Y1pb4w=="],
 
     "clsx": ["clsx@2.1.1", "", {}, "sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA=="],
 
