@@ -406,11 +406,13 @@ test.describe("forced colors", () => {
   test("an AI label keeps its border, and its callout keeps an edge", async ({
     page,
   }) => {
+    // Firefox forces a button's border to ButtonBorder, Chromium to
+    // CanvasText; either keeps it visible.
     expect
-      .soft(
+      .soft([system.CanvasText, system.ButtonBorder])
+      .toContain(
         (await style(page, ".bx--ai-label .bx--toggletip-button")).borderColor,
-      )
-      .toBe(system.CanvasText);
+      );
 
     await page.locator(".bx--ai-label .bx--toggletip-button").press("Enter");
     const callout = ".bx--ai-label-popover .bx--popover-contents";
