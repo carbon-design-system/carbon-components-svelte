@@ -118,7 +118,7 @@ Align what the eye sees: the ink of glyphs and icons, and text baselines. Elemen
 - **Actions for consumer markup.** Components cannot take actions. Put the action on a wrapper element and select the items inside it. Examples: `rovingFocus`, `dismiss`.
 - **Strings as props.** Every visible or announced string is a prop. Reuse the name and signature from a related component (`*Text` props, `translateWithId`). If `translateWithId` returns no value for an id, use the English default.
 - **Enums for variants** (`selectionMode`, `size`, `kind`). Use a boolean only for a true on/off state. A look is an enum even when it starts with two forms, because more follow: Search has `variant="ghost"`, not `borderless`.
-- **`id` prop.** Derive inner ids from `id`. Call `uniqueId()` only when `id` is unset. Do not build ids from consumer data: a space in an id breaks `aria-activedescendant` and `aria-controls`. Use the item's index.
+- **`id` prop.** Default it to `useId("component-name")`, and derive inner ids from it. A parent whose children take their own default ids starts a scope with `createIdScope(id)`. Do not build ids from consumer data: a space in an id breaks `aria-activedescendant` and `aria-controls`. Use the item's index.
 - **No writes to props.** Store measured values in internal variables.
 - **`$$restProps`** go on the primary element; for a form field, `class` and `style` go on its root, so layout classes such as margins affect the whole field. A consumer `aria-label` replaces the default `aria-labelledby`.
 
@@ -481,7 +481,7 @@ Measure positions and sizes in the browser (`getBoundingClientRect`, computed st
 | No shift on mount | Add a case to `e2e/ssr-layout.test.ts`. For components that measure and collapse content (overflow menus, fitted toolbars), record CLS with a `layout-shift` `PerformanceObserver`. Maximum 0.005. |
 | Skeleton size | Add a case to `e2e/skeleton-swap.test.ts`. The skeleton and the component have the same height. |
 | SSR smoke test | `tests/ssr-smoke.ssr.test.ts` passes. Add children that need a parent context to `NEEDS_PARENT`. |
-| Stable ids | Server and client generate the same ids. See `tests/SsrLayout/StableIds.ssr.test.ts`. |
+| Stable ids | Server and client generate the same ids. Add a compound component to `tests/IdScope/Families.test.svelte` and `FAMILIES` in `tests/IdScope/families.ts`, with an `id` on the root and none on its children; the sweep server-renders and hydrates each one. `tests/IdScope/IdScope.coverage.test.ts` fails when a parent sets a context its `useId` children read but starts no scope; exempt one only with a reason. See also `tests/SsrLayout/StableIds.ssr.test.ts`. |
 
 ### Dates and times
 
