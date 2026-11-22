@@ -826,7 +826,10 @@
   </FloatingPortal>
 {/if}
 
-{#if tooltipMounted}
+<!-- Only hover and focus handlers set `tooltipMounted`, which a build-time
+     specializer can't run. `hasTooltip` lets it drop PortalTooltip for a
+     menu that never shows one. -->
+{#if hasTooltip && tooltipMounted}
   <PortalTooltip
     anchor={buttonRef}
     direction={effectiveTooltipPosition}
