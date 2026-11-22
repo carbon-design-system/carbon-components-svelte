@@ -22,6 +22,7 @@
 
   import { onMount } from "svelte";
   import { createLoadingDelay } from "../utils/delayed-loading.js";
+  import LoadingSpinner from "./LoadingSpinner.svelte";
   import { overlayFocus } from "./overlay-focus.js";
 
   // `shown` is the spinner the user sees. With a delay, an active spinner
@@ -64,8 +65,6 @@
   $: waiting = active && !shown;
   $: spinning = active || shown;
   $: revealAfter = waiting ? `${delay}ms` : undefined;
-
-  $: spinnerRadius = small ? "42" : "44";
 </script>
 
 {#if delay <= 0 || active || appeared}
@@ -81,61 +80,15 @@
       {...$$restProps}
       use:overlayFocus={shown}
     >
-      <div
-        class:bx--loading={true}
-        class:bx--loading--small={small}
-        class:bx--loading--stop={!spinning}
-      >
-        <!-- The <title> names the image; aria-label too would be read twice. -->
-        <svg class:bx--loading__svg={true} viewBox="0 0 100 100" role="img">
-          <title>{description}</title>
-          {#if small}
-            <circle
-              class:bx--loading__background={true}
-              cx="50%"
-              cy="50%"
-              r={spinnerRadius}
-            ></circle>
-          {/if}
-          <circle
-            class:bx--loading__stroke={true}
-            cx="50%"
-            cy="50%"
-            r={spinnerRadius}
-          ></circle>
-        </svg>
-      </div>
+      <LoadingSpinner {small} active={spinning} {description} />
     </div>
   {:else}
-    <div
-      class:bx--loading={true}
-      class:bx--loading--small={small}
-      class:bx--loading--stop={!spinning}
-      class:bx--loading--delayed={waiting}
+    <LoadingSpinner
       {...$$restProps}
-    >
-      <svg
-        class:bx--loading__svg={true}
-        viewBox="0 0 100 100"
-        role="img"
-        style:animation-duration={revealAfter}
-      >
-        <title>{description}</title>
-        {#if small}
-          <circle
-            class:bx--loading__background={true}
-            cx="50%"
-            cy="50%"
-            r={spinnerRadius}
-          ></circle>
-        {/if}
-        <circle
-          class:bx--loading__stroke={true}
-          cx="50%"
-          cy="50%"
-          r={spinnerRadius}
-        ></circle>
-      </svg>
-    </div>
+      {small}
+      active={spinning}
+      {description}
+      {revealAfter}
+    />
   {/if}
 {/if}

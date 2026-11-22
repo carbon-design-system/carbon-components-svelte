@@ -48,7 +48,7 @@
    * Accessible label for the status icons (spinner, remove control, checkmark).
    * Pass a string, or a function receiving {@link FilenameIconDescriptionContext}.
    * When the resolved value is omitted or blank after trim, defaults are used:
-   * - `uploading`: passed to `Loading` as `"uploading"`
+   * - `uploading`: the spinner's description is `"uploading"`
    * - `edit`: close button `aria-label` is `"Remove file {fileName}"` (`"Remove file"` without a `fileName`)
    * - `complete`: checkmark `aria-label` / `title` are `"Upload complete"`
    *
@@ -97,7 +97,7 @@
     prevStatus = status;
   }
 
-  import Loading from "../Loading/Loading.svelte";
+  import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import Close from "../icons/Close.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -106,11 +106,10 @@
 <span role="status" class:bx--visually-hidden={true}>{statusAnnouncement}</span>
 
 {#if status === "uploading"}
-  <Loading
+  <LoadingSpinner
     description={resolvedIconLabel ?? "uploading"}
     {...$$restProps}
     small
-    withOverlay={false}
   />
 {/if}
 
