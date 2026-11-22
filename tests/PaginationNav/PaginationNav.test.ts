@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import PaginationNav from "./PaginationNav.test.svelte";
 import PaginationNavPair from "./PaginationNavPair.test.svelte";
@@ -315,4 +315,33 @@ describe("PaginationNav", () => {
     expect(onChange).toHaveBeenCalledWith({ page: 50 });
     expect(onChange).toHaveBeenCalledTimes(2);
   });
+
+  // Pages 1-3 and the last show; the rest overflow.
+  it.each([
+    { total: 1004, listed: 1000 },
+    { total: 1005, listed: 0 },
+  ])("lists $listed pages up front for total $total", ({ total, listed }) => {
+    render(PaginationNav, { props: { total, shown: 5 } });
+    expect(
+      screen.getByRole("combobox").querySelectorAll("option[data-page]"),
+    ).toHaveLength(listed);
+  });
+
+  it.each(["focus", "pointerDown"] as const)(
+    "lists a long overflow's pages on %s",
+    async (event) => {
+      const onChange = vi.fn();
+      render(PaginationNav, { props: { total: 2000, shown: 5, onChange } });
+      const select = screen.getByRole("combobox");
+
+      // Only the hidden placeholder until the select can open.
+      expect(select.querySelectorAll("option")).toHaveLength(1);
+
+      await fireEvent[event](select);
+      expect(select.querySelectorAll("option[data-page]")).toHaveLength(1996);
+
+      await user.selectOptions(select, "1500");
+      expect(onChange).toHaveBeenCalledWith({ page: 1500 });
+    },
+  );
 });

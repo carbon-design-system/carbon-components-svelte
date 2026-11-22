@@ -30,7 +30,15 @@
 
   const dispatch = createEventDispatcher();
 
+  // A native select can't open until it has focus or a pointer press, so an
+  // overflow of more than 1000 pages lists them on the first of those.
+  // Shorter overflows render up front.
+  const EAGER_OPTIONS = 1000;
+
   let value = "";
+  let interacted = false;
+
+  $: populated = interacted || count <= EAGER_OPTIONS;
 </script>
 
 {#if count > 1}
@@ -41,6 +49,12 @@
         {value}
         class:bx--pagination-nav__page={true}
         class:bx--pagination-nav__page--select={true}
+        on:focus={() => {
+          interacted = true;
+        }}
+        on:pointerdown={() => {
+          interacted = true;
+        }}
         on:change={(event) => {
           value = "";
           dispatch("select", {
@@ -51,14 +65,16 @@
         }}
       >
         <option value="" hidden></option>
-        {#each Array.from({ length: count }, (_, index) => index) as pageOffset (pageOffset)}
-          <option
-            value={fromIndex + pageOffset + 1}
-            data-page={fromIndex + pageOffset + 1}
-          >
-            {fromIndex + pageOffset + 1}
-          </option>
-        {/each}
+        {#if populated}
+          {#each Array.from({ length: count }, (_, index) => index) as pageOffset (pageOffset)}
+            <option
+              value={fromIndex + pageOffset + 1}
+              data-page={fromIndex + pageOffset + 1}
+            >
+              {fromIndex + pageOffset + 1}
+            </option>
+          {/each}
+        {/if}
       </select>
       <div class:bx--pagination-nav__select-icon-wrapper={true}>
         <OverflowMenuHorizontal class="bx--pagination-nav__select-icon" />
