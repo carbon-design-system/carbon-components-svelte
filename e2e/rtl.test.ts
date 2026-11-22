@@ -1411,11 +1411,12 @@ test.describe("right-to-left text fields", () => {
     page,
     browserName,
   }) => {
-    // Safari reads a field's neutral text ("-5", "3 / 4") right to left:
+    // Safari draws a field's neutral text ("-5", "3 / 4") left to right but
+    // places the caret as if it ran right to left:
     // https://github.com/carbon-design-system/carbon-components-svelte/issues/5740
     test.fixme(
       browserName === "webkit",
-      "Safari reverses neutral text in RTL fields (#5740)",
+      "Safari misplaces the caret in neutral text in RTL fields (#5740)",
     );
     await setDirection(page, "rtl");
     // "3" is at the left end, so the caret lands before it.
@@ -1428,11 +1429,12 @@ test.describe("right-to-left text fields", () => {
     page,
     browserName,
   }) => {
-    // Safari reads a field's neutral text ("-5", "3 / 4") right to left:
+    // Safari draws a field's neutral text ("-5", "3 / 4") left to right but
+    // places the caret as if it ran right to left:
     // https://github.com/carbon-design-system/carbon-components-svelte/issues/5740
     test.fixme(
       browserName === "webkit",
-      "Safari reverses neutral text in RTL fields (#5740)",
+      "Safari misplaces the caret in neutral text in RTL fields (#5740)",
     );
     await setDirection(page, "rtl");
     const fields = {
@@ -1473,14 +1475,7 @@ test.describe("right-to-left text fields", () => {
 
   test("keeps NumberInput's minus sign in front of the number", async ({
     page,
-    browserName,
   }) => {
-    // Safari reads a field's neutral text ("-5", "3 / 4") right to left:
-    // https://github.com/carbon-design-system/carbon-components-svelte/issues/5740
-    test.fixme(
-      browserName === "webkit",
-      "Safari reverses neutral text in RTL fields (#5740)",
-    );
     // In an RTL paragraph, bidi moved a leading minus to the far side:
     // "-5" painted as "5-", and "-5 kg" as "kg 5-".
     await setDirection(page, "rtl");
@@ -1504,13 +1499,13 @@ test.describe("right-to-left text fields", () => {
 
   test("keeps Slider's minus signs in front of the numbers", async ({
     page,
-    browserName,
   }) => {
-    // Safari reads a field's neutral text ("-5", "3 / 4") right to left:
+    // Safari draws a field's neutral text ("-5", "3 / 4") left to right but
+    // places the caret as if it ran right to left:
     // https://github.com/carbon-design-system/carbon-components-svelte/issues/5740
     test.fixme(
       browserName === "webkit",
-      "Safari reverses neutral text in RTL fields (#5740)",
+      "Safari misplaces the caret in neutral text in RTL fields (#5740)",
     );
     await setDirection(page, "rtl");
     const inputs = page.locator(
@@ -2502,11 +2497,12 @@ test.describe("right-to-left date picker", () => {
     page,
     browserName,
   }) => {
-    // Safari reads a field's neutral text ("-5", "3 / 4") right to left:
+    // Safari draws a field's neutral text ("-5", "3 / 4") left to right but
+    // places the caret as if it ran right to left:
     // https://github.com/carbon-design-system/carbon-components-svelte/issues/5740
     test.fixme(
       browserName === "webkit",
-      "Safari reverses neutral text in RTL fields (#5740)",
+      "Safari misplaces the caret in neutral text in RTL fields (#5740)",
     );
     // Bidi reordered "03/15/2024 2:30 PM" by the page's direction, so an
     // RTL page showed "PM 2:30 03/15/2024". Read left to right, the field's

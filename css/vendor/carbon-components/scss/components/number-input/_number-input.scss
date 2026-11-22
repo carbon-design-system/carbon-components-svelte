@@ -41,7 +41,11 @@
     width: 100%;
     height: to-rem(40px);
     box-sizing: border-box;
-    padding-inline: $carbon--spacing-05 to-rem(128px);
+    // ccs: the steppers' room is `--ccs-number-input-end`, so a right-to-left
+    // field can put it back on the page's inline end (number-input-plaintext).
+    --ccs-number-input-start: #{$carbon--spacing-05};
+    --ccs-number-input-end: #{to-rem(128px)};
+    padding-inline: var(--ccs-number-input-start) var(--ccs-number-input-end);
     border: 0;
     border-bottom: to-rem(1px) solid $border-strong;
 
@@ -77,20 +81,20 @@
   // ccs: no stepper room when `hideSteppers` removes the steppers
   .#{$prefix}--number--xl.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--xl.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='text'] {
-    padding-inline-end: to-rem(144px);
+    --ccs-number-input-end: #{to-rem(144px)};
   }
 
   // ccs: no stepper room when `hideSteppers` removes the steppers
   .#{$prefix}--number--sm.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--sm.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='text'] {
-    padding-inline-end: to-rem(112px);
+    --ccs-number-input-end: #{to-rem(112px)};
   }
 
   // ccs: xs size (Carbon React `size="xs"`), two 24px steppers + 48px,
   // none when `hideSteppers` removes the steppers
   .#{$prefix}--number--xs.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--xs.#{$prefix}--number:not(.#{$prefix}--number--nosteppers) input[type='text'] {
-    padding-inline-end: to-rem(96px);
+    --ccs-number-input-end: #{to-rem(96px)};
   }
 
   // ccs: the padding above also holds the invalid or warning icon. Without
@@ -99,22 +103,22 @@
   // the later `--nosteppers` rule and the fluid variant still win over it.
   .#{$prefix}--number--neutral input[type='number'],
   .#{$prefix}--number--neutral input[type='text'] {
-    padding-inline-end: to-rem(96px);
+    --ccs-number-input-end: #{to-rem(96px)};
   }
 
   .#{$prefix}--number--xl.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--xl.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='text'] {
-    padding-inline-end: to-rem(112px);
+    --ccs-number-input-end: #{to-rem(112px)};
   }
 
   .#{$prefix}--number--sm.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--sm.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='text'] {
-    padding-inline-end: to-rem(80px);
+    --ccs-number-input-end: #{to-rem(80px)};
   }
 
   .#{$prefix}--number--xs.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='number'],
   .#{$prefix}--number--xs.#{$prefix}--number--neutral:not(.#{$prefix}--number--nosteppers) input[type='text'] {
-    padding-inline-end: to-rem(64px);
+    --ccs-number-input-end: #{to-rem(64px)};
   }
 
   .#{$prefix}--number input[type='number']:disabled,
@@ -488,13 +492,13 @@
 
   .#{$prefix}--number--nosteppers input[type='number'],
   .#{$prefix}--number--nosteppers input[type='text'] {
-    padding-inline-end: to-rem(48px);
+    --ccs-number-input-end: #{to-rem(48px)};
   }
 
   // ccs: no steppers and no status icon: the regular field inset.
   .#{$prefix}--number--nosteppers.#{$prefix}--number--neutral input[type='number'],
   .#{$prefix}--number--nosteppers.#{$prefix}--number--neutral input[type='text'] {
-    padding-inline-end: $carbon--spacing-05;
+    --ccs-number-input-end: #{$carbon--spacing-05};
   }
 
   .#{$prefix}--number--nosteppers .#{$prefix}--number__invalid {
@@ -527,7 +531,7 @@
   // ccs: without steppers the read-only icon stays; keep text clear of it.
   .#{$prefix}--number--readonly.#{$prefix}--number--nosteppers input[type='number'],
   .#{$prefix}--number--readonly.#{$prefix}--number--nosteppers input[type='text'] {
-    padding-inline-end: $carbon--spacing-08;
+    --ccs-number-input-end: #{$carbon--spacing-08};
   }
 
   .#{$prefix}--number.#{$prefix}--skeleton {
@@ -614,8 +618,22 @@
     text-align: left;
   }
 
-  [dir="rtl"] .#{$prefix}--number input[type="number"],
+  // Safari draws a value with no strong character ("-5") left to right
+  // under `unicode-bidi: plaintext` in a right-to-left page, but places the
+  // caret as if it ran right to left: a click before the "-" lands after
+  // the "5" (#5740). So the field runs left to right there. That turns its inline sides, so put
+  // the steppers' room back on the page's inline end. A page number has no
+  // sign, and its start border must stay on the page's side.
+  [dir="rtl"]
+    .#{$prefix}--number
+    input[type="number"]:not(.#{$prefix}--pagination__page-number-input),
   [dir="rtl"] .#{$prefix}--number input[type="text"] {
+    direction: ltr;
+    padding-inline: ccs-dir(
+        var(--ccs-number-input-start),
+        var(--ccs-number-input-end)
+      )
+      ccs-dir(var(--ccs-number-input-end), var(--ccs-number-input-start));
     text-align: ccs-dir(left, right);
   }
 }

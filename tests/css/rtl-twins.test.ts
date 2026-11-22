@@ -14,6 +14,9 @@ const SAME_BOTH_WAYS = new Set([
   "[dir=rtl] .bx--snippet--multi.bx--snippet--no-copy .bx--snippet-container pre padding-left",
   "[dir=rtl] .bx--list-box--decorator .bx--list-box__selection--multi left",
   "[dir=rtl] .bx--list-box--decorator .bx--list-box__selection--multi right",
+  // A number runs left to right in an LTR region too (#5740).
+  "[dir=rtl] .bx--number input[type=number]:not(.bx--pagination__page-number-input) direction",
+  "[dir=rtl] .bx--number input[type=text] direction",
 ]);
 
 describe("[dir=rtl] twins", () => {

@@ -41,7 +41,8 @@
   .#{$prefix}--number-input--fluid input[type="number"],
   .#{$prefix}--number-input--fluid input[type="text"] {
     padding-block: to-rem(32px) to-rem(13px);
-    padding-inline: $carbon--spacing-05 to-rem(80px);
+    --ccs-number-input-start: #{$carbon--spacing-05};
+    --ccs-number-input-end: #{to-rem(80px)};
     background: transparent;
     min-block-size: to-rem(64px);
     outline: none;
@@ -71,7 +72,7 @@
   .#{$prefix}--number-input--fluid
     .#{$prefix}--number--nosteppers
     input[type="text"] {
-    padding-inline-end: $carbon--spacing-05;
+    --ccs-number-input-end: #{$carbon--spacing-05};
   }
 
   .#{$prefix}--number-input--fluid .#{$prefix}--number__controls {
