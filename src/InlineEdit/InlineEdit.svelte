@@ -17,7 +17,7 @@
    * Specify a custom id for the input.
    * @type {string}
    */
-  export let id = uniqueId();
+  export let id = useId("inline-edit");
 
   /**
    * Screen-reader label for the input.
@@ -116,9 +116,9 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

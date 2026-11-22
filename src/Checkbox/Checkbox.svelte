@@ -97,7 +97,7 @@
   export let title = undefined;
 
   /** Set an id for the input label */
-  export let id = uniqueId();
+  export let id = useId("checkbox");
 
   /**
    * Set the tabindex for the input element.
@@ -136,8 +136,8 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { useId } from "../utils/id-scope.js";
   import { overflowTitle } from "../utils/overflow-title.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import CheckboxSkeleton from "./CheckboxSkeleton.svelte";
 
   // A disabled `<fieldset>` around the component disables it too.

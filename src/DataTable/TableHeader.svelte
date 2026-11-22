@@ -36,14 +36,14 @@
   };
 
   /** Set an id for the top-level element */
-  export let id = uniqueId();
+  export let id = useId("table-header");
 
   import { getContext, onMount } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
   import ArrowsVertical from "../icons/ArrowsVertical.svelte";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   const defaultTranslations = {
     [translationIds.columnSortAscending]:

@@ -58,6 +58,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { returnFocus } from "../utils/focus.js";
+  import { useId } from "../utils/id-scope.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import {
     getLayoutDirection,
@@ -70,7 +71,6 @@
     isTypeaheadKey,
     typeaheadIndex,
   } from "../utils/typeahead.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import { verticalListFocus } from "../utils/vertical-list-focus.js";
 
   const dispatch = createEventDispatcher();
@@ -120,7 +120,7 @@
   // Everything is tabbable until the bar knows its items (and without a bar).
   $: tabindex = $tabStop === undefined || $tabStop === ref ? 0 : -1;
 
-  const generatedId = uniqueId();
+  const generatedId = useId("header-nav-menu");
   // The menu is named by the trigger, so follow a consumer-provided `id`.
   $: triggerId = $$restProps.id ?? generatedId;
 

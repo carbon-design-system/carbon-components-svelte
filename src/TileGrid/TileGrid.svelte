@@ -104,7 +104,7 @@
   export let groupHeadingLevel = undefined;
 
   /** Set an id for the grid. The label's and groups' ids derive from it. */
-  export let id = uniqueId();
+  export let id = useId("tile-grid");
 
   /**
    * Obtain a reference to the grid element.
@@ -116,13 +116,13 @@
   import { createEventDispatcher, getContext, tick } from "svelte";
   import { parseAspectRatio } from "../utils/aspect-ratio.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { useId } from "../utils/id-scope.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();

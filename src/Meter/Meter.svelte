@@ -127,12 +127,12 @@
    * The helper text, thresholds, and status ids derive from it as
    * `{id}-helper`, `{id}-thresholds`, and `{id}-status`.
    */
-  export let id = uniqueId();
+  export let id = useId("meter");
 
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { useId } from "../utils/id-scope.js";
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   $: helperId = `${id}-helper`;
   $: thresholdsId = `${id}-thresholds`;

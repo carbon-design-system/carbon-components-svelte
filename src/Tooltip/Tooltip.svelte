@@ -60,15 +60,17 @@
 
   /**
    * Set an id for the tooltip.
+   * Defaults to `{id}-tooltip`.
    * @type {string}
    */
-  export let tooltipId = uniqueId();
+  export let tooltipId = "";
 
   /**
    * Set an id for the tooltip button.
+   * Defaults to `{id}-trigger`.
    * @type {string}
    */
-  export let triggerId = uniqueId();
+  export let triggerId = "";
 
   /**
    * Set the tooltip button text.
@@ -136,6 +138,7 @@
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { clippedBy, windowShift } from "../utils/fit-align.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { physicalAlign } from "../utils/inline-align.js";
   import {
@@ -145,12 +148,19 @@
   import { tabindexAttribute } from "../utils/tabindex.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const layoutDirection = getLayoutDirection();
 
   const dispatch = createEventDispatcher();
+
+  // Both ids follow `id` (set on the wrapper), so one id pins them. The
+  // fallback is drawn at init, the only time a scope can be read.
+  let generatedId = $$restProps.id ? "" : useId("tooltip");
+  $: if (!$$restProps.id && !generatedId) generatedId = useId("tooltip");
+  $: baseId = $$restProps.id || generatedId;
+  $: resolvedTooltipId = tooltipId || `${baseId}-tooltip`;
+  $: resolvedTriggerId = triggerId || `${baseId}-trigger`;
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
   /**
    * @type {import("svelte/store").Writable<boolean>}
@@ -543,16 +553,16 @@
   $: buttonProps = {
     role: "button",
     "aria-haspopup": "true",
-    id: hideIcon ? triggerId : undefined,
+    id: hideIcon ? resolvedTriggerId : undefined,
     class: hideIcon ? "bx--tooltip__label" : "bx--tooltip__trigger",
     "aria-expanded": open,
     "aria-describedby": joinDescribedBy(
-      open ? tooltipId : undefined,
+      open ? resolvedTooltipId : undefined,
       ariaDescribedBy,
     ),
     "aria-labelledby":
       ariaLabelledBy ??
-      (ariaLabel ? undefined : triggerText ? triggerId : undefined),
+      (ariaLabel ? undefined : triggerText ? resolvedTriggerId : undefined),
     "aria-label": ariaLabel ?? (triggerText ? undefined : iconDescription),
     tabindex: tabindexAttribute(tabindex),
     style: hideIcon ? $$restProps.style : undefined,
@@ -573,7 +583,7 @@
   on:mouseleave={handleMouseleave}
 >
   {#if !hideIcon}
-    <div bind:this={ref} id={triggerId} class:bx--tooltip__label={true}>
+    <div bind:this={ref} id={resolvedTriggerId} class:bx--tooltip__label={true}>
       <slot name="triggerChildren"
         ><slot name="triggerText">{triggerText}</slot></slot
       >
@@ -612,7 +622,7 @@
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       bind:this={refTooltip}
-      id={tooltipId}
+      id={resolvedTooltipId}
       data-floating-menu-direction={placement}
       class:bx--tooltip={true}
       class:bx--tooltip--shown={open}
@@ -641,7 +651,7 @@
         class:bx--tooltip__content={true}
         tabindex="-1"
         role="dialog"
-        aria-labelledby={triggerId}
+        aria-labelledby={resolvedTriggerId}
       >
         <slot />
       </div>
@@ -670,7 +680,7 @@
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         bind:this={refPortalTooltip}
-        id={tooltipId}
+        id={resolvedTooltipId}
         data-floating-menu-direction={actualDirection}
         class:bx--tooltip={true}
         class:bx--tooltip--shown={open}
@@ -701,7 +711,7 @@
           class:bx--tooltip__content={true}
           tabindex="-1"
           role="dialog"
-          aria-labelledby={triggerId}
+          aria-labelledby={resolvedTriggerId}
         >
           <slot />
         </div>

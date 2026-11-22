@@ -37,7 +37,7 @@
    * and `FormRequirement` placed directly in the group derive theirs as
    * `helper-{id}`, `error-{id}`, and `warn-{id}`.
    */
-  export let id = uniqueId();
+  export let id = useId("form-group");
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
@@ -45,7 +45,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { createFormParts, partsDescribedBy } from "../utils/form-parts.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   /** @type {import("svelte/store").Writable<string>} */
   const sharedId = writable(id);

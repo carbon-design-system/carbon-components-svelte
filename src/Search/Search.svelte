@@ -147,7 +147,7 @@
   export let icon = /** @type {Icon} */ (IconSearch);
 
   /** Set an id for the input element */
-  export let id = uniqueId();
+  export let id = useId("search");
 
   /**
    * Obtain a reference to the input HTML element.
@@ -226,6 +226,7 @@
   import { clippedBy, pastWindow } from "../utils/fit-align.js";
   import { returnFocus } from "../utils/focus.js";
   import { formReset } from "../utils/form-reset.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {
     applePlatform,
@@ -237,7 +238,6 @@
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
   // A disabled `<fieldset>` around the component disables it too.

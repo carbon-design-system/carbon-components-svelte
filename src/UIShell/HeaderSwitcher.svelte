@@ -75,15 +75,15 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { returnFocusOnClose } from "../utils/focus.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import { verticalListFocus } from "../utils/vertical-list-focus.js";
 
   const dispatch = createEventDispatcher();
 
-  const fallbackId = uniqueId();
+  const fallbackId = useId("header-switcher");
   $: menuId = `${id ?? fallbackId}-menu`;
 
   /** @type {null | HTMLDivElement} */

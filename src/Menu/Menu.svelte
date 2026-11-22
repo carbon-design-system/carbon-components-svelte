@@ -120,6 +120,7 @@
   import { focusQuietly, returnFocus } from "../utils/focus.js";
   import { createFrameJob } from "../utils/frame-batch.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { createIdScope } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import {
@@ -253,6 +254,7 @@
   /** @type {Set<string>} */
   const seededIds = parentCtx?.seededIds ?? new Set();
 
+  createIdScope($$restProps.id, "menu");
   setContext("carbon:Menu", {
     close,
     seededIds,

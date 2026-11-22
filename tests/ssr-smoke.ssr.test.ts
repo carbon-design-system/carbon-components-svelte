@@ -48,14 +48,6 @@ const NEEDS_PARENT = new Set([
   "ToolbarMenuItem", // ToolbarMenu
 ]);
 
-/**
- * Props that pin a component's generated ids, beyond the `id` every
- * component gets. Each id a component renders must come from a prop.
- */
-const ID_PROPS: Record<string, Record<string, string>> = {
-  Tooltip: { tooltipId: "fixed-tooltip", triggerId: "fixed-trigger" },
-};
-
 const components = [...barrel.matchAll(BARREL_EXPORT)].map(([, name, file]) => {
   const path = `../src/${file}`;
   return { name, path, open: OPEN_PROP.test(sources[path] ?? "") };
@@ -130,7 +122,6 @@ describe.each(components)("$name", ({ name, path, open }) => {
       const component = await load();
       const props = {
         id: "fixed",
-        ...ID_PROPS[name],
         open: isOpen || undefined,
       };
       const html = render(component, { props }).body;

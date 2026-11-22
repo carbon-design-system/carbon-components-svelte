@@ -46,6 +46,7 @@
   import { derived, writable } from "svelte/store";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { createIdScope } from "../utils/id-scope.js";
   import { keyBy } from "../utils/key-by.js";
   import {
     getLayoutDirection,
@@ -217,6 +218,7 @@
   const statusTextStore = writable(statusText);
   $: statusTextStore.set(statusText);
 
+  createIdScope($$restProps.id, "progress-indicator");
   setContext("carbon:ProgressIndicator", {
     steps,
     stepsById,

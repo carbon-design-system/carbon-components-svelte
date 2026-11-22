@@ -69,8 +69,8 @@
   import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import ArrowRight from "../icons/ArrowRight.svelte";
+  import { useId } from "../utils/id-scope.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import CardWrapper from "./CardWrapper.svelte";
 
   const sharedHorizontal = writable(horizontal);
@@ -84,7 +84,7 @@
   /** @type {import("svelte/store").Writable<null | { block: number; inline: string }>} */
   const media = writable(null);
 
-  const titleId = uniqueId();
+  const titleId = useId("card-title");
 
   // The first `CardTitle` takes `titleId`, and the card points
   // `aria-labelledby` at it. The server can't know yet whether a title

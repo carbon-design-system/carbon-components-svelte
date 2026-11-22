@@ -1,5 +1,5 @@
 <script>
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   /**
    * Specify the kind of contained list.
@@ -33,7 +33,7 @@
    * Set an id for the list element.
    * The label id derives from it as `label-{id}`.
    */
-  export let id = uniqueId();
+  export let id = useId("contained-list");
 
   $: labelId = `label-${id}`;
 </script>

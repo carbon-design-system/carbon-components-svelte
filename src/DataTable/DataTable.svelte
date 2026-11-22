@@ -335,9 +335,10 @@
   /**
    * Set an id for the table container.
    * The title, description, header, cell and selection ids derive from it,
-   * for example `{id}-title` and `{id}-{header.key}`.
+   * for example `{id}-title` and `{id}-{header.key}`, and slotted
+   * components draw theirs from `{id}-slot`.
    */
-  export let id = uniqueId();
+  export let id = useId("data-table");
 
   /**
    * Provide a class name for every body cell, or a function
@@ -616,10 +617,10 @@
   import { toCssLength } from "../utils/css-length.js";
   import { formReset } from "../utils/form-reset.js";
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
+  import { createIdScope, useId } from "../utils/id-scope.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import { normalizeDataTableSize } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import {
     DEFAULT_VIRTUAL_LIST_CONFIG,
     virtualize as virtualizeUtil,
@@ -1006,6 +1007,9 @@
     });
   }
 
+  // Slotted children draw `{id}-slot-{name}-{n}`. A bare `{id}` prefix could
+  // collide with this table's own `{id}-{header.key}` and `{id}-{row.id}`.
+  createIdScope(`${id}-slot`);
   setContext("carbon:DataTable", {
     batchSelectedIds,
     tableRows,

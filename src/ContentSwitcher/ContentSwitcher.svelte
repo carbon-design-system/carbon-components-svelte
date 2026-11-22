@@ -78,6 +78,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { createIdScope, useId } from "../utils/id-scope.js";
   import { createInitOrder } from "../utils/init-order.js";
   import {
     getLayoutDirection,
@@ -89,9 +90,8 @@
   import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
-  const labelId = uniqueId("ccs-content-switcher-label");
+  const labelId = useId("content-switcher-label", "ccs-content-switcher-label");
   // A consumer `aria-label` or `aria-labelledby` replaces the visible label.
   $: labelledBy =
     labelText &&
@@ -405,6 +405,8 @@
 
     await focusSwitchElement(index);
   }
+
+  createIdScope($$restProps.id, "content-switcher");
 
   /** @type {import("../utils/roving-focus.js").RovingFocusOptions} */
   const rovingFocusOptions = {

@@ -16,6 +16,12 @@ export function resolveValidationVisibility(options: {
  * instead (for components, like CheckboxGroup/RadioButtonGroup, that
  * still need stable ids when no `id` prop was passed).
  */
+export function buildFieldIds(id: string): {
+  helperId: string;
+  errorId: string;
+  warnId: string;
+  readonlyId: string;
+};
 export function buildFieldIds(
   id?: string,
   fallback?: {

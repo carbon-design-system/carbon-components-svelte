@@ -87,7 +87,7 @@
   export let helperText = "";
 
   /** Set an id for the input element */
-  export let id = uniqueId();
+  export let id = useId("copy-input");
 
   /**
    * Specify a name attribute for the input.
@@ -167,11 +167,11 @@
     FORM_SIZE_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
+  import { useId } from "../utils/id-scope.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

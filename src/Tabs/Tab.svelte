@@ -39,7 +39,7 @@
    * Set an id for the top-level element.
    * Use a stable value with `Tabs` `selectedId` when tabs are added or removed dynamically.
    */
-  export let id = uniqueId();
+  export let id = useId("tab");
 
   /**
    * Specify an optional secondary label.
@@ -94,9 +94,9 @@
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import Close from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { useId } from "../utils/id-scope.js";
   import { tabindexAttribute } from "../utils/tabindex.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const {
     selectedTab,

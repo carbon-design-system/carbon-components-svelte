@@ -54,6 +54,7 @@
   import { createEventDispatcher, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";
   import { sameArrayItems } from "../utils/array-set-ops.js";
+  import { createIdScope } from "../utils/id-scope.js";
   import { rangeSlice } from "../utils/range-slice.js";
 
   const dispatch = createEventDispatcher();
@@ -243,6 +244,8 @@
   /** @type {import("svelte/store").Writable<"sm" | "md" | undefined>} */
   const groupSize = writable(size);
   $: groupSize.set(size);
+
+  createIdScope($$restProps.id, "selectable-tile-group");
 
   setContext("carbon:SelectableTileGroup", {
     groupSize: readonly(groupSize),

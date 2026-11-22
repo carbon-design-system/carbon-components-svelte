@@ -22,7 +22,7 @@
   export let value = /** @type {Value} */ ("value");
 
   /** Set an id for the input element */
-  export let id = uniqueId();
+  export let id = useId("structured-list-input");
 
   /** Specify a name attribute for the input */
   export let name = "";
@@ -42,9 +42,9 @@
 
   import { getContext, onMount } from "svelte";
   import { readable, writable } from "svelte/store";
+  import { useId } from "../utils/id-scope.js";
   import { noop } from "../utils/noop.js";
   import { tabindexAttribute } from "../utils/tabindex.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const initialChecked = checked;
   const ctx = getContext("carbon:StructuredListWrapper");

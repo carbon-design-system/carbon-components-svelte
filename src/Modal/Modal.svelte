@@ -204,7 +204,7 @@
   export let lazy = false;
 
   /** Set an id for the top-level element */
-  export let id = uniqueId();
+  export let id = useId("modal");
 
   /**
    * Obtain a reference to the top-level HTML element.
@@ -231,10 +231,10 @@
     initialFocus,
     restoreFocus,
   } from "../utils/focus.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import { trackModal } from "./modal-store.js";
 
   const dispatch = createEventDispatcher();

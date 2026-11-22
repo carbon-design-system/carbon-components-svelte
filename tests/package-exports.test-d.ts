@@ -2,6 +2,7 @@ import type {
   breakpointObserver,
   breakpoints,
   Button as BarrelButton,
+  createIdScope,
   createTheme,
   DataTable as BarrelDataTable,
   dismiss,
@@ -18,6 +19,7 @@ import type {
   themeScript,
   ThemeZone as BarrelThemeZone,
   trapFocus,
+  useId,
 } from "carbon-components-svelte";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
 import type Button from "carbon-components-svelte/src/Button/Button.svelte";
@@ -117,6 +119,8 @@ type _PreserveFocusSelection = ReturnType<typeof preserveFocusSelection>;
 type _RovingFocus = ReturnType<typeof rovingFocus>;
 type _RovingFocusOptions = RovingFocusOptions;
 type _TrapFocus = ReturnType<typeof trapFocus>;
+type _CreateIdScope = ReturnType<typeof createIdScope>;
+type _UseId = ReturnType<typeof useId>;
 
 const _tokens: Token[] | undefined = tokenize("let a", "js");
 const _type: TokenType | null | undefined = _tokens?.[0]?.type;

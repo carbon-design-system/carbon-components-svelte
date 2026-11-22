@@ -28,7 +28,7 @@
   export let secondaryLabel = "";
 
   /** Set an id for the top-level element */
-  export let id = uniqueId();
+  export let id = useId("progress-step");
 
   import { getContext, onMount } from "svelte";
   import { writable } from "svelte/store";
@@ -37,9 +37,9 @@
   import Incomplete from "../icons/Incomplete.svelte";
   import Warning from "../icons/Warning.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { useId } from "../utils/id-scope.js";
   import { noop } from "../utils/noop.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   let step =
     /** @type {{ complete: boolean; current: boolean; index: number }} */ ({});
