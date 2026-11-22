@@ -444,7 +444,7 @@
   export let portalMenu = undefined;
 
   /** Set an id for the date picker element */
-  export let id = uniqueId();
+  export let id = useId("date-picker");
 
   /**
    * Bind to the calendar for programmatic control: `open()`, `close()`,
@@ -495,13 +495,13 @@
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { clippedBy } from "../utils/fit-align.js";
+  import { createIdScope, useId } from "../utils/id-scope.js";
   import {
     declaredDirection,
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
   import { createCalendarApi } from "./calendar-api.js";
   import { createCalendar } from "./create-calendar.js";
@@ -1287,6 +1287,7 @@
     if (event.key === "Shift") clearRangePreview();
   }
 
+  createIdScope(id);
   setContext("carbon:DatePicker", {
     range,
     multiple,

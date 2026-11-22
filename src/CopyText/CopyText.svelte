@@ -74,13 +74,13 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { COPY_FEEDBACK_TIMEOUT_MS } from "../utils/copy-feedback.js";
   import { copyText } from "../utils/copy-text.js";
+  import { useId } from "../utils/id-scope.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   // The button describes itself with the value, so each copy button in a
   // list reads as "Copy to clipboard, <value>". An explicit `id` on the
   // root gives the value a stable id, so server and client markup match.
-  const generatedId = uniqueId();
+  const generatedId = useId("copy-text");
   $: valueId = $$restProps.id ? `${$$restProps.id}-value` : generatedId;
 
   /** @type {null | HTMLSpanElement} */

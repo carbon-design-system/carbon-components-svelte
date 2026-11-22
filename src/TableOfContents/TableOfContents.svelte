@@ -66,6 +66,7 @@
     revealItem,
     scrollToSection,
   } from "../utils/active-section.js";
+  import { createIdScope } from "../utils/id-scope.js";
   import { noop } from "../utils/noop.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { observeResize } from "../utils/shared-observer.js";
@@ -217,6 +218,8 @@
   }
 
   let grouped = false;
+
+  createIdScope($$restProps.id, "toc");
 
   setContext("carbon:TableOfContents", {
     selectedId: selectedStore,

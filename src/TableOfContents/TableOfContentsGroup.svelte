@@ -10,11 +10,11 @@
   export let labelText = "";
 
   /** Set an id for the label element */
-  export let id = uniqueId();
+  export let id = useId("toc-group");
 
   import { getContext } from "svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   getContext("carbon:TableOfContents")?.registerGroup?.();
 

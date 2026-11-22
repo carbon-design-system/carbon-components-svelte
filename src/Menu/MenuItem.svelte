@@ -85,7 +85,7 @@
    * It's recommended to provide an id as a value to bind to
    * within a selectable or radio menu group.
    */
-  export let id = uniqueId();
+  export let id = useId("menu-item");
 
   /**
    * Obtain a reference to the list item HTML element.
@@ -103,6 +103,7 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { useId } from "../utils/id-scope.js";
   import {
     applePlatform,
     ariaKeyShortcuts,

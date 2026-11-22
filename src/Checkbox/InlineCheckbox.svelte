@@ -1,6 +1,6 @@
 <script>
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   /** Specify whether the checkbox is checked */
   export let checked = false;
@@ -15,7 +15,7 @@
   export let title = undefined;
 
   /** Set an id for the input label */
-  export let id = uniqueId();
+  export let id = useId("inline-checkbox");
 
   /**
    * Obtain a reference to the input HTML element

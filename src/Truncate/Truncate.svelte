@@ -71,12 +71,12 @@
 
   import { onMount } from "svelte";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
+  import { useId } from "../utils/id-scope.js";
   import { noop } from "../utils/noop.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { isTruncated, observeTruncation } from "../utils/truncation.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
-  const fallbackId = uniqueId("ccs-truncate");
+  const fallbackId = useId("truncate", "ccs-truncate");
 
   /** @type {null | HTMLElement} */
   let textRef = null;

@@ -15,7 +15,7 @@
   export let tabindex = "-1";
 
   /** Set an id for the top-level element */
-  export let id = uniqueId();
+  export let id = useId("list-box-field");
 
   /**
    * Obtain a reference to the top-level HTML element.
@@ -25,8 +25,8 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
+  import { useId } from "../utils/id-scope.js";
   import { tabindexAttribute } from "../utils/tabindex.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:MultiSelect");
 

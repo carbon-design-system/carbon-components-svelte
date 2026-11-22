@@ -156,7 +156,7 @@
    * The title and subtitle ids derive from it as `{id}-title` and
    * `{id}-subtitle`.
    */
-  export let id = uniqueId();
+  export let id = useId("side-panel");
 
   /**
    * Obtain a reference to the panel element.
@@ -194,6 +194,7 @@
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { focusQuietly, initialFocus, restoreFocus } from "../utils/focus.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {
     getLayoutDirection,
@@ -203,7 +204,6 @@
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { trapFocus } from "../utils/trap-focus.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const focusReturn = restoreFocus();

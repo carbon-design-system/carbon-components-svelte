@@ -1,10 +1,12 @@
 <script>
   /**
    * Set an id for the top-level element.
-   * Without one, the panel takes `{tabId}-panel` from the tab at its position.
+   * Without one, the panel takes `{tabId}-panel` from the tab at its
+   * position, or a generated id when no tab is there.
    * Prefer a stable value when pairing panels with dynamic tabs.
+   * @type {string}
    */
-  export let id = uniqueId();
+  export let id = "";
 
   /**
    * Set to `true` to defer mounting panel content until this tab is first selected
@@ -23,7 +25,7 @@
   export let flush = false;
 
   import { getContext, onMount } from "svelte";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   const {
     selectedContent,
@@ -39,8 +41,9 @@
   // points `aria-controls` at. With its own `id`, it keeps it: the tab
   // rendered first, so on the server its `aria-controls` still names the
   // reserved id until registration corrects it after mount.
-  const initialPanel = claimPanel?.(id, $$props.id !== undefined);
-  if (initialPanel && initialPanel.id !== id) id = initialPanel.id;
+  // Only an unclaimed panel draws an id, so most never spend one.
+  const initialPanel = claimPanel?.(id || "", !!id);
+  id = initialPanel?.id || id || useId("tab-content");
 
   addContent({ id });
 

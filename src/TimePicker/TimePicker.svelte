@@ -58,7 +58,7 @@
   export let helperText = "";
 
   /** Set an id for the input element */
-  export let id = uniqueId();
+  export let id = useId("time-picker");
 
   /**
    * Specify a name attribute for the input.
@@ -100,10 +100,10 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { createIdScope, useId } from "../utils/id-scope.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;
@@ -125,6 +125,7 @@
     hideLabel: readOnly(groupHideLabel),
   };
 
+  createIdScope(id);
   setContext("carbon:TimePicker", timePickerContext);
 
   function handleFocus() {

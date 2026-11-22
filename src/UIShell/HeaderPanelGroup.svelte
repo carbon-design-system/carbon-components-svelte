@@ -9,9 +9,9 @@
    */
   export let label = "";
 
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
-  const labelId = uniqueId("ccs-header-panel-group");
+  const labelId = useId("header-panel-group", "ccs-header-panel-group");
 </script>
 
 <!--

@@ -99,7 +99,7 @@
   export let requireTitle = true;
 
   /** Set an id for the top-level element */
-  export let id = uniqueId();
+  export let id = useId("overflow-menu-item");
 
   /**
    * Obtain a reference to the HTML element.
@@ -116,6 +116,7 @@
   } from "svelte";
   import Kbd from "../Kbd/Kbd.svelte";
   import { splitAria } from "../utils/aria-naming.js";
+  import { useId } from "../utils/id-scope.js";
   import {
     applePlatform,
     ariaKeyShortcuts,
@@ -123,7 +124,6 @@
   } from "../utils/keyboard-shortcut.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const { focusedId, moveFocus, add, remove, patch, update, itemsById } =

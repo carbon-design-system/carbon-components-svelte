@@ -46,7 +46,7 @@
   export let hideLabel = false;
 
   /** Set an id for the input element */
-  export let id = uniqueId();
+  export let id = useId("radio-button");
 
   /**
    * Specify a name attribute for the radio button input.
@@ -76,7 +76,7 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
   import {
     registerRadioButton,
     updateGroupSelection,

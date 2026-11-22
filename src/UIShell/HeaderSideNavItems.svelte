@@ -7,6 +7,7 @@
 
   import { getContext, onMount, setContext } from "svelte";
   import { readable } from "svelte/store";
+  import { createIdScope } from "../utils/id-scope.js";
   import { createMenubar } from "../utils/menubar.js";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
 
@@ -27,6 +28,8 @@
   const orientation = menubar.orientation;
 
   onMount(() => menubar.destroy);
+
+  createIdScope($$restProps.id, "header-side-nav-items");
 
   setContext("carbon:HeaderNav", {
     registerItem,
