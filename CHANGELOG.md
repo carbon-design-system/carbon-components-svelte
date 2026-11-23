@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.114.6](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.5...v0.114.6) (2026-11-23)
+
+### Bug Fixes
+
+- **link:** space and align icons in the default slot ([ab674c1](https://github.com/carbon-design-system/carbon-components-svelte/commit/ab674c1fd9ede3c2de843979d84cba14b5014609))
+- **table-of-contents:** line up slotted icons and tags with the text ([859dc5a](https://github.com/carbon-design-system/carbon-components-svelte/commit/859dc5a61eccbf8bf4b928b36c96360999a27161))
+- **toggle-button-group:** keep the icon its size when the label wraps ([b029891](https://github.com/carbon-design-system/carbon-components-svelte/commit/b029891efb759930e7b7e7bfcec4e817d702810b))
+
 ### [0.114.5](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.4...v0.114.5) (2026-11-22)
 
 ### Bug Fixes
