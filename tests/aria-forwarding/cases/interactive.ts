@@ -14,6 +14,8 @@ import Dialog from "carbon-components-svelte/Dialog/Dialog.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
+import AppliedFilters from "carbon-components-svelte/FilterPanel/AppliedFilters.svelte";
+import FilterPanel from "carbon-components-svelte/FilterPanel/FilterPanel.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
@@ -37,6 +39,7 @@ import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
 import Truncate from "carbon-components-svelte/Truncate/Truncate.svelte";
 import UserAvatar from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
+import { stubViewport } from "../../utils/match-media";
 import type { AriaEntry } from "../contract";
 import AccordionItem from "../fixtures/AccordionItem.test.svelte";
 import BreadcrumbItemFixture from "../fixtures/BreadcrumbItem.test.svelte";
@@ -48,6 +51,7 @@ import ClickableTile from "../fixtures/ClickableTile.test.svelte";
 import ComposedModal from "../fixtures/ComposedModal.test.svelte";
 import ContextMenu from "../fixtures/ContextMenu.test.svelte";
 import ContextMenuOption from "../fixtures/ContextMenuOption.test.svelte";
+import FilterFlyoutFixture from "../fixtures/FilterFlyout.test.svelte";
 import InterstitialScreen from "../fixtures/InterstitialScreen.test.svelte";
 import InterstitialScreenBody from "../fixtures/InterstitialScreenBody.test.svelte";
 import Link from "../fixtures/Link.test.svelte";
@@ -66,6 +70,24 @@ import TooltipDefinition from "../fixtures/TooltipDefinition.test.svelte";
 const nodes = [{ id: "docs", text: "Docs" }];
 
 export const interactive: AriaEntry[] = [
+  {
+    name: "AppliedFilters",
+    render: (attrs) => render(AppliedFilters, { props: attrs }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "FilterPanel",
+    render: (attrs) => render(FilterPanel, { props: attrs }),
+    target: () => screen.getAllByRole("group")[0],
+  },
+  {
+    name: "FilterFlyout",
+    render: (attrs) => {
+      stubViewport(1100);
+      return render(FilterFlyoutFixture, { props: attrs });
+    },
+    target: () => screen.getByRole("complementary"),
+  },
   {
     name: "AILabel",
     render: (attrs) => render(AILabel, { props: attrs }),

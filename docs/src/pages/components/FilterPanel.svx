@@ -1,0 +1,168 @@
+---
+components: ["FilterPanel", "AppliedFilters", "FilterFlyout"]
+description: A faceted filter panel narrows a list or table by category, range, date and more, with live counts, applied-filter chips and a flyout on small screens.
+---
+
+## Basic
+
+Describe each filter as a facet and bind `value`. `FilterPanel` draws the controls, and `value` holds what is applied: an object with one entry per facet that filters something.
+
+Wrap the facets in `defineFacets`. It returns them unchanged and keeps each `type` as the literal TypeScript expects, where a plain array widens it to `string`.
+
+The panel does not read your records. Count them with `facetCounts`, which returns the number of results each option would give and the total, and filter them with `filterRecords`. Both are plain functions, so a server can run them too.
+
+<FileSource src="/framed/FilterPanel/FilterPanelBasic" />
+
+## Facets
+
+Each facet has an `id`, a `label` and a `type`. The record property is `id`, or `field`, or whatever `getValue` returns.
+
+| Type | Control | Value |
+| :--- | :--- | :--- |
+| `checkbox` | A list with counts, a search above 12 options and "Show more" | `["Compute", "Storage"]` |
+| `radio` | A group with an Any option | `"Premium"` |
+| `range` | `RangeSlider` with two number inputs | `[100, null]`, an open end is `null` |
+| `date` | A `DatePicker` range | `["2025-01-01", null]`, as `YYYY-MM-DD` |
+| `toggle` | A `Toggle` | `true` |
+| `tree` | A `TreeView` with checkboxes | `["infrastructure"]`, a branch stands for its children |
+
+Every facet is a group with the facet's name, inside an accordion item. Set `collapsed` on a facet to start it closed. The header shows how many selections the facet holds.
+
+<FileSource src="/framed/FilterPanel/FilterPanelFacets" />
+
+A `checkbox` facet matches a record that has any of the checked values. Set `match` to `"all"` for a record that holds several values, such as tags, and it must have every one.
+
+## Counts
+
+### Disjunctive counts
+
+An option's count is the number of results you would get by checking it. A facet's own selection does not shrink its own counts, so with `Compute` checked, `Databases` still shows how many databases there are, and checking it adds them. The counts of every other facet follow all the filters. A `match: "all"` facet counts under its own selection too, since each tag you add narrows the list.
+
+`facetCounts` computes this in one pass over the records. Each record fails zero, one or more facets. A record that passes all of them is a result and counts for every facet. A record that fails exactly one counts for that facet alone. No facet is counted a second time, so the cost is one test per active facet per record, however many facets there are.
+
+| Records and facets | Recount and filter |
+| :--- | :--- |
+| 50,000 records, 8 facets, nothing applied | 13 ms |
+| 50,000 records, 8 facets, every facet applied | 12 ms |
+| The same, with the CPU throttled four times | 50 ms |
+
+Measured in Chromium. Recount on every change; no index or worker is needed at this size. Past a few hundred thousand records, count on the server.
+
+### Zero counts
+
+Set `zeroCounts` to choose what an option with no results does. `"disable"`, the default, keeps it in place and dims it. `"hide"` removes it. A checked option always stays, so it can be unchecked.
+
+| Do | Why |
+| :--- | :--- |
+| Disable by default | The list holds still, so the option under the pointer does not move between two clicks. |
+| Hide in a long list | Fifty dimmed options bury the few that work. |
+| Keep options in a stable order | Sorting by count as it changes moves every option on each click. Derive the order once, as `deriveFacetOptions` does. |
+
+<FileSource src="/framed/FilterPanel/FilterPanelZeroCounts" />
+
+### Server counts
+
+The panel takes counts as data. Pass what your API returns in the same shape, `{ category: { Compute: 4 } }`. An option missing from a facet's entry counts as zero, and a facet with no entry shows no counts.
+
+<FileSource src="/framed/FilterPanel/FilterPanelServer" />
+
+### Long lists
+
+A `checkbox` facet shows its first `limit` options (6 by default), plus any checked one beyond them, then "Show more". At 12 options it adds a search field. An expanded list draws at most `maxOptions` options (100) and asks the user to search for the rest.
+
+| Options drawn | Expand time | With the CPU throttled four times |
+| :--- | :--- | :--- |
+| 100 | 29 ms | 63 ms |
+| 500 | 76 ms | 290 ms |
+
+Measured in a Chromium production build, from the click to the second frame. A faceted list is a thing to narrow, not to scroll, so the panel stops at 100 and does not virtualize: a virtual list gives up in-page find and makes "select all in view" meaningless.
+
+## Applying filters
+
+### Applied filters
+
+`AppliedFilters` shows one dismissible tag for each selection, with Clear all, and keeps focus in the bar when a tag goes. Place it above the results. It takes the same `facets` and `value`.
+
+<FileSource src="/framed/FilterPanel/FilterPanelApplied" />
+
+### Batch
+
+Set `mode` to `"batch"` when each change costs a request. Edits go to `draft`, and nothing is applied until Apply. Reset puts the draft back to what is applied, and Clear all empties the draft. Compute counts from `draft` to preview the result, as below.
+
+In the handlers, read the filters from the event: `apply` and `change` carry them. A bound `value` updates after the handler runs.
+
+<FileSource src="/framed/FilterPanel/FilterPanelBatch" />
+
+| Do | Why |
+| :--- | :--- |
+| Use `instant` for a list in memory | The result is under a frame, and users see what each click does. |
+| Use `batch` when a change costs a request | One request for several changes, and no results flashing in between. |
+| Show the count from the draft in `batch` mode | Apply then says what it will return. |
+
+## Layout
+
+`FilterFlyout` keeps its content inline, in an `aside`, at the `lg` breakpoint and wider. Below it, the content moves into a `SidePanel` that opens from the start edge, and `flyout` says which one is showing. Show a Filter button when `flyout` is `true` and set `open` from it. The server writes the inline layout, since it does not know the width.
+
+A filter button in the table toolbar opens the flyout, and the table's description counts the rows left. Resize the window to see the panel move.
+
+<FileSource src="/framed/FilterPanel/FilterPanelDataTable" />
+
+The panel's state lives in `value`, which the page owns, so changing layout keeps the filters. In `batch` mode the draft belongs to the panel and a closed flyout drops it.
+
+## Filter model
+
+A filter state converts to these shapes.
+
+| Shape | Functions | Notes |
+| :--- | :--- | :--- |
+| `FilterState`, `{ category: ["Compute"] }` | `normalizeFilterState` | What `value` holds. One key per facet. |
+| A list of filters, `{ key, op, values, negated }` | `toFilters`, `fromFilters` | The shape of `TokenSearch`'s `query.filters`. A checkbox is one `eq` with several values, a range is `gte`, `lte` or `between`. |
+| A query, `{ text, filters }` | `toQuery`, `fromQuery` | A `TokenSearch` `query`, with the free text beside the filters. |
+| A tree of conditions | `toConditions`, `fromConditions` | A `QueryBuilder` tree: one `and` group. |
+
+The list of filters is the shape to save and share. A `QueryBuilder` tree can say more, with `or` groups and nesting, so a tree converts back with a `skipped` list for what the facets cannot show. A `tree` facet is written as its leaves, so a consumer that knows nothing of the hierarchy still matches.
+
+<FileSource src="/framed/FilterPanel/FilterPanelConversions" />
+
+### URL
+
+`toSearchParams` writes one parameter per value, `category=Compute&category=Storage`, so a value that holds a comma stays whole. A range is `cost=100..500`, `100..` or `..500`. `fromSearchParams` reads only the facets' names, drops a value that does not parse or that a facet's `options` do not list, and returns a state that is safe to render. Pass `prefix` to keep the names clear of other parameters.
+
+<FileSource src="/framed/FilterPanel/FilterPanelUrl" />
+
+To render the first page with the filters, read them from the request.
+
+```js
+import { facetCounts, filterRecords, fromSearchParams } from "carbon-components-svelte";
+
+export function load({ url }) {
+  const value = fromSearchParams(facets, url.searchParams);
+  return { value, ...facetCounts(records, facets, value), rows: filterRecords(records, facets, value) };
+}
+```
+
+## Accessibility
+
+Each facet is a group named by the facet. A checkbox or radio facet is a `fieldset` with a legend, the others hold their control in one, and the accordion header repeats the name as the button. The panel has no landmark of its own: `FilterFlyout` writes an `aside` named by its `title`, or put the panel in your own region.
+
+The result count is spoken from a polite status region. It waits `announceDelay` (800 ms) for the count to stop changing, then says the last one, so clicking five options reads one count. A count that comes back to what was said is not said again, and the count at load is never said. Because the region lives in the panel, a closed flyout does not speak. Count in the table's own description, as above.
+
+Clear all in the panel stays where it is and reads as unavailable once nothing is applied, so focus is not lost. A tag removed from `AppliedFilters` moves focus to the tag that took its place, or the one before it, and to the bar itself when none is left. Clear all in the bar moves focus to the bar.
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="Tab" /> | Move through the headers, options, inputs and buttons. |
+| <DocKbd label="Space" /> | Check or uncheck an option, toggle a switch. |
+| <DocKbd label="Enter" /> | Open or close a facet, press a button, remove a tag. |
+| Arrow keys | Move between the radios of a group, the thumbs of a slider and the nodes of a tree. |
+| <DocKbd label="Escape" /> | Close the flyout. Focus returns to the button that opened it. |
+
+## Usage
+
+| Do | Why |
+| :--- | :--- |
+| Count with `facetCounts` and filter with `filterRecords` from the same `facets` | One schema keeps the counts, the results and the chips in step. |
+| Put the applied tags above the results | They answer "why is my list short" where the user is looking. |
+| Show the number of results beside the table | The status region speaks it, and nobody has to count rows. |
+| Order facets by how often they are used | Collapse the rest with `collapsed`. |
+| Keep `value` in the URL | A filtered list becomes a link, and Back works. |

@@ -4,6 +4,7 @@ export { default as AccordionSkeleton } from "./Accordion/AccordionSkeleton.svel
 export { default as ActionSet } from "./ActionSet/ActionSet.svelte";
 export { default as AILabel } from "./AILabel/AILabel.svelte";
 export { default as AILabelActions } from "./AILabel/AILabelActions.svelte";
+export { default as AppliedFilters } from "./FilterPanel/AppliedFilters.svelte";
 export { default as AspectRatio } from "./AspectRatio/AspectRatio.svelte";
 export { default as BadgeIndicator } from "./BadgeIndicator/BadgeIndicator.svelte";
 export { default as BigNumber } from "./BigNumber/BigNumber.svelte";
@@ -108,6 +109,25 @@ export { default as FileUploaderButton } from "./FileUploader/FileUploaderButton
 export { default as FileUploaderDropContainer } from "./FileUploader/FileUploaderDropContainer.svelte";
 export { default as FileUploaderItem } from "./FileUploader/FileUploaderItem.svelte";
 export { default as FileUploaderSkeleton } from "./FileUploader/FileUploaderSkeleton.svelte";
+export { default as FilterFlyout } from "./FilterPanel/FilterFlyout.svelte";
+export { default as FilterPanel } from "./FilterPanel/FilterPanel.svelte";
+export {
+  appliedFilters,
+  countFilters,
+  defineFacets,
+  deriveFacetOptions,
+  facetCounts,
+  filterRecords,
+  fromConditions,
+  fromFilters,
+  fromQuery,
+  fromSearchParams,
+  normalizeFilterState,
+  toConditions,
+  toFilters,
+  toQuery,
+  toSearchParams,
+} from "./FilterPanel/filter-model.js";
 export { default as FluidForm } from "./FluidForm/FluidForm.svelte";
 export { default as Form } from "./Form/Form.svelte";
 export { default as FormGroup } from "./FormGroup/FormGroup.svelte";
