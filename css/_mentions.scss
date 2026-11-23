@@ -1,0 +1,98 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// The menu of `Mentions`: a list box menu that floats at the caret of a
+/// `TextArea` or `TextInput`. It sits in a portal, outside any `bx--list-box`,
+/// so the option sizes Carbon scopes under `bx--list-box--sm` are restated
+/// here, and its width follows its content between a minimum and a maximum.
+/// An option may carry secondary text, which takes the room the text leaves.
+/// @access private
+/// @group components
+@mixin mentions {
+  // A zero-width marker inside the field's wrapper, moved to the trigger by
+  // the component. The floating portal places the menu against it.
+  .#{$prefix}--mentions__anchor {
+    position: absolute;
+    width: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .#{$prefix}--mentions__menu {
+    min-width: to-rem(192px);
+    max-width: min(to-rem(384px), calc(100vw - #{$carbon--spacing-05}));
+    background-color: $field;
+    box-shadow: 0 2px 6px rgba($carbon--black-100, 0.3);
+  }
+
+  .#{$prefix}--mentions__menu .#{$prefix}--list-box__menu-item {
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--mentions__menu .#{$prefix}--list-box__menu-item__option {
+    display: flex;
+    height: to-rem(32px);
+    align-items: center;
+    padding-top: to-rem(7px);
+    padding-bottom: to-rem(7px);
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--mentions__menu--md .#{$prefix}--list-box__menu-item {
+    height: to-rem(40px);
+  }
+
+  .#{$prefix}--mentions__menu--md
+    .#{$prefix}--list-box__menu-item__option {
+    height: to-rem(40px);
+    padding-top: to-rem(11px);
+    padding-bottom: to-rem(11px);
+  }
+
+  .#{$prefix}--mentions__menu--lg .#{$prefix}--list-box__menu-item {
+    height: to-rem(48px);
+  }
+
+  .#{$prefix}--mentions__menu--lg
+    .#{$prefix}--list-box__menu-item__option {
+    height: to-rem(48px);
+    padding-top: to-rem(15px);
+    padding-bottom: to-rem(15px);
+  }
+
+  // A handle such as `@praman` keeps its `@` at its start under `dir="rtl"`
+  // instead of moving it past the name.
+  .#{$prefix}--mentions__text {
+    min-width: 0;
+    unicode-bidi: plaintext;
+    flex: 0 1 auto;
+    overflow: hidden;
+    color: $text-primary;
+    text-overflow: ellipsis;
+  }
+
+  .#{$prefix}--mentions__secondary {
+    min-width: 0;
+    unicode-bidi: plaintext;
+    flex: 1 1 0;
+    overflow: hidden;
+    color: $text-secondary;
+    text-overflow: ellipsis;
+  }
+
+  // The highlighted row fills with `Highlight` and opts out of forcing (see
+  // the list box), so its text needs the system color the fill asks for.
+  @media (forced-colors: active) {
+    .#{$prefix}--list-box__menu-item--highlighted .#{$prefix}--mentions__text,
+    .#{$prefix}--list-box__menu-item--highlighted
+      .#{$prefix}--mentions__secondary {
+      color: HighlightText;
+    }
+  }
+}
+
+@include exports("mentions") {
+  @include mentions;
+}
