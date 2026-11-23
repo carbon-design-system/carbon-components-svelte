@@ -6,6 +6,7 @@ description: Links provide styled hyperlinks with multiple sizes, states, and ic
 <script>
   import { Link, LinkDownload, OutboundLink, Text } from "carbon-components-svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
+  import DocumentPdf from "carbon-icons-svelte/lib/DocumentPdf.svelte";
 </script>
 
 ## Basic
@@ -152,6 +153,15 @@ Use the `icon` named slot to render custom icon markup instead of, or with diffe
   </Link>
   before upgrading.
 </div>
+
+### Leading icon
+
+The `icon` prop puts the icon after the text. To put one before it, such as a file type, add it to the default slot. It keeps its size and lines up with the first line when the text wraps.
+
+<Link href="/reports/q3-usage.pdf">
+  <DocumentPdf />
+  Q3 usage report
+</Link>
 
 ## Sizes
 
