@@ -6,6 +6,7 @@
     ToggletipFooter,
   } from "carbon-components-svelte";
   import Carbon from "carbon-icons-svelte/lib/Carbon.svelte";
+  import DocumentPdf from "carbon-icons-svelte/lib/DocumentPdf.svelte";
 </script>
 
 <Link
@@ -33,6 +34,13 @@
 >
   Large
 </Link>
+
+<div style="width: 10rem;">
+  <Link data-testid="link-slot-icon" href="#q3-usage">
+    <DocumentPdf />
+    Quarterly usage report for every region
+  </Link>
+</div>
 
 <p style="color: rgb(10, 20, 30);">
   Read the

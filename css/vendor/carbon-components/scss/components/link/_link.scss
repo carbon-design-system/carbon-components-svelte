@@ -34,6 +34,11 @@ $link-focus-text-color: var(--cds-link-focus-text-color, #{$focus});
     @include type-style('body-compact-01');
 
     display: inline-flex;
+    // ccs: a gap spaces the built-in icon and anything in the default slot,
+    // such as a leading icon or a tag, and the text keeps the line's baseline
+    // when an icon comes first.
+    align-items: baseline;
+    gap: $spacing-02;
     color: $link-text-color;
     outline: none;
     text-decoration: none;
@@ -130,18 +135,15 @@ $link-focus-text-color: var(--cds-link-focus-text-color, #{$focus});
 
   .#{$prefix}--link--lg {
     @include type-style('body-compact-02');
+
+    gap: $spacing-03; // ccs: upstream's lg icon gap
   }
 
+  // ccs: the link's gap replaces upstream's `margin-left`, which stayed on
+  // the left in RTL.
   .#{$prefix}--link__icon {
     display: inline-flex;
     align-self: center;
-    // Narrower than upstream's $spacing-03 for the default and sm sizes; lg
-    // restores it below (formerly css/_link.scss).
-    margin-left: $spacing-02; // ccs: value
-  }
-
-  .#{$prefix}--link--lg .#{$prefix}--link__icon { // ccs: flatten
-    margin-left: $spacing-03;
   }
 }
 
@@ -174,6 +176,33 @@ $link-focus-text-color: var(--cds-link-focus-text-color, #{$focus});
 
 @include exports("link-icon") {
   @include link-icon;
+}
+
+// carbon-components-svelte patch (link-slot-icon)
+/// An icon in the default slot is a flex item of the link. Keep it from
+/// shrinking when the text wraps, and center it on the first line, as icons
+/// beside wrapped text do in Carbon: a 16px icon sits 1px into the 18px
+/// line, flush in the 16px `sm` line, and 3px into the 22px `lg` line.
+/// @access private
+/// @group components
+@mixin link-slot-icon {
+  .#{$prefix}--link > svg {
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-block-start: 1px;
+  }
+
+  .#{$prefix}--link--sm > svg {
+    margin-block-start: 0;
+  }
+
+  .#{$prefix}--link--lg > svg {
+    margin-block-start: to-rem(3px);
+  }
+}
+
+@include exports("link-slot-icon") {
+  @include link-slot-icon;
 }
 
 /// Muted Link variant: inherit the surrounding text color instead of the
