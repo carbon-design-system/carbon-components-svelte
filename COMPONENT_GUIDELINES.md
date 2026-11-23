@@ -166,6 +166,8 @@ These names apply to new components and new props. Shipped components keep their
 - `actions` holds a group of buttons. `action` holds exactly one.
 - `empty` renders when there are no items. `noResults` renders when a filter matches none. A component with both states has both slots.
 - A slot for a custom trigger passes one object to spread on it, such as `let:triggerProps` with its `id`, `aria-*` attributes and handlers.
+- A text slot inside a flex row, such as a link, button or menu item, renders in one wrapper element (`__label`, `__text`, `__link-content`). Without it, each icon, tag and text run in the slot is a separate flex item: they touch, an icon shrinks when the text wraps, and a tag truncates. Give the wrapper a gap, `flex-shrink: 0` on icons and tags, and `align-items: flex-start` so they line up with the first line of wrapped text.
+- Slot content inside a link or button must not be interactive: a nested link or button is invalid HTML. The docs say so in the component's usage table. An icon in the slot that shows status, not decoration, gets a `title` so it adds to the control's name.
 
 ### Data props or child components
 
