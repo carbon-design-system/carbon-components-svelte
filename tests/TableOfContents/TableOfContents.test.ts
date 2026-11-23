@@ -4,6 +4,7 @@ import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import TableOfContentsGroups from "./TableOfContents.groups.test.svelte";
 import TableOfContentsItems from "./TableOfContents.items.test.svelte";
+import TableOfContentsSlot from "./TableOfContents.slot.test.svelte";
 import TableOfContents from "./TableOfContents.test.svelte";
 import { renderMeasured } from "./helpers";
 
@@ -34,6 +35,16 @@ describe("TableOfContents", () => {
       "#overview",
     );
     expect(screen.getAllByRole("listitem")).toHaveLength(3);
+  });
+
+  it("renders slotted content in the link's content row and name", () => {
+    render(TableOfContentsSlot);
+
+    const link = screen.getByRole("link", { name: "Theme New" });
+    expect(screen.getByTestId("icon").parentElement).toHaveClass(
+      "bx--toc__link-content",
+    );
+    expect(link.firstElementChild).toHaveClass("bx--toc__link-content");
   });
 
   it("indents and marks items below the first level", () => {

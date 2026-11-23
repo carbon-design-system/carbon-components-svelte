@@ -134,6 +134,6 @@
     on:click
     on:click={handleClick}
   >
-    <slot>{text}</slot>
+    <span class:bx--toc__link-content={true}><slot>{text}</slot></span>
   </a>
 </li>
