@@ -15,6 +15,7 @@ description: A table of contents lists the sections of a page as links and highl
     TableOfContents,
     TableOfContentsGroup,
     TableOfContentsItem,
+    Tag,
     Text,
   } from "carbon-components-svelte";
 
@@ -36,6 +37,7 @@ description: A table of contents lists the sections of a page as links and highl
   let nestedContainer = null;
   let groupContainer = null;
   let smallContainer = null;
+  let contentContainer = null;
 
   let article = null;
   let headings = [];
@@ -423,6 +425,53 @@ For rendered Markdown or other content you don't write item by item, read the he
   </Row>
 </Grid>
 
+## Content
+
+### Status tags
+
+Each item's default slot renders inside its link, so an item can hold more than text, such as a tag that marks a section as new or in beta. Put status after the text so items at the same level still start in line, and use small tags, which match the height of a line. Icons and tags line up with the first line of a label that wraps. Everything in the slot is part of the link's accessible name, so screen readers announce "Theme New".
+
+<Grid>
+  <Row>
+    <Column sm={4} md={3} lg={4}>
+      <TableOfContents scrollContainer={contentContainer}>
+        <TableOfContentsItem href="#toc-content-install" text="Install" />
+        <TableOfContentsItem href="#toc-content-theme">
+          Theme <Tag size="sm" type="blue">New</Tag>
+        </TableOfContentsItem>
+        <TableOfContentsItem href="#toc-content-motion">
+          Motion <Tag size="sm" type="purple">Beta</Tag>
+        </TableOfContentsItem>
+        <TableOfContentsItem href="#toc-content-props" text="Props" />
+      </TableOfContents>
+    </Column>
+    <Column sm={4} md={5} lg={12}>
+      <Box bind:ref={contentContainer} height="16rem" overflowY="auto">
+        <Prose>
+          <section id="toc-content-install">
+            <h4>Install</h4>
+            <p>Add the package with your package manager, then import the CSS once at the root of your app.</p>
+          </section>
+          <section id="toc-content-theme">
+            <h4>Theme</h4>
+            <p>Wrap the app in a theme to set the color tokens. Every component reads the same tokens.</p>
+            <p>Switch the theme at runtime, and the page updates at once.</p>
+          </section>
+          <section id="toc-content-motion">
+            <h4>Motion</h4>
+            <p>Components animate with the productive easing curves, and stop animating when the reader prefers reduced motion.</p>
+          </section>
+          <section id="toc-content-props">
+            <h4>Props</h4>
+            <p>Each component lists its props with a type, a default, and a short description.</p>
+            <p>Props that aren't listed pass through to the root element.</p>
+          </section>
+        </Prose>
+      </Box>
+    </Column>
+  </Row>
+</Grid>
+
 ## Usage
 
 | Do | Why |
@@ -436,4 +485,5 @@ For rendered Markdown or other content you don't write item by item, read the he
 | Group items under a `TableOfContentsGroup` when the page has distinct parts, such as examples and reference. | A plain-text title names each part without adding a link that goes nowhere, and screen readers announce the group. |
 | Set `size="sm"` when the list is long. | Shorter rows fit more sections in view, so the reader sees where they are without scrolling the sidebar. |
 | Keep item text short and matching the section heading. | Long labels wrap onto several lines and push later sections out of view in a sticky sidebar. |
+| Keep slot content to non-interactive status, such as a tag or an icon, after the text. | It renders inside the item's link, where a nested button or link is invalid HTML, and leading content pushes the text out of line with the other items at its level. |
 | Set `labelText` when a page has more than one navigation landmark. | It names the `nav`, which defaults to "Table of contents". |
