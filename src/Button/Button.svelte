@@ -72,6 +72,18 @@
   export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
+   * Specify props to pass to the `icon` component, such as `loop` on an
+   * animated icon. The button's icon `class` and `aria-hidden` still apply,
+   * and a `class` or `style` here is added to them.
+   * @type {import("../utils/icon-component.js").IconComponentProps<Icon> | undefined}
+   * @example
+   * ```svelte
+   * <Button icon={Renew} iconProps={{ loop: refreshing }}>Refresh</Button>
+   * ```
+   */
+  export let iconProps = undefined;
+
+  /**
    * Specify the ARIA label for the button icon.
    * On an icon-only button, this also drives Carbon's tooltip. If omitted,
    * the icon-only button renders without a tooltip; supply your own
@@ -479,9 +491,13 @@
       $inputGroupSize ??
       formButtonSize($formSize) ??
       "default");
-  $: iconProps = {
+  $: iconStyle = hasIconOnly ? "margin-inline-start: 0" : undefined;
+  $: iconComponentProps = {
+    ...iconProps,
+    style:
+      [iconProps?.style, iconStyle].filter(Boolean).join("; ") || undefined,
     "aria-hidden": "true",
-    class: "bx--btn__icon",
+    class: ["bx--btn__icon", iconProps?.class].filter(Boolean).join(" "),
   };
 
   /** @param {MouseEvent} event */
@@ -640,23 +656,20 @@
             small
             description={loadingDescription}
             class="bx--btn__loading"
-            style={hasIconOnly ? "margin-inline-start: 0" : undefined}
+            style={iconStyle}
           />
         {:else if $$slots.icon}
           <!-- An svg in the slot takes the icon's styles without the class. -->
           <span class:bx--btn__icon-slot={true}>
             <slot
               name="icon"
-              style={hasIconOnly ? "margin-inline-start: 0" : undefined}
-              {...iconProps}
+              style={iconStyle}
+              aria-hidden="true"
+              class="bx--btn__icon"
             />
           </span>
         {:else if icon}
-          <svelte:component
-            this={icon}
-            style={hasIconOnly ? "margin-inline-start: 0" : undefined}
-            {...iconProps}
-          />
+          <svelte:component this={icon} {...iconComponentProps} />
         {/if}
       </a>
       <slot name="badge" />
@@ -711,23 +724,20 @@
           small
           description={loadingDescription}
           class="bx--btn__loading"
-          style={hasIconOnly ? "margin-inline-start: 0" : undefined}
+          style={iconStyle}
         />
       {:else if $$slots.icon}
         <!-- An svg in the slot takes the icon's styles without the class. -->
         <span class:bx--btn__icon-slot={true}>
           <slot
             name="icon"
-            style={hasIconOnly ? "margin-inline-start: 0" : undefined}
-            {...iconProps}
+            style={iconStyle}
+            aria-hidden="true"
+            class="bx--btn__icon"
           />
         </span>
       {:else if icon}
-        <svelte:component
-          this={icon}
-          style={hasIconOnly ? "margin-inline-start: 0" : undefined}
-          {...iconProps}
-        />
+        <svelte:component this={icon} {...iconComponentProps} />
       {/if}
     </a>
   {/if}
@@ -783,23 +793,20 @@
           small
           description={loadingDescription}
           class="bx--btn__loading"
-          style={hasIconOnly ? "margin-inline-start: 0" : undefined}
+          style={iconStyle}
         />
       {:else if $$slots.icon}
         <!-- An svg in the slot takes the icon's styles without the class. -->
         <span class:bx--btn__icon-slot={true}>
           <slot
             name="icon"
-            style={hasIconOnly ? "margin-inline-start: 0" : undefined}
-            {...iconProps}
+            style={iconStyle}
+            aria-hidden="true"
+            class="bx--btn__icon"
           />
         </span>
       {:else if icon}
-        <svelte:component
-          this={icon}
-          style={hasIconOnly ? "margin-inline-start: 0" : undefined}
-          {...iconProps}
-        />
+        <svelte:component this={icon} {...iconComponentProps} />
       {/if}
     </button>
     <slot name="badge" />
@@ -855,23 +862,20 @@
         small
         description={loadingDescription}
         class="bx--btn__loading"
-        style={hasIconOnly ? "margin-inline-start: 0" : undefined}
+        style={iconStyle}
       />
     {:else if $$slots.icon}
       <!-- An svg in the slot takes the icon's styles without the class. -->
       <span class:bx--btn__icon-slot={true}>
         <slot
           name="icon"
-          style={hasIconOnly ? "margin-inline-start: 0" : undefined}
-          {...iconProps}
+          style={iconStyle}
+          aria-hidden="true"
+          class="bx--btn__icon"
         />
       </span>
     {:else if icon}
-      <svelte:component
-        this={icon}
-        style={hasIconOnly ? "margin-inline-start: 0" : undefined}
-        {...iconProps}
-      />
+      <svelte:component this={icon} {...iconComponentProps} />
     {/if}
   </button>
 {/if}

@@ -62,6 +62,21 @@
 
 <Button icon={Add}>With icon</Button>
 
+<Button
+  data-testid="btn-icon-props"
+  icon={Add}
+  iconProps={{ size: 20, class: "custom-icon", style: "opacity: 0.5" }}
+>
+  With icon props
+</Button>
+
+<Button
+  data-testid="btn-icon-props-icon-only"
+  icon={Add}
+  iconDescription="Add"
+  iconProps={{ style: "opacity: 0.5" }}
+/>
+
 <Button data-testid="btn-icon-slot-props">
   With slotted icon
   <svelte:fragment slot="icon" let:class={iconClass}>

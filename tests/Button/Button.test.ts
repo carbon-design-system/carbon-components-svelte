@@ -154,6 +154,25 @@ describe("Button", () => {
     expect(icon).toBeInTheDocument();
   });
 
+  it("should pass iconProps to the icon, keeping its class and aria-hidden", () => {
+    render(Button);
+
+    const icon = screen.getByTestId("btn-icon-props").querySelector("svg");
+    assert(icon);
+    expect(icon).toHaveAttribute("width", "20");
+    expect(icon).toHaveClass("bx--btn__icon", "custom-icon");
+    expect(icon).toHaveAttribute("aria-hidden", "true");
+    expect(icon).toHaveStyle({ opacity: "0.5" });
+
+    const iconOnly = screen
+      .getByTestId("btn-icon-props-icon-only")
+      .querySelector("svg");
+    expect(iconOnly).toHaveStyle({
+      opacity: "0.5",
+      marginInlineStart: "0px",
+    });
+  });
+
   it("should pass the icon class to the icon slot", () => {
     render(Button);
 
@@ -633,12 +652,29 @@ describe("Button", () => {
       expectTypeOf<Props["icon"]>().toEqualTypeOf<CustomIcon | undefined>();
     });
 
+    it("should type iconProps from the icon's props", () => {
+      type IconProps = { loop?: boolean };
+      type ClassIcon = new (...args: unknown[]) => { $$prop_def: IconProps };
+      type FunctionIcon = (internals: unknown, props: IconProps) => object;
+
+      expectTypeOf<
+        ComponentProps<ButtonComponent<ClassIcon>>["iconProps"]
+      >().toEqualTypeOf<IconProps | undefined>();
+      expectTypeOf<
+        ComponentProps<ButtonComponent<FunctionIcon>>["iconProps"]
+      >().toEqualTypeOf<IconProps | undefined>();
+    });
+
     it("should default to any type when generic is not specified", () => {
       type ComponentType = ButtonComponent;
       type Props = ComponentProps<ComponentType>;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
+      expectTypeOf<Props["iconProps"]>().toEqualTypeOf<
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
+        Record<string, any> | undefined
+      >();
     });
   });
 });
