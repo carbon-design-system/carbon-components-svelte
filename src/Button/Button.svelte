@@ -7,7 +7,7 @@
    * @extendProps {"./ButtonSkeleton.svelte"} ButtonSkeletonProps
    * @restProps {button | a | div}
    * @slot {{ props: { role: "button"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } }}
-   * @slot {{ style: undefined | string; }} icon
+   * @slot {{ style: undefined | string; class: string; "aria-hidden": "true"; }} icon - Render your own icon. Read `class` with `let:class` to style it as the `icon` prop does.
    * @slot {{}} badge - Compose a `BadgeIndicator` overlaid on an icon-only button. Size is set to `lg` automatically.
    * @event {KeyboardEvent} shortcut - Dispatched when `shortcut` is pressed, before the button is clicked. Call `preventDefault()` to skip the click.
    */

@@ -154,6 +154,17 @@ describe("Button", () => {
     expect(icon).toBeInTheDocument();
   });
 
+  it("should pass the icon class to the icon slot", () => {
+    render(Button);
+
+    const icon = screen.getByTestId("btn-icon-slot-props").querySelector("svg");
+    expect(icon).toHaveClass("bx--btn__icon");
+
+    type IconSlot = ButtonComponent["$$slot_def"]["icon"];
+    expectTypeOf<IconSlot["class"]>().toEqualTypeOf<string>();
+    expectTypeOf<IconSlot["aria-hidden"]>().toEqualTypeOf<"true">();
+  });
+
   it("should label an icon-only button through its assistive text, not the icon", () => {
     render(Button);
 
