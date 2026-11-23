@@ -62,6 +62,13 @@
 
 <Button icon={Add}>With icon</Button>
 
+<Button data-testid="btn-icon-slot-props">
+  With slotted icon
+  <svelte:fragment slot="icon" let:class={iconClass}>
+    <Add class={iconClass} />
+  </svelte:fragment>
+</Button>
+
 <Button data-testid="btn" on:click={onClick}>Test button</Button>
 
 <Button data-testid="btn-skeleton" skeleton style="width: 200px" />
