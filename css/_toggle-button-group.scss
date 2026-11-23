@@ -41,6 +41,12 @@
       color $duration--fast-01 motion(standard, productive);
   }
 
+  // A label that wraps gives way; the icon keeps its size, whether it comes
+  // from the `icon` prop or slot.
+  .#{$prefix}--toggle-button > svg {
+    flex-shrink: 0;
+  }
+
   .#{$prefix}--toggle-button svg {
     flex-shrink: 0;
     fill: $icon-secondary;
