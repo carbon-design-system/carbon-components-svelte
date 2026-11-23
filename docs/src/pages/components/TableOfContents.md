@@ -18,6 +18,9 @@ description: A table of contents lists the sections of a page as links and highl
     Tag,
     Text,
   } from "carbon-components-svelte";
+  import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
+  import CircleDash from "carbon-icons-svelte/lib/CircleDash.svelte";
+  import InProgress from "carbon-icons-svelte/lib/InProgress.svelte";
 
   let container = null;
   let selectedId;
@@ -38,6 +41,21 @@ description: A table of contents lists the sections of a page as links and highl
   let groupContainer = null;
   let smallContainer = null;
   let contentContainer = null;
+  let progressContainer = null;
+
+  const statuses = {
+    complete: { icon: CheckmarkFilled, title: "Complete" },
+    started: { icon: InProgress, title: "In progress" },
+    open: { icon: CircleDash, title: "Not started" },
+  };
+
+  const progressItems = [
+    { id: "toc-progress-profile", text: "Profile", status: "complete", body: "The workspace name, region, and the contact who receives account notices." },
+    { id: "toc-progress-billing", text: "Billing", status: "complete", body: "The plan tier, billing contact, and payment method for monthly invoices." },
+    { id: "toc-progress-team", text: "Team members", status: "started", body: "Invite the people who deploy to this workspace and give each a role." },
+    { id: "toc-progress-security", text: "Security and compliance review", status: "open", body: "Confirm the data residency, audit logging, and single sign-on settings your compliance team requires." },
+    { id: "toc-progress-alerts", text: "Alerts", status: "open", body: "Choose which incidents page the on-call engineer and which only send email." },
+  ];
 
   let article = null;
   let headings = [];
@@ -472,6 +490,37 @@ Each item's default slot renders inside its link, so an item can hold more than 
   </Row>
 </Grid>
 
+### Progress
+
+Give every item a leading icon to show the status of each section, such as the parts of a long form. Items at the same level then still start in line, and each icon lines up with the first line of a label that wraps. Set each icon's `title`, which names the status for screen readers, so the status isn't shown by shape alone.
+
+<Grid>
+  <Row>
+    <Column sm={4} md={3} lg={4}>
+      <TableOfContents labelText="Workspace setup" scrollContainer={progressContainer}>
+        {#each progressItems as item (item.id)}
+          <TableOfContentsItem href="#{item.id}">
+            <svelte:component this={statuses[item.status].icon} title={statuses[item.status].title} />
+            {item.text}
+          </TableOfContentsItem>
+        {/each}
+      </TableOfContents>
+    </Column>
+    <Column sm={4} md={5} lg={12}>
+      <Box bind:ref={progressContainer} height="16rem" overflowY="auto">
+        <Prose>
+          {#each progressItems as item (item.id)}
+            <section id={item.id}>
+              <h4>{item.text}</h4>
+              <p>{item.body}</p>
+            </section>
+          {/each}
+        </Prose>
+      </Box>
+    </Column>
+  </Row>
+</Grid>
+
 ## Usage
 
 | Do | Why |
@@ -485,5 +534,5 @@ Each item's default slot renders inside its link, so an item can hold more than 
 | Group items under a `TableOfContentsGroup` when the page has distinct parts, such as examples and reference. | A plain-text title names each part without adding a link that goes nowhere, and screen readers announce the group. |
 | Set `size="sm"` when the list is long. | Shorter rows fit more sections in view, so the reader sees where they are without scrolling the sidebar. |
 | Keep item text short and matching the section heading. | Long labels wrap onto several lines and push later sections out of view in a sticky sidebar. |
-| Keep slot content to non-interactive status, such as a tag or an icon, after the text. | It renders inside the item's link, where a nested button or link is invalid HTML, and leading content pushes the text out of line with the other items at its level. |
+| Keep slot content to non-interactive status, such as a tag or an icon, and put it after the text unless every item at that level has a leading icon. | It renders inside the item's link, where a nested button or link is invalid HTML. A leading icon on only some items pushes their text out of line with the rest of the level. |
 | Set `labelText` when a page has more than one navigation landmark. | It names the `nav`, which defaults to "Table of contents". |
