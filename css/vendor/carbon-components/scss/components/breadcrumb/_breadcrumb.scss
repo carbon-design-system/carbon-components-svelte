@@ -320,6 +320,12 @@
     width: to-rem(14px);
     height: to-rem(14px);
   }
+
+  // Inside a link, the link's gap spaces the icon. An item with no `href`
+  // keeps the margin.
+  .#{$prefix}--link > .#{$prefix}--breadcrumb-item__icon {
+    margin-inline-end: 0;
+  }
 }
 
 @include exports('breadcrumb-icon') {

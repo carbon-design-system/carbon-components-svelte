@@ -13,11 +13,17 @@ test.describe("Link", () => {
       .evaluate((svg) => svg.getBoundingClientRect().width);
   }
 
+  /** Space between the end of the text and the start of the icon. */
   function iconGap(page: Page, testId: string) {
-    return page
-      .getByTestId(testId)
-      .locator(".bx--link__icon")
-      .evaluate((el) => Number.parseFloat(getComputedStyle(el).marginLeft));
+    return page.getByTestId(testId).evaluate((link) => {
+      const icon = link.querySelector(".bx--link__icon") as Element;
+      const range = document.createRange();
+      range.selectNodeContents(link);
+      range.setEndBefore(icon);
+      return (
+        icon.getBoundingClientRect().left - range.getBoundingClientRect().right
+      );
+    });
   }
 
   test("scales the icon to match the link size", async ({ page }) => {
@@ -39,6 +45,37 @@ test.describe("Link", () => {
     expect(await iconGap(page, "link-sm")).toBeCloseTo(4, 0);
     expect(await iconGap(page, "link-md")).toBeCloseTo(4, 0);
     expect(await iconGap(page, "link-lg")).toBeCloseTo(8, 0);
+  });
+
+  test("spaces a slotted leading icon and keeps it on the first line", async ({
+    page,
+  }) => {
+    const { width, gap, offset, lines } = await page
+      .getByTestId("link-slot-icon")
+      .evaluate((link) => {
+        const icon = (
+          link.querySelector("svg") as Element
+        ).getBoundingClientRect();
+        const text = [...link.childNodes].find(
+          (node) =>
+            node.nodeType === Node.TEXT_NODE && node.textContent?.trim(),
+        ) as Text;
+        const range = document.createRange();
+        range.selectNodeContents(text);
+        const rects = [...range.getClientRects()];
+        const first = rects[0];
+        return {
+          width: icon.width,
+          gap: first.left - icon.right,
+          offset: (icon.top + icon.bottom) / 2 - (first.top + first.bottom) / 2,
+          lines: new Set(rects.map(({ top }) => Math.round(top))).size,
+        };
+      });
+
+    expect(lines).toBeGreaterThanOrEqual(2);
+    expect(width).toBeCloseTo(16, 0);
+    expect(gap).toBeCloseTo(4, 0);
+    expect(Math.abs(offset)).toBeLessThanOrEqual(0.5);
   });
 
   function color(page: Page, testId: string) {
