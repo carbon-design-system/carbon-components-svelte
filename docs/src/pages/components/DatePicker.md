@@ -30,7 +30,7 @@ From the keyboard, <DocKbd label="Down" /> in the field moves focus into the cal
 
 ### Multiple
 
-Set `datePickerType` to `"multiple"` to select several individual, non-contiguous dates from one calendar. Each click toggles that day; `value` holds the dates as a single string, joined with `", "`, formatted with the same `dateFormat` used by other calendar types. Shift-click a day to add the contiguous range between it and the last-clicked day to the selection; disabled dates within that range are skipped. From the keyboard, <DocKbd label="Enter" /> adds or removes the focused day and the calendar stays open for the next one.
+Set `datePickerType` to `"multiple"` to select several individual, non-contiguous dates from one calendar. Each click toggles that day; `value` holds the dates as a single string, joined with `", "`, formatted with the same `dateFormat` used by other calendar types. Shift-click a day to add the contiguous range between it and the last-clicked day to the selection; disabled dates within that range are skipped. From the keyboard, <DocKbd label="Enter" /> adds or removes the focused day and the calendar stays open for the next one; <DocKbd label="Shift" />+<DocKbd label="Enter" /> adds the range from the last-picked day, as Shift-click does.
 
 <FileSource src="/framed/DatePicker/DatePickerMultiple" />
 
