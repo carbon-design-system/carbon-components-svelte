@@ -291,6 +291,70 @@ describe("multiple mode", () => {
     day(instance, 1).click();
     expect(input.value).toBe("2024-03-05");
   });
+
+  it("extends from the last plain pick with Shift, by click or Enter", () => {
+    const { instance, input } = create({
+      mode: "multiple",
+      defaultDate: "2024-03-20",
+      disable: ["2024-03-07"],
+    });
+
+    day(instance, 5).click();
+    fireEvent.click(day(instance, 8), { shiftKey: true });
+    expect(input.value).toBe("2024-03-20, 2024-03-05, 2024-03-06, 2024-03-08");
+
+    // The anchor stays on day 5.
+    day(instance, 3).focus();
+    fireEvent.keyDown(day(instance, 3), {
+      key: "Enter",
+      keyCode: 13,
+      shiftKey: true,
+    });
+    expect(instance.selectedDates.map((d) => d.getDate())).toEqual([
+      20, 5, 6, 8, 3, 4,
+    ]);
+  });
+
+  it("previews a shift-pick on hover and clears it when Shift is released", () => {
+    const { instance } = create({ mode: "multiple" });
+    instance.jumpToDate("2024-03-01");
+    day(instance, 5).click();
+
+    fireEvent.mouseOver(day(instance, 7), { shiftKey: true });
+    const inRange = () =>
+      [
+        ...instance.calendarContainer.querySelectorAll(
+          ".bx--date-picker__day--in-range",
+        ),
+      ].map((el) => el.textContent);
+    expect(inRange()).toEqual(["5", "6", "7"]);
+
+    fireEvent.keyUp(window, { key: "Shift" });
+    expect(inRange()).toEqual([]);
+  });
+});
+
+describe("inert", () => {
+  it("ignores picks and keys, other than Tab, until turned off", () => {
+    const { instance, input } = create({ inline: true, inert: true });
+    instance.jumpToDate("2024-03-01");
+    const { calendarContainer } = instance;
+    expect(calendarContainer).toHaveAttribute("aria-disabled", "true");
+
+    day(instance, 10).click();
+    expect(input.value).toBe("");
+    const keyDown = (key: string) =>
+      day(instance, 10).dispatchEvent(
+        new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true }),
+      );
+    expect(keyDown("Enter")).toBe(false);
+    expect(keyDown("Tab")).toBe(true);
+
+    instance.set("inert", false);
+    expect(calendarContainer).not.toHaveAttribute("aria-disabled");
+    day(instance, 10).click();
+    expect(input.value).toBe("2024-03-10");
+  });
 });
 
 describe("range mode", () => {

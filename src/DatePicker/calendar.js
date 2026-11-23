@@ -68,6 +68,7 @@ const QUIET_OPTIONS = new Set([
   "closeOnSelect",
   "errorHandler",
   "ignoredFocusElements",
+  "inert",
   "parseDate",
   "position",
   "positionElement",
@@ -1274,11 +1275,28 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
   }
 
-  function clearWeekHover() {
+  function clearHoverRange() {
     for (const day of daysRef?.querySelectorAll(
       ".bx--date-picker__day--in-range",
     ) ?? []) {
       day.classList.remove("bx--date-picker__day--in-range");
+    }
+  }
+
+  /** @param {MouseEvent} event */
+  function previewExtension(event) {
+    if (!event.shiftKey || !multipleAnchor) {
+      clearHoverRange();
+      return;
+    }
+    const day = eventTarget(event).closest?.(".bx--date-picker__day");
+    if (!day?.dateObj) return;
+    const [from, to] = orderedTimes(multipleAnchor, day.dateObj);
+    for (const cell of /** @type {NodeListOf<Cell>} */ (
+      daysRef.querySelectorAll(".bx--date-picker__day")
+    )) {
+      const time = cell.dateObj.getTime();
+      toggleClass(cell, IN_RANGE, time >= from && time <= to);
     }
   }
 
@@ -1618,6 +1636,35 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   // --- Selection --------------------------------------------------------
 
+  /**
+   * The last day picked without Shift in "multiple" mode. Shift-picks
+   * extend from it and leave it in place.
+   * @type {Date | undefined}
+   */
+  let multipleAnchor;
+
+  /** @param {Date} a @param {Date} b */
+  function orderedTimes(a, b) {
+    return a <= b ? [a.getTime(), b.getTime()] : [b.getTime(), a.getTime()];
+  }
+
+  /** @param {Date} date */
+  function extendMultiple(date) {
+    const [from, to] = orderedTimes(/** @type {Date} */ (multipleAnchor), date);
+    const picked = new Set(
+      self.selectedDates.map((/** @type {Date} */ d) => d.getTime()),
+    );
+    const cursor = new Date(from);
+    while (cursor.getTime() <= to) {
+      if (!picked.has(cursor.getTime()) && isOpenDay(cursor)) {
+        self.selectedDates.push(new Date(cursor));
+      }
+      cursor.setDate(cursor.getDate() + 1);
+    }
+    latestSelectedDate = new Date(date.getTime());
+    return latestSelectedDate;
+  }
+
   /** @param {Date} date */
   function selectDateValue(date) {
     const selected = new Date(date.getTime());
@@ -1666,7 +1713,15 @@ export function createCalendarEngine(element, userConfig = {}) {
         eventTarget(event).closest?.(SELECTABLE_DAY)
       );
     if (!target) return;
-    const selected = selectDateValue(target.dateObj);
+    // Shift with a click, Enter or Space extends a "multiple" selection.
+    const extend =
+      isMultiple &&
+      !!multipleAnchor &&
+      /** @type {MouseEvent | KeyboardEvent} */ (event).shiftKey;
+    const selected = extend
+      ? extendMultiple(target.dateObj)
+      : selectDateValue(target.dateObj);
+    if (isMultiple && !extend) multipleAnchor = selected;
     halfRangePicked = isRange && self.selectedDates.length === 1;
     const changeView =
       (selected.getMonth() < self.currentMonth ||
@@ -1728,6 +1783,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     self.selectedDates = [];
     halfRangePicked = false;
     latestSelectedDate = undefined;
+    multipleAnchor = undefined;
     if (toInitial) {
       self.currentYear = initialDate.getFullYear();
       self.currentMonth = initialDate.getMonth();
@@ -1804,6 +1860,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       },
     ],
     clickOpens: [bindOpenTriggers],
+    inert: [syncInert],
     static: [placeContainer],
   };
 
@@ -1909,6 +1966,8 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (self._input) self._input.classList.remove("active");
     openListeners.clear();
     stopFollowing();
+    // A shift preview would still show when the calendar next opens.
+    if (isMultiple) clearHoverRange();
     triggerEvent("onClose", reason);
   }
   self.close = close;
@@ -2525,6 +2584,12 @@ export function createCalendarEngine(element, userConfig = {}) {
       on(self._input, "pointerenter", fillContents);
       on(secondInput, "pointerenter", fillContents);
     }
+    // Capture, so `inert` runs ahead of every handler in the calendar.
+    for (const type of ["click", "mousedown", "keydown"]) {
+      listeners.add(self.calendarContainer, type, blockWhenInert, {
+        capture: true,
+      });
+    }
     on(self.calendarContainer, "keydown", onKeyDown);
     if (config.allowInput) on(self._input, "blur", onBlur);
     bindOpenTriggers();
@@ -2537,6 +2602,23 @@ export function createCalendarEngine(element, userConfig = {}) {
         const [start] = self.selectedDates;
         if (start && !isMonthShown(start)) jumpToDate(start);
       });
+    }
+  }
+
+  /** @param {Event} event */
+  function blockWhenInert(event) {
+    if (!config.inert) return;
+    event.stopImmediatePropagation();
+    if (/** @type {KeyboardEvent} */ (event).key !== "Tab") {
+      event.preventDefault();
+    }
+  }
+
+  function syncInert() {
+    if (config.inert) {
+      self.calendarContainer.setAttribute("aria-disabled", "true");
+    } else {
+      self.calendarContainer.removeAttribute("aria-disabled");
     }
   }
 
@@ -2555,11 +2637,22 @@ export function createCalendarEngine(element, userConfig = {}) {
     on(monthNavRef, "increment", onYearInput);
     on(monthNavRef, "input", onYearInput);
     on(daysRef, "click", isGridMode ? selectGridCell : selectDate);
+    /** @param {(event: any) => void} handler */
+    const onHover = (handler) =>
+      on(daysRef, "mouseover", (event) => {
+        if (!config.inert) handler(event);
+      });
     if (isRange) {
-      on(daysRef, "mouseover", (event) => previewRange(eventTarget(event)));
+      onHover((event) => previewRange(eventTarget(event)));
     } else if (pickerMode === "week") {
-      on(daysRef, "mouseover", hoverWeek);
-      on(daysRef, "mouseleave", clearWeekHover);
+      onHover(hoverWeek);
+      on(daysRef, "mouseleave", clearHoverRange);
+    } else if (isMultiple) {
+      onHover(previewExtension);
+      on(daysRef, "mouseleave", clearHoverRange);
+      on(window, "keyup", (event) => {
+        if (event.key === "Shift") clearHoverRange();
+      });
     }
   }
 
@@ -2615,6 +2708,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   built = true;
   try {
     build();
+    if (config.inert) syncInert();
     bindEvents();
     if (self.selectedDates.length || secondInput) updateValue();
   } catch (error) {
