@@ -120,7 +120,7 @@
     "svelte": "^5.57.3",
     "svelte-ast": "^0.12.0",
     "svelte-lint": "^0.2.0",
-    "svelte-typecheck": "^0.1.21",
+    "svelte-typecheck": "^0.2.2",
     "typescript": "^6.0.3",
     "vite": "^8.3.5",
     "vitest": "^5.1.0"
