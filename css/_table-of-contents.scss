@@ -103,6 +103,28 @@
     }
   }
 
+  // The link centers its content in the row; within the content, slotted
+  // icons and tags line up with the first line of a label that wraps, as
+  // icons beside wrapped text do in Carbon. A small tag is as tall as the
+  // line.
+  .#{$prefix}--toc__link-content {
+    display: flex;
+    flex-grow: 1;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+
+    // A label that wraps gives way; icons and tags keep their size.
+    > svg,
+    > .#{$prefix}--tag {
+      flex-shrink: 0;
+    }
+
+    // Centers a 16px icon on the 18px line.
+    > svg {
+      margin-block-start: 1px;
+    }
+  }
+
   // Spacing follows proximity: nested rows sit closer together than
   // top-level rows, a wider gap closes each nested run, and groups sit
   // farther apart still, so subsections read as part of the section above.
@@ -130,6 +152,14 @@
 
     min-height: 0;
     padding-block: $carbon--spacing-02;
+  }
+
+  // label-01's 16px line fits a 16px icon.
+  .#{$prefix}--toc--sm
+    .#{$prefix}--toc__item--nested
+    .#{$prefix}--toc__link-content
+    > svg {
+    margin-block-start: 0;
   }
 
   .#{$prefix}--toc--sm
