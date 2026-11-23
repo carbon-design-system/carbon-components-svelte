@@ -1,0 +1,136 @@
+---
+components: ["CurrencyInput"]
+description: Currency inputs take an amount in the format of a locale, with grouping, a decimal mark and a symbol placed as that locale places them.
+---
+
+<script>
+  import { CurrencyInput } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Set `currency` to an ISO 4217 code. The symbol, its position and the number of fraction digits come from the currency and the locale. The field has no steppers: an amount is typed, not stepped.
+
+<CurrencyInput labelText="Unit price" currency="USD" />
+
+## Value
+
+`value` is a decimal string such as `"1234.56"`, with `.` as the decimal mark, a leading `-` for a negative amount and no grouping or symbol. It is `""` when the field is empty. A string and not a number so that cents stay exact (`0.1 + 0.2` is not `0.3` as a double) and a large amount keeps every digit.
+
+| Value | Use |
+| :-- | :-- |
+| `value` | A decimal string. Send it as it is, or compare it with `compareDecimal`. |
+| `toMinorUnits(value, digits)` | An integer count of cents, for an API that takes one. It is `null` past `Number.MAX_SAFE_INTEGER`. |
+| `fromMinorUnits(minor, digits)` | The decimal string for a count of cents. |
+| `currencyFractionDigits(code)` | The digits of a currency: JPY 0, USD 2, BHD 3. |
+
+<FileSource src="/framed/CurrencyInput/CurrencyValue" />
+
+The value has the digits that were entered. When the field is left it is padded to the digits of the currency, and the text shows `$12.50` for `"12.50"`. A `name` submits the decimal string through a hidden field, never the formatted text.
+
+## Locales
+
+Set `locale` to a BCP 47 tag. The grouping, the decimal mark, the digits, and the side the symbol is on all follow it. Without `locale`, the runtime's locale is used, which can differ between a server and a browser: set it on a page that is server-rendered.
+
+<FileSource src="/framed/CurrencyInput/CurrencyLocales" />
+
+Typing and pasting read the field's locale first, then others:
+
+| Typed or pasted | Read as | Why |
+| :-- | :-- | :-- |
+| `1234,5` in `de-DE` | `1.234,5 €` | The decimal mark of the locale. |
+| `1234.5` in `de-DE` | `1.234,5 €` | A typed period is a decimal key, as on a numpad. Group marks are written for you and cannot be typed. |
+| `1,234.56` pasted in `de-DE` | `1.234,56 €` | With two kinds of mark, the last one is the decimal mark. |
+| `12,5` pasted in `en-US` | `$12.50` | One mark with one or two digits after it cannot be grouping. |
+| `1.234` or `1,234` pasted in `en-US` | `$1,234.00` | One mark with exactly three digits after it is read as grouping when the field cannot hold three fraction digits. |
+| `1e5`, `abc` | Nothing changes | Scientific notation and text are refused. |
+
+A lone mark followed by three digits is ambiguous, because `1.234` is one thousand two hundred thirty-four in Germany and a little more than one in the United States. A field with room for three fraction digits, such as a `BHD` amount or a `UnitInput`, reads it as the locale does. A field with two does not, because three fraction digits cannot be entered there. The same applies to a symbol: `$`, `€` and an ISO code are dropped from a paste, whatever the currency of the field.
+
+## Fraction digits
+
+`JPY` has no fraction, `BHD` has three. Set `minimumFractionDigits` and `maximumFractionDigits` to change them. A digit past the maximum is refused, so nothing is pushed out of the field.
+
+<CurrencyInput labelText="Price (JPY)" currency="JPY" locale="ja-JP" value="1234" />
+
+<CurrencyInput labelText="Price (BHD)" currency="BHD" locale="ar-BH" value="1.5" />
+
+## Negative amounts
+
+A field takes no minus key by default. Set `allowNegative`, or a negative `min`, to take one. `-` toggles the sign, and a pasted `−12.50`, `(12.50)` and `12.50-` are all negative. Set `currencySign` to `"accounting"` to write a negative amount in brackets where the locale does.
+
+<FileSource src="/framed/CurrencyInput/CurrencyNegative" />
+
+## Min, max and step
+
+Compare amounts as decimals with `min`, `max` and `step`. An amount outside them is invalid. Set `invalidText` to say why.
+
+<FileSource src="/framed/CurrencyInput/CurrencyRange" />
+
+## States
+
+Reflect validation and interaction states.
+
+### Invalid
+
+Indicate an invalid state with an error message by setting `invalid` and providing `invalidText`.
+
+<CurrencyInput invalid invalidText="The amount exceeds your credit limit." labelText="Payment" currency="USD" value="25000" />
+
+### Warning
+
+Indicate a warning state with a message by setting `warn` and providing `warnText`.
+
+<CurrencyInput warn warnText="This amount is above your usual payment." labelText="Payment" currency="USD" value="9500" />
+
+### Disabled
+
+Set `disabled` to `true` to prevent user interaction.
+
+<CurrencyInput disabled labelText="Payment" currency="USD" value="120" />
+
+### Read-only
+
+Display a non-editable amount with `readonly`.
+
+<CurrencyInput readonly labelText="Payment" currency="USD" value="120" />
+
+## Hidden label
+
+Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
+
+<CurrencyInput hideLabel labelText="Payment" currency="USD" />
+
+## With TextInput
+
+The field is a `TextInput` with the `numberFormat` action on a wrapper. Use the action to format a field you already have, or one that is not a `CurrencyInput`. `onchange` reports `{ value, number, text, field }`.
+
+<FileSource src="/framed/CurrencyInput/CurrencyAction" />
+
+`createNumberFormat(options)` is the same engine with no DOM: `format(value)` writes the text for a bound value, `parse(text)` reads text a person wrote, and both run on a server.
+
+## Editing
+
+The caret is kept among the digits. The format adds and removes group marks and the symbol as an amount is typed, and the caret does not move because of them.
+
+| Edit | Result |
+| :-- | :-- |
+| Type in the middle | The digit goes in at the caret, and the caret stays after it. |
+| Backspace after a group mark | Deletes the digit before it. The mark is never a stop. |
+| Backspace after the decimal mark | Moves the caret before the mark, so the fraction is not folded into the integer part. With nothing after the mark, it deletes the mark. |
+| A digit the field has no room for | Refused. Nothing earlier is pushed out. |
+| Select and type | The selection is replaced. |
+| Paste | Read as above, and inserted at the selection. A paste with a decimal mark into a field that has one is refused. |
+| Undo and redo | The browser's own history. |
+| IME | Nothing changes while the IME composes. When it ends, full-width and Arabic-Indic digits become digits. |
+
+## Accessibility
+
+| Do | Why |
+| :-- | :-- |
+| Keep the symbol in the text of the field | A screen reader reads the value with its currency, `€1,234.56`. A symbol drawn beside the field is read apart from it, and sits on the wrong side in some locales. |
+| Leave the hint on | Assistive technology reads "Amount in Euro" with the field, from `aria-describedby`, before there is a symbol. Set `hintText` to translate it. |
+| Use `helperText` to say what is expected | Such as a limit. It is read with the field. |
+| Set `allowNegative` only where a negative amount is valid | The decimal keypad on iOS has no minus key, so a field that takes one asks for the full keyboard. |
+
+The field runs in the direction of its locale. An amount in `en-US` keeps its order in a right-to-left page, and sits at the page's start, beside the label. An amount in `ar-EG` keeps its own direction in a left-to-right page.
