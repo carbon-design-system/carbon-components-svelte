@@ -40,13 +40,13 @@ describe("DatePicker redundant calendar updates", () => {
     expect(setCalls).toEqual([]);
   });
 
-  it("still applies clickOpens and allowInput when readonly changes", async () => {
+  it("still applies clickOpens, allowInput and inert when readonly changes", async () => {
     const { rerender } = render(DatePicker, { datePickerType: "single" });
     await screen.findByLabelText(/^Choose a /);
     await tick();
 
     await rerender({ datePickerType: "single", readonly: true });
     await tick();
-    expect(setCalls).toEqual(["clickOpens", "allowInput"]);
+    expect(setCalls).toEqual(["clickOpens", "allowInput", "inert"]);
   });
 });

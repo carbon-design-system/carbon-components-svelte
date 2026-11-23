@@ -58,6 +58,12 @@ export interface CalendarOptions extends Partial<
   firstDayOfWeek?: number;
   getWeek?: (date: Date) => number;
   ignoredFocusElements?: HTMLElement[];
+  /**
+   * Keeps the calendar on screen but ignores clicks and keys in it, other
+   * than Tab, and marks it `aria-disabled`. For an inline calendar whose
+   * field is read-only or disabled.
+   */
+  inert?: boolean;
   inline?: boolean;
   /**
    * Blocks a day from being picked or focused with the keyboard without

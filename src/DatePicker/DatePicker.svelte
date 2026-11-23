@@ -726,11 +726,6 @@
   /** @type {(() => void) | null} */
   let unlistenRepositionResize = null;
   const SCROLL_LISTENER_OPTIONS = { capture: true, passive: true };
-  // datePickerType="multiple": anchor for shift-click range selection. Only
-  // moves on a plain click, so consecutive shift-clicks all extend from the
-  // same anchor (matches file-explorer-style multi-select).
-  /** @type {Date | null} */
-  let multipleSelectAnchor = null;
   /** @type {HTMLElement | null} */
   let topLayerAncestor = null;
   // Set from onOpen/onClose. Outside-click listener attaches only while open.
@@ -1171,125 +1166,6 @@
     return true;
   }
 
-  /**
-   * Extends a "multiple" mode selection to a contiguous range on shift-click.
-   * Flatpickr's own day-click handler only toggles the single clicked day, so
-   * a shift-click is intercepted here (capture phase, ahead of flatpickr's
-   * own listener) and handled entirely ourselves. Disabled dates within the
-   * range are skipped silently; the range is added to, not swapped with, the
-   * existing selection.
-   * @type {(event: MouseEvent) => void}
-   */
-  function handleMultipleDayClick(event) {
-    const dayElem = /** @type {HTMLElement} */ (event.target).closest(
-      ".bx--date-picker__day",
-    );
-    if (
-      !dayElem ||
-      dayElem.classList.contains("bx--date-picker__day--disabled")
-    )
-      return;
-
-    const clickedDate = /** @type {import("./calendar.js").DayElement} */ (
-      dayElem
-    ).dateObj;
-    if (!clickedDate) return;
-
-    if (!event.shiftKey || !multipleSelectAnchor) {
-      multipleSelectAnchor = clickedDate;
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    const [start, end] =
-      multipleSelectAnchor <= clickedDate
-        ? [multipleSelectAnchor, clickedDate]
-        : [clickedDate, multipleSelectAnchor];
-
-    const rangeDates = [];
-    const cursor = new Date(start);
-    while (cursor.getTime() <= end.getTime()) {
-      if (/** @type {NonNullable<typeof engine>} */ (engine).isEnabled(cursor))
-        rangeDates.push(new Date(cursor));
-      cursor.setDate(cursor.getDate() + 1);
-    }
-
-    const existingTimes = new Set(
-      /** @type {NonNullable<typeof engine>} */ (engine).selectedDates.map(
-        (date) => date.getTime(),
-      ),
-    );
-    const merged = [
-      .../** @type {NonNullable<typeof engine>} */ (engine).selectedDates,
-      ...rangeDates.filter((date) => !existingTimes.has(date.getTime())),
-    ];
-    /** @type {NonNullable<typeof engine>} */ (engine).setDate(merged, true);
-  }
-
-  /** @type {HTMLElement[]} */
-  let previewedDayElems = [];
-
-  function clearRangePreview() {
-    for (const el of previewedDayElems) {
-      el.classList.remove("bx--date-picker__day--in-range");
-    }
-    previewedDayElems = [];
-  }
-
-  /**
-   * Previews a pending shift-click range by marking the days between the
-   * anchor and the hovered day with the `--in-range` modifier, the same one
-   * "range" mode already uses, so no new CSS is needed.
-   * @type {(event: MouseEvent) => void}
-   */
-  function updateRangePreview(event) {
-    if (!event.shiftKey || !multipleSelectAnchor || !engine) {
-      clearRangePreview();
-      return;
-    }
-
-    const dayElem = /** @type {HTMLElement} */ (event.target).closest(
-      ".bx--date-picker__day",
-    );
-    if (!dayElem) return;
-
-    const hoveredDate = /** @type {import("./calendar.js").DayElement} */ (
-      dayElem
-    ).dateObj;
-    if (!hoveredDate) return;
-
-    clearRangePreview();
-
-    const [start, end] =
-      multipleSelectAnchor <= hoveredDate
-        ? [multipleSelectAnchor, hoveredDate]
-        : [hoveredDate, multipleSelectAnchor];
-
-    for (const el of engine.calendarContainer.querySelectorAll(
-      ".bx--date-picker__day",
-    )) {
-      const date = /** @type {import("./calendar.js").DayElement} */ (el)
-        .dateObj;
-      if (
-        date &&
-        date.getTime() >= start.getTime() &&
-        date.getTime() <= end.getTime()
-      ) {
-        el.classList.add("bx--date-picker__day--in-range");
-        previewedDayElems.push(/** @type {HTMLElement} */ (el));
-      }
-    }
-  }
-
-  /**
-   * @param {KeyboardEvent} event
-   */
-  function handleShiftKeyUp(event) {
-    if (event.key === "Shift") clearRangePreview();
-  }
-
   createIdScope(id);
   setContext("carbon:DatePicker", {
     range,
@@ -1492,7 +1368,6 @@
               detachFixedRepositionListeners();
             }
             if (portalWhenClipped) unportal();
-            clearRangePreview();
             const reason =
               /** @type {import("./calendar.js").CalendarCloseReason | undefined} */ (
                 eventDetail
@@ -1541,6 +1416,7 @@
       dateFormat: options.dateFormat,
       clickOpens: options.clickOpens,
       allowInput: options.allowInput,
+      inert: options.inert,
     };
     appliedPropOptions = Object.fromEntries(
       Object.keys(propOptions).map((option) => [option, options[option]]),
@@ -1567,52 +1443,7 @@
       handleCalendarKeydown,
       { capture: true },
     );
-    if (engine.config.inline) {
-      for (const type of BLOCKED_EVENTS) {
-        engine.calendarContainer?.addEventListener(
-          type,
-          handleBlockedInteraction,
-          { capture: true },
-        );
-      }
-    }
-    if ($mode === "multiple") {
-      engine?.calendarContainer?.addEventListener(
-        "click",
-        handleMultipleDayClick,
-        { capture: true },
-      );
-      engine?.calendarContainer?.addEventListener(
-        "mouseover",
-        updateRangePreview,
-      );
-      engine?.calendarContainer?.addEventListener(
-        "mouseleave",
-        clearRangePreview,
-      );
-      window.addEventListener("keyup", handleShiftKeyUp);
-    }
   }
-
-  /**
-   * An inline calendar stays on screen while its input is read-only or
-   * disabled, unlike the popup, which simply never opens. Stop flatpickr's
-   * own listeners from seeing the interaction.
-   *
-   * @param {Event} event
-   */
-  function handleBlockedInteraction(event) {
-    if (!interactionBlocked) return;
-    event.stopImmediatePropagation();
-    if (
-      event.type !== "keydown" ||
-      /** @type {KeyboardEvent} */ (event).key !== "Tab"
-    ) {
-      event.preventDefault();
-    }
-  }
-
-  const BLOCKED_EVENTS = ["click", "mousedown", "keydown"];
 
   /**
    * @param {KeyboardEvent} event
@@ -1663,31 +1494,10 @@
     detachFixedRepositionListeners();
     if (!engine) return;
     engine.calendarContainer?.removeEventListener(
-      "click",
-      handleMultipleDayClick,
-      { capture: true },
-    );
-    engine.calendarContainer?.removeEventListener(
-      "mouseover",
-      updateRangePreview,
-    );
-    engine.calendarContainer?.removeEventListener(
-      "mouseleave",
-      clearRangePreview,
-    );
-    window.removeEventListener("keyup", handleShiftKeyUp);
-    engine.calendarContainer?.removeEventListener(
       "keydown",
       handleCalendarKeydown,
       { capture: true },
     );
-    for (const type of BLOCKED_EVENTS) {
-      engine.calendarContainer?.removeEventListener(
-        type,
-        handleBlockedInteraction,
-        { capture: true },
-      );
-    }
     engine.destroy();
     engine = null;
     calendarOpen = false;
@@ -1787,13 +1597,6 @@
     applyInitialMonth();
   }
   $: interactionBlocked = $readonlyAny || $disabledAny;
-  $: if (engine?.config.inline) {
-    if (interactionBlocked) {
-      engine.calendarContainer.setAttribute("aria-disabled", "true");
-    } else {
-      engine.calendarContainer.removeAttribute("aria-disabled");
-    }
-  }
   // A range writes to two inputs, and the calendar has no alt input for
   // the second.
   $: usesDisplayFormat = !!displayFormat && datePickerType !== "range";
@@ -1919,12 +1722,14 @@
   $: interactive = {
     clickOpens: !$readonlyAny,
     allowInput: !$readonlyAny && allowInput,
+    inert: interactionBlocked,
   };
   // Each `calendar.set` rebuilds the day grid, so only apply a real change.
   // The calendar is created with these values already.
   $: if (engine) {
     applyOptionIfChanged("clickOpens", interactive.clickOpens);
     applyOptionIfChanged("allowInput", interactive.allowInput);
+    applyOptionIfChanged("inert", interactive.inert);
     // A disabled or read-only input can't open the calendar, so one that
     // turns so while open closes it.
     if (interactionBlocked && engine.isOpen) engine.close();
