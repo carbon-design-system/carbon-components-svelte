@@ -74,9 +74,17 @@ Add an icon to the button using the `icon` prop.
 
 <Button icon={Add}>With icon</Button>
 
+### Icon props
+
+Pass props to the `icon` component with `iconProps`, such as `loop` on an animated icon. The button's icon class and `aria-hidden` still apply, and a `class` or `style` in `iconProps` is added to them. The button sets the icon's size, so `size` has no effect. `iconProps` is typed from the icon's props.
+
+```svelte
+<Button icon={Renew} iconProps={{ loop: refreshing }}>Refresh</Button>
+```
+
 ### Custom icon
 
-Use the `icon` named slot to render custom icon markup instead of, or with different props than, the `icon` prop. An `svg` in the slot, such as an icon component or raw markup, is spaced, sized and colored like one passed to `icon`.
+Use the `icon` named slot to render custom icon markup instead of the `icon` prop. An `svg` in the slot, such as an icon component or raw markup, is spaced, sized and colored like one passed to `icon`.
 
 <Button>
   Custom icon
