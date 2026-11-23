@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>log-viewer</title>
+    <g id="log-viewer" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="container" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="40.5" y="20.5" width="239" height="139"></rect>
+        <rect id="toolbar-divider" fill="var(--cds-border-subtle, #e0e0e0)" x="41" y="44" width="238" height="1"></rect>
+        <rect id="search" fill="var(--cds-field-02, #f4f4f4)" x="48" y="27" width="84" height="12"></rect>
+        <rect id="level-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="196" y="30" width="16" height="6" rx="3"></rect>
+        <rect id="level-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="216" y="30" width="16" height="6" rx="3"></rect>
+        <rect id="level-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="236" y="30" width="16" height="6" rx="3"></rect>
+        <rect id="line-numbers" fill="var(--cds-text-disabled, #c6c6c6)" x="50" y="53" width="10" height="4"></rect>
+        <rect id="line-numbers-2" fill="var(--cds-text-disabled, #c6c6c6)" x="50" y="69" width="10" height="4"></rect>
+        <rect id="line-numbers-3" fill="var(--cds-text-disabled, #c6c6c6)" x="50" y="85" width="10" height="4"></rect>
+        <rect id="line-numbers-4" fill="var(--cds-text-disabled, #c6c6c6)" x="50" y="101" width="10" height="4"></rect>
+        <rect id="line-numbers-5" fill="var(--cds-text-disabled, #c6c6c6)" x="50" y="117" width="10" height="4"></rect>
+        <rect id="line-numbers-6" fill="var(--cds-text-disabled, #c6c6c6)" x="50" y="133" width="10" height="4"></rect>
+        <rect id="badge-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="68" y="51" width="22" height="8" rx="4"></rect>
+        <rect id="badge-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="68" y="67" width="22" height="8" rx="4"></rect>
+        <rect id="badge-3" fill="var(--cds-support-error, #da1e28)" x="68" y="83" width="22" height="8" rx="4"></rect>
+        <rect id="badge-4" fill="var(--cds-layer-accent-active, #a8a8a8)" x="68" y="99" width="22" height="8" rx="4"></rect>
+        <rect id="badge-5" fill="var(--cds-layer-accent-active, #a8a8a8)" x="68" y="115" width="22" height="8" rx="4"></rect>
+        <rect id="badge-6" fill="var(--cds-layer-accent-active, #a8a8a8)" x="68" y="131" width="22" height="8" rx="4"></rect>
+        <rect id="text-1" fill="var(--cds-border-strong, #8d8d8d)" x="98" y="53" width="120" height="4"></rect>
+        <rect id="text-2" fill="var(--cds-border-strong, #8d8d8d)" x="98" y="69" width="96" height="4"></rect>
+        <rect id="text-3" fill="var(--cds-support-error, #da1e28)" x="98" y="85" width="132" height="4"></rect>
+        <rect id="text-4" fill="var(--cds-border-strong, #8d8d8d)" x="98" y="101" width="108" height="4"></rect>
+        <rect id="text-5" fill="var(--cds-border-strong, #8d8d8d)" x="98" y="117" width="84" height="4"></rect>
+        <rect id="text-6" fill="var(--cds-border-strong, #8d8d8d)" x="98" y="133" width="126" height="4"></rect>
+    </g>
+</svg>

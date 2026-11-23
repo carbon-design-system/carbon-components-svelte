@@ -1,0 +1,138 @@
+---
+components: ["LogViewer"]
+description: Log viewers show a stream of text lines, such as build output or service logs, with ANSI colors, follow-the-end scrolling, search, level filters and copy.
+---
+
+<script>
+  import { LogViewer, Stack } from "carbon-components-svelte";
+
+  const ESC = "\u001b";
+
+  const build = [
+    "2026-10-27T09:41:02.118Z INFO Resolving dependencies",
+    `2026-10-27T09:41:03.402Z INFO ${ESC}[32m✔${ESC}[0m checkout-api@4.12.0 built in 1.3s`,
+    "2026-10-27T09:41:04.771Z WARN payments-db: slow migration 0042 (9.8s)",
+    "2026-10-27T09:41:05.016Z DEBUG cache lookup key=session:8f2a",
+    `2026-10-27T09:41:06.230Z ERROR ${ESC}[1;31mFAIL${ESC}[0m auth-gateway: health check returned 503`,
+    "2026-10-27T09:41:06.231Z ERROR   at probe (https://status.example.com/runs/48213)",
+    "2026-10-27T09:41:07.905Z INFO Rolling back to checkout-api@4.11.3",
+    "2026-10-27T09:41:09.114Z INFO Rollback complete",
+  ];
+
+  const colors = [
+    `${ESC}[1mBold${ESC}[0m ${ESC}[3mitalic${ESC}[0m ${ESC}[4munderline${ESC}[0m ${ESC}[9mstrike${ESC}[0m ${ESC}[2mdim${ESC}[0m ${ESC}[7mreverse${ESC}[0m`,
+    `${[30, 31, 32, 33, 34, 35, 36, 37].map((code) => `${ESC}[${code}m${code}`).join(" ")}${ESC}[0m`,
+    `${[90, 91, 92, 93, 94, 95, 96, 97].map((code) => `${ESC}[${code}m${code}`).join(" ")}${ESC}[0m`,
+    `${[41, 42, 43, 44, 45, 46].map((code) => `${ESC}[${code}m ${code} ${ESC}[0m`).join(" ")}`,
+    `${[196, 208, 226, 46, 51, 21, 201].map((code) => `${ESC}[38;5;${code}m${code}`).join(" ")}${ESC}[0m 256-color`,
+    `${ESC}[38;2;255;128;0mtruecolor orange${ESC}[0m ${ESC}[38;2;120;200;255mtruecolor sky${ESC}[0m ${ESC}[48;2;32;96;160m on blue ${ESC}[0m`,
+  ];
+
+  const wide = [
+    `2026-10-27T09:41:06.230Z ERROR request 8f2a failed: ${"upstream timeout after retries; ".repeat(12)}`,
+    "2026-10-27T09:41:06.801Z INFO next request",
+  ];
+
+  const structured = [
+    { time: Date.UTC(2026, 9, 27, 9, 41, 2, 118), level: "info", text: "Pulling image checkout-api:4.12.0" },
+    { time: Date.UTC(2026, 9, 27, 9, 41, 5, 16), level: "warn", text: "Image digest differs from the staging build" },
+    { time: Date.UTC(2026, 9, 27, 9, 41, 6, 230), level: "error", text: "Container exited with code 137" },
+    { time: Date.UTC(2026, 9, 27, 9, 41, 6, 232), text: "Restarting (attempt 1 of 3)" },
+  ];
+</script>
+
+## Basic
+
+LogViewer shows `lines` in a monospace font, oldest first, with line numbers. A line is a string, and the viewer reads a leading ISO timestamp and level word, such as `ERROR` or `[warn]`, into a time and a level label. It starts at the newest line. Name it with `labelText`, and set its `height` as a CSS length, or `"100%"` to fill a parent that has a height.
+
+Only the lines in view are in the page, so a log of 100,000 lines costs about as much as one of 100. The toolbar searches the whole log, not only the lines drawn.
+
+<LogViewer lines={build} labelText="Release build" height="16rem" timestamps />
+
+## Streaming
+
+For a stream, call `append` on the component instead of rebuilding `lines`. It takes one line or an array, and any number of calls in a frame cost one update, so it keeps up with 1,000 lines a second. Past `maxLines` the oldest lines are dropped, and line numbers keep counting from the stream. Call `clear` to empty the log.
+
+<FileSource src="/framed/LogViewer/StreamingLog" />
+
+`lines` suits a log you already have. When the array grows and keeps its first and last lines, only the new ones are read. Any other change reads it again, so a consumer that caps its own array, dropping lines from the front, should use `append`.
+
+| Do | Why |
+| --- | --- |
+| Call `append` with a batch when many lines arrive together | One call per line works, but a batch skips the per-call bookkeeping. |
+| Set `maxLines` to what a reader can use | Memory is bounded by it. The default is 10,000. |
+| Leave `announce` at `"summary"` or turn it `"off"` for a fast stream | Screen readers are told at most once per `announceInterval`, not once per line. |
+
+## Following the end
+
+`follow` keeps the newest line in view while lines arrive. Scrolling up sets it to `false`, so a reader is never pulled away from what they are reading, and a "Jump to latest" button shows how many lines came since. Scrolling back to the end, or pressing the button, follows again. Bind `follow` to show your own state or to set it.
+
+While the reader is scrolled up, an unwrapped log stays on the lines they are reading even as old lines are dropped from the top. A wrapped log keeps up to twice `maxLines`, since the height of a wrapped line is not known until it is drawn.
+
+## Colors
+
+ANSI escape sequences in a line become color and style: the 16-color palette, the 256-color palette and truecolor, plus bold, dim, italic, underline, strikethrough and reverse video. Other escapes, such as cursor movement, are dropped. Each line starts from the default style.
+
+The 16 colors come from the Carbon palette in two sets, one for light themes and one for dark, and the viewer picks the set from the page behind it, so every color reads at 4.5:1 on White and on Gray 100. Set `--ccs-log-ansi-0` to `--ccs-log-ansi-15`, and `--ccs-log-ansi-on-0` to `--ccs-log-ansi-on-15` for text on a background, to use your own.
+
+256-color and truecolor values are the producer's choice, and one made for a dark terminal can vanish on White. `minContrast` moves any such color toward black or white until it reads, as a terminal's minimum contrast ratio does. Set it to `0` to draw colors as written.
+
+<LogViewer lines={colors} labelText="Terminal colors" height="14rem" lineNumbers={false} />
+
+In forced colors, the system draws all text in its own colors, so ANSI colors collapse. Bold, underline and the other styles stay, and a level is always written out as text, so nothing is carried by color alone.
+
+## Lines
+
+### Levels and times
+
+A line that is a string is read for `ERROR`, `WARN`, `INFO` and `DEBUG` words (and `warning`, `fatal`, `trace` and similar), in capitals, in brackets, or with a colon, after an optional ISO timestamp. A word that opens a sentence is left alone. A line with `level=warn` has its level read but keeps its text. A line that states its own level and time is never guessed at: give an object with `text`, `level` and `time`, which is a number, a `Date` or a string.
+
+Set `timestamps` to show the time of day. A line with no level is shown with the `"info"` filter.
+
+<LogViewer lines={structured} labelText="Container events" height="12rem" timestamps />
+
+### Wrapping and long lines
+
+A line stays on one row by default and the log scrolls sideways, with the line numbers held in place. Set `wrap` to `true` to wrap lines instead, which the toolbar also toggles. Wrapped rows are measured as they are drawn.
+
+<LogViewer lines={wide} labelText="Wrapped output" height="12rem" wrap timestamps />
+
+A very long line, such as a 20,000-character JSON payload, is drawn like any other. Search shows at most 200 matches in one line, and links are not looked for in a run of text longer than 4,000 characters.
+
+### Links
+
+URLs in a line become links that open in a new tab, whether `http:`, `https:` or `mailto:`. Other schemes stay text. Set `links` to `false` to turn this off. A link inside a selected line takes the text color and keeps its underline.
+
+## Search and filters
+
+The toolbar searches every line, including the ones not drawn. Type to highlight matches and jump to the first one at or after the top of the view, press <DocKbd label="Enter" /> for the next match and <DocKbd label="Shift" />+<DocKbd label="Enter" /> for the previous one, and the count shows where you are. Matches wrap around at either end. Use the toggles beside the arrows to match case or read the query as a regular expression; one that does not parse is reported instead of searched.
+
+Bind `query`, `regex` and `caseSensitive` to drive the search from outside. The browser's own find only sees the lines that are drawn, so use this instead.
+
+The Levels menu filters the log and counts how many lines each level holds. While a level is hidden, the button shows how many are shown, such as "Levels (3/4)". Bind `levels` to read or set the levels shown. Searching and stepping through matches stops following the end, so the match stays where you left it.
+
+<LogViewer lines={build} labelText="Release build search" height="16rem" query="auth" levels={["info", "warn", "error"]} />
+
+## Selecting and copying
+
+A selection across a virtualized log can not be a text selection, since the lines you select leave the page when you scroll. Click a line number to select the line, and <DocKbd label="Shift" />-click another to select the range between them, wherever they are in the log. <DocKbd label="Ctrl" />+<DocKbd label="A" /> selects every line shown, and <DocKbd label="Escape" /> clears the selection. Bind `selection` to read it, as a range of line ids, which are line numbers minus one.
+
+The copy button, and <DocKbd label="Ctrl" />+<DocKbd label="C" /> in the log, copy the selected lines, or every line shown when none is selected, without colors. The `copy` event reports how many lines were copied. Text selected in the usual way, within the lines drawn, copies as usual, and the line numbers are left out of it.
+
+<LogViewer lines={build} labelText="Release build selection" height="14rem" selection={{ start: 2, end: 4 }} />
+
+`getText` returns the same text from code.
+
+## Accessibility
+
+The log is a `role="log"` region named by `labelText`, and it takes focus so the keys that scroll work: arrow keys, <DocKbd label="Page Up" />, <DocKbd label="Page Down" />, <DocKbd label="Home" /> and <DocKbd label="End" />. Scrolling to the end follows again.
+
+The log is not a live region, even though that is the role's default. Its lines come and go as the window moves, and a screen reader would read them all. A separate, visually hidden region is updated with `announce`: `"summary"` says how many lines arrived and how many were errors, `"lines"` reads the newest, and `"off"` says nothing. It speaks at most once per `announceInterval`, in milliseconds. Searches announce the position of the current match.
+
+Line numbers are buttons that stay out of the tab order, so Tab moves through the toolbar and into the log in a few presses. Every string the viewer shows has a prop to translate it, such as `searchLabelText` and `jumpText`.
+
+## Layout
+
+The log keeps its direction on a right-to-left page, as code does, and the toolbar around it flips. Set the page with `dir="rtl"` or a `LayoutDirection`.
+
+On the server, the viewer renders the lines at the start of the log, then moves to the end when it mounts. The colors of the 16-color palette follow the theme once the viewer has measured the page behind it, so a dark theme may show a light-theme color for the first frame.
