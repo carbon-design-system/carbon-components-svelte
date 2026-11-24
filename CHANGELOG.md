@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.114.7](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.6...v0.114.7) (2026-11-24)
+
+### Bug Fixes
+
+- **button:** type class and aria-hidden on the icon slot props ([ee2452c](https://github.com/carbon-design-system/carbon-components-svelte/commit/ee2452c60c1892684484636944d5ce570f560bf0)), closes [#5750](https://github.com/carbon-design-system/carbon-components-svelte/issues/5750)
+- **combo-box:** keep a native modal dialog open when Escape clears it ([5f97de3](https://github.com/carbon-design-system/carbon-components-svelte/commit/5f97de3b7730e84cf35d8164f458a39b5ae984db))
+- **list-box:** keep a native modal dialog open when Escape closes the menu ([ddc9db2](https://github.com/carbon-design-system/carbon-components-svelte/commit/ddc9db23c6e9801c40b4eff8a5f4009fb3be2d12))
+- **notification:** keep a native modal dialog open when Escape closes it ([ac2ad57](https://github.com/carbon-design-system/carbon-components-svelte/commit/ac2ad5797d2052b9f2546fc1b136a9edbff3b916))
+- **overflow-menu:** keep a native modal dialog open when Escape closes it ([5578fb1](https://github.com/carbon-design-system/carbon-components-svelte/commit/5578fb144a68899565765dfd88dc19017918c83e))
+- **tag:** keep a native modal dialog open when Escape closes an operational tag ([5738344](https://github.com/carbon-design-system/carbon-components-svelte/commit/57383449e82167f3a6a006c1597dbfb976a53abb))
+- **toggletip:** close on an Escape pressed right after opening ([53a8a25](https://github.com/carbon-design-system/carbon-components-svelte/commit/53a8a2523a7c5d165f88c88980e34d9a2af07796))
+- **toolbar:** only default ariaLabel inside a DataTable ([e71f18d](https://github.com/carbon-design-system/carbon-components-svelte/commit/e71f18d19b73e35d189e7d2e48f208e6dabafb71)), closes [#5761](https://github.com/carbon-design-system/carbon-components-svelte/issues/5761)
+- **tooltip:** keep a native dialog open when Escape hides a tooltip ([7503063](https://github.com/carbon-design-system/carbon-components-svelte/commit/75030636d64460966a5c2035acb98dc294c3979d))
+
 ### [0.114.6](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.5...v0.114.6) (2026-11-23)
 
 ### Bug Fixes
