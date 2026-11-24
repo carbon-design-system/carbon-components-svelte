@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import type ToolbarBatchActionsComponent from "carbon-components-svelte/DataTable/ToolbarBatchActions.svelte";
 import type { ComponentProps } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
+import DataTableToolbarNoBatch from "./DataTableToolbarNoBatch.test.svelte";
 import Toolbar from "./Toolbar.test.svelte";
 
 describe("DataTable Toolbar", () => {
@@ -14,7 +15,27 @@ describe("DataTable Toolbar", () => {
       const toolbar = container.querySelector(".bx--table-toolbar");
       expect(toolbar).toBeInTheDocument();
       expect(toolbar?.tagName).toBe("SECTION");
-      expect(toolbar).toHaveAttribute("aria-label", "data table toolbar");
+      expect(toolbar).not.toHaveAttribute("aria-label");
+    });
+
+    it("sets ariaLabel outside a DataTable", () => {
+      const { container } = render(Toolbar, {
+        props: { testComponent: "Toolbar", ariaLabel: "Text formatting" },
+      });
+
+      expect(container.querySelector(".bx--table-toolbar")).toHaveAttribute(
+        "aria-label",
+        "Text formatting",
+      );
+    });
+
+    it("defaults ariaLabel to data table toolbar inside a DataTable", () => {
+      const { container } = render(DataTableToolbarNoBatch);
+
+      expect(container.querySelector(".bx--table-toolbar")).toHaveAttribute(
+        "aria-label",
+        "data table toolbar",
+      );
     });
 
     it("should handle default size", () => {

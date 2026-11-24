@@ -10,8 +10,11 @@
 
   /**
    * Specify the ARIA label for the toolbar.
+   * Defaults to "data table toolbar" inside a `DataTable`, and to no label
+   * outside one.
+   * @type {string | undefined}
    */
-  export let ariaLabel = "data table toolbar";
+  export let ariaLabel = undefined;
 
   /** Set to `true` to keep the toolbar pinned while its scroll container scrolls. */
   export let sticky = false;
@@ -56,6 +59,8 @@
   $: inheritedSize = $tableSize
     ? TOOLBAR_SIZE_BY_TABLE_SIZE[$tableSize]
     : undefined;
+  $: effectiveAriaLabel =
+    ariaLabel ?? (dataTableCtx ? "data table toolbar" : undefined);
   $: effectiveSize = normalizeToolbarSize(size) ?? inheritedSize ?? "default";
   $: effectiveStickyOffset =
     stickyOffset ?? ($isHeaderRendered ? UI_SHELL_HEADER_HEIGHT : 0);
@@ -97,7 +102,7 @@
 <section
   bind:this={ref}
   tabindex="-1"
-  aria-label={ariaLabel}
+  aria-label={effectiveAriaLabel}
   class:bx--table-toolbar={true}
   class:bx--table-toolbar--xs={effectiveSize === "xs"}
   class:bx--table-toolbar--small={effectiveSize === "sm"}
