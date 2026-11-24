@@ -1480,9 +1480,13 @@
             } else if (event.key === "Escape") {
               // Dispatch before `clear()` flips `open`, so the guard still sees it open.
               const hadSelection = selectedId !== undefined;
-              // Clearing a closed field consumes Escape; with nothing to close
-              // or clear, it bubbles to an ancestor such as a Modal.
-              if (hadSelection || value !== "") event.stopPropagation();
+              // Clearing a closed field consumes Escape, default included so a
+              // native modal `<dialog>` stays open; with nothing to close or
+              // clear, it bubbles to an ancestor such as a Modal.
+              if (hadSelection || value !== "") {
+                event.stopPropagation();
+                event.preventDefault();
+              }
               close("escape-key");
               // Clearing a selection is a clear, like the clear button.
               if (hadSelection) dispatch("clear", event);

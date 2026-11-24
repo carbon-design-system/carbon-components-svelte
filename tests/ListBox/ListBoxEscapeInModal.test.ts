@@ -59,9 +59,10 @@ describe("Escape in a list box inside a Modal", () => {
     const input = screen.getByRole("combobox");
     expect(input).toHaveValue("Email");
 
-    await pressEscapeOnField();
+    const defaultAllowed = await pressEscapeOnField();
 
     expect(input).toHaveValue("");
     expect(isModalOpen()).toBe(true);
+    expect(defaultAllowed).toBe(false);
   });
 });
