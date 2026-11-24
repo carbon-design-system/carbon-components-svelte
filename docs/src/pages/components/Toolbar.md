@@ -5,6 +5,8 @@ description: Toolbars provide a flexible container for actions, search, and menu
 
 <script>
   import { Toolbar, ToolbarContent, ToolbarSearch, ToolbarMenu, ToolbarMenuItem, ToolbarBatchActions, Button } from "carbon-components-svelte";
+  import Copy from "carbon-icons-svelte/lib/Copy.svelte";
+  import Edit from "carbon-icons-svelte/lib/Edit.svelte";
   import Filter from "carbon-icons-svelte/lib/Filter.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 </script>
@@ -21,11 +23,13 @@ Create a basic toolbar with content inside toolbar content. **Toolbar** can be u
 
 ## Accessible label
 
-Set `ariaLabel` to override the toolbar's accessible name. The default, `"data table toolbar"`, is inherited from Toolbar's original use inside DataTable—override it for standalone toolbars so assistive technology announces something more meaningful.
+Inside a DataTable, the toolbar is named "data table toolbar". Outside one, it has no name by default. Set `ariaLabel` to name it, for example for a row of icon-only buttons.
 
-<Toolbar ariaLabel="Product actions">
+<Toolbar ariaLabel="Document actions">
   <ToolbarContent>
-    <Button>Create</Button>
+    <Button kind="ghost" icon={Edit} iconDescription="Edit" />
+    <Button kind="ghost" icon={Copy} iconDescription="Copy" />
+    <Button kind="ghost" icon={TrashCan} iconDescription="Delete" />
   </ToolbarContent>
 </Toolbar>
 
