@@ -191,7 +191,10 @@
     if (open && event.key === "Escape") {
       // Escape that cancels an IME composition is not a close.
       if (isImeComposition(event)) return;
+      // Preventing the default keeps a native modal `<dialog>` open, since
+      // closing is Escape's default action there.
       event.stopPropagation();
+      event.preventDefault();
       close();
       ref?.focus();
     }
