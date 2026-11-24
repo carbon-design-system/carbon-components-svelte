@@ -70,9 +70,12 @@
   }}
   on:keydown={(event) => {
     // An Escape that closes the menu stops here so an ancestor (Modal) stays
-    // open. A closed list box has nothing to dismiss, so Escape bubbles on.
+    // open, and prevents the default so a native modal `<dialog>` does too,
+    // since closing is Escape's default action there. A closed list box has
+    // nothing to dismiss, so Escape bubbles on.
     if (event.key === "Escape" && escapeClosesMenu) {
       event.stopPropagation();
+      event.preventDefault();
     }
   }}
   on:click|preventDefault
