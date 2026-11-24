@@ -124,9 +124,10 @@
   export let resizable = false;
 
   /**
-   * The width in pixels the user resized the panel to, or `undefined` to
-   * follow `size`. Rendered clamped between the `xs` width and 75% of the
-   * window. Has no effect unless `resizable` is `true`.
+   * Set the panel width in pixels, or `undefined` to follow `size`. Use it
+   * for a width between the `size` steps. Rendered clamped between the
+   * `xs` width and 75% of the window. With `resizable`, it's the width the
+   * user resized the panel to.
    * @type {number | undefined}
    * @bindable writable
    */
@@ -566,7 +567,7 @@
   $: lifecycle.syncOpen(open);
   $: syncRendered(open);
   $: resizeEnabled = resizable && rendered;
-  $: renderedWidth = resizable && width != null ? clampWidth(width) : undefined;
+  $: renderedWidth = width == null ? undefined : clampWidth(width);
   // The handle unmounts with the panel, taking its pointer capture (and
   // any `pointerup`) with it; end the drag instead of leaving it on.
   $: if (!resizeEnabled) stopResizing();

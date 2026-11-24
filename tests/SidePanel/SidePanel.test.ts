@@ -390,6 +390,20 @@ describe("SidePanel resize", () => {
     expect(onResize).toHaveBeenLastCalledWith(undefined);
   });
 
+  it("sets the width without resizable, clamped", async () => {
+    const { rerender } = render(SidePanel, {
+      props: { open: true, width: 736 },
+    });
+    expect(getPanel().style.width).toBe("736px");
+    expect(screen.queryByRole("separator")).toBeNull();
+
+    await rerender({ width: 100 });
+    expect(getPanel().style.width).toBe("256px");
+
+    await rerender({ width: undefined });
+    expect(getPanel().style.width).toBe("");
+  });
+
   it("renders no handle unless resizable", () => {
     render(SidePanel, { props: { open: true } });
     expect(screen.queryByRole("separator")).toBeNull();
