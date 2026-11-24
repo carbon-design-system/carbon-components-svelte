@@ -135,12 +135,14 @@
           `${direction}-${align}`
         );
 
-  // Window listeners are enabled on the animation frame after opening. Svelte
-  // flushes the open state synchronously while the triggering click is still
-  // propagating, so enabling them immediately would let the click that opened
-  // the toggletip (e.g. from an external trigger) bubble to the window handler
-  // and close it again. Deferring past the current event mirrors the
-  // post-render effect in the upstream component.
+  // The outside-click listener is enabled on the animation frame after
+  // opening. Svelte flushes the open state synchronously while the triggering
+  // click is still propagating, so enabling it immediately would let the click
+  // that opened the toggletip (e.g. from an external trigger) bubble to the
+  // window handler and close it again. Deferring past the current event
+  // mirrors the post-render effect in the upstream component. The Escape
+  // listener is enabled as soon as it opens, so a key pressed before that
+  // frame still closes it.
   let listenersEnabled = false;
   /** @type {number} */
   let enableFrame;
@@ -246,10 +248,8 @@ whitespace gap; the label's end margin is then the only spacing. -->
     class:bx--toggletip--open={open}
     use:dismiss={{
       enabled: listenersEnabled,
-      listeners: [
-        { type: "click", handler: handleOutsideClick },
-        { type: "keydown", handler: handleWindowKeydown },
-      ],
+      type: "click",
+      handler: handleOutsideClick,
     }}
     on:keydown={handleKeydown}
     on:focusout={handleFocusout}
@@ -257,6 +257,11 @@ whitespace gap; the label's end margin is then the only spacing. -->
   >
     <button
       bind:this={ref}
+      use:dismiss={{
+        enabled: open,
+        type: "keydown",
+        handler: handleWindowKeydown,
+      }}
       type="button"
       class:bx--toggletip-button={true}
       aria-label={ariaLabel ?? (iconDescription || undefined)}

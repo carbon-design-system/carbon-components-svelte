@@ -110,6 +110,18 @@ describe("Toggletip", () => {
     expect(trigger).toHaveFocus();
   });
 
+  it("closes on an Escape pressed outside right after opening", async () => {
+    render(Toggletip, { props: { open: false } });
+
+    const trigger = screen.getByRole("button", { name: "Information" });
+    await user.click(trigger);
+    trigger.blur();
+    // No frame has passed since the click opened it.
+    await fireEvent.keyDown(document.body, { key: "Escape" });
+
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+  });
+
   it("does not close an enclosing modal on Escape", async () => {
     const { container } = render(ToggletipInModal, {
       props: { portalTooltip: false },
