@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>key-value-editor</title>
+    <g id="key-value-editor" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="key-label" fill="var(--cds-text-disabled, #c6c6c6)" x="52" y="48" width="24" height="6"></rect>
+        <rect id="value-label" fill="var(--cds-text-disabled, #c6c6c6)" x="134" y="48" width="32" height="6"></rect>
+        <g id="row-1">
+            <rect fill="var(--cds-field-01, #f4f4f4)" x="52" y="60" width="72" height="24"></rect>
+            <rect fill="var(--cds-border-strong, #8d8d8d)" x="52" y="83" width="72" height="1"></rect>
+            <rect fill="var(--cds-text-secondary, #525252)" x="60" y="70" width="36" height="4"></rect>
+            <rect fill="var(--cds-field-01, #f4f4f4)" x="130" y="60" width="106" height="24"></rect>
+            <rect fill="var(--cds-border-strong, #8d8d8d)" x="130" y="83" width="106" height="1"></rect>
+            <rect fill="var(--cds-text-secondary, #525252)" x="138" y="70" width="52" height="4"></rect>
+            <rect fill="var(--cds-icon-secondary, #525252)" x="246" y="70" width="8" height="8"></rect>
+        </g>
+        <g id="row-2">
+            <rect fill="var(--cds-field-01, #f4f4f4)" x="52" y="90" width="72" height="24"></rect>
+            <rect fill="var(--cds-border-strong, #8d8d8d)" x="52" y="113" width="72" height="1"></rect>
+            <rect fill="var(--cds-text-secondary, #525252)" x="60" y="100" width="28" height="4"></rect>
+            <rect fill="var(--cds-field-01, #f4f4f4)" x="130" y="90" width="106" height="24"></rect>
+            <rect fill="var(--cds-border-strong, #8d8d8d)" x="130" y="113" width="106" height="1"></rect>
+            <rect fill="var(--cds-text-secondary, #525252)" x="138" y="100" width="12" height="4"></rect>
+            <rect fill="var(--cds-text-secondary, #525252)" x="154" y="100" width="12" height="4"></rect>
+            <rect fill="var(--cds-text-secondary, #525252)" x="170" y="100" width="12" height="4"></rect>
+            <rect fill="var(--cds-icon-secondary, #525252)" x="246" y="100" width="8" height="8"></rect>
+        </g>
+        <g id="ghost-row">
+            <rect fill="var(--cds-field-01, #f4f4f4)" x="52" y="120" width="72" height="24"></rect>
+            <rect fill="var(--cds-border-strong, #8d8d8d)" x="52" y="143" width="72" height="1"></rect>
+            <rect fill="var(--cds-field-01, #f4f4f4)" x="130" y="120" width="106" height="24"></rect>
+            <rect fill="var(--cds-border-strong, #8d8d8d)" x="130" y="143" width="106" height="1"></rect>
+        </g>
+    </g>
+</svg>
