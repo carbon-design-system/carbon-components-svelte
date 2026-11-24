@@ -77,3 +77,10 @@ export const STEPPER_REPEAT_INTERVAL_MS: 50;
  * element is hidden or its animation is off.
  */
 export const COPY_FEEDBACK_FADE_MS: 110;
+
+/**
+ * Typing pause before `Search` announces `resultsDescription`, when it has
+ * no `debounce` of its own, so a screen reader does not interrupt each
+ * keystroke with a new count.
+ */
+export const RESULTS_ANNOUNCE_DELAY_MS: 500;

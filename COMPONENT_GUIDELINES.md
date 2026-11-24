@@ -341,6 +341,7 @@ Put every default delay in `src/constants/timing.js`, named `*_MS`, with a JSDoc
 | `SUBMENU_HOVER_DELAY_MS` | 150 ms | Hover time before a submenu opens or closes |
 | `SEPARATOR_HOVER_DELAY_MS` | 150 ms | Hover time before a `Splitter` separator highlights |
 | `TYPEAHEAD_RESET_MS` | 500 ms | Idle time before a type-ahead buffer resets |
+| `RESULTS_ANNOUNCE_DELAY_MS` | 500 ms | Typing pause before `Search` announces `resultsDescription`, when `debounce` is unset |
 | `SUBMENU_AIM_PAUSE_MS` | 100 ms | Pause that ends pointer aim toward an open submenu |
 | `LOADING_DELAY_MS` | 300 ms | Time `loading` stays `true` before an indicator shows |
 | `LOADING_MIN_DURATION_MS` | 500 ms | Minimum time an indicator stays once shown |
