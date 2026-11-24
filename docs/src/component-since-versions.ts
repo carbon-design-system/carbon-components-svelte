@@ -115,6 +115,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Theme: "0.40.0",
   ThemeZone: "0.114.0",
   Tile: "0.2.0",
+  TileGrid: "0.115.0",
   TimePicker: "0.2.0",
   ToastNotification: "0.2.0",
   Toggle: "0.2.0",

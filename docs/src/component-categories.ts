@@ -179,6 +179,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "ExpandableTile",
       "SelectableTile",
       "RadioTile",
+      "TileGrid",
     ],
   },
   {
