@@ -6,6 +6,7 @@ description: Copy buttons copy text to the clipboard as a standalone control, fo
   import { Button, CopyButton, Stack, TooltipGroup } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
   import Edit from "carbon-icons-svelte/lib/Edit.svelte";
+  import Link from "carbon-icons-svelte/lib/Link.svelte";
   import Share from "carbon-icons-svelte/lib/Share.svelte";
 </script>
 
@@ -30,6 +31,12 @@ Prefetch on hover with `on:mouseenter`.
 Set `kind` to `"ghost"` to render a transparent button that matches a [Button](/components/Button) with `kind="ghost"`. The default `kind` (`"primary"`) keeps Carbon's filled square.
 
 <CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" kind="ghost" />
+
+## Custom icon
+
+Set `icon` to replace the copy icon, for example with a link icon so a "copy link" button doesn't read as a second "copy code" button. `feedbackIcon` still takes its place after copying.
+
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" kind="ghost" icon={Link} feedbackIcon={Checkmark} iconDescription="Copy link" feedback="Link copied" />
 
 ## Sizes
 
@@ -65,7 +72,7 @@ Set `feedback` to customize the message shown after copying. Set `errorFeedback`
 
 ### Icon
 
-Set `feedbackIcon` to show a different icon while feedback is visible. The copy icon returns when feedback closes.
+Set `feedbackIcon` to show a different icon while feedback is visible. The copy icon, or `icon`, returns when feedback closes.
 
 <CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" feedbackIcon={Checkmark} />
 
