@@ -1392,6 +1392,20 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Tile
+  tile-grid:
+    name: Tile grid
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/tile-grid.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TileGrid
+    tags:
+      - layout
   time-picker:
     status: stable
     framework: svelte

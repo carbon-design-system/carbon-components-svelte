@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>tile-grid</title>
+    <g id="tile-grid" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="tile-1" fill="var(--cds-field-01, #f4f4f4)" x="76" y="37" width="41" height="53"></rect>
+        <rect id="media-1" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="45" width="21" height="21"></rect>
+        <rect id="label-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="82" y="76" width="24" height="6"></rect>
+        <rect id="tile-2" fill="var(--cds-field-01, #f4f4f4)" x="118" y="37" width="41" height="53"></rect>
+        <rect id="media-2" fill="var(--cds-border-subtle, #e0e0e0)" x="128" y="45" width="21" height="21"></rect>
+        <rect id="label-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="124" y="76" width="18" height="6"></rect>
+        <rect id="tile-3" fill="var(--cds-field-01, #f4f4f4)" x="160" y="37" width="41" height="53"></rect>
+        <rect id="media-3" fill="var(--cds-border-subtle, #e0e0e0)" x="170" y="45" width="21" height="21"></rect>
+        <rect id="label-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="166" y="76" width="28" height="6"></rect>
+        <rect id="tile-4" fill="var(--cds-field-01, #f4f4f4)" x="202" y="37" width="41" height="53"></rect>
+        <rect id="media-4" fill="var(--cds-border-subtle, #e0e0e0)" x="212" y="45" width="21" height="21"></rect>
+        <rect id="label-4" fill="var(--cds-layer-accent-active, #a8a8a8)" x="208" y="76" width="20" height="6"></rect>
+        <rect id="tile-5" fill="var(--cds-field-01, #f4f4f4)" x="76" y="91" width="41" height="53"></rect>
+        <rect id="media-5" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="99" width="21" height="21"></rect>
+        <rect id="label-5" fill="var(--cds-layer-accent-active, #a8a8a8)" x="82" y="130" width="22" height="6"></rect>
+        <rect id="tile-6" fill="var(--cds-field-01, #f4f4f4)" x="118" y="91" width="41" height="53"></rect>
+        <rect id="media-6" fill="var(--cds-border-subtle, #e0e0e0)" x="128" y="99" width="21" height="21"></rect>
+        <rect id="label-6" fill="var(--cds-layer-accent-active, #a8a8a8)" x="124" y="130" width="26" height="6"></rect>
+        <rect id="tile-7" fill="var(--cds-field-01, #f4f4f4)" x="160" y="91" width="41" height="53"></rect>
+        <rect id="media-7" fill="var(--cds-border-subtle, #e0e0e0)" x="170" y="99" width="21" height="21"></rect>
+        <rect id="label-7" fill="var(--cds-layer-accent-active, #a8a8a8)" x="166" y="130" width="16" height="6"></rect>
+        <rect id="tile-8" fill="var(--cds-field-01, #f4f4f4)" x="202" y="91" width="41" height="53"></rect>
+        <rect id="media-8" fill="var(--cds-border-subtle, #e0e0e0)" x="212" y="99" width="21" height="21"></rect>
+        <rect id="label-8" fill="var(--cds-layer-accent-active, #a8a8a8)" x="208" y="130" width="24" height="6"></rect>
+    </g>
+</svg>
