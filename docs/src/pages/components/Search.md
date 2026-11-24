@@ -53,6 +53,12 @@ The `search` event fires when pressing <DocKbd label="Enter" />, with `value` as
 
 <Search debounce={300} on:search={(e) => console.log(e.detail)} />
 
+## Results announcement
+
+Set `resultsDescription` when the search filters content on the page. A screen reader announces it politely once typing pauses, after `debounce` when set, otherwise after 500 ms, so it does not interrupt each keystroke. Set it to `""` while the field is empty to announce nothing.
+
+<FileSource src="/framed/Search/SearchResults" />
+
 ## Custom labels
 
 Customize the ARIA labels used for accessibility.
