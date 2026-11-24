@@ -217,3 +217,25 @@ describe("rovingFocus", () => {
     expect(onMove).not.toHaveBeenCalled();
   });
 });
+
+describe("rovingFocus grid orientation", () => {
+  it("moves Up and Down by layout and Left and Right in order", () => {
+    const { items, onMove, setActive } = setup(6, { orientation: "grid" });
+    // Two rows of three.
+    items.forEach((item, i) => {
+      const top = Math.floor(i / 3) * 50;
+      const left = (i % 3) * 50;
+      vi.spyOn(item, "getBoundingClientRect").mockReturnValue(
+        DOMRect.fromRect({ x: left, y: top, width: 50, height: 50 }),
+      );
+    });
+
+    setActive(1);
+    keydown(items[1], "ArrowDown");
+    expect(onMove).toHaveBeenLastCalledWith(4, expect.any(KeyboardEvent));
+
+    setActive(2);
+    keydown(items[2], "ArrowRight");
+    expect(onMove).toHaveBeenLastCalledWith(3, expect.any(KeyboardEvent));
+  });
+});

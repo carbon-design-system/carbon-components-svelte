@@ -1,6 +1,12 @@
 /** Svelte action for arrow-key roving focus. */
 
-export type RovingFocusOrientation = "horizontal" | "vertical" | "both";
+/**
+ * `"grid"` moves Left and Right through the items in order, and Up and Down
+ * to the nearest item in the row above or below, by layout. It measures
+ * the items, so `getItems` must return elements.
+ */
+export type RovingFocusOrientation =
+  "horizontal" | "vertical" | "both" | "grid";
 
 /**
  * `T` is what `getItems` returns: elements by default, or a component's
