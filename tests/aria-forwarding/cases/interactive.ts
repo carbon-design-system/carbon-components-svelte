@@ -30,6 +30,7 @@ import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte
 import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
+import TileGrid from "carbon-components-svelte/TileGrid/TileGrid.svelte";
 import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
 import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
 import TooltipIcon from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
@@ -449,6 +450,18 @@ export const interactive: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("dialog"),
+  },
+  {
+    name: "TileGrid",
+    render: (attrs) =>
+      render(TileGrid, {
+        props: {
+          items: [{ id: "a", text: "Archive" }],
+          labelText: "Icons",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "Toggletip",

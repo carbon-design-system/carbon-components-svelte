@@ -13,6 +13,8 @@ import { isTruncated } from "./truncation.js";
  * `options.measure` names a descendant (a selector) whose text is the one
  * that truncates, such as a label inside a button. Falls back to `node`.
  * `options.enabled: false` removes the listener and any `title` it set.
+ * `options.multiline` measures a line-clamped block, which overflows
+ * downward instead of sideways.
  *
  * @param {HTMLElement} node
  * @param {import("./title-when-truncated.js").TitleWhenTruncatedOptions} [options]
@@ -27,7 +29,10 @@ export function titleWhenTruncated(node, options = {}) {
   function update() {
     const measured =
       (latest.measure && node.querySelector(latest.measure)) || node;
-    if (measured instanceof HTMLElement && isTruncated(measured)) {
+    if (
+      measured instanceof HTMLElement &&
+      isTruncated(measured, latest.multiline)
+    ) {
       node.title = measured.textContent?.trim() ?? "";
     } else {
       node.removeAttribute("title");

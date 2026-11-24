@@ -1,0 +1,131 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// TileGrid lays out equal clickable tiles at a fixed aspect ratio: media
+/// over a label clamped to a set number of lines. Columns come from the
+/// container's width, so rows reflow at every breakpoint. The tiles keep
+/// Carbon's clickable tile surface, hover and focus ring, and AspectRatio's
+/// box; this partial resets the `<button>` and lays out its parts. Carbon
+/// has no gallery component, so this is hand-authored.
+/// @access private
+/// @group components
+@mixin tile-grid {
+  .#{$prefix}--tile-grid__list {
+    display: grid;
+    // `min()` keeps one column from overflowing a container narrower than
+    // the minimum tile width.
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(min(var(--ccs-tile-grid-min-width, #{to-rem(128px)}), 100%), 1fr)
+    );
+    // Carbon's condensed gutter: the page shows through as a hairline.
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  // A group's title sits closer to its own tiles than to the group above.
+  .#{$prefix}--tile-grid__group-title {
+    @include type-style("heading-compact-01");
+
+    margin-block: $carbon--spacing-07 $carbon--spacing-03;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--tile-grid__group-title:first-child {
+    margin-block-start: 0;
+  }
+
+  .#{$prefix}--tile-grid .#{$prefix}--tile {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-03;
+    min-width: 0;
+    min-height: 0;
+    border: 0;
+    text-align: start;
+  }
+
+  .#{$prefix}--tile-grid__media {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-height: 0;
+    overflow: hidden;
+    color: $icon-primary;
+  }
+
+  .#{$prefix}--tile-grid__label {
+    @include type-style("body-compact-01");
+
+    --ccs-truncate-lines: var(--ccs-tile-grid-label-lines, 2);
+
+    display: flex;
+    flex-shrink: 0;
+    // Every line is reserved, so a one-line label leaves the media where it
+    // is in the other tiles, and the text sits at the bottom, so its line
+    // shares the last line of a longer label. `body-compact-01` sets an
+    // 18px line.
+    align-items: flex-end;
+    block-size: calc(var(--ccs-tile-grid-label-lines, 2) * #{to-rem(18px)});
+  }
+
+  .#{$prefix}--tile-grid__label-text {
+    width: 100%;
+    // Break inside a word only when it can't fit on a line.
+    overflow-wrap: break-word;
+    // A label reads in its own direction on a page of the other one, with
+    // the ellipsis at its own end. Not `dir="auto"`: Svelte writes `dir`
+    // again on every update of the tile, and each write lays the grid out.
+    unicode-bidi: plaintext;
+  }
+
+  .#{$prefix}--tile-grid--center .#{$prefix}--tile-grid__media {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .#{$prefix}--tile-grid--center .#{$prefix}--tile-grid__label {
+    text-align: center;
+  }
+
+  .#{$prefix}--tile-grid--sm .#{$prefix}--tile {
+    padding: $carbon--spacing-04 $carbon--spacing-03;
+  }
+
+  .#{$prefix}--tile-grid--sm .#{$prefix}--tile-grid__label {
+    @include type-style("label-01");
+
+    // `label-01` sets a 16px line.
+    block-size: calc(var(--ccs-tile-grid-label-lines, 2) * #{to-rem(16px)});
+    color: $text-secondary;
+  }
+
+  // The media runs to the tile's edges; only the label keeps the padding.
+  .#{$prefix}--tile-grid--cover .#{$prefix}--tile {
+    padding: 0;
+  }
+
+  .#{$prefix}--tile-grid--cover .#{$prefix}--tile-grid__media > * {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .#{$prefix}--tile-grid--cover .#{$prefix}--tile-grid__label {
+    margin: 0 $carbon--spacing-05 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--tile-grid--cover.#{$prefix}--tile-grid--sm
+    .#{$prefix}--tile-grid__label {
+    margin: 0 $carbon--spacing-03 $carbon--spacing-04;
+  }
+}
+
+@include exports("tile-grid") {
+  @include tile-grid;
+}

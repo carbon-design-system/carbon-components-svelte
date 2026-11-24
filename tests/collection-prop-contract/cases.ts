@@ -2,6 +2,7 @@ import { screen } from "@testing-library/svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+import TileGrid from "carbon-components-svelte/TileGrid/TileGrid.svelte";
 import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
 import DatePicker from "../DatePicker/DatePicker.test.svelte";
 import DatePickerSelectedDates from "../DatePicker/DatePickerSelectedDates.test.svelte";
@@ -312,6 +313,26 @@ export const cases: CollectionCase[] = [
     check: () => {
       expect(treeItem("Bravo")).toHaveAttribute("aria-checked", "true");
       expect(treeItem("Alpha")).toHaveAttribute("aria-checked", "false");
+    },
+  },
+  {
+    name: "TileGrid",
+    component: TileGrid,
+    prop: "items",
+    props: { labelText: "Services" },
+    initial: () => [
+      { id: "a", text: "Alpha" },
+      { id: "b", text: "Bravo" },
+    ],
+    replacement: () => [
+      { id: "c", text: "Charlie" },
+      { id: "d", text: "Delta" },
+    ],
+    check: async () => {
+      expect(screen.queryByRole("button", { name: "Alpha" })).toBeNull();
+      await user.click(screen.getByRole("button", { name: "Charlie" }));
+      await user.keyboard("{ArrowRight}");
+      expect(screen.getByRole("button", { name: "Delta" })).toHaveFocus();
     },
   },
   {
