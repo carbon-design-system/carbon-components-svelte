@@ -268,6 +268,7 @@ export { default as SelectableTile } from "./Tile/SelectableTile.svelte";
 export { default as SelectableTileGroup } from "./Tile/SelectableTileGroup.svelte";
 export { default as Tile } from "./Tile/Tile.svelte";
 export { default as TileGroup } from "./Tile/TileGroup.svelte";
+export { default as TileGrid } from "./TileGrid/TileGrid.svelte";
 export { default as FluidTimePickerSkeleton } from "./TimePicker/FluidTimePickerSkeleton.svelte";
 export { default as TimePicker } from "./TimePicker/TimePicker.svelte";
 export { default as TimePickerSelect } from "./TimePicker/TimePickerSelect.svelte";

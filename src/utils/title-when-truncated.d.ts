@@ -4,6 +4,8 @@ export interface TitleWhenTruncatedOptions {
   measure?: string;
   /** Set to `false` to skip the element. Defaults to `true`. */
   enabled?: boolean;
+  /** Set to `true` for a line-clamped block. Defaults to `false`. */
+  multiline?: boolean;
 }
 
 /**
