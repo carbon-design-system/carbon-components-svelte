@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { pressEscape } from "../utils/tooltip-escape";
 import { user } from "../utils/user";
 import OverflowMenu from "./OverflowMenu.test.svelte";
 import { closeDetails, openMenu } from "./helpers";
@@ -19,6 +20,20 @@ describe("OverflowMenu close event trigger", () => {
     expect(menuButton).toHaveFocus();
     expect(closeDetails(onClose)).toEqual([{ trigger: "escape-key" }]);
   });
+
+  // A native modal `<dialog>` closes as Escape's default action.
+  it.each(["trigger", "menu item"])(
+    "prevents the default of an Escape on the %s",
+    async (target) => {
+      render(OverflowMenu);
+      const { menuButton, items } = await openMenu();
+
+      (target === "trigger" ? menuButton : items[0]).focus();
+
+      expect(await pressEscape()).toBe(false);
+      expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    },
+  );
 
   it.each([false, true])(
     'closes with trigger "escape-key" when Tab leaves the menu (portalMenu=%s)',

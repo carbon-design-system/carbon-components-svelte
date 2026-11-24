@@ -652,7 +652,10 @@
       event.preventDefault();
       typeaheadSearch(event.key);
     } else if (event.key === "Escape") {
+      // Preventing the default keeps a native modal `<dialog>` open, since
+      // closing is Escape's default action there.
       event.stopPropagation();
+      event.preventDefault();
       closeFromKeyboard();
     } else if (event.key === "Tab") {
       // Close like Escape, then let Tab move on from the trigger. Tabbing
@@ -743,6 +746,7 @@
         last();
       } else if (event.key === "Escape") {
         event.stopPropagation();
+        event.preventDefault();
         closeFromKeyboard();
       }
     }
