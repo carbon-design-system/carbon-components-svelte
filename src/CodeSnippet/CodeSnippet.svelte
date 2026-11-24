@@ -317,7 +317,10 @@
     if (event.key !== "Escape" || !feedbackOpen) return;
     // Escape that cancels an IME composition is not a dismissal.
     if (isImeComposition(event)) return;
+    // Preventing the default keeps a native modal `<dialog>` open, since
+    // closing is Escape's default action there.
     event.stopPropagation();
+    event.preventDefault();
     copyFeedback.dismiss();
   }
 

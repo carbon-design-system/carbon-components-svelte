@@ -227,7 +227,12 @@
       // Escape that cancels an IME composition is not a close.
       if (isImeComposition(event)) return;
       // Let Escape reach a parent (e.g. a Modal) when nothing was dismissed.
-      if (open) event.stopPropagation();
+      // Preventing the default keeps a native modal `<dialog>` open, since
+      // closing is Escape's default action there.
+      if (open) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
       // With `hideIcon`, the trigger is `ref` and `refIcon` is never bound.
       (hideIcon ? ref : refIcon)?.focus();
       open = false;
@@ -236,7 +241,8 @@
 
   // A hover-opened tooltip must close on Escape wherever focus is. Runs in
   // the capture phase so it closes before an ancestor (e.g. a Modal) sees
-  // Escape. Focus inside the tooltip is left to `handleKeydown`, so nested
+  // Escape, and prevents the default so a native modal `<dialog>` stays
+  // open. Focus inside the tooltip is left to `handleKeydown`, so nested
   // widgets still get Escape first.
   /** @param {Event} event */
   function handleWindowKeydown(event) {
@@ -250,6 +256,7 @@
     const target = /** @type {Node | null} */ (event.target);
     if (ref?.contains(target) || refTooltip?.contains(target)) return;
     event.stopPropagation();
+    event.preventDefault();
     open = false;
   }
 
