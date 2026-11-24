@@ -1,18 +1,19 @@
 // @ts-check
 
+import { adjacentRowIndex } from "./adjacent-row-index.js";
 import { clampIndex } from "./clamp-index.js";
 import { hasModifierKey } from "./has-modifier-key.js";
 import { moveIndex, nextEnabledIndex } from "./move-index.js";
 
 /**
- * @typedef {"horizontal" | "vertical" | "both"} RovingFocusOrientation
+ * @typedef {"horizontal" | "vertical" | "both" | "grid"} RovingFocusOrientation
  */
 
 /**
  * @typedef {Object} RovingFocusOptions
  * @property {string} selector - Items inside `node`. Also filters which keydown events count.
  * @property {() => HTMLElement[]} [getItems] - Item list in tab order. Default: `node.querySelectorAll(selector)`.
- * @property {RovingFocusOrientation} [orientation] - "horizontal" = Left/Right, "vertical" = Up/Down, "both" = all four. Default "horizontal".
+ * @property {RovingFocusOrientation} [orientation] - "horizontal" = Left/Right, "vertical" = Up/Down, "both" = all four, "grid" = Left/Right through the items and Up/Down to the nearest item in the row above or below, by layout. Default "horizontal".
  * @property {boolean} [wrap] - Wrap at the ends. Default `true`; `false` clamps.
  * @property {boolean} [skipDisabled] - Skip disabled items. Default `false`.
  * @property {boolean} [home] - Home jumps to the first item. Default `true`.
@@ -86,6 +87,22 @@ export function rovingFocus(node, options) {
     return nextEnabledIndex({ items, index: -1, step: direction, isDisabled });
   }
 
+  /**
+   * The nearest item in the row below or above, measured on the keypress.
+   * @param {HTMLElement[]} items
+   * @param {1 | -1} step
+   */
+  function rowIndex(items, step) {
+    const isDisabled = currentOptions.isDisabled ?? defaultIsDisabled;
+    return adjacentRowIndex(
+      items.length,
+      currentOptions.getActiveIndex(),
+      step,
+      (i) => items[i].getBoundingClientRect(),
+      currentOptions.skipDisabled ? (i) => isDisabled(items[i]) : undefined,
+    );
+  }
+
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     const target = event.target;
@@ -94,7 +111,9 @@ export function rovingFocus(node, options) {
     if (target !== node && !target.closest(currentOptions.selector)) return;
 
     const orientation = currentOptions.orientation ?? "horizontal";
-    const horizontal = orientation === "horizontal" || orientation === "both";
+    const grid = orientation === "grid";
+    const horizontal =
+      orientation === "horizontal" || orientation === "both" || grid;
     const vertical = orientation === "vertical" || orientation === "both";
 
     const items = getItems();
@@ -114,7 +133,9 @@ export function rovingFocus(node, options) {
       inline && currentOptions.rtl?.() ? "ArrowLeft" : "ArrowRight";
 
     let index = -1;
-    if (
+    if (grid && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
+      index = rowIndex(items, event.key === "ArrowDown" ? 1 : -1);
+    } else if (
       (inline && event.key === forward) ||
       (vertical && event.key === "ArrowDown")
     ) {
