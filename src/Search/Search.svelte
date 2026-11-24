@@ -163,6 +163,16 @@
    */
   export let debounce = 0;
 
+  /**
+   * Specify the text a screen reader announces about the results, such as
+   * `"12 results"`. It is announced politely once typing pauses, after
+   * `debounce` milliseconds when set, otherwise after 500 ms. A change to
+   * `""` clears it without an announcement. Leave it unset to render no
+   * live region.
+   * @type {string | undefined}
+   */
+  export let resultsDescription = undefined;
+
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import Kbd from "../Kbd/Kbd.svelte";
   import ShortcutBinding from "../Kbd/ShortcutBinding.svelte";
@@ -173,6 +183,7 @@
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
   } from "../constants/context-keys.js";
+  import { RESULTS_ANNOUNCE_DELAY_MS } from "../constants/timing.js";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
@@ -304,9 +315,43 @@
         : null;
   }
 
+  // The live region starts empty, so the server HTML and a value set on
+  // mount announce nothing. Each change waits for typing to pause, and a
+  // newer one replaces it.
+  let announcedResults = "";
+  let prevResultsDescription = resultsDescription;
+  /** @type {null | import("../utils/debounce.js").Debounced<(text: string) => void>} */
+  let announceResults = null;
+
+  // A new `debounce` applies from the next change and drops a pending one.
+  /** @param {number} _delay */
+  function resetResultsAnnouncer(_delay) {
+    announceResults?.cancel();
+    announceResults = null;
+  }
+  $: resetResultsAnnouncer(debounce);
+
+  $: if (resultsDescription !== prevResultsDescription) {
+    prevResultsDescription = resultsDescription;
+    if (resultsDescription) {
+      announceResults ??= debounceFn(
+        /** @param {string} text */
+        (text) => {
+          announcedResults = text;
+        },
+        debounce > 0 ? debounce : RESULTS_ANNOUNCE_DELAY_MS,
+      );
+      announceResults(resultsDescription);
+    } else {
+      announceResults?.cancel();
+      announcedResults = "";
+    }
+  }
+
   onMount(() => {
     return () => {
       dispatchSearch?.cancel();
+      announceResults?.cancel();
       loadingIndicator.cancel();
     };
   });
@@ -583,6 +628,13 @@
   {/if}
   {#if showWarn && !isFluid && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+  {/if}
+  {#if resultsDescription !== undefined}
+    <!-- Rendered while empty, so assistive tech registers the region before
+         its text changes. -->
+    <span role="status" aria-live="polite" class:bx--visually-hidden={true}
+      >{announcedResults}</span
+    >
   {/if}
 {/if}
 
