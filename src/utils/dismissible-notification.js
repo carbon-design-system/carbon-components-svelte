@@ -196,8 +196,10 @@ export function createDismissibleNotification({
     if (event.key === "Escape") {
       // Escape that cancels an IME composition is not a close.
       if (!closeOnEscape || isImeComposition(event)) return;
-      // Keep a surrounding modal or popover from closing on the same key.
+      // Keep a surrounding modal or popover from closing on the same key,
+      // and a native modal `<dialog>`, which closes as Escape's default.
       event.stopPropagation();
+      event.preventDefault();
       close();
     } else if (event.key === "Tab" && !event.defaultPrevented) {
       // With no Escape and no close button, a trap would have no exit

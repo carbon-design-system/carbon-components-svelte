@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { pressEscape } from "../utils/tooltip-escape";
 import { user } from "../utils/user";
 import NotificationActionable from "./NotificationActionable.test.svelte";
 
@@ -79,7 +80,7 @@ describe.each(["inline", "toast"] as const)("actionable (%s)", (type) => {
     render(NotificationActionable, { props: { type, onClose, onKeydown } });
 
     const trigger = await openFromTrigger();
-    await user.keyboard("{Escape}");
+    const defaultAllowed = await pressEscape();
 
     expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
     expect(onClose).toHaveBeenCalledTimes(1);
@@ -89,6 +90,8 @@ describe.each(["inline", "toast"] as const)("actionable (%s)", (type) => {
     expect(onKeydown.mock.calls.some(([event]) => event.key === "Escape")).toBe(
       false,
     );
+    // Nor a native modal `<dialog>`, which closes as Escape's default action.
+    expect(defaultAllowed).toBe(false);
   });
 
   it("stays open on Escape when the close event is prevented", async () => {
