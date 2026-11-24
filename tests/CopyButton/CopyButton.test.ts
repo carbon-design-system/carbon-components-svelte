@@ -8,6 +8,7 @@ import { openTooltips } from "../utils/open-tooltips";
 import { user } from "../utils/user";
 import CopyButton from "./CopyButton.test.svelte";
 import CopyButtonAsync from "./CopyButtonAsync.test.svelte";
+import CopyButtonIcon from "./CopyButtonIcon.test.svelte";
 import CopyButtonInModal from "./CopyButtonInModal.test.svelte";
 import CopyButtonPortalTooltipTimeout from "./CopyButtonPortalTooltipTimeout.test.svelte";
 
@@ -40,6 +41,18 @@ describe("CopyButton", () => {
 
     // Feedback is portalled by default; it shares the hover tooltip surface.
     expect(openTooltips()[0]).toHaveTextContent("Copied!");
+  });
+
+  it("renders a custom icon, and the feedback icon after copying", async () => {
+    render(CopyButtonIcon);
+    const button = getCopyButton("Copy link");
+
+    expect(screen.getByTestId("icon")).toHaveClass("bx--snippet__icon");
+    expect(button.querySelectorAll("svg")).toHaveLength(1);
+
+    await user.click(button);
+    expect(screen.getByTestId("feedback-icon")).toBeInTheDocument();
+    expect(screen.queryByTestId("icon")).toBeNull();
   });
 
   it("supports custom feedback text and timeout (inline caret)", async () => {

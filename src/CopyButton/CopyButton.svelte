@@ -17,8 +17,14 @@
   export let feedbackTimeout = COPY_FEEDBACK_TIMEOUT_MS;
 
   /**
+   * Specify the icon to render. Defaults to the Copy icon.
+   * @type {Icon | undefined}
+   */
+  export let icon = /** @type {Icon | undefined} */ (undefined);
+
+  /**
    * Specify an icon to render during the feedback window (for example, after copying).
-   * When unset, the copy icon is always shown.
+   * When unset, `icon` is always shown.
    * @type {Icon | undefined}
    */
   export let feedbackIcon = /** @type {Icon | undefined} */ (undefined);
@@ -343,7 +349,7 @@
   {#if feedbackIcon && feedbackOpen}
     <svelte:component this={feedbackIcon} class="bx--snippet__icon" />
   {:else}
-    <Copy class="bx--snippet__icon" />
+    <svelte:component this={icon ?? Copy} class="bx--snippet__icon" />
   {/if}
   {#if !feedbackPortalled}
     <span
