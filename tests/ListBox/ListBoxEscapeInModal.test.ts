@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import ComboBoxInModal from "../ComboBox/ComboBoxInModal.test.svelte";
 import DropdownInModal from "../Dropdown/DropdownInModal.test.svelte";
 import MultiSelectInModal from "../MultiSelect/MultiSelectInModal.test.svelte";
-import { user } from "../utils/user";
+import { pressEscape } from "../utils/tooltip-escape";
 
 function isModalOpen() {
   const modal = document.querySelector(".bx--modal");
@@ -10,10 +10,10 @@ function isModalOpen() {
   return modal.classList.contains("is-visible");
 }
 
-async function pressEscapeOnField() {
-  const field = screen.getByRole("combobox");
-  field.focus();
-  await user.keyboard("{Escape}");
+/** Presses Escape on the field; resolves `false` once its default is prevented. */
+function pressEscapeOnField() {
+  screen.getByRole("combobox").focus();
+  return pressEscape();
 }
 
 describe("Escape in a list box inside a Modal", () => {
@@ -33,10 +33,12 @@ describe("Escape in a list box inside a Modal", () => {
         props: { modalOpen: true, [openProp]: true, ...extraProps },
       });
 
-      await pressEscapeOnField();
+      const defaultAllowed = await pressEscapeOnField();
 
       expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
       expect(isModalOpen()).toBe(true);
+      // A native modal `<dialog>` closes as Escape's default action.
+      expect(defaultAllowed).toBe(false);
     });
 
     it("lets Escape close the modal when the menu is closed", async () => {
