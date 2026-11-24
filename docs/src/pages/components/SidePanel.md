@@ -44,6 +44,12 @@ Set `size` to control the panel width. The default is `"md"`, 480px. A panel nev
 
 <FileSource src="/framed/SidePanel/SidePanelSizes" />
 
+### Custom width
+
+Set `width` in pixels for a width between the `size` steps, such as one that fits an 80-column code snippet. It's clamped between the `xs` width and 75% of the window, and users can't drag it unless the panel is `resizable`.
+
+<FileSource src="/framed/SidePanel/SidePanelWidth" />
+
 ## Placement
 
 Set `placement` to `"start"` or `"end"` to choose the edge the panel docks to. The default is `"end"`, the right edge in a left-to-right layout and the left edge in a right-to-left one. Carbon React's `"left"` and `"right"` map to `"start"` and `"end"`.
@@ -64,7 +70,7 @@ Set `slideIn` to `true` to push the page content aside so the panel doesn't cove
 
 ## Resizable
 
-Set `resizable` to `true` to let users drag the panel's free edge, or move it with the arrow keys once it has focus. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the narrowest and widest widths, and a double click restores `size`. Bind `width` to read or save the width. The `resize` event fires once per gesture. The handle hides on narrow screens.
+Set `resizable` to `true` to let users drag the panel's free edge, or move it with the arrow keys once it has focus. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the narrowest and widest widths, and a double click restores `size`. Bind `width` to set, read or save the width. The `resize` event fires once per gesture. The handle hides on narrow screens.
 
 <FileSource src="/framed/SidePanel/SidePanelResizable" />
 
