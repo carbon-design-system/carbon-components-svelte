@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { nextFrame } from "../utils/next-frame";
+import { pressEscape } from "../utils/tooltip-escape";
 import { user } from "../utils/user";
 import OperationalTag from "./OperationalTag.test.svelte";
 
@@ -72,7 +73,8 @@ describe("OperationalTag", () => {
     render(OperationalTag, { open: true });
 
     screen.getByRole("link", { name: "Retention" }).focus();
-    await user.keyboard("{Escape}");
+    // Prevented, so a native modal `<dialog>` around the tag stays open.
+    expect(await pressEscape()).toBe(false);
 
     expect(trigger()).toHaveAttribute("aria-expanded", "false");
     expect(trigger()).toHaveFocus();
