@@ -8,6 +8,7 @@ import ContentSwitcherDisabledSelected from "./ContentSwitcher.disabledSelected.
 import ContentSwitcherDynamic from "./ContentSwitcher.dynamic.test.svelte";
 import ContentSwitcherDynamicBound from "./ContentSwitcher.dynamicBound.test.svelte";
 import ContentSwitcherKeyed from "./ContentSwitcher.keyed.test.svelte";
+import ContentSwitcherLabel from "./ContentSwitcher.label.test.svelte";
 import ContentSwitcherLowContrastIconOnly from "./ContentSwitcher.lowContrastIconOnly.test.svelte";
 import ContentSwitcherModifiers from "./ContentSwitcher.modifiers.test.svelte";
 import ContentSwitcherNested from "./ContentSwitcher.nested.test.svelte";
@@ -1093,6 +1094,60 @@ describe("ContentSwitcher", () => {
       for (const t of screen.getAllByRole("tab")) {
         expect(t).toHaveAttribute("tabindex", "-1");
       }
+    });
+  });
+
+  describe("labelText", () => {
+    it("renders a label that names the tablist", async () => {
+      await renderAndFlush(ContentSwitcherLabel);
+
+      const label = screen.getByText("Motion");
+      expect(label).toHaveClass("bx--label");
+      expect(label).not.toHaveClass("bx--visually-hidden");
+      expect(screen.getByRole("tablist", { name: "Motion" })).toBeVisible();
+    });
+
+    it("hides the label visually with hideLabel", async () => {
+      await renderAndFlush(ContentSwitcherLabel, {
+        props: { hideLabel: true },
+      });
+
+      expect(screen.getByText("Motion")).toHaveClass("bx--visually-hidden");
+      expect(screen.getByRole("tablist")).toHaveAccessibleName("Motion");
+    });
+
+    it("lets aria-label replace the label as the name", async () => {
+      await renderAndFlush(ContentSwitcherLabel, {
+        props: { ariaLabel: "Motion style" },
+      });
+
+      const tablist = screen.getByRole("tablist");
+      expect(tablist).not.toHaveAttribute("aria-labelledby");
+      expect(tablist).toHaveAccessibleName("Motion style");
+    });
+
+    it("renders no label or wrapper without labelText", async () => {
+      const { container } = await renderAndFlush(ContentSwitcherLabel, {
+        props: { labelText: "" },
+      });
+
+      expect(container.querySelector(".bx--label")).toBeNull();
+      expect(screen.getByRole("tablist").parentElement).toBe(container);
+    });
+
+    it("pairs panels in DOM order when one mounts late", async () => {
+      const { rerender } = await renderAndFlush(ContentSwitcherLabel, {
+        props: { showFirstPanel: false },
+      });
+
+      await rerender({ showFirstPanel: true });
+      await tick();
+      await tick();
+
+      expect(screen.getAllByRole("tab")[0]).toHaveAttribute(
+        "aria-controls",
+        "productive-panel",
+      );
     });
   });
 });

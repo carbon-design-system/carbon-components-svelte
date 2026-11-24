@@ -52,6 +52,15 @@
   export let iconOnly = false;
 
   /**
+   * Specify the label text. It renders above the switcher and names the
+   * tablist, unless `aria-label` or `aria-labelledby` is set.
+   */
+  export let labelText = "";
+
+  /** Set to `true` to visually hide the label text */
+  export let hideLabel = false;
+
+  /**
    * Obtain a reference to the tablist HTML element.
    * @type {null | HTMLDivElement}
    * @bindable readonly
@@ -80,6 +89,16 @@
   import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
+  import { uniqueId } from "../utils/unique-id.js";
+
+  const labelId = uniqueId("ccs-content-switcher-label");
+  // A consumer `aria-label` or `aria-labelledby` replaces the visible label.
+  $: labelledBy =
+    labelText &&
+    $$restProps["aria-labelledby"] === undefined &&
+    $$restProps["aria-label"] === undefined
+      ? labelId
+      : undefined;
 
   $: effectiveSize = normalizeFieldSize(size);
 
@@ -387,6 +406,43 @@
     await focusSwitchElement(index);
   }
 
+  /** @type {import("../utils/roving-focus.js").RovingFocusOptions} */
+  const rovingFocusOptions = {
+    selector: "[role='tab']",
+    rtl: () => resolveLayoutDirection($layoutDirection, ref) === "rtl",
+    skipDisabled: true,
+    getItems: () =>
+      switches
+        .map((s) => document.getElementById(s.id))
+        .filter((node) => node instanceof HTMLElement),
+    getActiveIndex: () => {
+      // Move from the switch that holds focus. Fall back to the manual-mode
+      // focus index, then the selection, when focus is elsewhere.
+      const active = switches.findIndex(
+        (s) => s.id === document.activeElement?.id,
+      );
+      if (active >= 0) return active;
+      if (focusedIndex >= 0) return focusedIndex;
+      // Start from the fallback tab stop when the selected switch is disabled,
+      // so the first arrow press moves off it instead of re-selecting it.
+      if (switches[committedIndex]?.disabled) {
+        const index = switches.findIndex((s) => s.id === get(tabStopId));
+        if (index > -1) return index;
+      }
+      return committedIndex;
+    },
+    onMove: (index, event) => {
+      if (hasModifierKey(event)) return;
+      // Prevent the arrow keys from also scrolling the page.
+      event.preventDefault();
+      if (selectionMode === "manual") {
+        focusTo(index);
+      } else {
+        changeTo(index);
+      }
+    },
+  };
+
   setContext("carbon:ContentSwitcher", {
     currentId,
     add,
@@ -451,12 +507,15 @@
       }
     }
 
-    // Panels render after the tablist, so order them within its parent.
-    // Tabpanels that are not registered here (e.g., from a nested Tabs) are
-    // dropped by id.
-    if (needsPanelSync && panelCount > 0 && ref?.parentElement) {
+    // Panels render after the tablist, so order them within its parent, or
+    // the label wrapper's parent when `labelText` is set. Tabpanels that are
+    // not registered here (e.g., from a nested Tabs) are dropped by id.
+    const panelRoot = labelText
+      ? ref?.parentElement?.parentElement
+      : ref?.parentElement;
+    if (needsPanelSync && panelCount > 0 && panelRoot) {
       needsPanelSync = false;
-      const root = ref.parentElement;
+      const root = panelRoot;
       panels.update((current) =>
         syncDomOrder({
           root,
@@ -477,58 +536,55 @@
   });
 </script>
 
-<div
-  bind:this={ref}
-  role="tablist"
-  use:rovingFocus={{
-    selector: "[role='tab']",
-    rtl: () => resolveLayoutDirection($layoutDirection, ref) === "rtl",
-    skipDisabled: true,
-    getItems: () =>
-      switches
-        .map((s) => document.getElementById(s.id))
-        .filter((node) => node instanceof HTMLElement),
-    getActiveIndex: () => {
-      // Move from the switch that holds focus. Fall back to the manual-mode
-      // focus index, then the selection, when focus is elsewhere.
-      const active = switches.findIndex(
-        (s) => s.id === document.activeElement?.id,
-      );
-      if (active >= 0) return active;
-      if (focusedIndex >= 0) return focusedIndex;
-      // Start from the fallback tab stop when the selected switch is disabled,
-      // so the first arrow press moves off it instead of re-selecting it.
-      if (switches[committedIndex]?.disabled) {
-        const index = switches.findIndex((s) => s.id === get(tabStopId));
-        if (index > -1) return index;
-      }
-      return committedIndex;
-    },
-    onMove: (index, event) => {
-      if (hasModifierKey(event)) return;
-      // Prevent the arrow keys from also scrolling the page.
-      event.preventDefault();
-      if (selectionMode === "manual") {
-        focusTo(index);
-      } else {
-        changeTo(index);
-      }
-    },
-  }}
-  class:bx--content-switcher={true}
-  class:bx--content-switcher--sm={effectiveSize === "sm"}
-  class:bx--content-switcher--xl={effectiveSize === "xl"}
-  class:bx--content-switcher--icon-only={isIconOnly}
-  class:bx--content-switcher--low-contrast={lowContrast}
-  class:bx--content-switcher--auto-width={autoWidth}
-  {...$$restProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
-  on:focus
-  on:blur
->
-  <slot />
-</div>
+{#if labelText}
+  <div class:bx--form-item={true}>
+    <span
+      id={labelId}
+      class:bx--label={true}
+      class:bx--visually-hidden={hideLabel}>{labelText}</span
+    >
+    <div
+      bind:this={ref}
+      role="tablist"
+      aria-labelledby={labelledBy}
+      use:rovingFocus={rovingFocusOptions}
+      class:bx--content-switcher={true}
+      class:bx--content-switcher--sm={effectiveSize === "sm"}
+      class:bx--content-switcher--xl={effectiveSize === "xl"}
+      class:bx--content-switcher--icon-only={isIconOnly}
+      class:bx--content-switcher--low-contrast={lowContrast}
+      class:bx--content-switcher--auto-width={autoWidth}
+      {...$$restProps}
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseleave
+      on:focus
+      on:blur
+    >
+      <slot />
+    </div>
+  </div>
+{:else}
+  <div
+    bind:this={ref}
+    role="tablist"
+    use:rovingFocus={rovingFocusOptions}
+    class:bx--content-switcher={true}
+    class:bx--content-switcher--sm={effectiveSize === "sm"}
+    class:bx--content-switcher--xl={effectiveSize === "xl"}
+    class:bx--content-switcher--icon-only={isIconOnly}
+    class:bx--content-switcher--low-contrast={lowContrast}
+    class:bx--content-switcher--auto-width={autoWidth}
+    {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+    on:focus
+    on:blur
+  >
+    <slot />
+  </div>
+{/if}
 <slot name="content" />
