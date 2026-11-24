@@ -418,13 +418,16 @@
 
   // Listens on `window` in the capture phase, as TooltipIcon does, so a
   // hovered tooltip also hides while focus is elsewhere, and an ancestor
-  // such as a Modal doesn't also see the Escape that hid it.
+  // such as a Modal doesn't also see the Escape that hid it. Preventing the
+  // default keeps a native modal `<dialog>` open, since closing is Escape's
+  // default action there.
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     if (event.key !== "Escape" || !(portalOpen || inlineOpen)) return;
     // Escape that cancels an IME composition is not a dismissal.
     if (isImeComposition(event)) return;
     event.stopPropagation();
+    event.preventDefault();
     dismissed = true;
     tooltipShown = false;
     tooltipHandoff.dismiss();

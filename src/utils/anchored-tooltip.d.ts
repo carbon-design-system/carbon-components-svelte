@@ -51,8 +51,9 @@ export function createAnchoredTooltip(options?: {
    */
   handleTooltipCover: () => void;
   /**
-   * Hide on Escape and stop the key, unless `passEscape` returns `true`,
-   * or `passEscapeWhenFocused` is set and the anchor has focus.
+   * Hide on Escape and use up the key (stop it and prevent its default, so
+   * a native modal `<dialog>` stays open too), unless `passEscape` returns
+   * `true`, or `passEscapeWhenFocused` is set and the anchor has focus.
    */
   handleKeydown: (event: KeyboardEvent) => void;
   /** Hide until the next pointer enter or focus. */

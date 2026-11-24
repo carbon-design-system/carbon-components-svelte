@@ -130,7 +130,12 @@ export function createAnchoredTooltip({
     if (event.key !== "Escape" || !get(open)) return;
     if (isImeComposition(event)) return;
     const pass = passEscape() || (passEscapeWhenFocused && get(focused));
-    if (!pass) event.stopPropagation();
+    if (!pass) {
+      // Preventing the default keeps a native modal `<dialog>` open, since
+      // closing is Escape's default action there.
+      event.stopPropagation();
+      event.preventDefault();
+    }
     dismissed.set(true);
     handoff.dismiss();
   }

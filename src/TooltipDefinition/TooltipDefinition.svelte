@@ -222,7 +222,12 @@
     if (event.key !== "Escape" || isImeComposition(event)) return;
     const visible = shown;
     hide();
-    if (visible) event.stopPropagation();
+    // Preventing the default keeps a native modal `<dialog>` open, since
+    // closing is Escape's default action there.
+    if (visible) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
   }
 </script>
 

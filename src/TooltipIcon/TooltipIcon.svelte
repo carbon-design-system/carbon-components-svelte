@@ -262,7 +262,12 @@
       : open && !disabled && !tooltipHidden;
     hidden = true;
     hide();
-    if (visible) event.stopPropagation();
+    // Preventing the default keeps a native modal `<dialog>` open, since
+    // closing is Escape's default action there.
+    if (visible) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
   }
 
   // In portal mode the assistive-text span is not rendered, so name the
