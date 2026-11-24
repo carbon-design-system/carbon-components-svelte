@@ -22,9 +22,24 @@ Create a content switcher with switch components. Each switch needs a text label
   <Switch text="Trending" />
 </ContentSwitcher>
 
+## Label
+
+Set `labelText` to render a label above the switcher. It names the tablist, so there's no need for `aria-label`. Set `hideLabel` to hide it visually and keep it for screen readers.
+
+<Stack gap={7}>
+  <ContentSwitcher labelText="Motion">
+    <Switch text="Productive" />
+    <Switch text="Expressive" />
+  </ContentSwitcher>
+  <ContentSwitcher labelText="Motion" hideLabel>
+    <Switch text="Productive" />
+    <Switch text="Expressive" />
+  </ContentSwitcher>
+</Stack>
+
 ## Switching views
 
-Pass one `SwitchPanel` per switch to the `content` slot. Panels pair with switches by position. The component shows the panel for the selected switch and sets `role="tabpanel"`, `aria-labelledby`, and each switch's `aria-controls`. Name the switcher with `aria-label`.
+Pass one `SwitchPanel` per switch to the `content` slot. Panels pair with switches by position. The component shows the panel for the selected switch and sets `role="tabpanel"`, `aria-labelledby`, and each switch's `aria-controls`. Name the switcher with `labelText` or `aria-label`.
 
 Set `lazy` to mount a panel's content the first time its switch is selected, or `unmountOnHide` to unmount it when the switch is deselected.
 
