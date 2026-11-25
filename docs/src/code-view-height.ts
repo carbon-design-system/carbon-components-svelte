@@ -6,5 +6,7 @@
 export function codeViewHeight(code: string): string {
   // A trailing newline doesn't render a line of its own.
   const lines = code.replace(/\n$/, "").split("\n").length;
-  return `calc(clamp(3rem, ${lines}rem + 1.5rem, 15rem) + 2rem)`;
+  // The room for the "Show more" button sits past the 15-row cap, so it
+  // never adds to the height.
+  return `calc(clamp(3rem, ${lines}rem, 15rem) + 2rem)`;
 }
