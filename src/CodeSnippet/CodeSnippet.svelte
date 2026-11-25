@@ -643,6 +643,7 @@
     class:bx--snippet--wraptext={wrapText}
     class:bx--snippet--single={type === "single"}
     class:bx--snippet--multi={type === "multi"}
+    class:bx--snippet--has-expand={showExpandButton}
     class:bx--snippet--disabled={disabled}
     class:bx--snippet--full-width={fullWidth}
     {...wrapperProps}
