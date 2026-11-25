@@ -402,8 +402,32 @@ $ccs-prose-variants: (
     $block-component: "#{$block-component}:not(#{$tag})";
   }
 
-  #{$p} > :where(#{$block-component}) + :where(:not(#{$carbon})) {
+  // The room goes on both sides: copy after a block component, and copy
+  // before one, so an example doesn't crowd the copy that introduces it.
+  // Two components in a row keep the flow gap, and the heading rules below
+  // keep a heading close to a component it introduces.
+  $after-component: ();
+  $before-component: ();
+
+  @each $f in $flows {
+    $after-component: append(
+      $after-component,
+      "#{$f} > :where(#{$block-component}) + :where(:not(#{$carbon}))",
+      comma
+    );
+    $before-component: append(
+      $before-component,
+      "#{$f} > :where(:not(#{$carbon})) + :where(#{$block-component})",
+      comma
+    );
+  }
+
+  #{$after-component} {
     margin-block-start: var(--ccs-prose-after-component);
+  }
+
+  #{$before-component} {
+    margin-block-start: var(--ccs-prose-before-component);
   }
 
   // A nested Prose has its own flow gap above it (`* + *`, read on the
@@ -431,18 +455,25 @@ $ccs-prose-variants: (
   }
 
   // A table, code block or figure stands apart from the copy around it as
-  // a component does. Headings' rules come later, so a heading keeps its
-  // own space above and stays close to a table it introduces.
-  $blocks: ();
+  // a component does, and so does any element marked `data-prose-block`,
+  // such as a page's own demo frame. Headings' rules come later, so a
+  // heading keeps its own space above and stays close to a block it
+  // introduces.
+  $blocks-before: ();
+  $blocks-after: ();
 
   @each $f in $flows {
-    @each $block in ("table", "pre", "figure") {
-      $blocks: append($blocks, "#{$f} > * + #{$block}#{$x}", comma);
-      $blocks: append($blocks, "#{$f} > #{$block}#{$x} + *", comma);
+    @each $block in ("table#{$x}", "pre#{$x}", "figure#{$x}", ":where([data-prose-block])#{$x}") {
+      $blocks-before: append($blocks-before, "#{$f} > * + #{$block}", comma);
+      $blocks-after: append($blocks-after, "#{$f} > #{$block} + *", comma);
     }
   }
 
-  #{$blocks} {
+  #{$blocks-before} {
+    margin-block-start: var(--ccs-prose-before-component);
+  }
+
+  #{$blocks-after} {
     margin-block-start: var(--ccs-prose-after-component);
   }
 
@@ -1061,6 +1092,8 @@ $ccs-prose-variants: (
     );
     --ccs-prose-anchor-color: #{$link-primary};
     --ccs-prose-anchor-hover: #{$link-primary-hover};
+    // Room above a block matches the room below it unless a page sets it.
+    --ccs-prose-before-component: var(--ccs-prose-after-component);
     --ccs-prose-table-width: auto;
     --ccs-prose-cell-padding-inline: 0;
     --ccs-prose-column-gap: var(--ccs-prose-column-gap-fit);
@@ -1113,9 +1146,9 @@ $ccs-prose-variants: (
 
   // A flow container for a page that alternates Prose runs with live
   // examples, as a Markdown preprocessor emits one Prose per run of copy.
-  // Siblings get the flow gap and copy after an example gets more room,
-  // each read from the next element's root (its own variant) or from the
-  // container's defaults for components. A run that opens with a heading
+  // Siblings get the flow gap and an example gets more room on both
+  // sides: copy after it reads the room from its own root (its variant),
+  // and the example reads it from the container's defaults. A run that opens with a heading
   // takes that heading's space above it: the heading's margin collapses
   // through the root, which has no padding or border, into the gap.
   $flow-root: ".#{$prefix}--prose-flow";
@@ -1123,10 +1156,15 @@ $ccs-prose-variants: (
 
   #{$flow-root} {
     --ccs-prose-flow: #{map-get($default-variant, flow)};
+    --ccs-prose-before-component: #{map-get($default-variant, after-component)};
   }
 
   #{$flow-root} > * + * {
     margin-block-start: var(--ccs-prose-flow);
+  }
+
+  #{$flow-root} > #{$p} + :not(#{$p}) {
+    margin-block-start: var(--ccs-prose-before-component);
   }
 
   #{$flow-root} > :not(#{$p}) + #{$p} {

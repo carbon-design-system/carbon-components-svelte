@@ -372,4 +372,31 @@
       </Tabs>
     </section>
   </Prose>
+  <Prose data-testid="blocks">
+    <p>Copy that introduces the example.</p>
+    <CodeSnippet
+      data-testid="before-snippet"
+      code="npm i carbon-components-svelte"
+    />
+    <CodeSnippet
+      data-testid="snippet-pair"
+      code="bun add carbon-components-svelte"
+    />
+    <h3>Heading</h3>
+    <CodeSnippet
+      data-testid="snippet-after-heading"
+      code="pnpm add carbon-components-svelte"
+    />
+    <p>Copy before a demo frame.</p>
+    <div data-prose-block data-testid="prose-block">Demo frame</div>
+    <p data-testid="after-prose-block">Copy after a demo frame.</p>
+    <section>
+      <p>Copy in a section.</p>
+      <CodeSnippet
+        data-testid="section-snippet"
+        code="npm i carbon-components-svelte"
+      />
+      <p data-testid="section-after-snippet">Copy after it.</p>
+    </section>
+  </Prose>
 </div>
