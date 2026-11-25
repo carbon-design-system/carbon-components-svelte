@@ -77,7 +77,7 @@ By default, the code snippet preserves text formatting and does not wrap text. S
 
 ### Expanded by default
 
-Set `expanded` to `true` to show the full multi-line code snippet.
+Set `expanded` to `true` to show the full multi-line code snippet. Code short enough to need no expanding shows collapsed, and `expanded` keeps the value you set.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetExpanded" />
 
