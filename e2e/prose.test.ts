@@ -240,6 +240,23 @@ test.describe("Prose", () => {
     expect(await margin("table-after-heading")).toBe("12px");
   });
 
+  test("spaces copy and blocks on both sides", async ({ page }) => {
+    const cases = {
+      "before-snippet": "32px",
+      "snippet-pair": "16px",
+      "snippet-after-heading": "12px",
+      "prose-block": "32px",
+      "after-prose-block": "32px",
+      "section-snippet": "32px",
+      "section-after-snippet": "32px",
+    };
+    for (const [testId, margin] of Object.entries(cases)) {
+      expect
+        .soft(await style(page.getByTestId(testId), "margin-top"), testId)
+        .toBe(margin);
+    }
+  });
+
   test("joins a tab panel to its tabs", async ({ page }) => {
     const root = page.getByTestId("tabs");
     for (const name of ["Request panel", "Line panel"]) {
@@ -264,7 +281,7 @@ test.describe("Prose", () => {
     const flow = page.getByTestId("flow");
     expect(
       await style(flow.locator(":scope > .bx--snippet"), "margin-top"),
-    ).toBe("16px");
+    ).toBe("32px");
     expect(
       await style(page.getByTestId("flow-after-component"), "margin-top"),
     ).toBe("32px");

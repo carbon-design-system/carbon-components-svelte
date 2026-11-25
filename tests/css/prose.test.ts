@@ -139,7 +139,7 @@ describe("prose", () => {
   it("counts Text as copy, not as a block component, whatever its tag", async () => {
     const afterComponent = parseRules(await compileEntry("prose.scss")).filter(
       (r) =>
-        r.selector.startsWith(".bx--prose>:where([") &&
+        r.selector.startsWith(".bx--prose>:where([class") &&
         r.decls.get("margin-block-start") ===
           "var(--ccs-prose-after-component)",
     );
