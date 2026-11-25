@@ -204,7 +204,7 @@ Set `dividers` to draw a rule above each `h2`, so each section reads as one grou
 
 ## Flow container
 
-A page that alternates copy with live examples, such as a Markdown page rendered with one Prose per run of copy, needs space between those runs. Wrap them in an element with the `bx--prose-flow` class: siblings get the flow gap, copy after an example gets more room, and a run that opens with a heading takes that heading's space above it.
+A page that alternates copy with live examples, such as a Markdown page rendered with one Prose per run of copy, needs space between those runs. Wrap them in an element with the `bx--prose-flow` class: siblings get the flow gap, an example gets more room above and below it, and a run that opens with a heading takes that heading's space above it.
 
 <div class="bx--prose-flow">
   <Prose><p>Add the package with your package manager:</p></Prose>
@@ -215,7 +215,7 @@ A page that alternates copy with live examples, such as a Markdown page rendered
 
 ## Carbon components inside
 
-Prose doesn't style Carbon components or anything inside them, so components keep their own styles: a `Link` keeps its color, a `CodeSnippet` its background and padding, and `Text` its type style. That includes plain elements you pass into a component's slot, such as the link in this notification. Components still take part in the spacing between elements: copy after a block component, such as a `CodeSnippet`, gets more room. Copy after an inline one, such as a `Link`, gets the usual gap, and so does copy after `Text` in any tag: it counts as copy.
+Prose doesn't style Carbon components or anything inside them, so components keep their own styles: a `Link` keeps its color, a `CodeSnippet` its background and padding, and `Text` its type style. That includes plain elements you pass into a component's slot, such as the link in this notification. Components still take part in the spacing between elements: copy before and after a block component, such as a `CodeSnippet`, gets more room. Copy next to an inline one, such as a `Link`, gets the usual gap, and so does `Text` in any tag: it counts as copy. Two block components in a row keep the usual gap, and a heading stays close to a component it introduces.
 
 <Prose>
   <h3>Install</h3>
@@ -227,6 +227,17 @@ Prose doesn't style Carbon components or anything inside them, so components kee
   <Text type="helper-text-01">Text keeps its own type style inside Prose.</Text>
   <p>Read the <Link href="#carbon-components-inside">theming guide</Link> next.</p>
 </Prose>
+
+### Your own blocks
+
+Add `data-prose-block` to a block you build yourself, such as a frame around a live example, so it gets the same room above and below as a component. Room below a block is `--ccs-prose-after-component`, and room above it is `--ccs-prose-before-component`, which matches it unless you set it.
+
+```svelte
+<Prose>
+  <p>Set loop while something is in progress.</p>
+  <div class="example" data-prose-block>…</div>
+</Prose>
+```
 
 ## Rendered HTML
 
