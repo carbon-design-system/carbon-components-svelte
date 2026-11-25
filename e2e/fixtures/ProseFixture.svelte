@@ -6,6 +6,9 @@
   import ListItem from "carbon-components-svelte/ListItem/ListItem.svelte";
   import InlineNotification from "carbon-components-svelte/Notification/InlineNotification.svelte";
   import Prose from "carbon-components-svelte/Prose/Prose.svelte";
+  import Tab from "carbon-components-svelte/Tabs/Tab.svelte";
+  import TabContent from "carbon-components-svelte/Tabs/TabContent.svelte";
+  import Tabs from "carbon-components-svelte/Tabs/Tabs.svelte";
   import Text from "carbon-components-svelte/Text/Text.svelte";
   import UnorderedList from "carbon-components-svelte/UnorderedList/UnorderedList.svelte";
 
@@ -349,4 +352,24 @@
     <Link href="#setup">Carbon Link</Link>
     <UnorderedList><ListItem>Carbon list item</ListItem></UnorderedList>
   </div>
+  <Prose data-testid="tabs">
+    <p>Copy before the tabs.</p>
+    <Tabs type="container">
+      <Tab label="Request" />
+      <Tab label="Response" />
+      <svelte:fragment slot="content">
+        <TabContent>Request panel</TabContent>
+        <TabContent>Response panel</TabContent>
+      </svelte:fragment>
+    </Tabs>
+    <section>
+      <h3>Line tabs</h3>
+      <Tabs>
+        <Tab label="Request" />
+        <svelte:fragment slot="content">
+          <TabContent>Line panel</TabContent>
+        </svelte:fragment>
+      </Tabs>
+    </section>
+  </Prose>
 </div>

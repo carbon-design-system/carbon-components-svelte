@@ -240,6 +240,24 @@ test.describe("Prose", () => {
     expect(await margin("table-after-heading")).toBe("12px");
   });
 
+  test("joins a tab panel to its tabs", async ({ page }) => {
+    const root = page.getByTestId("tabs");
+    for (const name of ["Request panel", "Line panel"]) {
+      const panel = root.getByRole("tabpanel").filter({ hasText: name });
+      const tabs = panel.locator("xpath=preceding-sibling::*[1]");
+      const panelBox = await panel.boundingBox();
+      const tabsBox = await tabs.boundingBox();
+      expect
+        .soft(
+          Math.abs(
+            (panelBox?.y ?? 0) - ((tabsBox?.y ?? 0) + (tabsBox?.height ?? 0)),
+          ),
+          name,
+        )
+        .toBeLessThanOrEqual(0.5);
+    }
+  });
+
   test("spaces Prose runs and examples in a flow container", async ({
     page,
   }) => {
