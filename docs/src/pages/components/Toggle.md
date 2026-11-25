@@ -23,6 +23,12 @@ Display the toggle in its on state with `toggled`.
 
 Customize or hide the toggle labels.
 
+### Beside the switch
+
+Set `labelPosition` to `"end"` to put the label beside the switch, at its end, in place of the state text, for settings rows and toolbars. The label stays the switch's accessible name.
+
+<Toggle labelPosition="end" labelText="Simulate loading" />
+
 ### Hidden
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
