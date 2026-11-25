@@ -513,6 +513,7 @@ describe("CodeSnippet", () => {
       await rerender({ code: "" });
       mockSnippetOverflowHeight(24);
       resize();
+      await waitForSnippetMeasurement();
       await tick();
       expect(screen.queryByText(/Show (more|less)/)).not.toBeInTheDocument();
       expect(
@@ -1127,16 +1128,22 @@ describe("CodeSnippet rows", () => {
   const lines = (count: number) =>
     Array.from({ length: count }, (_, i) => `line ${i}`).join("\n");
 
-  it("decides the expand control from the line count until it's measured", () => {
-    // jsdom lays out nothing, so the snippet is never measured here.
-    render(CodeSnippet, { props: { type: "multi", code: lines(16) } });
-    expect(screen.getByText("Show more")).toBeInTheDocument();
-  });
+  it.each([false, true])(
+    "decides the expand control from the line count until it's measured (wrapText: %s)",
+    (wrapText) => {
+      // jsdom lays out nothing, so the snippet is never measured here. Wrapping
+      // only adds rows, so more lines than the cap overflow either way.
+      render(CodeSnippet, {
+        props: { type: "multi", code: lines(16), wrapText },
+      });
+      expect(screen.getByText("Show more")).toBeInTheDocument();
+    },
+  );
 
   it("leaves the expand control out when the code fits, or may wrap", () => {
     render(CodeSnippet, { props: { type: "multi", code: `${lines(15)}\n` } });
     render(CodeSnippet, {
-      props: { type: "multi", code: lines(16), wrapText: true },
+      props: { type: "multi", code: lines(3), wrapText: true },
     });
     expect(screen.queryByText("Show more")).not.toBeInTheDocument();
   });

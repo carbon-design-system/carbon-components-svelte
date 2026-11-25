@@ -281,6 +281,9 @@
   let mounted = false;
   let stopObserving = noop;
 
+  /** A pending threshold change from a measurement. */
+  let thresholdFrame = 0;
+
   /** @type {null | HTMLDivElement} */
   let containerRef = null;
   let yScrollable = false;
@@ -371,10 +374,17 @@
     const collapsedMaxHeight =
       maxCollapsedNumberOfRows * rowHeightInRem * remInPixels;
     measured = true;
-    exceedsThreshold = canExpand && height > collapsedMaxHeight;
-    // If the content no longer overflows, collapse so the expanded min-height
-    // doesn't leave the snippet taller than its (now shorter) content.
-    if (!exceedsThreshold && expanded) expanded = false;
+    const next = canExpand && height > collapsedMaxHeight;
+    cancelAnimationFrame(thresholdFrame);
+    if (next === exceedsThreshold) return;
+    // This runs in a ResizeObserver callback, and a new threshold resizes
+    // the code container, which is observed too. The browser can't deliver
+    // that resize in the same pass and reports a loop error, so apply it on
+    // the next frame. The line count usually guessed right already, so this
+    // only runs when the content crosses the threshold.
+    thresholdFrame = requestAnimationFrame(() => {
+      exceedsThreshold = next;
+    });
   }
 
   function updateScrollState() {
@@ -412,22 +422,29 @@
   // Until the snippet is first measured, and in server-rendered HTML, the
   // line count decides, so the expand control is there from the start
   // instead of adding a row when the measurement lands. A trailing newline
-  // renders no line. Wrapped text can take more rows than it has lines, so
-  // it waits for the measurement.
+  // renders no line. Wrapping only adds rows, so more lines than the cap
+  // overflow wrapped or not; fewer may still wrap past it, which only the
+  // measurement can tell.
   $: if (!measured) {
     exceedsThreshold =
       type === "multi" &&
       showMoreLess &&
-      !wrapText &&
       typeof code === "string" &&
       canExpand &&
       code.replace(/\n$/, "").split("\n").length > maxCollapsedNumberOfRows;
   }
 
+  // Code that doesn't overflow shows collapsed, whatever `expanded` holds.
+  // Reading the measurement here, instead of writing `false` back to
+  // `expanded` from the ResizeObserver callback, leaves a bound value as the
+  // consumer set it and doesn't resize the observed container inside the
+  // callback, which browsers report as a ResizeObserver loop error.
+  $: shownExpanded = expanded && (!showMoreLess || exceedsThreshold);
+
   // Multi-line min/max heights come from row-count props (1rem a row).
   // A value of `0` means no constraint for that axis (Carbon React parity).
   $: if (type === "multi") {
-    if (expanded) {
+    if (shownExpanded) {
       minHeight =
         minExpandedNumberOfRows > 0
           ? `${minExpandedNumberOfRows * rowHeightInRem}rem`
@@ -516,6 +533,7 @@
 
     return () => {
       stopObserving();
+      cancelAnimationFrame(thresholdFrame);
       copyFeedback.cleanup();
       disconnectModalObserver();
     };
@@ -638,7 +656,7 @@
 {:else}
   <div
     class:bx--snippet={true}
-    class:bx--snippet--expand={expanded}
+    class:bx--snippet--expand={shownExpanded}
     class:bx--snippet--no-copy={hideCopyButton}
     class:bx--snippet--wraptext={wrapText}
     class:bx--snippet--single={type === "single"}

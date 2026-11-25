@@ -98,3 +98,23 @@
     copy={() => {}}
   />
 </div>
+<div data-testid="expanded-snippets">
+  <CodeSnippet
+    type="multi"
+    code={"a\nb\nc"}
+    expanded
+    data-testid="snippet-multi-short-expanded"
+  />
+  <CodeSnippet type="multi" code={longCode} wrapText expanded />
+  <!-- Few lines that only overflow once they wrap: only a measurement can
+    tell. -->
+  <div style="width: 15rem">
+    <CodeSnippet
+      type="multi"
+      code={Array(12).fill("function example() { return 'line'; }").join("\n")}
+      wrapText
+      expanded
+      data-testid="snippet-multi-wraps-past-cap"
+    />
+  </div>
+</div>

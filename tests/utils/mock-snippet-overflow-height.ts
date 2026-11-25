@@ -24,6 +24,8 @@ export function mockSnippetOverflowHeight(height = COLLAPSED_HEIGHT + 1) {
     });
 }
 
+/** The snippet applies a measured threshold change on the next frame. */
 export async function waitForSnippetMeasurement() {
   await Promise.resolve();
+  await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 }
