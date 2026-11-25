@@ -522,6 +522,19 @@ $ccs-prose-variants: (
     text-wrap: pretty;
   }
 
+  // An optional line length for text alone, so a page can let tables,
+  // code and examples span a wide column while copy stays readable.
+  // Unset, text runs to the root's own `max-width`.
+  $measured: ();
+
+  @each $element in join($headings, ("p", "ul", "ol", "dl", "blockquote")) {
+    $measured: append($measured, "#{$p} #{$element}#{$x}", comma);
+  }
+
+  #{$measured} {
+    max-inline-size: var(--ccs-prose-measure, none);
+  }
+
   // Anything a link can jump to (headings, sections) clears a sticky header
   // when the page sets `--ccs-prose-scroll-margin` to its height.
   #{$p} [id]#{$x} {
