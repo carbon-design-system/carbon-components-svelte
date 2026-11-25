@@ -117,6 +117,44 @@ test.describe("Toggle", () => {
     }
   });
 
+  test("sets a label at the end after the switch, centered on it", async ({
+    page,
+  }) => {
+    // The gap from the switch's inline end to the label, and how far the
+    // label's center sits from the switch's.
+    const measure = (testId: string) =>
+      page.getByTestId(testId).evaluate((node) => {
+        const toggle = node.querySelector(".bx--toggle__switch");
+        const label = node.querySelector(".bx--toggle-input__label > span");
+        if (!toggle || !label) throw new Error("no switch or label");
+        const rtl = getComputedStyle(toggle).direction === "rtl";
+        const box = toggle.getBoundingClientRect();
+        const text = label.getBoundingClientRect();
+        return {
+          gap: Math.round(rtl ? box.left - text.right : text.left - box.right),
+          offCenter: Math.round(
+            Math.abs(text.top + text.height / 2 - (box.top + box.height / 2)),
+          ),
+        };
+      });
+
+    await page.evaluate(() => document.fonts.ready);
+    for (const dir of [null, "rtl"]) {
+      await page.evaluate((dir) => {
+        if (dir) document.documentElement.dir = dir;
+        else document.documentElement.removeAttribute("dir");
+      }, dir);
+      for (const testId of ["toggle-label-end", "toggle-label-end-sm"]) {
+        expect
+          .soft(await measure(testId), `${testId}, dir=${dir ?? "none"}`)
+          .toEqual({ gap: 8, offCenter: 0 });
+      }
+    }
+    await expect(
+      page.getByRole("switch", { name: "Simulate loading" }).first(),
+    ).toBeVisible();
+  });
+
   // Flip the switch from script and read the transitions it starts in the
   // same task, before any of them can finish.
   const flipAndListTransitions = (page: Page) =>

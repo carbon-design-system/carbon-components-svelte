@@ -306,6 +306,18 @@ describe("Toggle", () => {
     expect(container.querySelector(".bx--toggle__text--on")).toBeNull();
   });
 
+  it("puts a label at the end in place of the state text", () => {
+    const { container } = render(ToggleComponent, {
+      props: { labelText: "Simulate loading", labelPosition: "end" },
+    });
+
+    expect(screen.getByRole("switch")).toHaveAccessibleName("Simulate loading");
+    expect(container.querySelector("label")).toHaveClass(
+      "bx--toggle-input__label--end",
+    );
+    expect(screen.queryByText("Off")).not.toBeInTheDocument();
+  });
+
   // The contract in tests/form-field-contract covers the messages and their
   // wiring; these are the styling hooks it doesn't model.
   const formItem = () => screen.getByRole("switch").closest(".bx--form-item");

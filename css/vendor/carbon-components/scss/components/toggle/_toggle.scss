@@ -557,3 +557,26 @@
 @include exports("toggle-forced-colors") {
   @include toggle-forced-colors;
 }
+
+// carbon-components-svelte patch (toggle-label-end)
+/// `labelPosition="end"`: the label sits beside the switch, in place of
+/// the state text, as in Carbon v11's side label. It follows the switch in
+/// the inline direction though it comes first in the markup, and takes the
+/// state text's type and color.
+/// @access private
+/// @group toggle
+@mixin toggle-label-end {
+  .#{$prefix}--toggle-input__label--end {
+    @include type-style("body-compact-01");
+
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+    color: $text-primary;
+  }
+}
+
+@include exports("toggle-label-end") {
+  @include toggle-label-end;
+}
