@@ -125,6 +125,13 @@ Each variant caps the line length so long lines stay easy to follow. Set `maxWid
   <p>This paragraph fills the whole column. It's set with the default variant's type and spacing, but without the 68-character line length, so it runs as wide as the space it's placed in.</p>
 </Prose>
 
+To cap only the text, set `maxWidth="none"` and the `--ccs-prose-measure` custom property. Headings, paragraphs, lists and quotes stop at that length, while tables, code blocks and examples span the column.
+
+<Prose maxWidth="none" style="--ccs-prose-measure: 36rem">
+  <p>This paragraph stops at 36rem, so it stays easy to read on a wide page. The code block below it runs the full width of the column.</p>
+  <pre><code>curl https://api.example.com/v1/usage?project=billing&amp;granularity=hourly&amp;include=forecast</code></pre>
+</Prose>
+
 ## Links
 
 Links look like an inline `Link`: in the link color, underlined, and with the focus ring while pressed or focused. Heading anchors match them. Set `linkTone="muted"` for copy dense with links, such as reference docs: links take the text color, still underlined, and anchors the secondary text color, and both turn link blue on hover. Links have no visited color, like `Link` by default, and `Link`'s color properties, such as `--cds-link-text-color`, recolor them too.
