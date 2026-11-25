@@ -30,3 +30,9 @@
   />
   <span data-testid="toggle-row-neighbor">Updated 2 min ago</span>
 </div>
+<div data-testid="toggle-label-end">
+  <Toggle labelPosition="end" labelText="Simulate loading" />
+</div>
+<div data-testid="toggle-label-end-sm">
+  <Toggle size="sm" labelPosition="end" labelText="Simulate loading" />
+</div>

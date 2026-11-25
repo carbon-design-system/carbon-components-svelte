@@ -33,6 +33,16 @@
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
 
+  /**
+   * Set where the label text sits.
+   * - `"top"`: above the switch, with the state text beside the switch
+   * - `"end"`: beside the switch, at its inline end, in place of the state
+   *   text, as Carbon v11 does with `hideLabel`. For settings rows and
+   *   toolbars.
+   * @type {"top" | "end"}
+   */
+  export let labelPosition = "top";
+
   /** Set an id for the input element */
   export let id = uniqueId();
 
@@ -99,6 +109,8 @@
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  $: labelAtEnd = labelPosition === "end";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;
@@ -209,6 +221,7 @@
       : "Toggle"}
     for={id}
     class:bx--toggle-input__label={true}
+    class:bx--toggle-input__label--end={labelAtEnd}
   >
     {#if labelText || $$slots.labelChildren}
       <span class:bx--visually-hidden={hideLabel}>
@@ -217,11 +230,12 @@
     {/if}
     <span
       class:bx--toggle__switch={true}
-      style:margin-top={hideLabel ? 0 : undefined}
+      style:margin-top={hideLabel || labelAtEnd ? 0 : undefined}
     >
       <!-- The state text is in flow: with none, render no spans, or their
-        margin would widen an otherwise bare switch. -->
-      {#if labelA || labelB || $$slots.labelA || $$slots.labelB}
+        margin would widen an otherwise bare switch. A label at the end takes
+        its place. -->
+      {#if !labelAtEnd && (labelA || labelB || $$slots.labelA || $$slots.labelB)}
         <span aria-hidden="true" class:bx--toggle__text--off={true}>
           <slot name="labelA">{labelA}</slot>
         </span>
