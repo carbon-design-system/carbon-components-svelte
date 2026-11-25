@@ -374,6 +374,23 @@ $ccs-prose-variants: (
     margin-block-start: var(--ccs-prose-flow);
   }
 
+  // Tabs render their panels as siblings after the tab list, but a panel
+  // belongs to the tabs before it: a container panel's layer joins the
+  // selected tab, and a line panel has its own padding.
+  $tab-panels: ();
+
+  @each $f in $flows {
+    $tab-panels: append(
+      $tab-panels,
+      "#{$f} > :where(.#{$prefix}--tabs) ~ :where(.#{$prefix}--tab-content)",
+      comma
+    );
+  }
+
+  #{$tab-panels} {
+    margin-block-start: 0;
+  }
+
   // Only block components get that room. Inline ones (a `Link`) sit in the
   // copy's line. `Text` and `Heading` (their `type-` classes) are copy in
   // any tag, and so is a nested Prose.
