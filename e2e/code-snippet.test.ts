@@ -66,6 +66,18 @@ test.describe("CodeSnippet", () => {
     ).toBeHidden();
   });
 
+  test("keeps room below the code only for the expand button", async ({
+    page,
+  }) => {
+    const paddingBottom = (testId: string) =>
+      page
+        .getByTestId(testId)
+        .locator("pre")
+        .evaluate((el) => getComputedStyle(el).paddingBottom);
+    expect(await paddingBottom("snippet-multi")).toBe("24px");
+    expect(await paddingBottom("snippet-multi-short")).toBe("0px");
+  });
+
   test("multi snippet hides expand button when content fits but padding exceeds the threshold", async ({
     page,
   }) => {

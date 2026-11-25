@@ -225,7 +225,8 @@
 
   .#{$prefix}--snippet--multi .#{$prefix}--snippet-container pre {
     padding-right: $carbon--spacing-08;
-    padding-bottom: to-rem(24px);
+    // ccs: the room below the code for the "Show more" button applies only
+    // while the button renders (`--has-expand`, below)
 
     // ccs: the code area is LTR, so physical sides: in RTL the room for
     // the copy button moves to the left, where the button is
@@ -334,14 +335,15 @@
   }
 
   // ccs: as tall as the snippets they stand in for. A multi snippet's
-  // code area is its 16px rows plus 24px below, between its minimum and
-  // maximum collapsed rows (3 and 15 by default), inside 32px of padding;
-  // a single one is 40px.
+  // code area is its 16px rows, between its minimum and maximum collapsed
+  // rows (3 and 15 by default), inside 32px of padding; a single one is
+  // 40px. The room for the "Show more" button sits past the maximum, so
+  // it never adds to the height.
   .#{$prefix}--snippet--multi.#{$prefix}--skeleton {
     height: calc(
       clamp(
           var(--ccs-code-snippet-min-rows, 3) * #{to-rem(16px)},
-          var(--ccs-code-snippet-rows, 3) * #{to-rem(16px)} + #{to-rem(24px)},
+          var(--ccs-code-snippet-rows, 3) * #{to-rem(16px)},
           var(--ccs-code-snippet-max-rows, 15) * #{to-rem(16px)}
         ) +
         #{$carbon--spacing-07}
@@ -482,4 +484,19 @@
 
 @include exports("code-snippet-fade") {
   @include code-snippet-fade;
+}
+
+/// Room below a multi-line snippet's code for the "Show more" button, only
+/// while the button renders. Carbon kept it on every multi snippet, so code
+/// short enough to need no button ended in a blank line's worth of space.
+/// @access private
+/// @group components
+@mixin code-snippet-expand-room {
+  .#{$prefix}--snippet--has-expand .#{$prefix}--snippet-container pre {
+    padding-block-end: to-rem(24px);
+  }
+}
+
+@include exports("code-snippet-expand-room") {
+  @include code-snippet-expand-room;
 }

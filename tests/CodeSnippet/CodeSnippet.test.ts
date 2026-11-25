@@ -430,15 +430,19 @@ describe("CodeSnippet", () => {
     "shows Show more only when expanding reveals more rows ($props)",
     async ({ props, canExpand }) => {
       mockSnippetOverflowHeight(1000);
-      render(CodeSnippet, {
+      const { container } = render(CodeSnippet, {
         props: { type: "multi", code: longCode, ...props },
       });
       await waitForSnippetMeasurement();
 
+      // The room below the code for the button follows the button.
+      const snippet = container.querySelector(".bx--snippet");
       if (canExpand) {
         expect(await screen.findByText("Show more")).toBeInTheDocument();
+        expect(snippet).toHaveClass("bx--snippet--has-expand");
       } else {
         expect(screen.queryByText("Show more")).not.toBeInTheDocument();
+        expect(snippet).not.toHaveClass("bx--snippet--has-expand");
       }
     },
   );
