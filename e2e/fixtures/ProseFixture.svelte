@@ -399,4 +399,15 @@
       <p data-testid="section-after-snippet">Copy after it.</p>
     </section>
   </Prose>
+  <Prose maxWidth="none" style="--ccs-prose-measure: 20rem">
+    <h2 data-testid="measure-h2">
+      A heading long enough to reach past the line length
+    </h2>
+    <p data-testid="measure-p">
+      Copy long enough to reach past the line length, so it wraps at the measure
+      instead of running the whole width of the column it sits in.
+    </p>
+    <pre data-testid="measure-pre"><code>npm i carbon-components-svelte</code
+      ></pre>
+  </Prose>
 </div>

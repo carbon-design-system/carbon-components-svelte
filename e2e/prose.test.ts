@@ -257,6 +257,16 @@ test.describe("Prose", () => {
     }
   });
 
+  test("caps text, not blocks, at --ccs-prose-measure", async ({ page }) => {
+    const width = async (testId: string) =>
+      (await page.getByTestId(testId).boundingBox())?.width ?? 0;
+    expect(await width("measure-p")).toBe(320);
+    expect(await width("measure-h2")).toBe(320);
+    expect(await width("measure-pre")).toBeGreaterThan(320);
+    // Unset, text fills the root.
+    expect(await width("raw-p")).toBeGreaterThan(320);
+  });
+
   test("joins a tab panel to its tabs", async ({ page }) => {
     const root = page.getByTestId("tabs");
     for (const name of ["Request panel", "Line panel"]) {
