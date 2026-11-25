@@ -15,3 +15,4 @@ npm -v`}
   on:expand={onExpand}
   on:collapse={onCollapse}
 />
+<span data-testid="bound">{expanded}</span>

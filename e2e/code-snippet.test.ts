@@ -140,6 +140,48 @@ test.describe("CodeSnippet", () => {
     expect(shrunkHeight).toBeLessThan(expandedHeight);
   });
 
+  test("lays out and resizes without a ResizeObserver loop error", async ({
+    page,
+  }) => {
+    await page.evaluate(() => {
+      const errors: string[] = [];
+      Object.assign(window, { loopErrors: errors });
+      addEventListener("error", (event) => errors.push(event.message));
+    });
+    // Mount again with the listener in place.
+    await page.goto("/code-snippet.html");
+    const short = page.getByTestId("snippet-multi-short-expanded");
+    await expect(short).toBeVisible();
+    await expect(short).not.toHaveClass(/bx--snippet--expand/);
+    await expect(
+      page
+        .getByTestId("snippet-multi-wraps-past-cap")
+        .getByRole("button", { name: /show less/i }),
+    ).toBeVisible();
+    // Content that crosses the threshold, both ways.
+    await page.getByTestId("toggle-content-size").click();
+    await expect(
+      page
+        .getByTestId("snippet-multi-dynamic")
+        .getByRole("button", { name: /show more/i }),
+    ).toBeVisible();
+    await page.getByTestId("toggle-content-size").click();
+    await expect(
+      page
+        .getByTestId("snippet-multi-dynamic")
+        .getByRole("button", { name: /show more/i }),
+    ).toBeHidden();
+    await page.evaluate(
+      () => new Promise((resolve) => requestAnimationFrame(resolve)),
+    );
+
+    expect(
+      await page.evaluate(
+        () => (window as unknown as { loopErrors: string[] }).loopErrors,
+      ),
+    ).toEqual([]);
+  });
+
   test("copy button swaps to feedback icon during feedback window and reverts", async ({
     page,
   }) => {

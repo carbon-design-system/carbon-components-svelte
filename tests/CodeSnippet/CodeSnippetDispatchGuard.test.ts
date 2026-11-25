@@ -4,6 +4,7 @@ import {
   flushRejectionQueue,
   isConsumerBoom,
 } from "../utils/absorb-unhandled-rejection";
+import { getBoundText } from "../utils/get-bound-text";
 import {
   mockSnippetOverflowHeight,
   waitForSnippetMeasurement,
@@ -37,5 +38,21 @@ describe("CodeSnippet dispatch guard", () => {
     trap.dispose();
 
     expect(onExpand).toHaveBeenCalledTimes(1);
+  });
+
+  it("leaves a bound expanded alone when the code doesn't overflow", async () => {
+    mockSnippetOverflowHeight(32);
+    const onCollapse = vi.fn();
+    const { container } = render(CodeSnippetDispatchGuard, {
+      props: { expanded: true, onCollapse },
+    });
+    await waitForSnippetMeasurement();
+
+    expect(screen.queryByText("Show less")).not.toBeInTheDocument();
+    expect(container.querySelector(".bx--snippet")).not.toHaveClass(
+      "bx--snippet--expand",
+    );
+    expect(getBoundText()).toBe("true");
+    expect(onCollapse).not.toHaveBeenCalled();
   });
 });
