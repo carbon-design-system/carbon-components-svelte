@@ -235,6 +235,16 @@ Prose doesn't style Carbon components or anything inside them, so components kee
   <p>Read the <Link href="#carbon-components-inside">theming guide</Link> next.</p>
 </Prose>
 
+### Captions
+
+For a caption or a short description, such as the subtitle under a page title, use `Text` with a compact type style in the secondary color. Prose spaces it as copy. For a whole block of smaller copy, use the `condensed` variant.
+
+<Prose>
+  <h3>Usage API</h3>
+  <Text type="body-compact-01" color="secondary">Usage and billing for every project, updated hourly.</Text>
+  <p>Send a request with your API key to read the numbers finance and engineering share.</p>
+</Prose>
+
 ### Your own blocks
 
 Add `data-prose-block` to a block you build yourself, such as a frame around a live example, so it gets the same room above and below as a component. Room below a block is `--ccs-prose-after-component`, and room above it is `--ccs-prose-before-component`, which matches it unless you set it.
