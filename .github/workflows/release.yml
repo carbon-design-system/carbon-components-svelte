@@ -51,6 +51,4 @@ jobs:
     permissions:
       contents: read
     uses: ./.github/workflows/deploy-docs.yml
-    with:
-      target: production
     secrets: inherit
