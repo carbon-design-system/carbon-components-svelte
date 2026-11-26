@@ -1,0 +1,17 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// NaturalDateInput: a field and a calendar button in an input group. The
+/// calendar opens from the button's wrapper, which Popover places against.
+/// @access private
+/// @group components
+@mixin natural-date-input {
+  .#{$prefix}--natural-date__calendar {
+    position: relative;
+    display: flex;
+  }
+}
+
+@include exports("natural-date-input") {
+  @include natural-date-input;
+}
