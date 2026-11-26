@@ -24,13 +24,16 @@ test.describe("InlineNotification", () => {
     await expect(page.getByTestId("inline-notification")).not.toBeVisible();
   });
 
-  test("fills a wide parent with fullWidth, with no outer margin", async ({
-    page,
-  }) => {
+  test("fills a wide parent with fullWidth", async ({ page }) => {
     const notification = page
       .getByTestId("notification-wide")
       .locator(".bx--inline-notification");
     expect((await notification.boundingBox())?.width).toBe(1200);
+  });
+
+  // As in v11, the layout that holds it spaces it, so a `gap` isn't doubled.
+  test("has no outer margin", async ({ page }) => {
+    const notification = page.getByTestId("inline-notification");
     await expect(notification).toHaveCSS("margin-top", "0px");
     await expect(notification).toHaveCSS("margin-bottom", "0px");
   });
