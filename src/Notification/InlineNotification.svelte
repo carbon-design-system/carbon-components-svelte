@@ -73,8 +73,8 @@
 
   /**
    * Set to `true` for the notification to fill its parent's width, without
-   * the default width limits and outer margin, as when it sits inside a card,
-   * a form, or another layout that spaces its own content.
+   * the default width limits, as when it sits inside a card, a form, or
+   * another layout that sizes its own content.
    */
   export let fullWidth = false;
 
