@@ -198,7 +198,7 @@ The table below lists every theme color. The [token reference](/tokens) shows ev
 
 ## Controls
 
-Bind `ThemeToggle`, `ThemeSelect`, or `ThemeDropdown` to `theme` to let people pick it. Each is a separate component, so a page loads only the control it shows. `render` still works but is deprecated: with it, every page that uses `Theme` loads all three controls.
+Bind `ThemeToggle`, `ThemeSelect`, or `ThemeDropdown` to `theme` to let people pick it. Each is a separate component, so a page loads only the control it shows.
 
 ### Toggle
 
