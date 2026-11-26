@@ -62,6 +62,20 @@ Set `level` to pick a level instead of counting from the parent: `0` is the page
   </Box>
 </Layer>
 
+## Custom styles
+
+Inside a `Layer`, the contextual custom properties (`--cds-layer`, `--cds-field`, `--cds-border-subtle`, …) name the surface for content at that layer's level, not the color of whatever sits around it. A `Layer` added only to lift its fields still re-points them, so a surface of your own painted with `--cds-layer` can come out the same color as the panel it was meant to stand out from.
+
+To paint a fixed step, name the numbered token instead, such as `--cds-layer-02`. To follow the nesting, as Carbon components do, keep the contextual one.
+
+```svelte
+<Layer>
+  <TextInput labelText="Name" />
+  <!-- Always one step above a layer-01 panel -->
+  <div style="background: var(--cds-layer-02)">…</div>
+</Layer>
+```
+
 ## Modals
 
 [Modal](/components/Modal) and [ComposedModal](/components/ComposedModal) start their own layer at level `0`, wherever they render. The modal body sits on level `1`, so fields in it take `field-02`, and a `Layer` inside the body sits on level `2`.
