@@ -166,8 +166,8 @@
   } from "../utils/sort-by-dom-order.js";
   import { getVisibleTagCount } from "../utils/tag-overflow.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import TagSetAllTags from "./TagSetAllTags.svelte";
   import TagSetOverflow from "./TagSetOverflow.svelte";
+  import { lazyAllTags } from "./lazy-all-tags.js";
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();
@@ -396,6 +396,7 @@
   const throttledMeasure = rafThrottle(measure);
 
   onMount(() => {
+    mounted = true;
     // Tags register in a batched microtask after mount, so `$items` is almost
     // always empty here and there is nothing to measure yet. Reading
     // `offsetWidth` regardless forces a synchronous layout for every TagSet on
@@ -447,6 +448,12 @@
   // count back under the threshold.
   $: mountAllTags = hasViewAll || allTagsOpen;
 
+  // The "View all" modal brings Modal and Search along. Most sets never
+  // overflow past `viewAllThreshold`, so load it only when one does, and
+  // only in the browser: the server renders no modal either way.
+  let mounted = false;
+  $: if (mounted && mountAllTags) lazyAllTags.load();
+
   let allTagsQuery = "";
   /** @type {null | HTMLUListElement} */
   let allTagsListRef = null;
@@ -466,6 +473,7 @@
   }
 
   function openAllTags() {
+    lazyAllTags.load();
     // The modal returns focus to what had it on open. The popover's
     // "View all" button is about to unmount, so hand that to "+N" first.
     overflowButtonRef?.focus();
@@ -588,8 +596,9 @@
   </Stack>
 </div>
 
-{#if mountAllTags}
-  <TagSetAllTags
+{#if mountAllTags && $lazyAllTags}
+  <svelte:component
+    this={$lazyAllTags}
     bind:open={allTagsOpen}
     bind:listRef={allTagsListRef}
     bind:query={allTagsQuery}
