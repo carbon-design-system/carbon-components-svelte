@@ -292,9 +292,11 @@ export function formatShortcut(shortcut, options = {}) {
     const named =
       index < keys.length - 1 ? MODIFIER_LABELS[key] : KEY_LABELS[key];
     if (named) return named[apple ? 0 : 1];
-    return key.length === 1
-      ? key.toUpperCase()
-      : key.charAt(0).toUpperCase() + key.slice(1);
+    // A letter pressed alone shows in lowercase, as keyboard help pages
+    // show it: "J" reads as Shift+J. With a modifier it's a capital, as
+    // menus show "⌘K". `Kbd` labels keys the same way.
+    if (key.length === 1) return keys.length === 1 ? key : key.toUpperCase();
+    return key.charAt(0).toUpperCase() + key.slice(1);
   });
 }
 

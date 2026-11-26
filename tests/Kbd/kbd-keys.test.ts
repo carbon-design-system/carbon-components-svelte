@@ -16,6 +16,14 @@ const translate = (id: string) =>
   })[id] ?? id;
 
 describe("kbdKeys", () => {
+  it("keeps a letter alone in lowercase, and capitalizes it with a modifier", () => {
+    expect(kbdKeys("j", false, translate)).toEqual([{ label: "j", name: "j" }]);
+    expect(kbdKeys("mod+k", false, translate).at(-1)).toEqual({
+      label: "K",
+      name: "K",
+    });
+  });
+
   it("draws Apple modifiers as icons and names them", () => {
     expect(kbdKeys("ctrl+alt+shift+mod+enter", true, translate)).toEqual([
       { label: "", name: "Control", icon: "control" },
