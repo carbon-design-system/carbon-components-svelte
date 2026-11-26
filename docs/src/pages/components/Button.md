@@ -76,12 +76,19 @@ Add an icon to the button using the `icon` prop.
 
 ### Custom icon
 
-Use the `icon` named slot to render custom icon markup instead of, or with different props than, the `icon` prop. `let:class={iconClass}` reads the slot's `class` into `iconClass`, so the icon is spaced and colored like one passed to `icon`. It needs a new name because `class` is reserved in JavaScript. The `svelte:fragment` holds the `let:` for everything in the slot, such as an icon wrapped in other elements.
+Use the `icon` named slot to render custom icon markup instead of, or with different props than, the `icon` prop. An `svg` in the slot, such as an icon component or raw markup, is spaced, sized and colored like one passed to `icon`.
 
 <Button>
   Custom icon
+  <Add slot="icon" />
+</Button>
+
+For an icon wrapped in other elements, read the slot's `class` with `let:class={iconClass}` and put it on the `svg`. It needs a new name because `class` is reserved in JavaScript. The `svelte:fragment` holds the `let:` for everything in the slot.
+
+<Button>
+  Wrapped icon
   <svelte:fragment slot="icon" let:class={iconClass}>
-    <Add class={iconClass} size={20} />
+    <span><Add class={iconClass} /></span>
   </svelte:fragment>
 </Button>
 
