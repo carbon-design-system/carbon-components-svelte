@@ -4,7 +4,7 @@ description: Inline notifications display contextual messages inline with conten
 ---
 
 <script>
-  import { InlineNotification, NotificationActionButton } from "carbon-components-svelte";
+  import { InlineNotification, NotificationActionButton, Stack } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -31,7 +31,7 @@ action never disappears before they reach it.
 
 ## Full width
 
-Set `fullWidth` to fill the parent's width without the default width limits and outer margin. Use it when the notification sits inside a card, form, or other layout that sizes and spaces its own content.
+Set `fullWidth` to fill the parent's width without the default width limits. Use it when the notification sits inside a card, form, or other layout that sizes its own content.
 
 <InlineNotification fullWidth kind="warning" title="Usage:" subtitle="Build minutes are close to the Team limit." />
 
@@ -43,8 +43,10 @@ Both the title and subtitle are optional and can be customized with slots.
 
 Title and subtitle only render when provided.
 
-<InlineNotification subtitle="You do not have permission to perform this action." />
-<InlineNotification title="Unable to process your request." />
+<Stack gap={5}>
+  <InlineNotification subtitle="You do not have permission to perform this action." />
+  <InlineNotification title="Unable to process your request." />
+</Stack>
 
 ### Custom (slots)
 
@@ -138,8 +140,10 @@ failed payment. An alert interrupts whatever the screen reader is
 reading, so keep it rare. Set `role="log"` for a running log of
 messages.
 
-<InlineNotification kind="success" title="Profile updated:" subtitle="Your changes are saved." />
-<InlineNotification role="alert" kind="error" title="Payment failed:" subtitle="Update your card to keep the workspace active." />
+<Stack gap={5}>
+  <InlineNotification kind="success" title="Profile updated:" subtitle="Your changes are saved." />
+  <InlineNotification role="alert" kind="error" title="Payment failed:" subtitle="Update your card to keep the workspace active." />
+</Stack>
 
 ## Status icon label
 
@@ -160,20 +164,24 @@ The component supports different notification types.
 
 ### High contrast
 
-<InlineNotification kind="error" title="Deployment failed:" subtitle="Build #128 failed to deploy. Check the pipeline logs for details." />
-<InlineNotification kind="info" title="Update available:" subtitle="Restart the application to install the latest updates." />
-<InlineNotification kind="info-square" title="Update available:" subtitle="Restart the application to install the latest updates." />
-<InlineNotification kind="success" title="Sync complete:" subtitle="All records have been synchronized with the server." />
-<InlineNotification kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
-<InlineNotification kind="warning-alt" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
+<Stack gap={5}>
+  <InlineNotification kind="error" title="Deployment failed:" subtitle="Build #128 failed to deploy. Check the pipeline logs for details." />
+  <InlineNotification kind="info" title="Update available:" subtitle="Restart the application to install the latest updates." />
+  <InlineNotification kind="info-square" title="Update available:" subtitle="Restart the application to install the latest updates." />
+  <InlineNotification kind="success" title="Sync complete:" subtitle="All records have been synchronized with the server." />
+  <InlineNotification kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
+  <InlineNotification kind="warning-alt" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
+</Stack>
 
 ### Low contrast
 
 Use low contrast variants for less prominent notifications.
 
-<InlineNotification lowContrast kind="error" title="Deployment failed:" subtitle="Build #128 failed to deploy. Check the pipeline logs for details." />
-<InlineNotification lowContrast kind="info" title="Update available:" subtitle="Restart the application to install the latest updates." />
-<InlineNotification lowContrast kind="info-square" title="Update available:" subtitle="Restart the application to install the latest updates." />
-<InlineNotification lowContrast kind="success" title="Sync complete:" subtitle="All records have been synchronized with the server." />
-<InlineNotification lowContrast kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
-<InlineNotification lowContrast kind="warning-alt" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
+<Stack gap={5}>
+  <InlineNotification lowContrast kind="error" title="Deployment failed:" subtitle="Build #128 failed to deploy. Check the pipeline logs for details." />
+  <InlineNotification lowContrast kind="info" title="Update available:" subtitle="Restart the application to install the latest updates." />
+  <InlineNotification lowContrast kind="info-square" title="Update available:" subtitle="Restart the application to install the latest updates." />
+  <InlineNotification lowContrast kind="success" title="Sync complete:" subtitle="All records have been synchronized with the server." />
+  <InlineNotification lowContrast kind="warning" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
+  <InlineNotification lowContrast kind="warning-alt" title="Scheduled maintenance:" subtitle="Maintenance will last 2-4 hours." />
+</Stack>

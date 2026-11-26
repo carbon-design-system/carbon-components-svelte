@@ -6,6 +6,7 @@
     ModalBody,
     ModalFooter,
     ModalHeader,
+    Stack,
   } from "carbon-components-svelte";
 
   let open = false;
@@ -39,15 +40,17 @@
 >
   <ModalHeader title="Edit profile" />
   <ModalBody>
-    {#if showWarning}
-      <InlineNotification
-        kind="warning"
-        title="Unsaved changes"
-        subtitle="Please save or discard your changes before closing."
-        hideCloseButton
-      />
-    {/if}
-    <p>You have unsaved changes. Click "Save" to apply them.</p>
+    <Stack gap={5}>
+      {#if showWarning}
+        <InlineNotification
+          kind="warning"
+          title="Unsaved changes"
+          subtitle="Please save or discard your changes before closing."
+          hideCloseButton
+        />
+      {/if}
+      <p>You have unsaved changes. Click "Save" to apply them.</p>
+    </Stack>
   </ModalBody>
   <ModalFooter
     primaryButtonText="Save"

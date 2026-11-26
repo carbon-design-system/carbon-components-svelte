@@ -6,6 +6,7 @@
     ModalBody,
     ModalFooter,
     ModalHeader,
+    Stack,
     TextInput,
   } from "carbon-components-svelte";
 
@@ -36,15 +37,17 @@
 >
   <ModalHeader title="Edit name" />
   <ModalBody hasForm>
-    {#if showWarning}
-      <InlineNotification
-        kind="warning"
-        title="Unsaved changes"
-        subtitle="Save your changes, or keep editing. Cancel stays open while the form is dirty."
-        hideCloseButton
-      />
-    {/if}
-    <TextInput labelText="Name" bind:value={draft} />
+    <Stack gap={5}>
+      {#if showWarning}
+        <InlineNotification
+          kind="warning"
+          title="Unsaved changes"
+          subtitle="Save your changes, or keep editing. Cancel stays open while the form is dirty."
+          hideCloseButton
+        />
+      {/if}
+      <TextInput labelText="Name" bind:value={draft} />
+    </Stack>
   </ModalBody>
   <ModalFooter
     primaryButtonText="Save"
