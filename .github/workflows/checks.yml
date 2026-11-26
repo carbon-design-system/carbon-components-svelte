@@ -101,7 +101,6 @@ jobs:
   changes:
     runs-on: ubuntu-latest
     outputs:
-      docs-deploy: ${{ steps.filter.outputs.docs-deploy }}
       css: ${{ steps.filter.outputs.css }}
       css-size: ${{ steps.filter.outputs.css-size }}
       # Whether `test:types` runs: a change to what it can read, or one
@@ -190,10 +189,6 @@ jobs:
           filter css-size \
             'css/*' crassus.config.ts scripts/check-css-size.ts \
             scripts/lib/css-size.ts scripts/lib/css-targets.ts package.json bun.lock
-          # A docs/ change deploys from deploy-docs.yml, whose guard repeats
-          # these patterns.
-          filter docs-deploy \
-            'src/*' 'css/*' 'scripts/*' package.json bun.lock '.github/*'
           # `test:types` checks tests/ and what it imports. It never reads the
           # Sass sources, the e2e suite (a unit test that imports from e2e/
           # selects that test, which runs it too), or the files below, which
@@ -512,15 +507,3 @@ jobs:
             none) echo "No unit tests affected." ;;
             *) read -ra files <<< "$TESTS" && bunx --bun vitest run --shard="$SHARD" --passWithNoTests "${files[@]/#/../}" ;;
           esac
-
-  deploy-docs:
-    needs: [static-checks, changes, test]
-    if: |
-      always() &&
-      (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master') &&
-      (github.event_name == 'workflow_dispatch' || needs.changes.outputs.docs-deploy == 'true') &&
-      !failure() && !cancelled()
-    uses: ./.github/workflows/deploy-docs.yml
-    with:
-      after-checks: true
-    secrets: inherit
