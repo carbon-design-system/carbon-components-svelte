@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.114.9](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.8...v0.114.9) (2026-11-26)
+
+### Bug Fixes
+
+- **button:** style an icon in the icon slot without its class ([2fab008](https://github.com/carbon-design-system/carbon-components-svelte/commit/2fab00845642580782c6b1394e3bffb3d51cff08))
+- **portal:** give focus back without scrolling the page ([f7fd425](https://github.com/carbon-design-system/carbon-components-svelte/commit/f7fd42555d125f2685c4d79b91674862b0febe1a))
+- **tag-set:** count the overflow again once web fonts load ([9d0eab1](https://github.com/carbon-design-system/carbon-components-svelte/commit/9d0eab10a362630deb8cc929d7c788ecbec80046))
+
 ### [0.114.8](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.7...v0.114.8) (2026-11-26)
 
 ### Bug Fixes
