@@ -80,6 +80,42 @@ test.describe("Button", () => {
 // A disabled ghost button draws its icon in `$icon-disabled` and its text
 // in `$text-disabled`, with or without a label. Carbon v11 uses
 // `$icon-on-color-disabled` for the icon-only one; this library does not.
+test("styles an icon in the icon slot without its class", async ({ page }) => {
+  await page.goto("/button-icon-kinds.html");
+  await page.evaluate(() => document.fonts.ready);
+  // Each icon's place in its button, its size and its fill.
+  const icons = (testId: string) =>
+    page.getByTestId(testId).evaluate((root) =>
+      [...root.querySelectorAll("button svg")].map((svg) => {
+        const button = svg.closest("button");
+        if (!button) throw new Error("no button");
+        const box = svg.getBoundingClientRect();
+        const outer = button.getBoundingClientRect();
+        return {
+          x: Math.round(box.x - outer.x),
+          y: Math.round(box.y - outer.y),
+          width: Math.round(box.width),
+          height: Math.round(box.height),
+          fill: getComputedStyle(svg).fill,
+        };
+      }),
+    );
+  for (const kind of [
+    "primary",
+    "secondary",
+    "tertiary",
+    "ghost",
+    "danger",
+    "danger-tertiary",
+    "danger-ghost",
+    "expressive",
+  ]) {
+    const expected = await icons(`kind-${kind}`);
+    expect(expected.length).toBeGreaterThan(0);
+    expect.soft(await icons(`slot-kind-${kind}`), kind).toEqual(expected);
+  }
+});
+
 test("disabled ghost buttons share one gray with or without a label", async ({
   page,
 }) => {

@@ -26,7 +26,10 @@
   // icon-only rule below sets `$icon-primary`), so `currentColor` carries it and a
   // consumer's `.my-btn svg { fill }` (0,1,1) wins. Paths carry no fill of
   // their own and inherit this. // ccs: flatten
-  .#{$prefix}--btn__icon {
+  // ccs: an svg in the icon slot is styled as the icon, with or without
+  // the class
+  .#{$prefix}--btn__icon,
+  .#{$prefix}--btn__icon-slot > svg {
     fill: currentColor;
   }
 
@@ -111,7 +114,8 @@
 
     padding: $button-padding-ghost;
 
-    .#{$prefix}--btn__icon {
+    .#{$prefix}--btn__icon,
+    .#{$prefix}--btn__icon-slot > svg { // ccs: slotted svg
       position: static;
       margin-inline-start: $carbon--spacing-03;
     }
@@ -212,11 +216,13 @@
     padding-right: to-rem(15px);
     padding-left: to-rem(15px);
 
-    .#{$prefix}--btn__icon {
+    .#{$prefix}--btn__icon,
+    .#{$prefix}--btn__icon-slot > svg { // ccs: slotted svg
       position: static;
     }
 
-    &.#{$prefix}--btn--ghost .#{$prefix}--btn__icon { // ccs: dropped unrendered danger--ghost alias
+    &.#{$prefix}--btn--ghost .#{$prefix}--btn__icon,
+    &.#{$prefix}--btn--ghost .#{$prefix}--btn__icon-slot > svg { // ccs: dropped unrendered danger--ghost alias; slotted svg
       margin: 0;
     }
   }
@@ -326,7 +332,8 @@
 
       padding: $button-padding-ghost;
 
-      .#{$prefix}--btn__icon {
+      .#{$prefix}--btn__icon,
+      .#{$prefix}--btn__icon-slot > svg { // ccs: slotted svg
         position: static;
         margin-inline-start: $carbon--spacing-03;
       }
@@ -405,7 +412,8 @@
     padding: 12px 13px;
   }
 
-  .#{$prefix}--btn--expressive .#{$prefix}--btn__icon { // ccs: flatten
+  .#{$prefix}--btn--expressive .#{$prefix}--btn__icon,
+  .#{$prefix}--btn--expressive .#{$prefix}--btn__icon-slot > svg { // ccs: flatten; slotted svg
     width: to-rem(20px);
     height: to-rem(20px);
   }
@@ -484,7 +492,8 @@
 
   // Windows HCM fix
   // stylelint-disable-next-line no-duplicate-selectors
-  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only .#{$prefix}--btn__icon {
+  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only .#{$prefix}--btn__icon,
+  .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only .#{$prefix}--btn__icon-slot > svg { // ccs: slotted svg
     @include high-contrast-mode('icon-fill');
   }
 }
@@ -538,7 +547,8 @@
       color: HighlightText;
     }
 
-    .#{$prefix}--btn--icon-only.#{$prefix}--btn--selected .#{$prefix}--btn__icon {
+    .#{$prefix}--btn--icon-only.#{$prefix}--btn--selected .#{$prefix}--btn__icon,
+    .#{$prefix}--btn--icon-only.#{$prefix}--btn--selected .#{$prefix}--btn__icon-slot > svg {
       fill: HighlightText;
     }
   }
@@ -546,4 +556,25 @@
 
 @include exports("button-forced-colors") {
   @include button-forced-colors;
+}
+
+// carbon-components-svelte patch (button-icon-slot)
+/// The icon slot's wrapper. It lays out nothing, so the svg inside it is
+/// the button's flex item and takes the icon rules above.
+/// @access private
+/// @group button
+@mixin button-icon-slot {
+  .#{$prefix}--btn__icon-slot {
+    display: contents;
+  }
+
+  // An icon-only button sets the `icon` prop's margin inline; an svg in the
+  // slot gets the same here, after the kind rules it ties.
+  .#{$prefix}--btn--icon-only .#{$prefix}--btn__icon-slot > svg {
+    margin-inline-start: 0;
+  }
+}
+
+@include exports("button-icon-slot") {
+  @include button-icon-slot;
 }

@@ -45,7 +45,8 @@
     cursor: not-allowed;
   }
 
-  .#{$prefix}--btn__icon {
+  .#{$prefix}--btn__icon,
+  .#{$prefix}--btn__icon-slot > svg { // ccs: slotted svg
     position: absolute;
     width: to-rem(16px);
     height: to-rem(16px);
