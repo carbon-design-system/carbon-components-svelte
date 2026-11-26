@@ -78,7 +78,7 @@
             { id: "hadoop", text: "Hadoop" },
           ],
         },
-        { id: "query", text: "SQL Query" },
+        { id: "query", text: "SQL Query", badge: 12 },
       ],
     },
     {
@@ -309,6 +309,14 @@ export async function rollback(region, id) {
       {expandedIds}
       activeId="hadoop"
     />
+  </div>
+  <div data-testid="tree-badge-slot" class="field">
+    <TreeView labelText="Services" {nodes} {expandedIds}>
+      <svelte:fragment slot="badgeChildren" let:node>
+        {#if node.id === "query"}<span data-testid="query-status">Beta</span
+          >{/if}
+      </svelte:fragment>
+    </TreeView>
   </div>
   <Slider data-testid="slider" labelText="Replicas" max={10} value={2} marks />
   <RangeSlider

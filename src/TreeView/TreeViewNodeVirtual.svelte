@@ -5,7 +5,7 @@
    * selection / expansion / focus / checkbox callbacks behave identically.
    *
    * @typedef {object} Row
-   * @property {{ id: string | number; text?: any; icon?: any; disabled?: boolean; href?: string; target?: string; nodes?: any[] }} node
+   * @property {{ id: string | number; text?: any; icon?: any; disabled?: boolean; href?: string; target?: string; badge?: string | number; badgeDescription?: string; nodes?: any[] }} node
    * @property {number} depth
    * @property {string | number | null} parentId
    * @property {number} posInSet
@@ -41,6 +41,7 @@
     expandNode,
     focusNode,
     toggleNode,
+    badgeSlot,
   } = getContext("carbon:TreeView");
 
   /** @type {string | number | undefined} */
@@ -58,6 +59,10 @@
   $: isCheckboxMode = $selectionMode === "checkbox" && node.href === undefined;
   $: indeterminate = isCheckboxMode && $indeterminateIdSet.has(id);
   $: icon = node.icon;
+  $: badge = node.badge;
+  $: hasBadge = badge != null && badge !== "";
+  // A node placed by hand with no `badgeChildren` keeps its `badge`.
+  $: slottedBadge = badgeSlot && $$slots.badgeChildren;
   $: isLinkLeaf = href !== undefined && !hasChildren;
 
   // Flattened-row indent that matches what the recursive TreeViewNodeList
@@ -126,7 +131,15 @@
         style:padding-inline-start="{indentRem}rem"
       >
         <svelte:component this={icon} class="bx--tree-node__icon" />
-        <slot node={mergedNode}>{node.text}</slot>
+        <slot node={mergedNode}>{node.text}</slot>{#if slottedBadge}<span
+            class:bx--tree-node__badge={true}
+            class:bx--tree-node__badge--slot={true}
+            ><slot name="badgeChildren" node={mergedNode} /></span
+          >{:else if hasBadge}<span class:bx--visually-hidden={true}
+            >, {node.badgeDescription ?? badge}</span
+          ><span class:bx--tree-node__badge={true} aria-hidden="true"
+            >{badge}</span
+          >{/if}
       </div>
     </a>
   </li>
@@ -207,11 +220,17 @@
         <span class:bx--tree-node__label__details={true}>
           <svelte:component this={icon} class="bx--tree-node__icon" />
           <slot node={mergedNode}>{node.text}</slot>
-        </span>
-      {:else}
+        </span>{:else}
         <svelte:component this={icon} class="bx--tree-node__icon" />
-        <slot node={mergedNode}>{node.text}</slot>
-      {/if}
+        <slot node={mergedNode}>{node.text}</slot>{/if}{#if slottedBadge}<span
+          class:bx--tree-node__badge={true}
+          class:bx--tree-node__badge--slot={true}
+          ><slot name="badgeChildren" node={mergedNode} /></span
+        >{:else if hasBadge}<span class:bx--visually-hidden={true}
+          >, {node.badgeDescription ?? badge}</span
+        ><span class:bx--tree-node__badge={true} aria-hidden="true"
+          >{badge}</span
+        >{/if}
     </div>
   </li>
 {/if}

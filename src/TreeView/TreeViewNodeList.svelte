@@ -61,6 +61,19 @@
    */
   export let icon = /** @type {Icon | undefined} */ (undefined);
 
+  /**
+   * Specify a count or short value to show at the row's trailing edge.
+   * @type {string | number | undefined}
+   */
+  export let badge = undefined;
+
+  /**
+   * Specify the text screen readers hear for the badge (e.g., "4 items").
+   * Defaults to the badge value.
+   * @type {string | undefined}
+   */
+  export let badgeDescription = undefined;
+
   import { getContext, tick } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import CaretDown from "../icons/CaretDown.svelte";
@@ -98,6 +111,7 @@
     isInitialRender,
     serverTabStopId,
     treeKey,
+    badgeSlot,
   } = getContext("carbon:TreeView");
 
   let subtreeRendered = isInitialRender() && $expandedIdSet.has(id);
@@ -172,6 +186,9 @@
   // indented; then from the DOM, for nodes placed by hand.
   $: depth = refLabel ? computeTreeLeafDepth(refLabel) - 1 : level - 1;
   $: inset = offset(depth, isCheckboxMode, parent, icon);
+  $: hasBadge = badge != null && badge !== "";
+  // A node placed by hand with no `badgeChildren` keeps its `badge`.
+  $: slottedBadge = badgeSlot && $$slots.badgeChildren;
 </script>
 
 {#if root}
@@ -188,6 +205,9 @@
         <svelte:fragment slot="childNodes" let:node>
           <slot name="childNodes" {node} />
         </svelte:fragment>
+        <svelte:fragment slot="badgeChildren" let:node>
+          <slot name="badgeChildren" {node} />
+        </svelte:fragment>
       </Self>
     {:else}
       <TreeViewNode
@@ -199,6 +219,9 @@
         let:node
       >
         <slot {node} />
+        <svelte:fragment slot="badgeChildren" let:node>
+          <slot name="badgeChildren" {node} />
+        </svelte:fragment>
       </TreeViewNode>
     {/if}
   {/each}
@@ -344,7 +367,15 @@
         >
           <slot {node} />
         </span>
-      </span>
+      </span>{#if slottedBadge}<span
+          class:bx--tree-node__badge={true}
+          class:bx--tree-node__badge--slot={true}
+          ><slot name="badgeChildren" {node} /></span
+        >{:else if hasBadge}<span class:bx--visually-hidden={true}
+          >, {badgeDescription ?? badge}</span
+        ><span class:bx--tree-node__badge={true} aria-hidden="true"
+          >{badge}</span
+        >{/if}
     </div>
     <ul
       id="{$treeId}-{id}-subtree"
@@ -370,6 +401,9 @@
                 <svelte:fragment slot="childNodes" let:node>
                   <slot name="childNodes" {node} />
                 </svelte:fragment>
+                <svelte:fragment slot="badgeChildren" let:node>
+                  <slot name="badgeChildren" {node} />
+                </svelte:fragment>
               </Self>
             {:else}
               <TreeViewNode
@@ -381,6 +415,9 @@
                 let:node
               >
                 <slot {node}>{node.text}</slot>
+                <svelte:fragment slot="badgeChildren" let:node>
+                  <slot name="badgeChildren" {node} />
+                </svelte:fragment>
               </TreeViewNode>
             {/if}
           {/each}
