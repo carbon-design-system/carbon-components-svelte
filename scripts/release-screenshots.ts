@@ -145,6 +145,7 @@ await writeFile(
   path.join(genDir, "entry.ts"),
   `import { mount } from "svelte";
 import "carbon-components-svelte/css/all.css";
+import "carbon-components-svelte/css/fonts.css";
 const mods = { ${todo.map((name) => `${JSON.stringify(name)}: () => import("./${name}.svelte")`).join(",")} };
 const name = new URLSearchParams(location.search).get("s")!;
 mods[name]().then((m) => mount(m.default, { target: document.getElementById("app")! }));

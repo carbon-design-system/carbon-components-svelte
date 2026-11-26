@@ -1,5 +1,6 @@
 import { mount } from "svelte";
 import "../../css/all.css";
+import "../../css/fonts.css";
 import "../../css/prose.css";
 import "../../css/syntax-tokens.css";
 import "../../css/syntax.css";

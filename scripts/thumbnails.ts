@@ -145,10 +145,14 @@ if (command === "missing") {
 } else if (command === "themes") {
   const { chromium } = await import("playwright");
   const names = args.length > 0 ? args : thumbnails;
-  const css = await readFile("css/all.css", "utf8").catch(() => {
-    console.error("css/all.css is missing. Run `bun run build:css` first.");
-    process.exit(1);
-  });
+  const css = await Promise.all(
+    ["css/all.css", "css/fonts.css"].map((file) => readFile(file, "utf8")),
+  )
+    .then((sheets) => sheets.join("\n"))
+    .catch(() => {
+      console.error("css/ is not built. Run `bun run build:css` first.");
+      process.exit(1);
+    });
   const svgs = await Promise.all(
     names.map(async (name) =>
       (await readFile(`${THUMBNAILS_DIR}/${name}.svg`, "utf8"))

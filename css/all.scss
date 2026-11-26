@@ -7,7 +7,8 @@ $feature-flags: (
   grid-columns-16: true
 );
 
-$css--font-face: true;
+// The IBM Plex `@font-face` rules ship on their own in `fonts.css`.
+$css--font-face: false;
 $css--helpers: true;
 $css--body: true;
 $css--use-layer: true;
