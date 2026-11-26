@@ -154,5 +154,22 @@ describe("Portal", () => {
       expect(input).toBeInTheDocument();
       expect(input).toHaveFocus();
     });
+
+    // The content isn't positioned yet when it moves, so a plain focus()
+    // scrolled the page to the top of the target.
+    it("gives focus back without scrolling the page", async () => {
+      const { rerender, portal } = await renderPortal({
+        target: createTarget(),
+        tabindex: -1,
+      });
+      portal.focus();
+      const focus = vi.spyOn(portal, "focus");
+
+      await rerender({ target: createTarget() });
+      await tick();
+
+      expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+      expect(portal).toHaveFocus();
+    });
   });
 });

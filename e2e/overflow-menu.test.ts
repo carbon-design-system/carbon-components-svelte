@@ -87,6 +87,19 @@ test.describe("OverflowMenu", () => {
     }
   });
 
+  test("opens a portaled menu without scrolling the page", async ({ page }) => {
+    const trigger = page.getByRole("button", { name: "Portal menu" });
+    await trigger.scrollIntoViewIfNeeded();
+    const before = await page.evaluate(() => window.scrollY);
+    expect(before).toBeGreaterThan(0);
+
+    await trigger.click();
+    await expect(
+      page.getByRole("menuitem", { name: "Portal item" }),
+    ).toBeFocused();
+    expect(await page.evaluate(() => window.scrollY)).toBe(before);
+  });
+
   test("focus returns to trigger after Escape", async ({ page }) => {
     const trigger = page.getByRole("button", { name: "Actions" });
     await trigger.click();
