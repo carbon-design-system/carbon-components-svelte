@@ -47,6 +47,14 @@ describe("Search shortcut", () => {
     expect(input("search")).toHaveFocus();
   });
 
+  it("focuses a field on screen without scrolling the page", () => {
+    render(SearchShortcut);
+    const focus = vi.spyOn(input("search"), "focus");
+
+    press({ key: "/" });
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+  });
+
   it("skips the focus when on:shortcut prevents it", () => {
     render(SearchShortcut, { props: { preventShortcut: true } });
 

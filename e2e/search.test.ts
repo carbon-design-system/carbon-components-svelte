@@ -74,6 +74,20 @@ test.describe("Search", () => {
     await expect(wrapper).not.toHaveClass(/bx--search--expanded/);
   });
 
+  test("focuses a field in view without scrolling the page", async ({
+    page,
+  }) => {
+    await page.addStyleTag({ content: "html { scroll-padding-top: 4rem }" });
+    await page.evaluate(() => window.scrollTo(0, 400));
+    const before = await page.evaluate(() => window.scrollY);
+    await page.keyboard.press("/");
+
+    await expect(
+      page.getByTestId("sticky-shortcut").getByRole("searchbox"),
+    ).toBeFocused();
+    expect(await page.evaluate(() => window.scrollY)).toBe(before);
+  });
+
   test("defaults to the 40px md height, as in v11", async ({ page }) => {
     await expect(page.getByTestId("search-query")).toHaveCSS("height", "40px");
   });
