@@ -17,11 +17,6 @@
     max-width: to-rem(320px);
   }
 
-  .#{$prefix}--overflow-menu-options--shortcuts
-    .#{$prefix}--overflow-menu-options__btn {
-    max-width: none;
-  }
-
   .#{$prefix}--overflow-menu-options__option-shortcut {
     display: inline-flex;
     flex-shrink: 0;

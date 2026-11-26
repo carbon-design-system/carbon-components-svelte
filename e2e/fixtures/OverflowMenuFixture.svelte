@@ -20,11 +20,24 @@
   <OverflowMenuItem text="Action 3" />
 </OverflowMenu>
 
+<OverflowMenu
+  data-testid="wide-overflow-menu"
+  iconDescription="Links"
+  menuOptionsClass="wide-menu"
+>
+  <OverflowMenuItem text="Copy import" />
+  <OverflowMenuItem href="#docs" text="Open the docs" />
+</OverflowMenu>
+
 {#if selectedAction}
   <p data-testid="selected-action">Selected: {selectedAction}</p>
 {/if}
 
 <style>
+  :global(.wide-menu) {
+    width: 16rem;
+  }
+
   .outside-click-area {
     padding: 1rem;
     background: #e0e0e0;
