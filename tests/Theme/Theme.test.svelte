@@ -11,10 +11,6 @@
   export let system = false;
   export let systemThemes: ComponentProps<Theme>["systemThemes"] | undefined =
     undefined;
-  export let render: ComponentProps<Theme>["render"] = undefined;
-  export let toggle: ComponentProps<Theme>["toggle"] = undefined;
-  export let select: ComponentProps<Theme>["select"] = undefined;
-  export let dropdown: ComponentProps<Theme>["dropdown"] = undefined;
   export let onUpdate: ((detail: { theme: string }) => void) | undefined =
     undefined;
 </script>
@@ -26,10 +22,6 @@
   {persistKey}
   {system}
   {systemThemes}
-  {render}
-  {toggle}
-  {select}
-  {dropdown}
   on:update={(e) => onUpdate?.(e.detail)}
   let:theme={slotTheme}
 >

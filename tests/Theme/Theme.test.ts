@@ -11,6 +11,7 @@ import { tick } from "svelte";
 import { setupStorageEventMock } from "../utils/storage-mocks";
 import { user } from "../utils/user";
 import Theme from "./Theme.test.svelte";
+import ThemeControls from "./ThemeControls.test.svelte";
 
 describe("Theme", () => {
   let documentMock: {
@@ -199,7 +200,12 @@ describe("Theme", () => {
 
   describe.each<{
     name: string;
-    props: Partial<ComponentProps<Theme>>;
+    props: {
+      render: "toggle" | "select" | "dropdown";
+      toggle?: Record<string, unknown>;
+      select?: Record<string, unknown>;
+      dropdown?: Record<string, unknown>;
+    };
     getControl: () => HTMLElement;
     /** Picks `theme` through the control (toggle ignores it and flips). */
     pick: (control: HTMLElement, theme: CarbonTheme) => Promise<void>;
@@ -311,7 +317,7 @@ describe("Theme", () => {
       expectedOptions: ["White", "Gray 90", "Gray 100"],
     },
   ])(
-    "render $name",
+    "$name control",
     ({
       props,
       getControl,
@@ -323,7 +329,13 @@ describe("Theme", () => {
     }) => {
       it("switches the theme through the control", async () => {
         const onUpdate = vi.fn();
-        render(Theme, { props: { ...props, onUpdate } });
+        render(ThemeControls, {
+          props: {
+            control: props.render,
+            controlProps: props[props.render],
+            onUpdate,
+          },
+        });
 
         const control = getControl();
         expectShows(control, "white");
@@ -345,10 +357,13 @@ describe("Theme", () => {
   it("should allow using exported themes const to build custom select", async () => {
     const customThemeKeys = Object.keys(themes) as CarbonTheme[];
 
-    render(Theme, {
+    render(ThemeControls, {
       props: {
-        render: "select",
-        select: { themes: customThemeKeys, labelText: "Available themes" },
+        control: "select",
+        controlProps: {
+          themes: customThemeKeys,
+          labelText: "Available themes",
+        },
       },
     });
 
@@ -370,10 +385,10 @@ describe("Theme", () => {
       ["white", "g10"].includes(theme),
     );
 
-    render(Theme, {
+    render(ThemeControls, {
       props: {
-        render: "select",
-        select: { themes: lightThemes, labelText: "Light themes" },
+        control: "select",
+        controlProps: { themes: lightThemes, labelText: "Light themes" },
       },
     });
 
@@ -411,7 +426,9 @@ describe("Theme", () => {
   ] as const)(
     "reflects a programmatic theme change in the $mode control",
     async ({ mode, check, label }) => {
-      const { component } = render(Theme, { props: { render: mode } });
+      const { component } = render(ThemeControls, {
+        props: { control: mode },
+      });
 
       component.theme = "g100";
       await tick();
@@ -443,8 +460,12 @@ describe("Theme", () => {
   ] as const)(
     "uses the default themes when $mode props omit them",
     ({ mode, check }) => {
-      render(ThemeComponent, {
-        props: { theme: "g100", render: mode, [mode]: { labelText: "Theme" } },
+      render(ThemeControls, {
+        props: {
+          theme: "g100",
+          control: mode,
+          controlProps: { labelText: "Theme" },
+        },
       });
 
       check(screen.getByLabelText("Theme", { exact: false }));
