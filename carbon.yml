@@ -943,6 +943,20 @@ assets:
     tags:
       - form
       - contextual-navigation
+  password-strength:
+    name: Password strength
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/password-strength.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/PasswordStrength
+    tags:
+      - form
   pin-code-input:
     name: PIN code input
     status: stable
