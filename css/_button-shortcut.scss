@@ -60,6 +60,9 @@
 
   // A ghost button's icon follows in the row; 8px from the keys there too.
   .#{$prefix}--btn--ghost.#{$prefix}--btn--shortcut-icon .#{$prefix}--btn__icon,
+  .#{$prefix}--btn--ghost.#{$prefix}--btn--shortcut-icon
+    .#{$prefix}--btn__icon-slot
+    > svg,
   .#{$prefix}--btn--ghost.#{$prefix}--btn--shortcut-icon .#{$prefix}--btn__loading {
     margin-inline-start: $carbon--spacing-03 - $carbon--spacing-05;
   }

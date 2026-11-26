@@ -28,3 +28,21 @@
     <Button {kind} icon={Add} iconDescription="Add" isSelected />
   </div>
 {/each}
+
+<!-- The same, with the icon in the `icon` slot and no class on it. -->
+{#each kinds as kind}
+  <div data-testid="slot-kind-{kind}">
+    <Button {kind}>Text<Add slot="icon" /></Button>
+    <Button {kind} iconDescription="Add"><Add slot="icon" /></Button>
+    <Button {kind} aria-label="Add"><Add slot="icon" /></Button>
+    <Button {kind} disabled>Text<Add slot="icon" /></Button>
+    <Button {kind} iconDescription="Add" disabled><Add slot="icon" /></Button>
+    <Button {kind} iconDescription="Add" isSelected><Add slot="icon" /></Button>
+  </div>
+{/each}
+<div data-testid="kind-expressive">
+  <Button expressive icon={Add}>Text</Button>
+</div>
+<div data-testid="slot-kind-expressive">
+  <Button expressive>Text<Add slot="icon" /></Button>
+</div>
