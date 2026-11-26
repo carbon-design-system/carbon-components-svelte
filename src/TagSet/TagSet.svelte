@@ -415,7 +415,16 @@
       }),
     );
 
+    // A web font that loads after the first measure changes every tag's
+    // width but not the set's, so nothing above fires. Measure again once
+    // the fonts are in, or the count stays as the fallback font had it.
+    let active = true;
+    document.fonts?.ready?.then(() => {
+      if (active) throttledMeasure();
+    });
+
     return () => {
+      active = false;
       for (const stop of stops) stop();
       throttledMeasure.cancel();
     };
