@@ -1,14 +1,10 @@
 <script context="module">
   /** @typedef {"white" | "g10" | "g80" | "g90" | "g100"} CarbonTheme */
 
+  import { themeLabels } from "./theme-labels.js";
+
   /** @type {Record<CarbonTheme, string>} */
-  export const themes = {
-    white: "White",
-    g10: "Gray 10",
-    g80: "Gray 80",
-    g90: "Gray 90",
-    g100: "Gray 100",
-  };
+  export const themes = themeLabels;
 </script>
 
 <script>
@@ -61,12 +57,16 @@
 
   /**
    * Render a toggle, select, or dropdown to control the theme.
+   * @deprecated use `ThemeToggle`, `ThemeSelect`, or `ThemeDropdown` with
+   * `bind:theme` instead. With `render`, every page that uses `Theme` ships
+   * all three controls.
    * @type {"toggle" | "select" | "dropdown" | undefined}
    */
   export let render = undefined;
 
   /**
    * Override the default toggle props.
+   * @deprecated pass props to `ThemeToggle` instead.
    * @type {import("../Toggle/Toggle.svelte").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }}
    */
   export let toggle = {
@@ -81,6 +81,7 @@
 
   /**
    * Override the default select props.
+   * @deprecated pass props to `ThemeSelect` instead.
    * @type {import("../Select/Select.svelte").SelectProps<CarbonTheme> & { themes?: CarbonTheme[]; }}
    */
   export let select = {
@@ -91,6 +92,7 @@
 
   /**
    * Override the default dropdown props.
+   * @deprecated pass props to `ThemeDropdown` instead.
    * @type {Omit<import("../Dropdown/Dropdown.svelte").DropdownProps, "items" | "selectedId"> & { themes?: CarbonTheme[]; }}
    */
   export let dropdown = {
@@ -100,14 +102,23 @@
   };
 
   import { createEventDispatcher, onMount, tick } from "svelte";
-  import Dropdown from "../Dropdown/Dropdown.svelte";
   import LocalStorage from "../LocalStorage/LocalStorage.svelte";
-  import Select from "../Select/Select.svelte";
-  import SelectItem from "../Select/SelectItem.svelte";
-  import Toggle from "../Toggle/Toggle.svelte";
+  import ThemeDropdown from "./ThemeDropdown.svelte";
+  import ThemeSelect from "./ThemeSelect.svelte";
+  import ThemeToggle from "./ThemeToggle.svelte";
   import { withContextualTokens } from "./contextual-tokens.js";
 
   const dispatch = createEventDispatcher();
+
+  // The deprecated `select` and `dropdown` props are typed for Select and
+  // Dropdown, whose slot types don't line up with the controls' attributes.
+  /**
+   * @param {object} props
+   * @returns {Record<string, any>}
+   */
+  function looseProps(props) {
+    return props;
+  }
 
   let prevTheme = theme;
   let mounted = false;
@@ -252,31 +263,11 @@
 {/if}
 
 {#if render === "toggle"}
-  {@const { themes: toggleThemes = ["white", "g100"], ...toggleProps } = toggle}
-  <Toggle
-    {...toggleProps}
-    toggled={theme === toggleThemes[1]}
-    on:toggle={(event) => {
-      theme = event.detail.toggled ? toggleThemes[1] : toggleThemes[0];
-    }}
-  />
+  <ThemeToggle {...toggle} bind:theme />
 {:else if render === "select"}
-  {@const { themes: selectThemes = themeKeys, ...selectProps } = select}
-  <Select {...selectProps} bind:selected={theme}>
-    {#each selectThemes as theme (theme)}
-      <SelectItem value={theme} text={themes[theme]} />
-    {/each}
-  </Select>
+  <ThemeSelect {...looseProps(select)} bind:theme />
 {:else if render === "dropdown"}
-  {@const { themes: dropdownThemes = themeKeys, ...dropdownProps } = dropdown}
-  <Dropdown
-    {...dropdownProps}
-    items={dropdownThemes.map((t) => ({ id: t, text: themes[t] }))}
-    selectedId={theme}
-    on:select={(event) => {
-      theme = event.detail.selectedId;
-    }}
-  />
+  <ThemeDropdown {...looseProps(dropdown)} bind:theme />
 {/if}
 
 <slot {theme} />

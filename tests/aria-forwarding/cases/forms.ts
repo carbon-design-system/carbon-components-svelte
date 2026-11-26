@@ -33,6 +33,9 @@ import TagInput from "carbon-components-svelte/TagInput/TagInput.svelte";
 import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
 import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
+import ThemeDropdown from "carbon-components-svelte/Theme/ThemeDropdown.svelte";
+import ThemeSelect from "carbon-components-svelte/Theme/ThemeSelect.svelte";
+import ThemeToggle from "carbon-components-svelte/Theme/ThemeToggle.svelte";
 import TileGroup from "carbon-components-svelte/Tile/TileGroup.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
 import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
@@ -379,6 +382,21 @@ export const forms: AriaEntry[] = [
         props: { labelText: "Alerts", readonly: true, ...attrs },
       }),
     target: () => screen.getByRole("switch"),
+  },
+  {
+    name: "ThemeToggle",
+    render: (attrs) => render(ThemeToggle, { props: attrs }),
+    target: () => screen.getByRole("switch"),
+  },
+  {
+    name: "ThemeSelect",
+    render: (attrs) => render(ThemeSelect, { props: attrs }),
+    target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "ThemeDropdown",
+    render: (attrs) => render(ThemeDropdown, { props: attrs }),
+    target: () => screen.getByRole("combobox"),
   },
   {
     name: "FormGroup",
