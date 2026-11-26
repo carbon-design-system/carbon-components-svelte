@@ -68,6 +68,25 @@ test.describe("OverflowMenu", () => {
     ).not.toBeVisible();
   });
 
+  test("draws link options like buttons, across a wider menu", async ({
+    page,
+  }) => {
+    await page.getByRole("button", { name: "Links" }).click();
+    const menu = page.getByRole("menu");
+    const link = page.getByRole("menuitem", { name: "Open the docs" });
+    const button = page.getByRole("menuitem", { name: "Copy import" });
+    await expect(link).toBeVisible();
+
+    expect(
+      await link.evaluate((el) => getComputedStyle(el).textDecorationLine),
+    ).toBe("none");
+    const menuWidth = (await menu.boundingBox())?.width ?? 0;
+    expect(menuWidth).toBe(256);
+    for (const option of [link, button]) {
+      expect((await option.boundingBox())?.width).toBe(menuWidth);
+    }
+  });
+
   test("focus returns to trigger after Escape", async ({ page }) => {
     const trigger = page.getByRole("button", { name: "Actions" });
     await trigger.click();

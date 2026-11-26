@@ -244,8 +244,8 @@
     @include focus-outline('reset');
 
     display: inline-flex;
+    // ccs: no max-width, so an option fills a menu made wider than 180px
     width: 100%;
-    max-width: 11.25rem;
     height: 100%;
     align-items: center;
     padding: 0 $carbon--spacing-05;
@@ -255,6 +255,9 @@
     cursor: pointer;
     font-weight: 400;
     text-align: start;
+    // ccs: a link option (`href`) drops the anchor's underline, as the
+    // button options beside it have none
+    text-decoration: none;
     transition: background-color $duration--fast-02 motion(entrance, productive),
       color $duration--fast-02 motion(entrance, productive);
 
