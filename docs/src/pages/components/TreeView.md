@@ -76,6 +76,20 @@ Add icons to nodes by defining an `icon` property with a Carbon Svelte icon comp
 
 <FileSource src="/framed/TreeView/TreeViewIcons" />
 
+### Badges
+
+Show a count at the end of a row by defining a `badge` property, such as the number of items in a folder. Screen readers hear the badge after the node text. Set `badgeDescription` to give it words, such as "42 unread", or a translation; it defaults to the badge value.
+
+<FileSource src="/framed/TreeView/TreeViewBadges" />
+
+A badge can also be a short string, such as a source control status letter (`badge: "M"` with `badgeDescription: "Modified"`).
+
+### Status badges
+
+Use the `badgeChildren` slot to show a status icon or a tag at the end of each row. It renders in the badge's place, with `let:node`, and replaces the `badge` property. Screen readers hear the slot content after the node text, so set `hideLabel` on an `IconIndicator` instead of removing its label. Keep the content short and not interactive: a tree item can't contain a button or a link. A `Tag` on every row competes with the node text; save it for a few rows, such as a "New" item.
+
+<FileSource src="/framed/TreeView/TreeViewBadgeStatus" />
+
 ### Links
 
 Add links to leaf nodes by defining an `href` property. Link nodes render as `<a>` elements with `role="treeitem"`. When a link node is active, `aria-current="page"` is used. Disabled link nodes omit the `href` attribute. <DocKbd label="Enter" /> follows the link; <DocKbd label="Space" /> selects the node without navigating.
