@@ -91,8 +91,11 @@
     const previouslyFocused = document.activeElement;
     const hadFocus = ref.contains(previouslyFocused);
     effectiveTarget.appendChild(ref);
+    // Moving the node drops its focus, so give it back. The node hasn't
+    // been positioned yet and can sit at the top of the target, where a
+    // plain `focus()` would scroll the page to it.
     if (hadFocus && previouslyFocused instanceof HTMLElement) {
-      previouslyFocused.focus();
+      previouslyFocused.focus({ preventScroll: true });
     }
   }
 </script>
