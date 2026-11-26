@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.114.8](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.7...v0.114.8) (2026-11-26)
+
+### Bug Fixes
+
+- **code-snippet:** drop the room for the expand button without one ([5ef76de](https://github.com/carbon-design-system/carbon-components-svelte/commit/5ef76def38401788578006495c452fec23e1a4c0))
+- **code-snippet:** stop a ResizeObserver loop error on short snippets ([971ecea](https://github.com/carbon-design-system/carbon-components-svelte/commit/971ecea190debbf077dad74fcbb88f58f23d9662))
+- **kbd:** show a letter pressed alone in lowercase ([f47791d](https://github.com/carbon-design-system/carbon-components-svelte/commit/f47791df720fea6809744a7b7378e46b32f0d138))
+- **notification:** drop InlineNotification's outer margin, as in v11 ([b628c4f](https://github.com/carbon-design-system/carbon-components-svelte/commit/b628c4f8af673200c9112cb182cc790fc9d09373))
+- **overflow-menu:** drop link options' underline and fill a wider menu ([4c2d349](https://github.com/carbon-design-system/carbon-components-svelte/commit/4c2d34946a00486b2daf84f59e62f05d1a7fe3be))
+- **prose:** join a tab panel to its tabs ([744ab17](https://github.com/carbon-design-system/carbon-components-svelte/commit/744ab179d189a93e6f04ea38128c8eb36c061358))
+- **search:** focus from the shortcut without scrolling a field in view ([cf81450](https://github.com/carbon-design-system/carbon-components-svelte/commit/cf814506b2f0bb99eb40c2f748669b91fa613684))
+
+### Performance
+
+- **side-nav:** scroll to the current item without forcing layout ([4b1bf42](https://github.com/carbon-design-system/carbon-components-svelte/commit/4b1bf423bbcb38e568696872aac2760f92afaa80))
+
 ### [0.114.7](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.6...v0.114.7) (2026-11-24)
 
 ### Bug Fixes
