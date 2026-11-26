@@ -131,15 +131,20 @@ const NAMES = {
  * @returns {Array<{ label: string; name: string; icon?: KbdIcon }>}
  */
 export function kbdKeys(shortcut, apple, translate) {
-  return shortcutKeys(shortcut, { apple }).map((key) => {
+  const keys = shortcutKeys(shortcut, { apple });
+  return keys.map((key) => {
     const icon = (apple && APPLE_ICONS[key]) || ARROWS[key];
     const nameId = (apple && APPLE_NAMES[key]) || NAMES[key];
     if (icon) return { label: "", name: translate(nameId), icon };
     const word = (apple && APPLE_WORDS[key]) || WORDS[key];
+    // A letter pressed alone shows in lowercase: "J" reads as Shift+J. With
+    // a modifier it's a capital, as menus show "⌘K".
     const label = word
       ? translate(word)
       : key.length === 1
-        ? key.toUpperCase()
+        ? keys.length === 1
+          ? key
+          : key.toUpperCase()
         : key.charAt(0).toUpperCase() + key.slice(1);
     return { label, name: nameId ? translate(nameId) : label };
   });

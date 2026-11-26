@@ -193,6 +193,9 @@ describe("formatShortcut", () => {
     ["ctrl+alt+enter", true, ["⌃", "⌥", "↵"]],
     ["escape", false, ["Esc"]],
     ["f2", false, ["F2"]],
+    // A letter alone stays lowercase; "J" would read as Shift+J.
+    ["j", false, ["j"]],
+    ["shift+j", false, ["Shift", "J"]],
   ])("formats %s (apple: %s)", (shortcut, apple, expected) => {
     expect(formatShortcut(shortcut, { apple })).toEqual(expected);
   });
