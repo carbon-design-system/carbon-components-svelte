@@ -134,8 +134,8 @@
   } from "svelte";
   import { derived, writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
+  import { lazyPortalTooltip } from "../Portal/lazy-portal-tooltip.js";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
@@ -685,6 +685,8 @@
     position: effectiveTooltipPosition,
     alignment: effectiveTooltipAlignment,
   } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
+
+  $: if (hasTooltip && tooltipMounted) lazyPortalTooltip.load();
 </script>
 
 <button
@@ -837,7 +839,8 @@
      specializer can't run. `hasTooltip` lets it drop PortalTooltip for a
      menu that never shows one. -->
 {#if hasTooltip && tooltipMounted}
-  <PortalTooltip
+  <svelte:component
+    this={$lazyPortalTooltip}
     anchor={buttonRef}
     direction={effectiveTooltipPosition}
     open={tooltipOpen}

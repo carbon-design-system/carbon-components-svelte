@@ -166,3 +166,20 @@ beforeEach(() => {
   activeTooltip.set(null);
   rootTooltipGroup.scope.releasedAt = Number.NEGATIVE_INFINITY;
 });
+
+// Portaled tooltips load on demand in the browser
+// (src/Portal/lazy-portal-tooltip.js), usually long before one opens.
+// Resolve that once per test file, so component tests see them as a page
+// does after the load. tests/utils/lazy-component.test.ts covers the wait.
+{
+  const { lazyPortalTooltip } =
+    await import("../../src/Portal/lazy-portal-tooltip.js");
+  lazyPortalTooltip.load();
+  await new Promise<void>((resolve) => {
+    const unsubscribe = lazyPortalTooltip.subscribe((component) => {
+      if (!component) return;
+      resolve();
+      queueMicrotask(() => unsubscribe());
+    });
+  });
+}

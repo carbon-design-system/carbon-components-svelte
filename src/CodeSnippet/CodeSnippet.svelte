@@ -223,8 +223,8 @@
   import { createEventDispatcher, onMount } from "svelte";
   import Button from "../Button/Button.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
+  import { lazyPortalTooltip } from "../Portal/lazy-portal-tooltip.js";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
@@ -543,6 +543,8 @@
     position: effectiveTooltipPosition,
     alignment: effectiveTooltipAlignment,
   } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
+
+  $: if (effectivePortalTooltip) lazyPortalTooltip.load();
 </script>
 
 {#if skeleton}
@@ -633,7 +635,8 @@
     >
 
     {#if effectivePortalTooltip}
-      <PortalTooltip
+      <svelte:component
+        this={$lazyPortalTooltip}
         anchor={copyRef}
         open={feedbackOpen}
         text={feedbackText}

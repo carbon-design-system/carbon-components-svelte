@@ -95,8 +95,8 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount } from "svelte";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
+  import { lazyPortalTooltip } from "../Portal/lazy-portal-tooltip.js";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import Copy from "../icons/Copy.svelte";
   import {
@@ -290,6 +290,8 @@
     position: effectiveTooltipPosition,
     alignment: effectiveTooltipAlignment,
   } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
+
+  $: if (ref) lazyPortalTooltip.load();
 </script>
 
 <button
@@ -362,7 +364,8 @@
 >
 
 {#if ref}
-  <PortalTooltip
+  <svelte:component
+    this={$lazyPortalTooltip}
     anchor={ref}
     open={tooltipOpen}
     text={tooltipText}

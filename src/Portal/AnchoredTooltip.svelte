@@ -42,8 +42,8 @@
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { noop } from "../utils/noop.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
-  import PortalTooltip from "./PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "./icon-tooltip-portal-gaps.js";
+  import { lazyPortalTooltip } from "./lazy-portal-tooltip.js";
 
   const tooltip = createAnchoredTooltip({
     group: getTooltipGroup(),
@@ -70,9 +70,12 @@
       tooltip.destroy();
     };
   });
+
+  lazyPortalTooltip.load();
 </script>
 
-<PortalTooltip
+<svelte:component
+  this={$lazyPortalTooltip}
   {anchor}
   {direction}
   open={enabled && $open}

@@ -122,7 +122,7 @@
   export let selectTextOnFocus = false;
 
   import { getContext, onMount, tick } from "svelte";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { lazyPortalTooltip } from "../Portal/lazy-portal-tooltip.js";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
@@ -256,6 +256,8 @@
     position: effectiveTooltipPosition,
     alignment: effectiveTooltipAlignment,
   } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
+
+  $: if (effectivePortalTooltip && !effectiveDisabled) lazyPortalTooltip.load();
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -465,7 +467,8 @@
 </div>
 
 {#if effectivePortalTooltip && !effectiveDisabled}
-  <PortalTooltip
+  <svelte:component
+    this={$lazyPortalTooltip}
     anchor={toggleButtonRef}
     direction={effectiveTooltipPosition === "top" ? "top" : "bottom"}
     open={$tooltipOpen}

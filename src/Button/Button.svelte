@@ -199,8 +199,8 @@
   import Kbd from "../Kbd/Kbd.svelte";
   import ShortcutBinding from "../Kbd/ShortcutBinding.svelte";
   import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
+  import { lazyPortalTooltip } from "../Portal/lazy-portal-tooltip.js";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import {
     FORM_SIZE_CONTEXT_KEY,
@@ -569,6 +569,8 @@
     position: effectiveTooltipPosition,
     alignment: effectiveTooltipAlignment,
   } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
+
+  $: if (usePortal) lazyPortalTooltip.load();
 </script>
 
 {#if skeleton}
@@ -871,7 +873,8 @@
 {/if}
 
 {#if usePortal}
-  <PortalTooltip
+  <svelte:component
+    this={$lazyPortalTooltip}
     anchor={ref}
     direction={effectiveTooltipPosition}
     open={portalOpen}
@@ -890,6 +893,6 @@
     >{iconDescription}{#if shortcut}<span
         class:bx--btn__tooltip-shortcut={true}
         aria-hidden="true"><Kbd {shortcut} variant="muted" /></span
-      >{/if}</PortalTooltip
+      >{/if}</svelte:component
   >
 {/if}

@@ -67,8 +67,8 @@
 
   import { afterUpdate, getContext, onMount } from "svelte";
   import { get, readable } from "svelte/store";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
+  import { lazyPortalTooltip } from "../Portal/lazy-portal-tooltip.js";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { noop } from "../utils/noop.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
@@ -171,6 +171,8 @@
     position: placedTooltipPosition,
     alignment: effectiveTooltipAlignment,
   } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
+
+  $: if (hasTooltipContent) lazyPortalTooltip.load();
 </script>
 
 <button
@@ -205,7 +207,8 @@
 </button>
 
 {#if hasTooltipContent}
-  <PortalTooltip
+  <svelte:component
+    this={$lazyPortalTooltip}
     anchor={ref}
     direction={effectiveTooltipPosition}
     open={$tooltipOpen}

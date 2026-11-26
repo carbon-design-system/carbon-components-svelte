@@ -12,7 +12,7 @@
    */
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { lazyPortalTooltip } from "../Portal/lazy-portal-tooltip.js";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
@@ -286,6 +286,8 @@
         ? id
         : undefined
       : id;
+
+  $: if (effectivePortalTooltip) lazyPortalTooltip.load();
 </script>
 
 <button
@@ -386,7 +388,8 @@
 </button>
 
 {#if effectivePortalTooltip}
-  <PortalTooltip
+  <svelte:component
+    this={$lazyPortalTooltip}
     anchor={ref}
     {direction}
     open={portalOpen}
@@ -410,5 +413,5 @@
     <slot name="tooltipChildren"
       ><slot name="tooltipText">{tooltipText}</slot></slot
     >
-  </PortalTooltip>
+  </svelte:component>
 {/if}
