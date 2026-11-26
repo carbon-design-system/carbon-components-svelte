@@ -1,5 +1,10 @@
 <script>
-  import { Button, InlineNotification, Modal } from "carbon-components-svelte";
+  import {
+    Button,
+    InlineNotification,
+    Modal,
+    Stack,
+  } from "carbon-components-svelte";
 
   let open = false;
   let hasUnsavedChanges = true;
@@ -37,13 +42,15 @@
     open = false;
   }}
 >
-  {#if showWarning}
-    <InlineNotification
-      kind="warning"
-      title="Unsaved changes"
-      subtitle="Please save or discard your changes before closing."
-      hideCloseButton
-    />
-  {/if}
-  <p>You have unsaved changes. Click "Save" to apply them.</p>
+  <Stack gap={5}>
+    {#if showWarning}
+      <InlineNotification
+        kind="warning"
+        title="Unsaved changes"
+        subtitle="Please save or discard your changes before closing."
+        hideCloseButton
+      />
+    {/if}
+    <p>You have unsaved changes. Click "Save" to apply them.</p>
+  </Stack>
 </Modal>

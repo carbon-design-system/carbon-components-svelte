@@ -3,6 +3,7 @@
     Button,
     ConfirmModal,
     InlineNotification,
+    Stack,
   } from "carbon-components-svelte";
 
   let open = false;
@@ -32,14 +33,16 @@
     error = reason instanceof Error ? reason.message : String(reason);
   }}
 >
-  <p>This will permanently delete your account and all of its data.</p>
-  {#if error}
-    <InlineNotification
-      kind="error"
-      title="Couldn't delete the account."
-      subtitle={error}
-      hideCloseButton
-      lowContrast
-    />
-  {/if}
+  <Stack gap={5}>
+    <p>This will permanently delete your account and all of its data.</p>
+    {#if error}
+      <InlineNotification
+        kind="error"
+        title="Couldn't delete the account."
+        subtitle={error}
+        hideCloseButton
+        lowContrast
+      />
+    {/if}
+  </Stack>
 </ConfirmModal>
