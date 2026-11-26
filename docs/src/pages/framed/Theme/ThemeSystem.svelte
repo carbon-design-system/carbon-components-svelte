@@ -1,10 +1,11 @@
 <script>
-  import { Button, Text, Theme } from "carbon-components-svelte";
+  import { Button, Text, Theme, ThemeToggle } from "carbon-components-svelte";
 
   let theme = "white";
 </script>
 
-<Theme system render="toggle" bind:theme />
+<Theme system bind:theme />
+<ThemeToggle bind:theme />
 
 <Text>Current theme: {theme}</Text>
 

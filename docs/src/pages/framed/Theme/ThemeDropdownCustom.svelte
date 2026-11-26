@@ -1,12 +1,14 @@
 <script>
-  import { Theme } from "carbon-components-svelte";
+  import { Theme, ThemeDropdown } from "carbon-components-svelte";
+
+  /** @type {import("carbon-components-svelte/Theme/theme-labels.js").CarbonTheme} */
+  let theme = "white";
 </script>
 
-<Theme
-  render="dropdown"
-  dropdown={{
-    themes: ["white", "g90", "g100"],
-    labelText: "Select a theme",
-    type: "inline",
-  }}
+<Theme bind:theme />
+<ThemeDropdown
+  bind:theme
+  themes={["white", "g90", "g100"]}
+  labelText="Select a theme"
+  type="inline"
 />

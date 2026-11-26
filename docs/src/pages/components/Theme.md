@@ -96,7 +96,7 @@ Use `Theme` with `system` and `themeScript` when you need more than White and Gr
 | White and Gray 100, with no JavaScript | `<html theme="system">` |
 | Another pair, such as Gray 10 and Gray 90 | `<Theme system systemThemes={["g10", "g90"]} />` and `themeScript` |
 | To remember the user's choice | `<Theme persist system />` and `themeScript` |
-| A theme control, or `update` events | `<Theme render="toggle" system />` |
+| A theme control, or `update` events | `<Theme bind:theme system />` and `<ThemeToggle bind:theme />` |
 
 The `theme` prop doesn't take `"system"`. It holds the theme that the controls show, `update` reports, and `persist` stores, so it is always one of the five themes. When `Theme` mounts, it sets the `theme` attribute on `<html>` to that theme.
 
@@ -196,50 +196,45 @@ The table below lists every theme color. The [token reference](/tokens) shows ev
 
 ## Controls
 
-Render a built-in control instead of managing `theme` yourself. Set `render` to `"toggle"`, `"select"`, or `"dropdown"`.
+Bind `ThemeToggle`, `ThemeSelect`, or `ThemeDropdown` to `theme` to let people pick it. Each is a separate component, so a page loads only the control it shows. `render` still works but is deprecated: with it, every page that uses `Theme` loads all three controls.
 
 ### Toggle
 
-Set `render` to `"toggle"` to display a toggle switch for switching between two themes. By default, it toggles between "white" and "g100" themes.
+`ThemeToggle` switches between two themes, "white" and "g100" by default. Set `themes` to pick the pair; other props go to the `Toggle`.
 
 <FileSource src="/framed/Theme/ThemeToggle" />
 
 #### Custom
 
-Customize themes, labels, and other toggle options with `toggle`.
-
 <FileSource src="/framed/Theme/ThemeToggleCustom" />
 
 ### Select
 
-Set `render` to `"select"` to display a dropdown menu for selecting from all available themes.
+`ThemeSelect` lists every theme. Set `themes` to choose which ones and their order; other props go to the `Select`.
 
 <FileSource src="/framed/Theme/ThemeSelect" />
 
 #### Custom
 
-Choose which themes to include, customize labels, and adjust other select options with `select`.
-
 <FileSource src="/framed/Theme/ThemeSelectCustom" />
 
 ### Dropdown
 
-Set `render` to `"dropdown"` to display a Dropdown component for selecting from all available themes.
+`ThemeDropdown` lists every theme in a `Dropdown`. Set `themes` to choose which ones; other props go to the `Dropdown`.
 
 <FileSource src="/framed/Theme/ThemeDropdown" />
 
 #### Custom
 
-Choose which themes to include, customize labels, and adjust other dropdown options with `dropdown`.
-
 <FileSource src="/framed/Theme/ThemeDropdownCustom" />
 
 ## Events
 
-Theme dispatches an `update` event whenever `theme` changes, whether from a built-in control or a bound value updated elsewhere in your app. The initial theme on mount does not dispatch `update`.
+Theme dispatches an `update` event whenever `theme` changes, whether from a theme control or a bound value updated elsewhere in your app. The initial theme on mount does not dispatch `update`.
 
 ```svelte
-<Theme render="toggle" on:update={(e) => console.log(e.detail.theme)} />
+<Theme bind:theme on:update={(e) => console.log(e.detail.theme)} />
+<ThemeToggle bind:theme />
 ```
 
 ## Slot
@@ -247,7 +242,7 @@ Theme dispatches an `update` event whenever `theme` changes, whether from a buil
 Use the default slot to access the current `theme` value with `let:theme`, without duplicating local state.
 
 ```svelte
-<Theme render="select" let:theme>
+<Theme let:theme>
   <p>Current theme: {theme}</p>
 </Theme>
 ```
