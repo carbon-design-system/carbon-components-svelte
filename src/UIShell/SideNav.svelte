@@ -346,22 +346,39 @@
     }
   }
 
+  let mounted = false;
+  let scrolledToActiveItem = false;
+  let activeItemFrame = 0;
+
+  function scrollToActiveItem() {
+    const activeItem = navRef?.querySelector('[aria-current="page"]');
+    // Scroll only the nav's own list. `Element.scrollIntoView` also moves
+    // Chromium's sequential focus starting point to the item, so the first
+    // Tab would skip the skip link and the header.
+    if (activeItem instanceof HTMLElement) {
+      scrollIntoViewWithin(
+        activeItem,
+        ".bx--side-nav__items",
+        activeItemScrollBlock,
+      );
+    }
+  }
+
+  // Bring the current item into view once, the first time the nav shows: on
+  // mount, or when a closed nav first opens. Reading the list's layout right
+  // after mount forced a layout of the whole page before the browser's own,
+  // even for a closed nav with nothing to scroll, so read it in the next
+  // frame instead.
+  $: if (mounted && (isOpen || rail) && !scrolledToActiveItem) {
+    scrolledToActiveItem = true;
+    activeItemFrame = requestAnimationFrame(scrollToActiveItem);
+  }
+
   onMount(() => {
     shouldRenderHamburgerMenu.set(!fixed);
-    tick().then(() => {
-      const activeItem = navRef?.querySelector('[aria-current="page"]');
-      // Scroll only the nav's own list. `Element.scrollIntoView` also moves
-      // Chromium's sequential focus starting point to the item, so the first
-      // Tab would skip the skip link and the header.
-      if (activeItem instanceof HTMLElement) {
-        scrollIntoViewWithin(
-          activeItem,
-          ".bx--side-nav__items",
-          activeItemScrollBlock,
-        );
-      }
-    });
+    mounted = true;
     return () => {
+      cancelAnimationFrame(activeItemFrame);
       if (holdsBodyLock) {
         holdsBodyLock = false;
         releaseBodyScrollLock();
