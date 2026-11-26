@@ -199,10 +199,24 @@
     if (!dispatch("shortcut", event, { cancelable: true })) return;
     if (expandable && !expanded) {
       expanded = true;
-      tick().then(() => ref?.focus());
+      tick().then(focusShortcutField);
     } else {
-      ref?.focus();
+      focusShortcutField();
     }
+  }
+
+  // A field already on screen keeps the page still. Focus otherwise scrolls
+  // it clear of the page's `scroll-padding`, which moved a page whose field
+  // sat in a sticky toolbar inside that padding.
+  function focusShortcutField() {
+    if (!ref) return;
+    const { top, bottom, left, right } = ref.getBoundingClientRect();
+    const inView =
+      top >= 0 &&
+      left >= 0 &&
+      bottom <= window.innerHeight &&
+      right <= window.innerWidth;
+    ref.focus({ preventScroll: inView });
   }
 
   const kbdTranslations = getKbdTranslations();

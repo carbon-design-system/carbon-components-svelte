@@ -21,3 +21,7 @@
   bind:expanded
   bind:value={valueExpandable}
 />
+<div data-testid="sticky-shortcut" style="position: sticky; top: 0">
+  <Search labelText="Sticky search" shortcut="/" />
+</div>
+<div style="height: 200vh"></div>
