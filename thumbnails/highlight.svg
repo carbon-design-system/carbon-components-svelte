@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>highlight</title>
+    <g id="highlight" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="line-1" x="80" y="68" width="160" height="6" fill="var(--cds-text-secondary, #525252)"></rect>
+        <rect id="match" x="124" y="82" width="56" height="16" fill="var(--cds-highlight, #d0e2ff)"></rect>
+        <rect id="line-2-start" x="80" y="86" width="40" height="8" fill="var(--cds-text-primary, #161616)"></rect>
+        <rect id="line-2-match" x="128" y="86" width="48" height="8" fill="var(--cds-text-primary, #161616)"></rect>
+        <rect id="line-2-end" x="184" y="86" width="56" height="8" fill="var(--cds-text-primary, #161616)"></rect>
+        <rect id="line-3" x="80" y="106" width="112" height="6" fill="var(--cds-text-secondary, #525252)"></rect>
+    </g>
+</svg>

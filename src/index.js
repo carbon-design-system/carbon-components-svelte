@@ -124,6 +124,7 @@ export { default as GridOverlay } from "./Grid/GridOverlay.svelte";
 export { default as Row } from "./Grid/Row.svelte";
 export { default as Heading } from "./Heading/Heading.svelte";
 export { default as Section } from "./Heading/Section.svelte";
+export { default as Highlight } from "./Highlight/Highlight.svelte";
 export { default as IconIndicator } from "./IconIndicator/IconIndicator.svelte";
 export { default as ImageLoader } from "./ImageLoader/ImageLoader.svelte";
 export { default as InlineEdit } from "./InlineEdit/InlineEdit.svelte";
@@ -334,6 +335,7 @@ export { formReset } from "./utils/form-reset.js";
 export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";
+export { highlightText, supportsHighlightApi } from "./utils/highlight-api.js";
 export { getInitials } from "./utils/initials.js";
 export {
   formatShortcut,
@@ -346,6 +348,18 @@ export { linkSegments } from "./utils/link-segments.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";
+export {
+  createFuzzyTextMatcher,
+  createTextMatcher,
+  foldText,
+  fuzzyMatchText,
+  indicesToRanges,
+  matchText,
+  mergeRanges,
+  normalizeRanges,
+  splitByRanges,
+} from "./utils/text-match.js";
+export { textSnippet } from "./utils/text-snippet.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
 export { trapFocus } from "./utils/trap-focus.js";
 export {
