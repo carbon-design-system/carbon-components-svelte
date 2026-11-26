@@ -55,70 +55,11 @@
    */
   export let systemThemes = ["white", "g100"];
 
-  /**
-   * Render a toggle, select, or dropdown to control the theme.
-   * @deprecated use `ThemeToggle`, `ThemeSelect`, or `ThemeDropdown` with
-   * `bind:theme` instead. With `render`, every page that uses `Theme` ships
-   * all three controls.
-   * @type {"toggle" | "select" | "dropdown" | undefined}
-   */
-  export let render = undefined;
-
-  /**
-   * Override the default toggle props.
-   * @deprecated pass props to `ThemeToggle` instead.
-   * @type {import("../Toggle/Toggle.svelte").ToggleProps & { themes?: [labelA: CarbonTheme, labelB: CarbonTheme]; }}
-   */
-  export let toggle = {
-    themes: ["white", "g100"],
-    labelA: "",
-    labelB: "",
-    labelText: "Dark mode",
-    hideLabel: false,
-  };
-
-  const themeKeys = /** @type {CarbonTheme[]} */ (Object.keys(themes));
-
-  /**
-   * Override the default select props.
-   * @deprecated pass props to `ThemeSelect` instead.
-   * @type {import("../Select/Select.svelte").SelectProps<CarbonTheme> & { themes?: CarbonTheme[]; }}
-   */
-  export let select = {
-    themes: themeKeys,
-    labelText: "Themes",
-    hideLabel: false,
-  };
-
-  /**
-   * Override the default dropdown props.
-   * @deprecated pass props to `ThemeDropdown` instead.
-   * @type {Omit<import("../Dropdown/Dropdown.svelte").DropdownProps, "items" | "selectedId"> & { themes?: CarbonTheme[]; }}
-   */
-  export let dropdown = {
-    themes: themeKeys,
-    labelText: "Themes",
-    hideLabel: false,
-  };
-
   import { createEventDispatcher, onMount, tick } from "svelte";
   import LocalStorage from "../LocalStorage/LocalStorage.svelte";
-  import ThemeDropdown from "./ThemeDropdown.svelte";
-  import ThemeSelect from "./ThemeSelect.svelte";
-  import ThemeToggle from "./ThemeToggle.svelte";
   import { withContextualTokens } from "./contextual-tokens.js";
 
   const dispatch = createEventDispatcher();
-
-  // The deprecated `select` and `dropdown` props are typed for Select and
-  // Dropdown, whose slot types don't line up with the controls' attributes.
-  /**
-   * @param {object} props
-   * @returns {Record<string, any>}
-   */
-  function looseProps(props) {
-    return props;
-  }
 
   let prevTheme = theme;
   let mounted = false;
@@ -260,14 +201,6 @@
 
 {#if persist}
   <LocalStorage bind:value={theme} key={persistKey} />
-{/if}
-
-{#if render === "toggle"}
-  <ThemeToggle {...toggle} bind:theme />
-{:else if render === "select"}
-  <ThemeSelect {...looseProps(select)} bind:theme />
-{:else if render === "dropdown"}
-  <ThemeDropdown {...looseProps(dropdown)} bind:theme />
 {/if}
 
 <slot {theme} />

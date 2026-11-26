@@ -13,7 +13,12 @@ describe("Theme controls", () => {
   });
 
   it("ThemeSelect lists its themes and applies the one picked", async () => {
-    render(ThemeControls, { props: { control: "select" } });
+    render(ThemeControls, {
+      props: {
+        control: "select",
+        controlProps: { themes: ["white", "g90", "g100"] },
+      },
+    });
     const select = screen.getByRole("combobox", { name: "Themes" });
 
     expect(screen.getAllByRole("option").map((o) => o.textContent)).toEqual([
