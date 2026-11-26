@@ -1,14 +1,17 @@
 <script>
-  import { Theme } from "carbon-components-svelte";
+  import { Theme, ThemeToggle } from "carbon-components-svelte";
+
+  /** @type {import("carbon-components-svelte/Theme/theme-labels.js").CarbonTheme} */
+  let theme = "white";
 </script>
 
-<Theme
-  render="toggle"
-  toggle={{
-    themes: ["g10", "g80"],
-    labelA: "Enable dark mode",
-    labelB: "Enable dark mode",
-    hideLabel: true,
-    size: "sm",
-  }}
+<Theme bind:theme />
+<ThemeToggle
+  bind:theme
+  themes={["g10", "g80"]}
+  labelText="Enable dark mode"
+  hideLabel
+  labelA="Enable dark mode"
+  labelB="Enable dark mode"
+  size="sm"
 />

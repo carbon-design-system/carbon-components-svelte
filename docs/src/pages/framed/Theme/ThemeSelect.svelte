@@ -1,5 +1,9 @@
 <script>
-  import { Theme } from "carbon-components-svelte";
+  import { Theme, ThemeSelect } from "carbon-components-svelte";
+
+  /** @type {import("carbon-components-svelte/Theme/theme-labels.js").CarbonTheme} */
+  let theme = "white";
 </script>
 
-<Theme render="select" />
+<Theme bind:theme />
+<ThemeSelect bind:theme />
