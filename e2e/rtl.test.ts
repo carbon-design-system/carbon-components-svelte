@@ -51,6 +51,11 @@ const PARTS = {
     "[data-testid=tree-virtual] [data-tree-row-id=engine] .bx--tree-parent-node__toggle",
   treeVirtualIcon:
     "[data-testid=tree-virtual] [data-tree-row-id=spark] .bx--tree-node__icon",
+  treeBadge:
+    "[data-testid=tree] [data-tree-row-id=query] .bx--tree-node__badge",
+  treeVirtualBadge:
+    "[data-testid=tree-virtual] [data-tree-row-id=query] .bx--tree-node__badge",
+  treeSlotBadge: "[data-testid=query-status]",
 };
 
 // The active and multiselect bars are `::before` boxes, so build each one

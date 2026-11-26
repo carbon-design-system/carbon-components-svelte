@@ -301,6 +301,8 @@
    * @property {boolean} [disabled] - Whether the node is disabled
    * @property {string} [href] - Optional URL the node links to
    * @property {string} [target] - Optional link target (e.g., "_blank")
+   * @property {string | number} [badge] - Optional count or short value shown at the row's trailing edge (e.g., the number of items in a folder)
+   * @property {string} [badgeDescription] - Text screen readers hear for the badge, after the node text (e.g., "4 items"). Defaults to the badge value
    * @property {boolean} [hasChildren] - Whether the node has children that have not been loaded yet. Renders an expander even without a `nodes` array; expanding fires `toggle` so children can be loaded lazily.
    * @property {TreeNode<Id>[]} [nodes]
    */
@@ -340,6 +342,7 @@
   /**
    * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
    * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }} childNodes
+   * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }} badgeChildren - Render each node's badge, such as a status `IconIndicator` or a `Tag`, at the row's trailing edge. Replaces the `badge` field. The content is part of the node's accessible name; it must not be interactive.
    */
 
   /**
@@ -1295,7 +1298,15 @@
     return inlineKey(event.key, $layoutDirection, node);
   }
 
+  /**
+   * Whether the consumer filled `badgeChildren`. TreeView forwards the slot
+   * to every node, so a node can't tell from its own `$$slots`.
+   * @type {boolean}
+   */
+  const badgeSlot = Boolean($$slots.badgeChildren);
+
   setContext("carbon:TreeView", {
+    badgeSlot,
     treeId,
     serverTabStopId,
     activeNodeId,
@@ -2378,6 +2389,9 @@
         let:node
       >
         <slot {node}>{node.text}</slot>
+        <svelte:fragment slot="badgeChildren" let:node>
+          <slot name="badgeChildren" {node} />
+        </svelte:fragment>
       </TreeViewNodeVirtual>
     {/each}
     {#if virtualData.endIndex < virtualIndex.totalCount}
@@ -2415,6 +2429,9 @@
       <slot {node}>{node.text}</slot>
       <svelte:fragment slot="childNodes" let:node>
         <slot name="childNodes" {node} />
+      </svelte:fragment>
+      <svelte:fragment slot="badgeChildren" let:node>
+        <slot name="badgeChildren" {node} />
       </svelte:fragment>
     </TreeViewNodeList>
   </ul>

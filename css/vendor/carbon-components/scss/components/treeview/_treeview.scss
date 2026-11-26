@@ -389,7 +389,10 @@
 
       .#{$prefix}--tree-node--selected:not(.#{$prefix}--tree-node--disabled)
         > .#{$prefix}--tree-node__label
-        .#{$prefix}--tree-node__label__details {
+        .#{$prefix}--tree-node__label__details,
+      .#{$prefix}--tree-node--selected:not(.#{$prefix}--tree-node--disabled)
+        > .#{$prefix}--tree-node__label
+        .#{$prefix}--tree-node__badge {
         color: HighlightText;
       }
 
@@ -436,7 +439,10 @@
         .#{$prefix}--tree-node__label__details,
       .#{$prefix}--tree-node.#{$prefix}--tree-node--disabled
         .#{$prefix}--tree-node__label:hover
-        .#{$prefix}--tree-node__label__details {
+        .#{$prefix}--tree-node__label__details,
+      .#{$prefix}--tree-node.#{$prefix}--tree-node--disabled
+        .#{$prefix}--tree-node__label
+        .#{$prefix}--tree-node__badge {
         color: GrayText;
       }
 
@@ -486,4 +492,52 @@
 
 @include exports("treeview-long-names") {
   @include treeview-long-names;
+}
+
+// carbon-components-svelte patch (treeview-badge)
+// A node's `badge`, such as an item count, sits at the row's trailing edge
+// in helper text, the way desktop sidebars show counts. Carbon has none.
+// The `badgeChildren` slot renders in the same place.
+
+/// Tree node badges.
+/// @access private
+/// @group treeview
+@mixin treeview-badge {
+  .#{$prefix}--tree .#{$prefix}--tree-node__badge {
+    @include type-style("label-01");
+
+    flex-shrink: 0;
+    padding-inline: $carbon--spacing-03 $carbon--spacing-05;
+    margin-inline-start: auto;
+    color: $text-helper;
+    font-variant-numeric: tabular-nums;
+    // Not `dir="ltr"`: an element's own `dir` turns `margin-inline-start:
+    // auto` to the wrong side in RTL. A value with no letters, such as a
+    // count, still reads left to right.
+    unicode-bidi: plaintext;
+  }
+
+  .#{$prefix}--tree
+    .#{$prefix}--tree-node--disabled
+    > .#{$prefix}--tree-node__label
+    .#{$prefix}--tree-node__badge {
+    color: $text-disabled;
+  }
+
+  // `badgeChildren` content, such as a status icon or a tag, keeps its
+  // own colors. A node the slot leaves empty takes no space.
+  .#{$prefix}--tree .#{$prefix}--tree-node__badge--slot {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--tree .#{$prefix}--tree-node__badge--slot:empty {
+    display: none;
+  }
+}
+
+@include exports("treeview-badge") {
+  @include treeview-badge;
 }

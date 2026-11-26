@@ -103,6 +103,19 @@
    */
   export let icon = /** @type {Icon | undefined} */ (undefined);
 
+  /**
+   * Specify a count or short value to show at the row's trailing edge.
+   * @type {string | number | undefined}
+   */
+  export let badge = undefined;
+
+  /**
+   * Specify the text screen readers hear for the badge (e.g., "4 items").
+   * Defaults to the badge value.
+   * @type {string | undefined}
+   */
+  export let badgeDescription = undefined;
+
   import { getContext } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import { resolveLinkRel } from "../utils/link-rel.js";
@@ -128,6 +141,7 @@
     focusNode,
     serverTabStopId,
     treeKey,
+    badgeSlot,
   } = getContext("carbon:TreeView");
 
   /**
@@ -182,6 +196,9 @@
   // indented; then from the DOM, for nodes placed by hand.
   $: depth = refLabel ? computeTreeLeafDepth(refLabel) - 1 : level - 1;
   $: inset = offset(depth, isCheckboxMode, leaf, icon);
+  $: hasBadge = badge != null && badge !== "";
+  // A node placed by hand with no `badgeChildren` keeps its `badge`.
+  $: slottedBadge = badgeSlot && $$slots.badgeChildren;
 </script>
 
 {#if href}
@@ -256,7 +273,15 @@
         <svelte:component this={icon} class="bx--tree-node__icon" />
         <span class:bx--tree-node__label__text={true} use:titleWhenTruncated
           ><slot {node}>{text}</slot></span
-        >
+        >{#if slottedBadge}<span
+            class:bx--tree-node__badge={true}
+            class:bx--tree-node__badge--slot={true}
+            ><slot name="badgeChildren" {node} /></span
+          >{:else if hasBadge}<span class:bx--visually-hidden={true}
+            >, {badgeDescription ?? badge}</span
+          ><span class:bx--tree-node__badge={true} aria-hidden="true"
+            >{badge}</span
+          >{/if}
       </div>
     </a>
   </li>
@@ -345,7 +370,15 @@
       <svelte:component this={icon} class="bx--tree-node__icon" />
       <span class:bx--tree-node__label__text={true} use:titleWhenTruncated
         ><slot {node}>{text}</slot></span
-      >
+      >{#if slottedBadge}<span
+          class:bx--tree-node__badge={true}
+          class:bx--tree-node__badge--slot={true}
+          ><slot name="badgeChildren" {node} /></span
+        >{:else if hasBadge}<span class:bx--visually-hidden={true}
+          >, {badgeDescription ?? badge}</span
+        ><span class:bx--tree-node__badge={true} aria-hidden="true"
+          >{badge}</span
+        >{/if}
     </div>
   </li>
 {/if}
