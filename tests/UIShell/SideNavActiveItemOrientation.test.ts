@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import type * as ScrollModule from "../../src/utils/scroll-into-view-within.js";
+import { nextFrame } from "../utils/next-frame";
 import SideNavActiveItemOrientationTest from "./SideNavActiveItemOrientation.test.svelte";
 
 const scrollCalls: unknown[][] = [];
@@ -66,8 +67,7 @@ describe("SideNav active item orientation", () => {
     render(SideNavActiveItemOrientationTest, {
       props: { activeItem: "nested", activeItemScrollBlock: "center" },
     });
-    await tick();
-    await tick();
+    await nextFrame();
 
     const scrollIntoView = Element.prototype
       .scrollIntoView as unknown as ReturnType<typeof vi.fn>;
@@ -75,5 +75,20 @@ describe("SideNav active item orientation", () => {
     expect(scrollCalls).toEqual([
       [screen.getByTestId("nested-item"), ".bx--side-nav__items", "center"],
     ]);
+  });
+
+  it("waits to scroll a closed nav until it first opens", async () => {
+    const { rerender } = render(SideNavActiveItemOrientationTest, {
+      props: { activeItem: "nested", isOpen: false },
+    });
+    await nextFrame();
+    expect(scrollCalls).toEqual([]);
+
+    await rerender({ isOpen: true });
+    await nextFrame();
+    await rerender({ isOpen: false });
+    await rerender({ isOpen: true });
+    await nextFrame();
+    expect(scrollCalls).toHaveLength(1);
   });
 });

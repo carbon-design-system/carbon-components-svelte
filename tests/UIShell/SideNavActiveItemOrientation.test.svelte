@@ -7,9 +7,10 @@
   export let activeItem: "none" | "shallow" | "nested" = "none";
   export let activeItemScrollBlock: "start" | "center" | "end" | "nearest" =
     "nearest";
+  export let isOpen = true;
 </script>
 
-<SideNav {activeItemScrollBlock}>
+<SideNav {activeItemScrollBlock} bind:isOpen>
   <SideNavItems>
     <SideNavMenu text="Menu 1" data-testid="menu-1">
       <SideNavMenuItem
