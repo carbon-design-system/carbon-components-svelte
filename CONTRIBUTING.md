@@ -1590,11 +1590,11 @@ git push origin v0.81.1
 
 If the workflow succeeds, the [`release.yml` workflow](https://github.com/carbon-design-system/carbon-components-svelte/actions/workflows/release.yml) publishes the new version to NPM.
 
-Once a stable version is on NPM, the same workflow deploys the docs site from the tag's commit, so the site shows what `npm install` gets. A `-next` tag leaves it alone. Pushes to master deploy to the preview site instead, when its `RENDER_PREVIEW_DEPLOY_HOOK_URL` secret is set, and otherwise wait for the next release.
+Once a stable version is on NPM, the same workflow deploys the docs site from the tag's commit, so the site shows what `npm install` gets. A `-next` tag leaves it alone, and pushes to master wait for the next release.
 
 | Do | Why |
 | --- | --- |
-| Fix the docs between releases by running "Deploy docs" from the latest release tag, with `production` | A run from master would publish docs for changes no release has yet. |
+| Fix the docs between releases by running "Deploy docs" from the latest release tag | A run from master would publish docs for changes no release has yet. |
 | Leave auto-deploy off on the Render service | Each deploy names its commit, which turns auto-deploy off. Turned back on, Render deploys every push to master again. |
 
 ### Post-release checklist
