@@ -19,6 +19,7 @@ import type {
   ThemeZone as BarrelThemeZone,
   trapFocus,
 } from "carbon-components-svelte";
+import type { ErrorBoundary } from "carbon-components-svelte/boundary";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
 import type Button from "carbon-components-svelte/src/Button/Button.svelte";
 import type ComboBoxSkeleton from "carbon-components-svelte/src/ComboBox/ComboBoxSkeleton.svelte";
@@ -87,6 +88,7 @@ type _CreateThemeOptions = CreateThemeOptions;
 type _CreateThemeResult = CreateThemeResult;
 type _DataTable = DataTable;
 type _DataTableRow = DataTableRow<{ id: string; name: string }>;
+type _ErrorBoundary = ErrorBoundary;
 type _FormatFileSize = ReturnType<typeof formatFileSize>;
 type _FuzzyMatch = ReturnType<typeof fuzzyMatch>;
 type _GetAvatarBackgroundColor = ReturnType<typeof getAvatarBackgroundColor>;

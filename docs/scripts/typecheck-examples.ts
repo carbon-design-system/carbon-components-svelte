@@ -131,6 +131,9 @@ fs.writeFileSync(
         types: [],
         paths: {
           "carbon-components-svelte": [relative("../src")],
+          "carbon-components-svelte/boundary": [
+            relative("../src/ErrorBoundary/index.d.ts"),
+          ],
           "carbon-components-svelte/*": [relative("../src/*")],
         },
       },
