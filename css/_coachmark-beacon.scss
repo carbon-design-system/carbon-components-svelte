@@ -31,6 +31,12 @@
     @include focus-outline("outline");
   }
 
+  // The ring follows the keyboard: a click on the beacon leaves it plain.
+  // A browser without `:focus-visible` drops this rule and keeps the ring.
+  .#{$prefix}--coachmark-beacon:focus:not(:focus-visible) {
+    outline: none;
+  }
+
   .#{$prefix}--coachmark-beacon__core {
     width: calc(var(--ccs-coachmark-beacon-size, #{to-rem(24px)}) / 3);
     height: calc(var(--ccs-coachmark-beacon-size, #{to-rem(24px)}) / 3);
@@ -44,8 +50,10 @@
     position: absolute;
     width: calc(var(--ccs-coachmark-beacon-size, #{to-rem(24px)}) / 3);
     height: calc(var(--ccs-coachmark-beacon-size, #{to-rem(24px)}) / 3);
+    // Two pulses, about 4 s, then the ring rests at its last frame
+    // (invisible). A looping pulse would not stop (WCAG 2.2.2).
     animation: coachmark-beacon-pulse $duration--slow-02 * 3
-      motion(entrance, productive) infinite;
+      motion(entrance, productive) 2 forwards;
     background-color: $support-info;
     border-radius: 50%;
     pointer-events: none;

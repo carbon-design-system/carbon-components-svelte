@@ -20,7 +20,8 @@
   export let open = false;
 
   /**
-   * Specify the heading. It names the dialog.
+   * Specify the heading. It names the dialog. The heading level follows
+   * the enclosing `Section` (one level below it), or is `h2` outside one.
    * Alternatively, use the "titleChildren" slot.
    */
   export let titleText = "";
@@ -84,7 +85,7 @@
    * The dialog id derives from it as `{id}-content`, and the heading as
    * `{id}-title`.
    */
-  export let id = uniqueId();
+  export let id = useId("coachmark");
 
   /**
    * Obtain a reference to the dialog element.
@@ -105,14 +106,18 @@
     returnFocus,
     returnFocusOnClose,
   } from "../utils/focus.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import CoachmarkBeacon from "./CoachmarkBeacon.svelte";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext(MODAL_CONTEXT_KEY);
+
+  // Undefined outside a `Section`; `$sectionLevel` is read only when it is set.
+  /** @type {import("svelte/store").Readable<1 | 2 | 3 | 4 | 5 | 6>} */
+  const sectionLevel = getContext("carbon:Section");
 
   /** @type {null | HTMLSpanElement} */
   let anchorRef = null;
@@ -132,6 +137,9 @@
   $: dialogId = `${id}-content`;
   $: titleId = `${id}-title`;
   $: triggerId = `${id}-target`;
+  // The heading sits one level below the enclosing `Section`'s heading, and
+  // is an `h2` outside one.
+  $: headingTag = `h${sectionLevel ? Math.min($sectionLevel + 1, 6) : 2}`;
   $: hasTitle = !!(titleText || $$slots.titleChildren);
 
   $: triggerProps = {
@@ -312,9 +320,14 @@
     <div class:bx--coachmark-content={true} on:keydown={handleKeydown}>
       <div class:bx--coachmark__header={true}>
         {#if hasTitle}
-          <h2 id={titleId} class:bx--coachmark__title={true} tabindex="-1">
+          <svelte:element
+            this={headingTag}
+            id={titleId}
+            class:bx--coachmark__title={true}
+            tabindex="-1"
+          >
             <slot name="titleChildren">{titleText}</slot>
-          </h2>
+          </svelte:element>
         {/if}
         <button
           bind:this={closeRef}
