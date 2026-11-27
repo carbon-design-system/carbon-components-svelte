@@ -17,34 +17,35 @@
     {
       id: "ordered",
       time: at(2, 9, 12),
-      title: "Ordered",
+      titleText: "Ordered",
       status: "success" as const,
     },
     {
       id: "packed",
       time: at(1, 16, 40),
-      title: "Packed",
-      description: "Packed at the Reno warehouse.",
+      titleText: "Packed",
+      descriptionText: "Packed at the Reno warehouse.",
       status: "success" as const,
     },
     {
       id: "shipped",
       time: at(1, 21, 5),
-      title: "Shipped",
-      description: "Handed to the carrier. Tracking 1Z 999 AA1 01 2345 6784.",
+      titleText: "Shipped",
+      descriptionText:
+        "Handed to the carrier. Tracking 1Z 999 AA1 01 2345 6784.",
       status: "success" as const,
     },
     {
       id: "out",
       time: at(0, 14, 30),
-      title: "Out for delivery",
-      description: "The driver is 4 stops away.",
+      titleText: "Out for delivery",
+      descriptionText: "The driver is 4 stops away.",
       status: "pending" as const,
     },
     {
       id: "delivered",
-      title: "Delivered",
-      description: "Expected today by 8 PM.",
+      titleText: "Delivered",
+      descriptionText: "Expected today by 8 PM.",
     },
   ];
 
@@ -52,46 +53,46 @@
     {
       id: "d1",
       time: at(0, 14, 20),
-      title: "Deployed v2.4.1 to production",
-      description: "Triggered by Ada Okafor.",
+      titleText: "Deployed v2.4.1 to production",
+      descriptionText: "Triggered by Ada Okafor.",
       status: "success" as const,
     },
     {
       id: "d2",
       time: at(0, 11, 5),
-      title: "Deploy v2.4.0 failed",
-      description: "Health check timed out after 120 s.",
+      titleText: "Deploy v2.4.0 failed",
+      descriptionText: "Health check timed out after 120 s.",
       status: "error" as const,
     },
     {
       id: "d3",
       time: at(0, 11, 2),
-      title: "Rolled back to v2.3.9",
+      titleText: "Rolled back to v2.3.9",
       status: "warning" as const,
     },
     {
       id: "d4",
       time: at(1, 17, 45),
-      title: "Deployed v2.3.9 to staging",
+      titleText: "Deployed v2.3.9 to staging",
       status: "info" as const,
     },
     {
       id: "d5",
       time: at(1, 9, 30),
-      title: "Comment from Grace Lee",
-      description: "Looks good to me.",
+      titleText: "Comment from Grace Lee",
+      descriptionText: "Looks good to me.",
       icon: Edit,
     },
     {
       id: "d6",
       time: at(30, 10, 0),
-      title: "Deployed v2.3.0",
+      titleText: "Deployed v2.3.0",
       status: "success" as const,
     },
     {
       id: "d7",
       time: at(400, 10, 0),
-      title: "Deployed v1.0.0",
+      titleText: "Deployed v1.0.0",
       status: "success" as const,
     },
   ];
@@ -100,14 +101,14 @@
     {
       id: "c1",
       time: at(0, 8),
-      title: "Added dark mode",
-      description: "Follows the system setting.",
+      titleText: "Added dark mode",
+      descriptionText: "Follows the system setting.",
     },
-    { id: "c2", time: at(1, 8), title: "Fixed the export dialog" },
-    { id: "c3", time: at(3, 8), title: "Faster search" },
-    { id: "c4", time: at(8, 8), title: "New keyboard shortcuts" },
-    { id: "c5", time: at(15, 8), title: "Improved onboarding" },
-    { id: "c6", time: at(40, 8), title: "Initial release" },
+    { id: "c2", time: at(1, 8), titleText: "Fixed the export dialog" },
+    { id: "c3", time: at(3, 8), titleText: "Faster search" },
+    { id: "c4", time: at(8, 8), titleText: "New keyboard shortcuts" },
+    { id: "c5", time: at(15, 8), titleText: "Improved onboarding" },
+    { id: "c6", time: at(40, 8), titleText: "Initial release" },
   ];
 
   let expanded = false;
@@ -118,8 +119,8 @@
   const big = Array.from({ length: count }, (_, index) => ({
     id: index,
     time: (live ? Date.now() : now) - index * 90_000,
-    title: `Event ${index + 1}`,
-    description:
+    titleText: `Event ${index + 1}`,
+    descriptionText:
       index % 3 === 0 ? "A longer line of detail for this event." : "",
     status: (["success", "info", "warning", "error"] as const)[index % 4],
   }));
@@ -227,13 +228,13 @@
       <div data-testid="composed" style="max-width: 24rem">
         <Timeline aria-label="Composed">
           <TimelineItem
-            title="Account created"
+            titleText="Account created"
             time={at(2, 10)}
             timeZone="UTC"
             locale="en-US"
             {now}
           />
-          <TimelineItem title="Waiting for review" status="pending">
+          <TimelineItem titleText="Waiting for review" status="pending">
             <Button size="sm" kind="ghost">Nudge</Button>
           </TimelineItem>
         </Timeline>

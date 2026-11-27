@@ -1,8 +1,8 @@
 import {
   buildTimeline,
   dayNumber,
-  defaultGroupLabel,
-  defaultStatusText,
+  defaultGroupText,
+  defaultStatusDescription,
   isWithinRelative,
 } from "../../src/utils/timeline.js";
 
@@ -33,33 +33,29 @@ describe("dayNumber", () => {
   });
 });
 
-describe("defaultGroupLabel", () => {
+describe("defaultGroupText", () => {
   const context = { now, locale: "en-US", timeZone: "UTC" };
 
   it("names today, yesterday and tomorrow", () => {
-    expect(defaultGroupLabel(at("2026-11-06T01:00:00Z"), context)).toBe(
-      "Today",
-    );
-    expect(defaultGroupLabel(at("2026-11-05T23:59:00Z"), context)).toBe(
+    expect(defaultGroupText(at("2026-11-06T01:00:00Z"), context)).toBe("Today");
+    expect(defaultGroupText(at("2026-11-05T23:59:00Z"), context)).toBe(
       "Yesterday",
     );
-    expect(defaultGroupLabel(at("2026-11-07T08:00:00Z"), context)).toBe(
+    expect(defaultGroupText(at("2026-11-07T08:00:00Z"), context)).toBe(
       "Tomorrow",
     );
   });
 
   it("writes a short date, with the year only when it is not this one", () => {
-    expect(defaultGroupLabel(at("2026-10-07T10:00:00Z"), context)).toBe(
-      "Oct 7",
-    );
-    expect(defaultGroupLabel(at("2025-10-02T10:00:00Z"), context)).toBe(
+    expect(defaultGroupText(at("2026-10-07T10:00:00Z"), context)).toBe("Oct 7");
+    expect(defaultGroupText(at("2025-10-02T10:00:00Z"), context)).toBe(
       "Oct 2, 2025",
     );
   });
 
   it("reads the day in the locale", () => {
     expect(
-      defaultGroupLabel(at("2026-11-05T10:00:00Z"), {
+      defaultGroupText(at("2026-11-05T10:00:00Z"), {
         ...context,
         locale: "de",
       }),
@@ -205,7 +201,7 @@ describe("buildTimeline", () => {
   it("takes a custom heading", () => {
     const result = buildTimeline(items, {
       groupBy: "day",
-      groupLabel: (time) => `day ${new Date(time).getUTCDate()}`,
+      groupText: (time) => `day ${new Date(time).getUTCDate()}`,
     });
     expect(result.groups.map((group) => group.label)).toEqual([
       "day 4",
@@ -215,11 +211,11 @@ describe("buildTimeline", () => {
   });
 });
 
-describe("defaultStatusText and isWithinRelative", () => {
+describe("defaultStatusDescription and isWithinRelative", () => {
   it("names a status and says nothing for none", () => {
-    expect(defaultStatusText("error")).toBe("Error");
-    expect(defaultStatusText("pending")).toBe("In progress");
-    expect(defaultStatusText(undefined)).toBe("");
+    expect(defaultStatusDescription("error")).toBe("Error");
+    expect(defaultStatusDescription("pending")).toBe("In progress");
+    expect(defaultStatusDescription(undefined)).toBe("");
   });
 
   it("limits a relative time by age", () => {

@@ -9,7 +9,7 @@ const DAY = 86_400_000;
 
 /**
  * @typedef {object} TimelineGroupContext
- * @property {number} now - The reference instant, in milliseconds.
+ * @property {number} [now] - The reference instant, in milliseconds. Unset until the browser's clock is read, when a heading is a date and never "Today".
  * @property {string} [locale]
  * @property {string} [timeZone]
  */
@@ -67,14 +67,17 @@ function capitalize(text) {
 /**
  * The default group heading: "Today", "Yesterday" and "Tomorrow" in the
  * locale, then a short date ("Nov 5"), with the year when it is not this one.
+ * With no `now`, which the server has, it is always a date with its year, so
+ * the text does not depend on the clock.
  *
  * @param {number} time
  * @param {TimelineGroupContext} context
  * @returns {string}
  */
-export function defaultGroupLabel(time, { now, locale, timeZone }) {
+export function defaultGroupText(time, { now, locale, timeZone }) {
   const day = dayNumber(time, timeZone);
-  const offset = day - dayNumber(now, timeZone);
+  const today = now === undefined ? undefined : dayNumber(now, timeZone);
+  const offset = today === undefined ? Number.NaN : day - today;
   if (Math.abs(offset) <= 1) {
     return capitalize(
       getRelativeTimeFormatter(locale, { numeric: "auto" }).format(
@@ -84,8 +87,9 @@ export function defaultGroupLabel(time, { now, locale, timeZone }) {
     );
   }
   const sameYear =
+    today !== undefined &&
     new Date(day * DAY).getUTCFullYear() ===
-    new Date(dayNumber(now, timeZone) * DAY).getUTCFullYear();
+      new Date(today * DAY).getUTCFullYear();
   return getDateTimeFormatter(locale, {
     timeZone,
     month: "short",
@@ -117,7 +121,7 @@ export function defaultGroupLabel(time, { now, locale, timeZone }) {
  *   now?: number,
  *   locale?: string,
  *   timeZone?: string,
- *   groupLabel?: (time: number, context: TimelineGroupContext) => string,
+ *   groupText?: (time: number, context: TimelineGroupContext) => string,
  * }} [options]
  * @returns {{ groups: TimelineGroup<Item>[], hidden: number, earlier: number, total: number }}
  */
@@ -127,10 +131,10 @@ export function buildTimeline(items, options = {}) {
     groupBy = "none",
     limit = Number.POSITIVE_INFINITY,
     expanded = false,
-    now = Date.now(),
+    now,
     locale,
     timeZone,
-    groupLabel = defaultGroupLabel,
+    groupText = defaultGroupText,
   } = options;
 
   /** @type {TimelineRow<Item>[]} */
@@ -191,7 +195,7 @@ export function buildTimeline(items, options = {}) {
       current = {
         key: `day-${day}`,
         time: row.time,
-        label: groupLabel(row.time, { now, locale, timeZone }),
+        label: groupText(row.time, { now, locale, timeZone }),
         rows: [],
       };
       currentDay = day;
@@ -220,7 +224,7 @@ const STATUS_TEXT = {
  * @param {TimelineStatus | undefined} status
  * @returns {string}
  */
-export function defaultStatusText(status) {
+export function defaultStatusDescription(status) {
   return status ? (STATUS_TEXT[status] ?? "") : "";
 }
 

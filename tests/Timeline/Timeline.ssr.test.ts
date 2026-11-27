@@ -13,16 +13,16 @@ const props = {
     {
       id: "a",
       time: "2026-11-06T14:20:00Z",
-      title: "Deployed",
+      titleText: "Deployed",
       status: "success" as const,
     },
     {
       id: "b",
       time: "2026-11-05T09:00:00Z",
-      title: "Failed",
+      titleText: "Failed",
       status: "error" as const,
     },
-    { id: "c", title: "Next", status: "pending" as const },
+    { id: "c", titleText: "Next", status: "pending" as const },
   ],
 };
 
@@ -46,5 +46,38 @@ describe("Timeline server render", () => {
     expect(renderSSR(Timeline, props).document.body.innerHTML).toBe(
       renderSSR(Timeline, props).document.body.innerHTML,
     );
+  });
+});
+
+describe("Timeline server render with no clock, locale or zone set", () => {
+  const unpinned = {
+    ...props,
+    now: undefined,
+    locale: undefined,
+    timeZone: undefined,
+  };
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("prints dates in en and UTC, with no relative time", () => {
+    const { document } = renderSSR(Timeline, unpinned);
+
+    expect(
+      [...document.querySelectorAll("h3")].map((heading) =>
+        heading.textContent?.trim(),
+      ),
+    ).toEqual(["Nov 6, 2026", "Nov 5, 2026"]);
+    expect(document.querySelector("time")?.textContent).toBe("2:20 PM");
+    expect(document.body.textContent).not.toContain("ago");
+  });
+
+  it("does not depend on the server's clock", () => {
+    vi.useFakeTimers({ now: Date.parse("2026-11-06T15:00:00Z") });
+    const first = renderSSR(Timeline, unpinned).document.body.innerHTML;
+    vi.setSystemTime(Date.parse("2030-01-01T00:00:00Z"));
+
+    expect(renderSSR(Timeline, unpinned).document.body.innerHTML).toBe(first);
   });
 });
