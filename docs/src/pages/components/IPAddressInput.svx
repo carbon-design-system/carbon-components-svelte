@@ -1,0 +1,242 @@
+---
+components: ["IPAddressInput", "IPAddressListInput"]
+description: IP address inputs take an IPv4 or IPv6 address, a CIDR block, or a range as plain text, then parse, check and normalize it, with a preview of the block.
+---
+
+<script>
+  import { IPAddressInput, IPAddressListInput, Stack } from "carbon-components-svelte";
+
+  let value = "10.0.0.1";
+  let parsed = null;
+</script>
+
+## Basic
+
+Type or paste an address. The field is plain text, so it takes a pasted value as it is and works for IPv6. Bind `value` to read the text, `parsed` for the parsed value, and `valid` for whether it passes every check.
+
+An error waits until the person leaves the field or presses <DocKbd label="Enter" />, then follows each edit, so a half-typed address is not flagged. A valid entry is rewritten to its canonical form at that point.
+
+<Stack gap={5}>
+  <IPAddressInput bind:value bind:parsed labelText="IP address" />
+  <p>Parsed: {parsed ? `IPv${parsed.version} ${parsed.text}` : "nothing"}</p>
+</Stack>
+
+| Do | Why |
+| --- | --- |
+| Use one text field | People paste addresses, and IPv6 has no fixed segments to split into boxes |
+| Show an example of the format as helper text | The default helper text lists one example for each accepted form |
+| Accept only the forms the setting needs | `allow` turns a CIDR block or a range on, so the message can say what to enter |
+| Keep the address on one line, left to right | Addresses read left to right in a right-to-left page |
+
+## Accepted forms
+
+`allow` lists the forms a field accepts: `"address"` (the default), `"cidr"` and `"range"`. Text in a form that is off gets a message that names what to enter.
+
+### IPv4 and IPv6
+
+Both versions are accepted by default. Set `version` to `4` or `6` to require one.
+
+<Stack gap={5}>
+  <IPAddressInput labelText="IPv4 address" version={4} value="192.168.1.10" />
+  <IPAddressInput labelText="IPv6 address" version={6} value="2001:db8::1" />
+</Stack>
+
+### CIDR blocks
+
+<IPAddressInput labelText="Subnet" allow={["cidr"]} value="10.0.0.0/24" />
+
+### Ranges
+
+A range is two addresses of the same version with a hyphen between them. Spaces around the hyphen are fine.
+
+<IPAddressInput labelText="Allowed range" allow={["range"]} value="10.0.0.1 - 10.0.0.50" />
+
+### Ports
+
+Set `port` to accept `1.2.3.4:8080`. An IPv6 address needs brackets: `[2001:db8::1]:443`. Without brackets, the last group of an IPv6 address would read as a port.
+
+<IPAddressInput labelText="Endpoint" port value="[2001:db8::1]:443" />
+
+### Zone identifiers
+
+Set `zone` to accept the interface name of a link-local IPv6 address, as in `fe80::1%eth0`. A zone is not accepted in a CIDR block or a range.
+
+<IPAddressInput labelText="Link-local address" zone version={6} value="fe80::1%eth0" />
+
+## Validation
+
+The parser follows the RFCs closely, so it rejects what lenient parsers accept. It reads dotted decimal with four octets, not `127.1`, `0x7f.0.0.1` or `2130706433`. Each message names the part that is wrong.
+
+| Text | Message |
+| --- | --- |
+| `10.0.0.256` | Octet 4 is greater than 255 |
+| `10.0.0` | An IPv4 address has 4 octets, found 3 |
+| `010.0.0.1` | Octet 1 has a leading zero ("010"), which some systems read as octal. Use "10" |
+| `2001:db8::1::2` | An IPv6 address can use "::" only once |
+| `2001:db8:12345::1` | Group 3 has more than 4 hex digits |
+| `10.0.1.77/24` | Host bits set: did you mean 10.0.1.0/24? |
+| `10.0.0.0/255.255.255.0` | Use a prefix length, not a netmask: 10.0.0.0/24 |
+| `10.0.0.50-10.0.0.1` | The range ends (10.0.0.1) before it starts (10.0.0.50) |
+
+### When errors show
+
+By default an error shows after the person commits the text. Set `validateOn` to `"input"` to show it from the first character.
+
+<IPAddressInput labelText="Address" validateOn="input" value="10.0.0." />
+
+### Leading zeros
+
+`010.0.0.1` is ambiguous: some systems read `010` as the octal number 8. The field rejects it and suggests the decimal octet. Set `leadingZeros` to `"strip"` to read the octets as decimal, for input from a spreadsheet that padded them.
+
+<IPAddressInput labelText="Address" leadingZeros="strip" value="010.000.001.010" />
+
+### Host bits
+
+`10.0.1.77/24` has bits set that the `/24` leaves to hosts. The default `hostBits="error"` names the network address. `"mask"` rewrites it to the network address, and `"allow"` keeps the address as typed, for an interface address that carries its prefix.
+
+<Stack gap={5}>
+  <IPAddressInput labelText="Subnet" allow={["cidr"]} value="10.0.1.77/24" validateOn="input" />
+  <IPAddressInput labelText="Interface address" allow={["cidr"]} hostBits="allow" value="10.0.1.77/24" />
+</Stack>
+
+### Prefix length
+
+`minPrefix` and `maxPrefix` bound the prefix length of a CIDR block. A smaller prefix is a larger block, so `minPrefix={16}` sets the largest block.
+
+<IPAddressInput labelText="VPC address prefix" allow={["cidr"]} version={4} minPrefix={16} maxPrefix={28} value="10.0.0.0/8" validateOn="input" />
+
+### Inside or clear of a block
+
+`within` requires the entry to sit inside at least one of the blocks, and `excludes` rejects an entry that overlaps any of them. Both take a CIDR block, a range, an address, or a list of them. A block of the other IP version is never inside, and never overlaps.
+
+<Stack gap={5}>
+  <IPAddressInput labelText="Subnet inside 10.0.0.0/16" allow={["cidr"]} within="10.0.0.0/16" value="10.1.0.0/24" validateOn="input" />
+  <IPAddressInput labelText="Subnet clear of 10.0.5.0/24" allow={["cidr"]} excludes="10.0.5.0/24" value="10.0.5.0/25" validateOn="input" />
+</Stack>
+
+### Your own error
+
+`invalid` and `invalidText` take over from the parse error, for a check the field cannot make, like an address another record already uses.
+
+<IPAddressInput labelText="Address" value="10.0.0.1" invalid invalidText="10.0.0.1 is already assigned to web-1" />
+
+## Normalization
+
+On commit, a valid entry becomes its canonical form: no leading zeros, lowercase hex, and IPv6 written as [RFC 5952](https://www.rfc-editor.org/rfc/rfc5952) asks. Try the entries below: click in a field and leave it.
+
+| Typed | Canonical |
+| --- | --- |
+| `2001:0DB8:0000:0000:0000:0000:0002:0001` | `2001:db8::2:1` |
+| `2001:db8:0:0:1:0:0:1` | `2001:db8::1:0:0:1` (the first of two equal runs) |
+| `2001:db8:0:1:1:1:1:1` | `2001:db8:0:1:1:1:1:1` (`::` never stands for one group) |
+| `::ffff:c000:0201` | `::ffff:192.0.2.1` (mixed form for IPv4-mapped addresses) |
+| `10.0.0.5 - 10.0.0.9` | `10.0.0.5-10.0.0.9` |
+
+<Stack gap={5}>
+  <IPAddressInput labelText="IPv6 address" value="2001:0DB8:0000:0000:0000:0000:0002:0001" />
+  <IPAddressInput labelText="Left as typed" normalizeOnBlur={false} value="2001:0DB8:0000:0000:0000:0000:0002:0001" />
+</Stack>
+
+Set `normalizeOnBlur` to `false` to leave the text alone. `parsed.text` still holds the canonical form.
+
+The field also cleans text from an input method or a document: full-width digits and punctuation, Unicode dashes in a range, zero-width characters, and the direction marks that text copied from a right-to-left page carries.
+
+## Preview
+
+A CIDR block or a range shows its size and bounds under the field as soon as it parses. An IPv4 block of `/30` or larger adds the network and broadcast addresses and the usable hosts between them. IPv6 has no broadcast address, so it shows the size and bounds only. An address that is not yet in its canonical form shows the canonical form.
+
+The field's `aria-describedby` points at the preview. It is not a live region, so a screen reader does not read it on every keystroke.
+
+<Stack gap={5}>
+  <IPAddressInput labelText="IPv4 subnet" allow={["cidr"]} value="10.0.0.0/24" />
+  <IPAddressInput labelText="IPv6 prefix" allow={["cidr"]} value="2001:db8::/48" />
+  <IPAddressInput labelText="Range" allow={["range"]} value="10.0.0.1-10.0.0.50" />
+</Stack>
+
+Set `hidePreview` to hide it. `locale` formats the counts.
+
+## Lists
+
+`IPAddressListInput` collects several entries as tags, built on `TagInput`. Each entry is checked and written in canonical form before it is added, so `::1` and `0:0:0:0:0:0:0:1` count as one. Pasted text splits on whitespace, commas, semicolons and line breaks, so a list of 100 CIDR blocks becomes 100 tags at once. An entry that fails stays in the field with its message.
+
+It takes the same `allow`, `version`, `hostBits`, `minPrefix`, `maxPrefix`, `within` and `excludes` as the single field, and `max` from `TagInput`. When `allow` includes `"range"`, whitespace no longer splits pasted text, because a range is written with spaces around its hyphen.
+
+<IPAddressListInput labelText="Allowed sources" value={["10.0.0.0/24", "192.168.1.5"]} helperText="Addresses or CIDR blocks. Paste a list to add them all." />
+
+## Examples
+
+### VPC subnet
+
+The block must sit inside the VPC, from `/16` to `/28`, and clear of the subnets that exist.
+
+<FileSource src="/framed/IPAddressInput/IPAddressInputVpcSubnet" />
+
+### Firewall source list
+
+A list of allowed sources that keeps out a private range.
+
+<FileSource src="/framed/IPAddressInput/IPAddressInputFirewallSources" />
+
+### IPv6 address
+
+<FileSource src="/framed/IPAddressInput/IPAddressInputIPv6" />
+
+## Sizes
+
+`size` follows `TextInput`: `"xs"`, `"sm"`, the default, and `"xl"`.
+
+<Stack gap={5}>
+  <IPAddressInput labelText="Extra small" size="xs" value="10.0.0.1" />
+  <IPAddressInput labelText="Small" size="sm" value="10.0.0.1" />
+  <IPAddressInput labelText="Extra large" size="xl" value="10.0.0.1" />
+</Stack>
+
+## States
+
+<Stack gap={5}>
+  <IPAddressInput labelText="Warning" warn warnText="This address is in a reserved range" value="192.0.2.1" />
+  <IPAddressInput labelText="Read-only" readonly value="10.0.0.1" />
+  <IPAddressInput labelText="Disabled" disabled value="10.0.0.1" />
+</Stack>
+
+## Forms
+
+Set `name` to submit the text. A form reset restores it. The field sets the browser's own validity from the parse error, so `form.checkValidity()` is `false` and a submit is blocked while the text is not valid. Set `required` to require a value.
+
+The VPC subnet example above submits as a form. An `IPAddressListInput` with a `name` submits one value for each entry.
+
+## Helpers
+
+The parser behind the fields has no DOM or component dependency, so it also runs on the server. Import it from `carbon-components-svelte`.
+
+| Function | Use |
+| --- | --- |
+| `parseIPAddress(text, options)` | Returns `{ ok: true, value }` or `{ ok: false, error }`. It never throws. `value` holds `kind`, `version`, `address`, `prefix`, `start`, `end` and `size` (as `BigInt`), `port`, `zone` and the canonical `text`. `error` holds `code`, `message` and `params`. |
+| `describeIPRange(value)` | The size, bounds, network, broadcast and usable hosts of a parsed value |
+| `checkIPAddressBounds(value, { within, excludes })` | The `within` and `excludes` checks alone |
+| `ipRangeContains(outer, inner)`, `ipRangesOverlap(a, b)` | Compare two parsed values |
+| `formatIPAddress(version, bigint)` | The canonical text of an address |
+| `cleanIPAddressText(text)` | The clean-up applied to pasted text |
+
+The parser reads at most 512 characters and does a fixed amount of work for each, so a very long paste is refused quickly.
+
+## Localization
+
+Every message has a code. `translateWithId(id, params)` returns the text for one, or `undefined` to keep the English default. The preview labels use the ids `addresses`, `network`, `broadcast`, `usable`, `normalized` and `example`.
+
+<IPAddressInput
+  labelText="Dirección IP"
+  validateOn="input"
+  value="10.0.0.256"
+  translateWithId={(id, params) => id === "octet-too-large" ? `El octeto ${params.octet} es mayor que 255` : undefined}
+/>
+
+## Events
+
+`input` fires as the person types and `change` when they commit, after normalization. Both carry `{ value, parsed, error }`. `IPAddressListInput` forwards the `TagInput` events `add`, `remove`, `invalid` and `change`.
+
+<IPAddressInput
+  labelText="Address"
+  on:input={(e) => console.log(e.detail)} // { value, parsed, error }
+  on:change={(e) => console.log(e.detail)} // { value, parsed, error }
+/>
