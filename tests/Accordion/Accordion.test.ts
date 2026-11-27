@@ -7,6 +7,7 @@ import AccordionLazy from "./Accordion.lazy.test.svelte";
 import AccordionSingle from "./Accordion.single.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";
 import Accordion from "./Accordion.test.svelte";
+import AccordionItemHeadingEnd from "./AccordionItem.headingEnd.test.svelte";
 
 describe("Accordion", () => {
   const itemIsDisabled = (name: string | RegExp) => {
@@ -603,5 +604,41 @@ describe("Accordion", () => {
     await rerender({ open: false });
 
     expect(onToggle).not.toHaveBeenCalled();
+  });
+
+  describe("headingEnd slot", () => {
+    it("renders beside the heading button, not inside it", () => {
+      render(AccordionItemHeadingEnd);
+
+      const heading = screen.getByRole("button", {
+        name: "Natural Language Classifier",
+      });
+      const end = screen.getByText("3 errors").parentElement;
+
+      expect(end).toHaveClass("bx--accordion__heading-end");
+      expect(heading).not.toContainElement(end);
+      expect(heading.parentElement).toHaveClass("bx--accordion__item");
+      expect(heading.nextElementSibling).toBe(end);
+    });
+
+    it("does not toggle the item when its content is clicked", async () => {
+      render(AccordionItemHeadingEnd);
+
+      await user.click(screen.getByRole("button", { name: "Manage" }));
+
+      itemIsCollapsed("Natural Language Classifier");
+    });
+
+    it("renders no wrapper without the slot", () => {
+      const { container } = render(AccordionItemHeadingEnd, {
+        props: { withHeadingEnd: false },
+      });
+
+      const item = container.querySelector(".bx--accordion__item");
+      expect(item?.children).toHaveLength(2);
+      expect(
+        container.querySelector(".bx--accordion__heading-end"),
+      ).not.toBeInTheDocument();
+    });
   });
 });

@@ -412,3 +412,73 @@
 @include exports("accordion-flush") {
   @include accordion-flush;
 }
+
+// carbon-components-svelte patch
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// AccordionItem's `headingEnd` slot renders after the heading button, as
+/// its sibling, so a tag or menu there is not nested in the button. An item
+/// that holds it becomes a two-column grid. The heading stays a direct child
+/// of the item, so the `>` rules above keep matching, and an item without
+/// the slot keeps its markup and layout.
+/// @access private
+/// @group components
+@mixin accordion-heading-end {
+  .#{$prefix}--accordion__item:has(> .#{$prefix}--accordion__heading-end) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+
+    > .#{$prefix}--accordion__content {
+      grid-column: 1 / -1;
+    }
+  }
+
+  // Items size their end column alone, so the chevrons of items with
+  // and without the slot would not line up. Share one end column across
+  // the accordion's items where subgrid is supported.
+  @supports (grid-template-columns: subgrid) {
+    .#{$prefix}--accordion:has(
+        > .#{$prefix}--accordion__item > .#{$prefix}--accordion__heading-end
+      ) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+
+      > .#{$prefix}--accordion__item {
+        display: grid;
+        grid-column: 1 / -1;
+        grid-template-columns: subgrid;
+      }
+
+      > .#{$prefix}--accordion__item > .#{$prefix}--accordion__content {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+
+  // Centered on the heading's first line, so a wrapped title does not move
+  // it. The min-height matches the heading's at each size, and the end
+  // padding matches the chevron's inset.
+  .#{$prefix}--accordion__heading-end {
+    display: flex;
+    min-height: to-rem(40px);
+    align-items: center;
+    align-self: start;
+    justify-content: flex-end;
+    gap: $carbon--spacing-03;
+    padding-inline-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--accordion--xl .#{$prefix}--accordion__heading-end {
+    min-height: to-rem(48px);
+  }
+
+  .#{$prefix}--accordion--sm .#{$prefix}--accordion__heading-end {
+    min-height: to-rem(32px);
+  }
+}
+
+@include exports("accordion-heading-end") {
+  @include accordion-heading-end;
+}

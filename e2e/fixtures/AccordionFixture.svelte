@@ -1,5 +1,5 @@
 <script>
-  import { Accordion, AccordionItem } from "carbon-components-svelte";
+  import { Accordion, AccordionItem, Tag } from "carbon-components-svelte";
 </script>
 
 <Accordion data-testid="accordion">
@@ -14,5 +14,15 @@
 <Accordion align="start" data-testid="accordion-start">
   <AccordionItem title="Start 1">
     <p>Content for start 1</p>
+  </AccordionItem>
+</Accordion>
+
+<Accordion data-testid="accordion-heading-end">
+  <AccordionItem title="End 1">
+    <Tag slot="headingEnd" size="sm">Draft</Tag>
+    <p>Content for end 1</p>
+  </AccordionItem>
+  <AccordionItem title="End 2">
+    <p>Content for end 2</p>
   </AccordionItem>
 </Accordion>

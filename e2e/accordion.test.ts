@@ -37,7 +37,11 @@ test.describe("Accordion", () => {
       page.evaluate(async () => {
         await document.fonts.ready;
         const result: Record<string, { left: number; right: number }> = {};
-        for (const id of ["accordion", "accordion-start"]) {
+        for (const id of [
+          "accordion",
+          "accordion-start",
+          "accordion-heading-end",
+        ]) {
           const root = document.querySelector(`[data-testid=${id}]`);
           const arrow = root?.querySelector(".bx--accordion__arrow");
           const title = root?.querySelector(".bx--accordion__title");
@@ -45,9 +49,11 @@ test.describe("Accordion", () => {
           // The title box spans the free width, so measure its text.
           const range = document.createRange();
           range.selectNodeContents(title);
+          const end = root?.querySelector(".bx--accordion__heading-end");
           const rects = {
             arrow: arrow.getBoundingClientRect(),
             title: range.getBoundingClientRect(),
+            ...(end && { end: end.getBoundingClientRect() }),
           };
           for (const [name, rect] of Object.entries(rects)) {
             result[`${id} ${name}`] = {
@@ -71,5 +77,24 @@ test.describe("Accordion", () => {
         .soft(Math.abs(rtl[name].left - (width - box.right)), name)
         .toBeLessThanOrEqual(1);
     }
+  });
+
+  test("lines up the chevrons of items with and without headingEnd", async ({
+    page,
+  }) => {
+    const arrows = page
+      .getByTestId("accordion-heading-end")
+      .locator(".bx--accordion__arrow");
+    const [first, second] = await Promise.all([
+      arrows.nth(0).boundingBox(),
+      arrows.nth(1).boundingBox(),
+    ]);
+    expect(first?.x).toBe(second?.x);
+
+    const end = await page
+      .getByTestId("accordion-heading-end")
+      .locator(".bx--accordion__heading-end")
+      .boundingBox();
+    expect(end?.x).toBeGreaterThan((first?.x ?? 0) + (first?.width ?? 0));
   });
 });

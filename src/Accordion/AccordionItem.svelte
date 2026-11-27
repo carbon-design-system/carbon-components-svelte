@@ -2,6 +2,7 @@
   /**
    * @event {{ open: boolean }} toggle - Dispatched with the next open state after a header click.
    * @restProps {li}
+   * @slot {{}} headingEnd - Content at the end of the heading row, such as a tag or an overflow menu. It renders beside the heading button, not inside it, so buttons and menus here stay valid and reachable by Tab. Clicks on it do not toggle the item.
    */
 
   /**
@@ -174,6 +175,11 @@
       <slot name="title">{title ?? ""}</slot>
     </div>
   </button>
+  {#if $$slots.headingEnd}
+    <div class:bx--accordion__heading-end={true}>
+      <slot name="headingEnd" />
+    </div>
+  {/if}
   <!-- Only the content animates; `self` ignores descendants' bubbled events. -->
   <div
     id="{id}-content"
