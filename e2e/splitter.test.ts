@@ -152,6 +152,60 @@ test.describe("Splitter", () => {
     expect((await sidebar.boundingBox())?.width).toBeCloseTo(150, 0);
   });
 
+  test("holds a pixel size as the viewport widens, and drags in pixels", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 800, height: 900 });
+    const separator = page.getByRole("separator", {
+      name: "Resize navigation",
+    });
+    const nav = page.getByText("Navigation");
+    const container = page.getByTestId("pixel-size-container");
+    const valueNow = async () => {
+      const width = (await container.boundingBox())?.width ?? 0;
+      return String(Math.round((240 / width) * 10000) / 100);
+    };
+
+    expect((await nav.boundingBox())?.width).toBeCloseTo(240, 0);
+    await expect(separator).toHaveAttribute("aria-valuenow", await valueNow());
+
+    await page.setViewportSize({ width: 1400, height: 900 });
+    await expect(separator).toHaveAttribute("aria-valuenow", await valueNow());
+    expect((await nav.boundingBox())?.width).toBeCloseTo(240, 0);
+
+    const box = await separator.boundingBox();
+    if (!box) throw new Error("missing box");
+    const y = box.y + box.height / 2;
+    await page.mouse.move(box.x + box.width / 2, y);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2 + 60, y, { steps: 5 });
+    await page.mouse.up();
+
+    await expect(page.getByTestId("nav-size-display")).toHaveText("300px");
+    expect((await nav.boundingBox())?.width).toBeCloseTo(300, 0);
+  });
+
+  test("holds a pixel size from the right edge in RTL", async ({ page }) => {
+    await page.evaluate(() => {
+      document.documentElement.dir = "rtl";
+    });
+    const separator = page.getByRole("separator", {
+      name: "Resize navigation",
+    });
+    const root = await page.getByTestId("pixel-size-container").boundingBox();
+    const box = await separator.boundingBox();
+    if (!root || !box) throw new Error("missing box");
+    expect(root.x + root.width - (box.x + box.width / 2)).toBeCloseTo(240, 0);
+
+    const y = box.y + box.height / 2;
+    await page.mouse.move(box.x + box.width / 2, y);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2 - 60, y, { steps: 5 });
+    await page.mouse.up();
+
+    await expect(page.getByTestId("nav-size-display")).toHaveText("300px");
+  });
+
   test("has no detectable accessibility violations", async ({ page }) => {
     // The preview iframe's srcdoc is scaffolding; axe would audit it as a
     // standalone page (main landmark, h1).

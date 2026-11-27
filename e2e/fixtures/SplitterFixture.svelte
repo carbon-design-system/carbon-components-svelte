@@ -4,6 +4,7 @@
   let size = 30;
   let resizes = 0;
   let previewSize = 30;
+  let navSize: `${number}px` = "240px";
 </script>
 
 <div style="width: 600px; height: 300px;">
@@ -56,3 +57,11 @@
     <p slot="end">Content</p>
   </Splitter>
 </div>
+
+<div data-testid="pixel-size-container" style="height: 100px;">
+  <Splitter bind:size={navSize} separatorLabel="Resize navigation">
+    <p slot="start">Navigation</p>
+    <p slot="end">Content</p>
+  </Splitter>
+</div>
+<div data-testid="nav-size-display">{navSize}</div>
