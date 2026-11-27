@@ -483,3 +483,40 @@
 @include exports("tile-forced-colors") {
   @include tile-forced-colors;
 }
+
+// carbon-components-svelte patch (tile-group-invalid)
+// Carbon has no invalid tile group. A required `TileGroup` with no selection
+// shows a message below its tiles that mirrors the radio button group's: an
+// error icon beside `bx--form-requirement` text.
+
+/// Invalid message below a required `TileGroup`.
+/// @access private
+/// @group tile
+@mixin tile-group-invalid {
+  .#{$prefix}--tile-group__validation-msg {
+    display: flex;
+    align-items: flex-start;
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--tile-group__invalid-icon {
+    margin-block-start: to-rem(1px);
+    margin-inline-end: to-rem(1px);
+    margin-inline-start: to-rem(3px);
+    fill: $support-error;
+    min-inline-size: to-rem(16px);
+  }
+
+  .#{$prefix}--tile-group__validation-msg .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    margin-block-start: 0;
+    margin-inline-start: $carbon--spacing-03;
+    color: $text-error;
+    max-block-size: 100%;
+  }
+}
+
+@include exports("tile-group-invalid") {
+  @include tile-group-invalid;
+}
