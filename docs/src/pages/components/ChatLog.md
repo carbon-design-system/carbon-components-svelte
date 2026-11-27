@@ -139,7 +139,7 @@ Show a file someone sent with FileDownloadItem, a link that downloads it, and a 
 
 ## Links and rich text
 
-Message text rendered with `{text}` is escaped, so it can't inject markup, but its URLs aren't links. `linkSegments` splits plain text into text and links without parsing HTML. Only `http:`, `https:` and `mailto:` URLs become links (pass `schemes` to change them), so `javascript:` and `data:` stay text, and a link's text is its own URL.
+Message text rendered with `{text}` is escaped, so it can't inject markup, but its URLs aren't links. `linkSegments` splits plain text into text and links without parsing HTML. Only `http:`, `https:` and `mailto:` URLs become links (pass `schemes` to change them), so `javascript:` and `data:` stay text, and a link's text is its own URL. A URL with credentials, such as `https://google.com@evil.example/`, stays text too, since it opens the host after the `@`. A bidi or zero-width character ends a link, so it can't reorder or hide part of the link text.
 
 <ChatLog labelText="Conversation with support">
   <ChatMessage author="Dana">
