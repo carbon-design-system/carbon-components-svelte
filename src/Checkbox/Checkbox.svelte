@@ -35,8 +35,20 @@
   /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
-  /** Set to `true` to mark the field as required */
+  /**
+   * Set to `true` to mark the field as required. A wrapping `<form>` blocks
+   * submission while it is unchecked, and the checkbox shows its invalid
+   * state with `requiredInvalidText` instead of the browser's error bubble.
+   * Inside a `CheckboxGroup`, the group's `required` applies instead.
+   */
   export let required = false;
+
+  /**
+   * Specify the invalid state text shown when a required checkbox blocks
+   * submission. Cleared once it is checked. `invalid` and `invalidText` take
+   * precedence. Not used inside a `CheckboxGroup`, which reports its own.
+   */
+  export let requiredInvalidText = "Check this box to continue";
 
   /** Set to `true` for the checkbox to be read-only */
   export let readonly = false;
@@ -138,6 +150,7 @@
   import { formReset } from "../utils/form-reset.js";
   import { useId } from "../utils/id-scope.js";
   import { overflowTitle } from "../utils/overflow-title.js";
+  import { requiredInvalid } from "../utils/required-invalid.js";
   import CheckboxSkeleton from "./CheckboxSkeleton.svelte";
 
   // A disabled `<fieldset>` around the component disables it too.
@@ -194,7 +207,12 @@
       : ($groupRequired ?? required)
     : required;
   $: effectiveReadonly = $groupReadonly || readonly;
-  $: effectiveInvalid = $groupInvalid || invalid;
+  /** Set when the checkbox, required and unchecked, blocked form submission. */
+  let requiredError = false;
+  $: if (ctx || !required || checked) requiredError = false;
+  $: shownInvalidText =
+    requiredError && !invalid ? requiredInvalidText : invalidText;
+  $: effectiveInvalid = $groupInvalid || invalid || requiredError;
   $: effectiveWarn = $groupWarn || warn;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid: effectiveInvalid,
@@ -295,6 +313,11 @@
       use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
       bind:this={ref}
       use:formReset={handleFormReset}
+      use:requiredInvalid={{
+        // A group reports a missing selection for all of its checkboxes.
+        enabled: !ctx && required,
+        onChange: (missing) => (requiredError = !ctx && missing),
+      }}
       type="checkbox"
       value={nativeValue}
       {checked}
@@ -316,7 +339,7 @@
         resolveStatusDescribedBy({
           showInvalid,
           showWarn,
-          invalidText,
+          invalidText: shownInvalidText,
           warnText,
           helperText,
           errorId,
@@ -391,9 +414,9 @@
       <div class:bx--checkbox__validation-msg={true}>
         {#if showInvalid}
           <WarningFilled class="bx--checkbox__invalid-icon" />
-          {#if invalidText}
+          {#if shownInvalidText}
             <div id={errorId} class:bx--form-requirement={true} role="alert">
-              {invalidText}
+              {shownInvalidText}
             </div>
           {/if}
         {:else}
