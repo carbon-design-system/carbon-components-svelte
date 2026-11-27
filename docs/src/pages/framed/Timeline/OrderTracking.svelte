@@ -8,32 +8,38 @@
   // The step in progress has `status: "pending"`. The last step has no time
   // yet, so it stays at the end.
   const steps = [
-    { id: "ordered", time: at(2, 9, 12), title: "Ordered", status: "success" },
+    {
+      id: "ordered",
+      time: at(2, 9, 12),
+      titleText: "Ordered",
+      status: "success",
+    },
     {
       id: "packed",
       time: at(1, 16, 40),
-      title: "Packed",
-      description: "Packed at the Reno warehouse.",
+      titleText: "Packed",
+      descriptionText: "Packed at the Reno warehouse.",
       status: "success",
     },
     {
       id: "shipped",
       time: at(1, 21, 5),
-      title: "Shipped",
-      description: "Handed to the carrier. Tracking 1Z 999 AA1 01 2345 6784.",
+      titleText: "Shipped",
+      descriptionText:
+        "Handed to the carrier. Tracking 1Z 999 AA1 01 2345 6784.",
       status: "success",
     },
     {
       id: "out",
       time: at(0, 14, 30),
-      title: "Out for delivery",
-      description: "The driver is 4 stops away.",
+      titleText: "Out for delivery",
+      descriptionText: "The driver is 4 stops away.",
       status: "pending",
     },
     {
       id: "delivered",
-      title: "Delivered",
-      description: "Expected today by 8 PM.",
+      titleText: "Delivered",
+      descriptionText: "Expected today by 8 PM.",
     },
   ];
 </script>
