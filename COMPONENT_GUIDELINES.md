@@ -235,6 +235,7 @@ These names apply to new components and new props. Shipped components keep their
 
 - Announce results and status with `aria-live="polite"`. Use `assertive` only for errors that block the user.
 - Announce each change once. Throttle announcements for streams.
+- Send announcements through the shared announcer (`createAnnouncerChannel` in `announcer.js`), not a live region of the component's own. It puts the message inside an open modal dialog the component is in, where a region in the body is out of the accessibility tree.
 - Text contrast is at least 4.5:1. Large text, icons, focus rings, selected indicators and borders that identify a control or show its state are at least 3:1 (WCAG 1.4.3, 1.4.11). Borders that only divide the layout, such as dividers and nesting rules, may use `$border-subtle`.
 - The component works at 200% zoom and at a 320 px CSS width (WCAG 1.4.10).
 
@@ -364,6 +365,8 @@ Put every default delay in `src/constants/timing.js`, named `*_MS`, with a JSDoc
 | `COPY_FEEDBACK_FADE_MS` | 110 ms | Fade-out of a copy confirmation, after which it closes if `animationend` has not fired |
 | `STEPPER_REPEAT_DELAY_MS` | 400 ms | Hold time before a stepper button starts to repeat |
 | `STEPPER_REPEAT_INTERVAL_MS` | 50 ms | Time between steps while a stepper button stays held |
+| `ANNOUNCER_READY_DELAY_MS` | 150 ms | Age a live region reaches before `announce()` writes to it, so a screen reader has seen it |
+| `ANNOUNCER_CLEAR_AFTER_MS` | 7 s | Time an announced message stays in its live region |
 
 ### Intent
 
@@ -438,6 +441,7 @@ Check `src/utils/` before you write a helper.
 | `Intl` formatters | `intl-formatter-cache.js` |
 | Child registration | `batchStoreUpdates` in `batch-store-updates.js` |
 | Keyboard shortcuts | `keyboard-shortcut.js` |
+| Screen reader announcements | `announce`, `createAnnouncerChannel` in `announcer.js` |
 
 ### Known issues
 
