@@ -148,6 +148,18 @@
   export let readonly = false;
 
   /**
+   * Set to `true` while the code is being verified.
+   *
+   * Shows a small spinner after the segments and sets `aria-busy` on the
+   * fieldset. Edits are blocked, but the segments stay enabled so focus does
+   * not move. Invalid and warning states are hidden while loading.
+   */
+  export let loading = false;
+
+  /** Specify the accessible description of the loading spinner */
+  export let loadingDescription = "Verifying code";
+
+  /**
    * Set to `true` to use the fluid variant.
    * Inherited from the parent `FluidForm` context,
    * so it does not need to be set when used inside `FluidForm`.
@@ -203,6 +215,7 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
+  import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
@@ -274,14 +287,26 @@
   $: value = code.join("");
   $: complete = count > 0 && code.length === count && code.every(Boolean);
   // Validation states are suppressed in the read-only and disabled variants,
-  // matching the other Carbon inputs.
+  // matching the other Carbon inputs, and while the code is being verified.
   $: ({ showInvalid: hasError, showWarn: hasWarn } =
     resolveValidationVisibility({
       invalid,
       warn,
       disabled: effectiveDisabled,
-      readonly,
+      readonly: readonly || loading,
     }));
+  // Edits are blocked while read-only, disabled, or verifying.
+  $: locked = readonly || effectiveDisabled || loading;
+  // The spinner sits in a slot as wide as one segment, so its spacing
+  // follows the segment size.
+  $: loadingClass =
+    effectiveSize === "xs"
+      ? "bx--pin-code-input__loading bx--pin-code-input__loading--xs"
+      : effectiveSize === "sm"
+        ? "bx--pin-code-input__loading bx--pin-code-input__loading--sm"
+        : effectiveSize === "xl"
+          ? "bx--pin-code-input__loading bx--pin-code-input__loading--xl"
+          : "bx--pin-code-input__loading";
   $: isFluid = fluid || !!formContext?.isFluid;
   $: segmentPlaceholder =
     placeholder === undefined ? (isFluid ? "–" : "") : placeholder;
@@ -435,7 +460,7 @@
   /** @type {(index: number, event: Event) => void} */
   function handleInput(index, event) {
     const input = /** @type {HTMLInputElement} */ (event.target);
-    if (readonly || effectiveDisabled) {
+    if (locked) {
       input.value = code[index] ?? "";
       return;
     }
@@ -478,7 +503,7 @@
   function handleKeydown(index, event) {
     switch (inlineArrow(event.key)) {
       case "Backspace":
-        if (readonly || effectiveDisabled) break;
+        if (locked) break;
         if (!code[index] && index > 0) {
           event.preventDefault();
           setChar(index - 1, "");
@@ -498,11 +523,11 @@
         }
         break;
       case "Delete":
-        if (readonly || effectiveDisabled || !code[index]) break;
+        if (locked || !code[index]) break;
         setChar(index, "");
         break;
       default:
-        if (readonly || effectiveDisabled) break;
+        if (locked) break;
         // maxlength="1" drops keystrokes into a filled segment; select its
         // content so the native insertion replaces the character.
         if (
@@ -525,7 +550,7 @@
   /** @type {(index: number, event: ClipboardEvent) => void} */
   function handlePaste(index, event) {
     event.preventDefault();
-    if (readonly || effectiveDisabled) return;
+    if (locked) return;
     const text = (event.clipboardData?.getData("text") ?? "").replace(
       /\s/g,
       "",
@@ -639,6 +664,7 @@
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledBy}
     aria-describedby={joinDescribedBy(describedById, ariaDescribedBy)}
+    aria-busy={loading || undefined}
   >
     {#if labelText || $$slots.labelChildren}
       <!-- A legend can't point at a field the way `<label for>` does, so a
@@ -691,10 +717,10 @@
               placeholder={segmentPlaceholder || undefined}
               id={index === 0 ? id : `${id}-${index}`}
               disabled={effectiveDisabled}
-              {readonly}
+              readonly={readonly || loading}
               {required}
               {form}
-              aria-readonly={readonly || undefined}
+              aria-readonly={readonly || loading || undefined}
               aria-label={segmentLabelText(index + 1, count, labelText, type)}
               aria-invalid={hasError || undefined}
               aria-errormessage={hasError && invalidText ? errorId : undefined}
@@ -716,6 +742,13 @@
             />
           {/if}
         {/each}
+        {#if loading}
+          <LoadingSpinner
+            small
+            description={loadingDescription}
+            class={loadingClass}
+          />
+        {/if}
         {#if !isFluid}
           {#if hasError}
             <WarningFilled class="bx--pin-code-input__icon" />

@@ -1162,4 +1162,81 @@ describe("PinCodeInput", () => {
     expect(skeleton.children).toHaveLength(1);
     expect(skeleton.children[0]).toHaveClass("bx--pin-code-input__segments");
   });
+
+  describe("loading", () => {
+    it("shows a spinner with its description and marks the fieldset busy", async () => {
+      const { container } = render(PinCodeInput, {
+        props: { loading: true, loadingDescription: "Checking" },
+      });
+
+      expect(await screen.findByTitle("Checking")).toBeInTheDocument();
+      expect(getFieldset(container)).toHaveAttribute("aria-busy", "true");
+    });
+
+    it("keeps focus and leaves the segments enabled", async () => {
+      const { rerender } = render(PinCodeInput);
+      const inputs = getInputs();
+
+      inputs[1].focus();
+      await rerender({ loading: true });
+
+      expect(inputs[1]).toHaveFocus();
+      for (const input of inputs) {
+        expect(input).toBeEnabled();
+        expect(input).toHaveAttribute("readonly");
+        expect(input).toHaveAttribute("aria-readonly", "true");
+      }
+    });
+
+    it("blocks typing, paste, and backspace", async () => {
+      const { component } = render(PinCodeInput, {
+        props: { loading: true, value: "12" },
+      });
+      const inputs = getInputs();
+
+      inputs[2].focus();
+      await user.keyboard("3");
+      await fireEvent.paste(inputs[2], {
+        clipboardData: { getData: () => "9999" },
+      });
+      inputs[1].focus();
+      await user.keyboard("{Backspace}");
+      await tick();
+
+      expect(component.code).toEqual(["1", "2", "", ""]);
+    });
+
+    it("hides the invalid state while loading", () => {
+      const { container } = render(PinCodeInput, {
+        props: { loading: true, invalid: true, invalidText: "Wrong" },
+      });
+
+      expect(getRequirement(container)).not.toBeInTheDocument();
+      for (const input of getInputs()) {
+        expect(input).not.toHaveAttribute("aria-invalid");
+      }
+    });
+
+    it.each([
+      ["default", ""],
+      ["xs", "xs"],
+      ["sm", "sm"],
+      ["md", ""],
+      ["lg", "xl"],
+      ["xl", "xl"],
+    ] as const)("sizes the spinner slot to %s segments", (size, modifier) => {
+      const { container } = render(PinCodeInput, {
+        props: { loading: true, size },
+      });
+      const spinner = container.querySelector(".bx--pin-code-input__loading");
+
+      assert(spinner);
+      const modifiers = [...spinner.classList].filter((name) =>
+        name.startsWith("bx--pin-code-input__loading--"),
+      );
+      expect(modifiers).toEqual(
+        modifier ? [`bx--pin-code-input__loading--${modifier}`] : [],
+      );
+    });
+  });
 });

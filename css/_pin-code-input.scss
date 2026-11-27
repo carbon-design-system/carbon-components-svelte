@@ -87,6 +87,25 @@
     height: to-rem(48px);
   }
 
+  // The spinner sits in a slot as wide as one segment, so its side spacing
+  // is (segment width - 16px spinner) / 2 and scales with `size`.
+  .#{$prefix}--pin-code-input__loading {
+    flex-shrink: 0;
+    margin-inline: to-rem(12px);
+  }
+
+  .#{$prefix}--pin-code-input__loading--xs {
+    margin-inline: to-rem(4px);
+  }
+
+  .#{$prefix}--pin-code-input__loading--sm {
+    margin-inline: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--pin-code-input__loading--xl {
+    margin-inline: $carbon--spacing-05;
+  }
+
   .#{$prefix}--pin-code-input__icon {
     flex-shrink: 0;
     margin-inline-start: $carbon--spacing-03;
