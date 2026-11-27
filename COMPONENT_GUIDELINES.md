@@ -102,6 +102,7 @@ Align what the eye sees: the ink of glyphs and icons, and text baselines. Elemen
 
 - Change layout for narrow screens with CSS breakpoints. Do not change state, such as a view, a page size or `open`, from the viewport width in JavaScript: the server cannot know the width, and the change overwrites a bound prop.
 - `size`, `kind`, `invalid`, `warn`, `disabled`, `readonly`, skeletons and `Layer` work as in related components. Form controls pass `tests/form-field-contract`.
+- A field's look is `variant`: `"default"`, `"fill"` (no bottom border) or `"ghost"` (no border, and no fill until hover or a value). A field drawn on another surface, such as a toolbar's search, uses one of these looks, not rules of its own. A look that drops a border makes it `transparent`, so the field keeps its height and forced colors still draw the edge.
 - A disabled component shows every part as disabled: text in `$text-disabled`, icons in `$icon-disabled`, no hover, and no focus on its items. It disables its own controls; for slotted content, it sets `inert` on the slot region or documents that the consumer disables it. A read-only component keeps its text color and blocks changes. An unavailable item inside an enabled composite (a menu item, a toolbar button) is a different case: it stays focusable with `aria-disabled`.
 - Where an alignment rule conflicts with the built-in layout of a Carbon component used inside, such as a field label's position, keep the Carbon layout and say so in the pull request.
 - Overlays move to a portal when a container would clip them. A container with a `transform` or `content-visibility: auto` also clips in-place menus. Set `portalMenu` on menus inside one.
@@ -116,7 +117,7 @@ Align what the eye sees: the ink of glyphs and icons, and text baselines. Elemen
 - **Exported helpers.** Put logic that consumers may need without the component (serialize, validate, evaluate, apply a change) in a pure function with no DOM access, exported from the package. It must run on the server. Examples: `toCsv`, `toHierarchy`, `fuzzyMatch`.
 - **Actions for consumer markup.** Components cannot take actions. Put the action on a wrapper element and select the items inside it. Examples: `rovingFocus`, `dismiss`.
 - **Strings as props.** Every visible or announced string is a prop. Reuse the name and signature from a related component (`*Text` props, `translateWithId`). If `translateWithId` returns no value for an id, use the English default.
-- **Enums for variants** (`selectionMode`, `size`, `kind`). Use a boolean only for a true on/off state.
+- **Enums for variants** (`selectionMode`, `size`, `kind`). Use a boolean only for a true on/off state. A look is an enum even when it starts with two forms, because more follow: Search has `variant="ghost"`, not `borderless`.
 - **`id` prop.** Derive inner ids from `id`. Call `uniqueId()` only when `id` is unset. Do not build ids from consumer data: a space in an id breaks `aria-activedescendant` and `aria-controls`. Use the item's index.
 - **No writes to props.** Store measured values in internal variables.
 - **`$$restProps`** go on the primary element; for a form field, `class` and `style` go on its root, so layout classes such as margins affect the whole field. A consumer `aria-label` replaces the default `aria-labelledby`.
@@ -128,7 +129,7 @@ These names apply to new components and new props. Shipped components keep their
 | Kind | Name | Examples |
 | :--- | :--- | :--- |
 | Visible text | `{part}Text` | `labelText`, `helperText`, `emptyText` |
-| Text read only by assistive technology | `{part}Description` | `iconDescription`, `loadingDescription` |
+| Text read only by assistive technology | `{part}Description` | `iconDescription`, `loadingDescription`, `badgeDescription` |
 | Assistive text built from values | `{part}Description` as a function with a named default | `countDescription(count, limit)` |
 | Text both shown (in a `title` or tooltip) and read | `{part}Text`, or a `{part}Text` function | `colorNameText(color)` |
 | Text for each state of a two-state control | one `*Text` prop per state | `onText`, `offText` |
@@ -137,15 +138,20 @@ These names apply to new components and new props. Shipped components keep their
 | On/off state | an adjective | `open`, `expanded`, `disabled`, `readonly`, `invalid`, `loading` |
 | Visual hiding | `hide{Part}` | `hideLabel` |
 | Name for a part with no visible label | `labelText` with `hideLabel` | A list title that only screen readers hear |
-| One of several forms | a string enum | `kind` for meaning, `size` for scale, `variant` for layout form |
+| One of several forms | a string enum | `kind` for meaning, `size` for scale, `variant` for look |
+| Field look | `variant`: `"default"`, `"fill"` or `"ghost"` | Search; ToolbarSearch uses `"ghost"` |
 | One selected item | `selectedId` | |
 | Several selected items | `selectedIds`, `expandedIds`, `checkedIds` | |
 | Form value | `value` | |
 | Collection | `items` (list), `nodes` (tree), `rows` and `headers` (table) | |
+| Size of a collection that is only partly loaded | `totalItems`, `-1` when unknown | Pagination, VirtualList |
+| Shape of a box | `ratio`: a named ratio or `"WxH"` | AspectRatio, CardMedia, TileGrid |
 | Map from an item | `itemTo{Thing}` | `itemToString`, `itemToId` |
 | Decision callback | `should{Verb}` returning a boolean | `shouldFilter` |
 | Placement | `align`, in floating-ui form | `"bottom-start"`, `"end"` |
+| Side of a part beside another | `"start"` or `"end"`, never `"left"`, `"right"` or `"inline"` | Toggle's `labelPosition="end"` |
 
+- Fields of data items follow the same names as props. A TreeView node's `badgeDescription` is what screen readers hear for its `badge`.
 - Use `open` for content that floats above the page (menus, popovers, modals, panels). Use `expanded` for content that pushes the page (disclosures, tiles, tree rows).
 - Do not use negative booleans (`prevent*`, `no*`). Name the behavior: `closeOn={["escape", "outside"]}`.
 - Do not select by index. An index changes when items are sorted, filtered or reordered.
@@ -428,6 +434,7 @@ Check `src/utils/` before you write a helper.
 - `cursor` or `user-select` on a large container restyles every descendant. Set it on the dragged item, or on an element with `contain`.
 - A virtualized list cannot be a live region because rows mount and unmount on scroll. Set `aria-live="off"` on the list. Announce summaries from a separate status element, at most once per interval.
 - Thousands of tags mount slowly. Render a limited number and show the rest as a count.
+- A component that measures text, such as an overflow count, measures again once `document.fonts.ready` resolves. A web font that loads after the first measure changes the text's width but not the container's, so no `ResizeObserver` fires.
 
 ## Design checks
 
@@ -512,6 +519,7 @@ Report these values in the pull request. Give the data size for each value and t
 - **Share resources.** One observer per type, one timer per interval, one window listener per event type, one live region.
 - **Batch layout.** Read sizes from `ResizeObserver` entries. Do not read `offsetWidth` in a loop. Group reads and writes with `createFrameJob`.
 - **Defer work.** Run O(n) work only while the component is open or hovered. Build hidden content when it first opens, then keep it.
+- **Lazy-load only what an interaction opens.** A child that renders only after the user opens it, such as TagSet's "View all" modal, can load with a dynamic `import()` in the browser. Markup that a prop shows must be in the server HTML, so split it into its own component instead. A failed load (offline, or after a deploy) leaves the part closed and tries again on the next open.
 - **Update incrementally.** After an edit to a large document, reprocess the changed part. Reprocess the whole document when input pauses. Record undo entries at the start of each typing burst.
 - **Use plain markup per item** when a child component would render once per item in an unbounded loop. See [Per-item children](CONTRIBUTING.md#per-item-children).
 - **Use `Set` and `Map`** for membership. Iterate ids in `{#each}`. Compare values in `$:` guards; Svelte treats new objects as changed. Batch child registration. See [Batching child registration](CONTRIBUTING.md#batching-child-registration).

@@ -738,7 +738,7 @@ Tests in `tests/css/` that budget the compiled sheet, each with the number to lo
 | `unrendered-classes.test.ts` | Styled `bx--*` classes nothing in `src/` renders. |
 | `conventions.test.ts` | Source rules, with exact baselines for what predates them. |
 
-These numbers are counts, so two branches that each raise 67 to 68 merge cleanly to a wrong 68. After a rebase over a branch that changed one, rebuild and set it to the measured count. Don't add your change on top.
+These numbers are counts, so two branches that each raise 67 to 68 merge cleanly to a wrong 68. After a rebase over a branch that changed one, rebuild and set it to the measured count. Don't add your change on top. A change that needs a higher number, such as a new hover state with its own `(any-hover: hover)` block, raises it with a comment beside it that gives the reason.
 
 Compile through `compileEntry()` from `tests/css/compile.ts`, not `compileAsync` directly. It caches per source hash so a dozen workers do not each compile the same sheet. A PR that touches `css/**` also gets two jobs. `css-size` runs `check:css:size` and fails over the limit in [Size growth](#size-growth). `css-cascade` shows the rule delta against the base branch in its summary and annotates each cascade flip at its `.scss` line; it is informational and never blocks.
 
@@ -1127,6 +1127,8 @@ bun run test:svelte3
 bun run test:svelte4
 ```
 
+A run can pass every test and still fail. Look for an `Unhandled Errors` block above the summary. `Vite module runner has been closed` there means a dynamic `import()` settled after its test file finished. Handle the import's rejection in the component, as a failed chunk load needs anyway, rather than awaiting it in each test.
+
 #### Svelte async mode tests
 
 Apps compiled with Svelte's `experimental.async` run the library differently. Svelte can render between two `$:` statements, and a removed `{#each}` block reads its `{@const}`s once more before it's destroyed. A row that looks itself up in a map kept by another `$:` statement can get `undefined` (#5688). In a keyed `{#each}`, read what a row needs from the row itself, or set the list and its lookup in one statement.
@@ -1191,6 +1193,17 @@ mount(MyComponentFixture);
 ```
 
 Keep the entry to exactly that: one fixture import, `./mount`, and the `mount()` call. Anything else, such as an extra stylesheet, makes the page navigate instead of using the host.
+
+#### Web fonts
+
+CI loads IBM Plex from the network, so a page lays out text in the fallback font first, then again when the font arrives. Locally the font usually comes from the cache before the first layout, so a measurement that goes stale on CI passes. To reproduce, delay the font requests before the page loads, and compare with a copy mounted after `document.fonts.ready` ([`e2e/tag-set-font.test.ts`](e2e/tag-set-font.test.ts)):
+
+```ts
+await page.route(/s81c\.com/, async (route) => {
+  await new Promise((resolve) => setTimeout(resolve, 800));
+  await route.continue();
+});
+```
 
 #### Tests share one host page per worker
 
@@ -1502,6 +1515,8 @@ git fetch upstream
 git rebase upstream/master
 ```
 
+Two PRs can each pass and still break master together. #5740 skipped Pagination's page input with `:not(.bx--pagination__page-number-input)`, and #5645 moved that class from the input to the field root. The exclusion stopped matching, and RTL Pagination broke. After a rebase over a PR that renames or moves a class, search `css/`, `src/` and `e2e/` for selectors that name it.
+
 A branch older than the `bun fmt` reformat (0dedc0007) conflicts in almost every file it touches. Rebase it onto 2ef731752, which adds the `bun fmt` config but not the reformat, run `bun fmt` on the files each commit changes, then rebase onto `master`.
 
 ### Resolve conflicts in shared test files
@@ -1562,6 +1577,13 @@ In the description:
 ## Maintainer guide
 
 The following applies only to project maintainers.
+
+### Merging
+
+| Do | Why |
+| --- | --- |
+| Merge one PR at a time, and wait for master's run to pass before the next | A PR runs only the tests its changes select; master runs every suite. One PR per run means a failure names the PR that caused it. |
+| After a stacked PR's base merges, rebase the next PR onto master and retarget it | The rebase merge gives the base's commits new hashes, so the next PR would otherwise list them again. |
 
 ### Release
 
