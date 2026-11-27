@@ -1880,7 +1880,10 @@ test.describe("right-to-left menus and keys", () => {
     expect(sub.right).toBeLessThanOrEqual(width);
   });
 
-  test("aligns OverflowMenu with the button's inline start, or end when flipped", async ({
+  // Each button sits at a window edge. In RTL each menu fits as `flipped`
+  // asks and stays there. In LTR that alignment would run past the edge, so
+  // the menu lines up with the button's other edge instead.
+  test("aligns OverflowMenu with the button's edge nearest the window edge", async ({
     page,
   }) => {
     const width = await viewportWidth(page);
@@ -1893,7 +1896,7 @@ test.describe("right-to-left menus and keys", () => {
 
     for (const dir of ["ltr", "rtl"] as const) {
       await setDirection(page, dir);
-      for (const [testId, name, rtlSide] of cases) {
+      for (const [testId, name, side] of cases) {
         const button = page.getByTestId(testId).getByRole("button", { name });
         await button.click();
         const menu = page.getByRole("menu", { name });
@@ -1902,18 +1905,13 @@ test.describe("right-to-left menus and keys", () => {
           edges(button),
           edges(menu),
         ]);
-        // LTR is the mirror: the right-edge menu aligns on the left.
-        const side =
-          dir === "rtl" ? rtlSide : rtlSide === "right" ? "left" : "right";
         expect.soft(menuBox[side], `${dir} ${testId}`).toBe(buttonBox[side]);
-        if (dir === "rtl") {
-          expect
-            .soft(menuBox.left, `${testId} in view`)
-            .toBeGreaterThanOrEqual(0);
-          expect
-            .soft(menuBox.right, `${testId} in view`)
-            .toBeLessThanOrEqual(width);
-        }
+        expect
+          .soft(menuBox.left, `${dir} ${testId} in view`)
+          .toBeGreaterThanOrEqual(0);
+        expect
+          .soft(menuBox.right, `${dir} ${testId} in view`)
+          .toBeLessThanOrEqual(width);
         await page.keyboard.press("Escape");
         await expect(menu).toBeHidden();
       }
