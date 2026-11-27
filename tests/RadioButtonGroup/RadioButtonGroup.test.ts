@@ -250,6 +250,27 @@ describe("RadioButtonGroup", () => {
     },
   );
 
+  // WebKit, like user-event, moves native radios in DOM order, so in RTL
+  // ArrowLeft went to the radio on the right.
+  it("moves ArrowLeft toward the inline end in RTL", async () => {
+    document.documentElement.dir = "rtl";
+    try {
+      const { component } = render(RadioButtonGroup, {
+        props: { selected: "2" },
+      });
+      await user.click(screen.getByRole("radio", { name: "Option 2" }));
+
+      await user.keyboard("{ArrowLeft}");
+      expect(screen.getByRole("radio", { name: "Option 3" })).toHaveFocus();
+      expect(component.selected).toBe("3");
+
+      await user.keyboard("{ArrowRight}{ArrowRight}");
+      expect(component.selected).toBe("1");
+    } finally {
+      document.documentElement.removeAttribute("dir");
+    }
+  });
+
   describe("readonly", () => {
     it("should apply readonly class on the fieldset", () => {
       const { container } = render(RadioButtonGroup, {

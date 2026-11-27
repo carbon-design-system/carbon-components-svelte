@@ -1934,6 +1934,27 @@ test.describe("right-to-left menus and keys", () => {
       await expect(items.nth(0)).toBeFocused();
     }
   });
+
+  // WebKit moves native radios in DOM order, so ArrowRight went left.
+  test("moves a RadioButtonGroup's selection with the inline arrows", async ({
+    page,
+  }) => {
+    const group = page.getByTestId("radio-group");
+    const radios = group.getByRole("radio");
+    // Safari doesn't focus a radio whose label is clicked.
+    await group.getByText("Small").click();
+    await radios.nth(0).focus();
+    expect((await edges(group.getByText("Medium"))).right).toBeLessThan(
+      (await edges(group.getByText("Small"))).left,
+    );
+
+    await page.keyboard.press("ArrowLeft");
+    await expect(radios.nth(1)).toBeFocused();
+    await expect(radios.nth(1)).toBeChecked();
+    await page.keyboard.press("ArrowRight");
+    await expect(radios.nth(0)).toBeFocused();
+    await expect(radios.nth(0)).toBeChecked();
+  });
 });
 
 // Each floating case: what it points at, its surface, and its caret, either
