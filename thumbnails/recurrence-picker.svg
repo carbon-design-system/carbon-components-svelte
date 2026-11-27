@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>recurrence-picker</title>
+    <g id="recurrence-picker" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="day-0" fill="var(--cds-field-01, #f4f4f4)" x="62" y="64" width="28" height="32"></rect>
+        <rect id="day-1" fill="var(--cds-field-01, #f4f4f4)" x="92" y="64" width="28" height="32"></rect>
+        <rect id="day-2" fill="var(--cds-field-01, #f4f4f4)" x="122" y="64" width="28" height="32"></rect>
+        <rect id="day-2-bar" fill="var(--cds-background-brand, #0f62fe)" x="122" y="93" width="28" height="3"></rect>
+        <rect id="day-3" fill="var(--cds-field-01, #f4f4f4)" x="152" y="64" width="28" height="32"></rect>
+        <rect id="day-4" fill="var(--cds-field-01, #f4f4f4)" x="182" y="64" width="28" height="32"></rect>
+        <rect id="day-4-bar" fill="var(--cds-background-brand, #0f62fe)" x="182" y="93" width="28" height="3"></rect>
+        <rect id="day-5" fill="var(--cds-field-01, #f4f4f4)" x="212" y="64" width="28" height="32"></rect>
+        <rect id="day-6" fill="var(--cds-field-01, #f4f4f4)" x="242" y="64" width="28" height="32"></rect>
+        <rect id="summary-rule" fill="var(--cds-border-subtle, #c6c6c6)" x="62" y="112" width="2" height="12"></rect>
+        <rect id="summary" fill="var(--cds-text-secondary, #525252)" x="72" y="116" width="120" height="4"></rect>
+    </g>
+</svg>
