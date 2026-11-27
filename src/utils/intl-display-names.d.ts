@@ -13,17 +13,6 @@ export function regionName(locale: string, code: string): string | undefined;
  */
 export function regionNativeName(code: string): string | undefined;
 
-/** The regional-indicator flag emoji for a code, or `""`. */
-export function regionFlag(code: string): string;
-
-/**
- * Whether this platform draws flag emoji, found by painting one. Checked once.
- * `createContext` replaces the canvas, for tests.
- */
-export function canRenderFlags(
-  createContext?: () => CanvasRenderingContext2D | null,
-): boolean;
-
 /** The region a locale is most likely in: "US" for "en". */
 export function localeRegion(locale: string): string;
 

@@ -2,6 +2,7 @@
   import {
     Button,
     Coachmark,
+    CountryPicker,
     ExpandableTile,
     Flag,
     HoverCard,
@@ -128,4 +129,13 @@
 <div data-testid="flags" style="padding: 1rem;">
   <Flag flag={JP} size={32} />
   <Flag code="XK" size={32} />
+</div>
+
+<div data-testid="country" style="height: 20rem; padding: 1rem;">
+  <CountryPicker
+    open
+    labelText="Country"
+    values={["CH", "XK"]}
+    portalMenu={false}
+  />
 </div>
