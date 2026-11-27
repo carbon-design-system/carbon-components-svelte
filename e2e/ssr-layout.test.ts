@@ -91,3 +91,21 @@ test("a LanguagePicker row keeps its height when the name in its own script arri
   );
   expect(heights[0]).toBe(heights[1]);
 });
+
+test("an ImageCompare divider sits at its value before the script runs", async ({
+  page,
+}) => {
+  const selector = "[data-testid=compare] .bx--image-compare__handle";
+  const mounted = await rect(page, selector);
+  // The server prints the position as a custom property, and the clip and
+  // the divider read it. Printing it again must not move either.
+  await page
+    .locator("[data-testid=compare] .bx--image-compare__stage")
+    .evaluate((el) =>
+      (el as HTMLElement).style.setProperty(
+        "--ccs-image-compare-position",
+        "30",
+      ),
+    );
+  expect(await rect(page, selector)).toEqual(mounted);
+});

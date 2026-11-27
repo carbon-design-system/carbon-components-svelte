@@ -8,7 +8,7 @@
   export let orientation: ComponentProps<ImageCompare>["orientation"] =
     "horizontal";
   export let slots = false;
-  export let onChange: (detail: number) => void = () => {};
+  export let onChange: (detail: { value: number }) => void = () => {};
 </script>
 
 <p data-testid="bound-value">{value}</p>

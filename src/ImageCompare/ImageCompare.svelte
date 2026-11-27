@@ -1,7 +1,7 @@
 <script>
   /**
    * @restProps {div}
-   * @event {number} change
+   * @event {{ value: number }} change - The divider moved. `value` is the share of the frame that shows "before", from 0 to 100.
    * @slot {{}} before - Content for the "before" side, such as an `<img>`, chart, or map. Replaces `beforeSrc`. Static content only: the comparison takes the pointer input.
    * @slot {{}} after - Content for the "after" side. Replaces `afterSrc`.
    */
@@ -61,20 +61,20 @@
   /** Specify the "before" image source */
   export let beforeSrc = "";
 
-  /** Specify the "before" image alt text. Defaults to `beforeLabel`. */
+  /** Specify the "before" image alt text. Defaults to `beforeText`. */
   export let beforeAlt = "";
 
   /** Specify the "after" image source */
   export let afterSrc = "";
 
-  /** Specify the "after" image alt text. Defaults to `afterLabel`. */
+  /** Specify the "after" image alt text. Defaults to `afterText`. */
   export let afterAlt = "";
 
   /** Specify the text that names the "before" side */
-  export let beforeLabel = "Before";
+  export let beforeText = "Before";
 
   /** Specify the text that names the "after" side */
-  export let afterLabel = "After";
+  export let afterText = "After";
 
   /**
    * Set to `true` to hide the visible side labels. Screen readers still hear
@@ -91,18 +91,20 @@
 
   /**
    * Specify the accessible name of the divider (`"slider"` mode) or of the
-   * switch (`"toggle"` mode). Defaults to "Comparison position" and
-   * "Comparison view".
-   * @type {string | undefined}
+   * switch (`"toggle"` mode). Read only by assistive technology.
    */
-  export let controlLabel = undefined;
+  export let controlDescription = "Comparison";
 
   /**
-   * Customize the divider's `aria-valuetext`. Receives the share of
-   * "before" showing, from 0 to 100. Defaults to "Showing 40% of Before".
-   * @type {((value: number) => string) | undefined}
+   * Override the divider's `aria-valuetext`. It receives the share of
+   * "before" showing, from 0 to 100, and the text that names the "before"
+   * side. The default reads "Showing 40% of Before". Translators control
+   * the word order.
+   * @type {(value: number, beforeText: string) => string}
    */
-  export let formatValueText = undefined;
+  export let valueDescription = function valueDescription(value, beforeText) {
+    return `Showing ${Math.round(value)}% of ${beforeText}`;
+  };
 
   /**
    * Obtain a reference to the root element.
@@ -148,9 +150,7 @@
 
   $: position = clamp(value);
   $: vertical = orientation === "vertical";
-  $: valueText = formatValueText
-    ? formatValueText(position)
-    : `Showing ${Math.round(position)}% of ${beforeLabel}`;
+  $: valueText = valueDescription(position, beforeText);
   $: selectedIndex = selected === "after" ? 1 : 0;
 
   /** @param {number} next */
@@ -158,7 +158,7 @@
     const clamped = Math.round(clamp(next) * 10) / 10;
     if (clamped === value) return;
     value = clamped;
-    dispatch("change", clamped);
+    dispatch("change", { value: clamped });
   }
 
   const isRtl = () => resolveLayoutDirection($layoutDirection, ref) === "rtl";
@@ -282,7 +282,7 @@
                 class="bx--image-compare__image"
                 style:object-fit={fit}
                 src={beforeSrc}
-                alt={beforeAlt || beforeLabel}
+                alt={beforeAlt || beforeText}
                 draggable="false"
               />
             {/if}
@@ -290,7 +290,7 @@
         </AspectRatio>
         {#if !hideLabels}
           <figcaption class="bx--image-compare__caption">
-            {beforeLabel}
+            {beforeText}
           </figcaption>
         {/if}
       </figure>
@@ -302,7 +302,7 @@
                 class="bx--image-compare__image"
                 style:object-fit={fit}
                 src={afterSrc}
-                alt={afterAlt || afterLabel}
+                alt={afterAlt || afterText}
                 draggable="false"
               />
             {/if}
@@ -310,7 +310,7 @@
         </AspectRatio>
         {#if !hideLabels}
           <figcaption class="bx--image-compare__caption">
-            {afterLabel}
+            {afterText}
           </figcaption>
         {/if}
       </figure>
@@ -343,7 +343,7 @@
                 class="bx--image-compare__image"
                 style:object-fit={fit}
                 src={beforeSrc}
-                alt={beforeAlt || beforeLabel}
+                alt={beforeAlt || beforeText}
                 draggable="false"
               />
             {/if}
@@ -352,7 +352,7 @@
             <span
               class="bx--image-compare__label bx--image-compare__label--before"
             >
-              {beforeLabel}
+              {beforeText}
             </span>
           {/if}
         </div>
@@ -369,7 +369,7 @@
                 class="bx--image-compare__image"
                 style:object-fit={fit}
                 src={afterSrc}
-                alt={afterAlt || afterLabel}
+                alt={afterAlt || afterText}
                 draggable="false"
               />
             {/if}
@@ -378,7 +378,7 @@
             <span
               class="bx--image-compare__label bx--image-compare__label--after"
             >
-              {afterLabel}
+              {afterText}
             </span>
           {/if}
         </div>
@@ -389,7 +389,7 @@
               role="slider"
               tabindex="0"
               class="bx--image-compare__divider"
-              aria-label={controlLabel ?? "Comparison position"}
+              aria-label={controlDescription}
               aria-orientation={vertical ? "vertical" : "horizontal"}
               aria-valuemin="0"
               aria-valuemax="100"
@@ -420,12 +420,12 @@
         <ContentSwitcher
           size="sm"
           autoWidth
-          aria-label={controlLabel ?? "Comparison view"}
+          aria-label={controlDescription}
           bind:selectedIndex
           on:change={handleSwitch}
         >
-          <Switch text={beforeLabel} />
-          <Switch text={afterLabel} />
+          <Switch text={beforeText} />
+          <Switch text={afterText} />
         </ContentSwitcher>
       </div>
     {/if}

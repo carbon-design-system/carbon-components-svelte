@@ -23,7 +23,7 @@ describe("ImageCompare", () => {
       render(ImageCompare);
 
       expect(slider()).toHaveAttribute("tabindex", "0");
-      expect(slider()).toHaveAttribute("aria-label", "Comparison position");
+      expect(slider()).toHaveAttribute("aria-label", "Comparison");
       expect(slider()).toHaveAttribute("aria-orientation", "horizontal");
       expect(slider()).toHaveAttribute("aria-valuemin", "0");
       expect(slider()).toHaveAttribute("aria-valuemax", "100");
@@ -43,17 +43,31 @@ describe("ImageCompare", () => {
       ).toContain("--ccs-image-compare-position: 30");
     });
 
-    it("names the value with the labels and lets formatValueText replace it", async () => {
+    it("names the value with the labels and lets valueDescription replace it", async () => {
       const { rerender } = render(ImageCompareComponent, {
-        props: { value: 40, beforeLabel: "Original", afterLabel: "Edited" },
+        props: { value: 40, beforeText: "Original", afterText: "Edited" },
       });
       expect(slider()).toHaveAttribute(
         "aria-valuetext",
         "Showing 40% of Original",
       );
 
-      await rerender({ formatValueText: (v: number) => `${v} sur 100` });
-      expect(slider()).toHaveAttribute("aria-valuetext", "40 sur 100");
+      await rerender({
+        valueDescription: (v: number, before: string) =>
+          `${before} : ${v} sur 100`,
+      });
+      expect(slider()).toHaveAttribute(
+        "aria-valuetext",
+        "Original : 40 sur 100",
+      );
+    });
+
+    it("takes the divider's name from controlDescription", () => {
+      render(ImageCompareComponent, {
+        props: { controlDescription: "Vergleich" },
+      });
+
+      expect(slider()).toHaveAttribute("aria-label", "Vergleich");
     });
 
     it("clamps a value outside 0 to 100 and ignores NaN", async () => {
@@ -167,7 +181,7 @@ describe("ImageCompare", () => {
 
       await fireEvent.pointerMove(stage, { clientX: 300, pointerId: 1 });
       expect(boundValue()).toHaveTextContent("75");
-      expect(onChange).toHaveBeenLastCalledWith(75);
+      expect(onChange).toHaveBeenLastCalledWith({ value: 75 });
 
       await fireEvent.pointerUp(stage, { pointerId: 1 });
       await fireEvent.pointerMove(stage, { clientX: 40, pointerId: 1 });
@@ -380,7 +394,7 @@ describe("ImageCompare", () => {
       expect(screen.queryByRole("slider")).not.toBeInTheDocument();
       expect(screen.getByRole("tablist")).toHaveAttribute(
         "aria-label",
-        "Comparison view",
+        "Comparison",
       );
       expect(after).toHaveAttribute("aria-hidden", "true");
       expect(before).not.toHaveAttribute("aria-hidden");

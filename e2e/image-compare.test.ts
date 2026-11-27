@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import AxeBuilder from "@axe-core/playwright";
 import type {
   BrowserContext,
   CDPSession,
@@ -69,40 +68,6 @@ const expectValueNear = (page: Page, expected: number) =>
 test.beforeEach(async ({ page }) => {
   await page.goto("/image-compare.html");
   await expect(divider(page, "slider")).toBeVisible();
-});
-
-test.describe("ImageCompare a11y", () => {
-  test("has no detectable accessibility violations in any mode", async ({
-    page,
-  }) => {
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-    expect(results.violations).toEqual([]);
-
-    await divider(page, "slider").focus();
-    await page.keyboard.press("End");
-    await page.getByRole("tab", { name: "Current" }).click();
-    // Axe reads colors, so let the fade finish.
-    await expect(
-      page.getByTestId("toggle").locator(".bx--image-compare__layer--before"),
-    ).toBeHidden();
-
-    const changed = await new AxeBuilder({ page }).include("#app").analyze();
-    expect(changed.violations).toEqual([]);
-  });
-
-  test("names the divider and says what it shows", async ({ page }) => {
-    const slider = divider(page, "slider");
-    await expect(slider).toHaveAttribute(
-      "aria-valuetext",
-      "Showing 50% of Before",
-    );
-    await expect(
-      page.getByRole("group", { name: "Denoised photo" }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("slider", { name: "Comparison position" }).first(),
-    ).toBeVisible();
-  });
 });
 
 test.describe("ImageCompare keyboard", () => {

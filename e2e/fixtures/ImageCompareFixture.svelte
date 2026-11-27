@@ -34,8 +34,8 @@
     afterSrc={screen(true, 800, 600)}
     beforeAlt="Old settings page"
     afterAlt="Redesigned settings page"
-    beforeLabel="Old"
-    afterLabel="New"
+    beforeText="Old"
+    afterText="New"
   />
 
   <ImageCompare
@@ -46,8 +46,8 @@
     afterSrc={dashboard(true)}
     beforeAlt="Baseline screenshot"
     afterAlt="Current screenshot"
-    beforeLabel="Baseline"
-    afterLabel="Current"
+    beforeText="Baseline"
+    afterText="Current"
   />
 
   <ImageCompare
@@ -75,13 +75,13 @@
   <ImageCompare data-testid="slots" ratio="2x1" value={30}>
     <div
       slot="before"
-      style="display: grid; place-items: center; width: 100%; height: 100%; background: #e0e0e0;"
+      style="display: grid; place-items: center; width: 100%; height: 100%; background: #e0e0e0; color: #161616;"
     >
       Q1 revenue
     </div>
     <div
       slot="after"
-      style="display: grid; place-items: center; width: 100%; height: 100%; background: #a7f0ba;"
+      style="display: grid; place-items: center; width: 100%; height: 100%; background: #a7f0ba; color: #161616;"
     >
       Q2 revenue
     </div>
