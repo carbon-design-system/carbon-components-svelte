@@ -106,6 +106,7 @@ export { default as Divider } from "./Divider/Divider.svelte";
 export { default as Dropdown } from "./Dropdown/Dropdown.svelte";
 export { default as DropdownSkeleton } from "./Dropdown/DropdownSkeleton.svelte";
 export { default as FluidDropdownSkeleton } from "./Dropdown/FluidDropdownSkeleton.svelte";
+export { default as DurationInput } from "./DurationInput/DurationInput.svelte";
 export { default as EmptyState } from "./EmptyState/EmptyState.svelte";
 export { collectFormErrors } from "./ErrorSummary/collect-form-errors.js";
 export { default as ErrorSummary } from "./ErrorSummary/ErrorSummary.svelte";

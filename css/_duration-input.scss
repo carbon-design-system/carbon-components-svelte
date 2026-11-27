@@ -1,0 +1,99 @@
+// Duration input: a group of unit spinbuttons styled like Carbon text input.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/css--reset";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// DurationInput: a fieldset of numeric segments with a unit label each
+/// @access private
+/// @group components
+@mixin duration-input {
+  // A fieldset's default minimum is its content width; let it shrink instead.
+  .#{$prefix}--duration-input__fieldset {
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  // The status icon sits outside the segments, which read left to right in
+  // every language, so it stays at the inline end.
+  .#{$prefix}--duration-input__fields {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--duration-input__segments {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: $carbon--spacing-05;
+    row-gap: $carbon--spacing-03;
+  }
+
+  // A segment and its unit wrap together.
+  .#{$prefix}--duration-input__segment-group {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+  }
+
+  // The width follows the digits the segment can hold, set by the component
+  // as `--ccs-duration-digits`, in tabular figures so the box holds still.
+  .#{$prefix}--duration-input__segment {
+    width: calc(
+      var(--ccs-duration-digits, 2) * 1ch + #{$carbon--spacing-03 * 2}
+    );
+    min-width: 0;
+    padding: 0 $carbon--spacing-03;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+
+  .#{$prefix}--duration-input__unit {
+    @include type-style("body-compact-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--duration-input__unit--disabled {
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--duration-input--readonly .#{$prefix}--duration-input__segment {
+    background-color: transparent;
+    border-bottom-color: $text-helper;
+  }
+
+  .#{$prefix}--duration-input__icon {
+    flex-shrink: 0;
+    fill: $support-error;
+  }
+
+  .#{$prefix}--duration-input__icon--warning {
+    fill: $support-warning;
+  }
+
+  // Carbon does not theme the warning icon's inner triangle by default.
+  .#{$prefix}--duration-input__icon--warning path[fill] {
+    fill: $carbon--black-100;
+    opacity: 1;
+  }
+
+  // v10 shows `.bx--form-requirement` only after an invalid input sibling.
+  // The segments sit in a fieldset, so the message sits below the group.
+  .#{$prefix}--duration-input .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: to-rem(200px);
+    font-weight: 400;
+  }
+}
+
+@include exports("duration-input") {
+  @include duration-input;
+}

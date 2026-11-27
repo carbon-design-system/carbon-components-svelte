@@ -39,3 +39,20 @@ test("an open OverflowMenu sits under its button before it's positioned", async 
   });
   expect(await rect(page, selector)).toEqual(mounted);
 });
+
+test("DurationInput segments are as wide as the server printed them", async ({
+  page,
+}) => {
+  const selector = "[data-testid=duration] .bx--duration-input__segments";
+  const mounted = await rect(page, selector);
+  // Each segment prints its width in digits as a custom property. Printing
+  // it again, as the server does, must not move the row.
+  await page
+    .locator("[data-testid=duration] .bx--duration-input__segment")
+    .evaluateAll((nodes) => {
+      for (const node of nodes) {
+        (node as HTMLElement).style.setProperty("--ccs-duration-digits", "2");
+      }
+    });
+  expect(await rect(page, selector)).toEqual(mounted);
+});
