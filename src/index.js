@@ -4,6 +4,7 @@ export { default as AccordionSkeleton } from "./Accordion/AccordionSkeleton.svel
 export { default as ActionSet } from "./ActionSet/ActionSet.svelte";
 export { default as AILabel } from "./AILabel/AILabel.svelte";
 export { default as AILabelActions } from "./AILabel/AILabelActions.svelte";
+export { default as Announcer } from "./Announcer/Announcer.svelte";
 export { default as AspectRatio } from "./AspectRatio/AspectRatio.svelte";
 export { default as BadgeIndicator } from "./BadgeIndicator/BadgeIndicator.svelte";
 export { default as BigNumber } from "./BigNumber/BigNumber.svelte";
@@ -321,6 +322,7 @@ export { default as SkipToContent } from "./UIShell/SkipToContent.svelte";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
 export { default as UserAvatar } from "./UserAvatar/UserAvatar.svelte";
 export { default as UserAvatarGroup } from "./UserAvatarGroup/UserAvatarGroup.svelte";
+export { announce } from "./utils/announcer.js";
 export { getAvatarBackgroundColor } from "./utils/avatar-color.js";
 export {
   applyColumnSettings,

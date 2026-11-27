@@ -84,3 +84,17 @@ export const COPY_FEEDBACK_FADE_MS: 110;
  * keystroke with a new count.
  */
 export const RESULTS_ANNOUNCE_DELAY_MS: 500;
+
+/**
+ * How long a live region is in the page before `announce()` writes to it. A
+ * screen reader reports a change only in a region it has already seen, so a
+ * message written as its region is made is often lost.
+ */
+export const ANNOUNCER_READY_DELAY_MS: 150;
+
+/**
+ * How long an announced message stays in its live region. The message is
+ * removed afterward, so the region does not fill up and a screen reader
+ * that browses the page does not find old messages.
+ */
+export const ANNOUNCER_CLEAR_AFTER_MS: 7000;
