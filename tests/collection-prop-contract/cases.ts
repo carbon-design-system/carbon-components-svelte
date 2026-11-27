@@ -418,6 +418,7 @@ export const exempt: Exemptions = {
   "HeaderSearch.results": NO_REFERENCE_CHECK,
   "HeaderSearchResults.results": INTERNAL,
   "HeaderSearchRichMenuContent.skeletonWidths": INTERNAL,
+  "LikertMatrix.statements": NO_REFERENCE_CHECK,
   "MenuItemGroup.selectedIds": NO_REFERENCE_CHECK,
   "Modal.secondaryButtons": NO_REFERENCE_CHECK,
   "ModalFooter.secondaryButtons": NO_REFERENCE_CHECK,

@@ -1024,6 +1024,41 @@
       "defaultKind": "function"
     },
     {
+      "component": "LikertMatrix",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "LikertMatrix",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "LikertMatrix",
+      "prop": "legendText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "LikertMatrix",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "LikertMatrix",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
       "component": "ListBox",
       "prop": "invalidText",
       "type": "string",
@@ -2800,6 +2835,27 @@
         "pageDown": "Page Down",
         "home": "Home",
         "end": "End"
+      }
+    },
+    {
+      "component": "LikertMatrix",
+      "prop": "translateWithId",
+      "type": "(id: import(\"../utils/survey-scale-points.js\").ScaleTranslationId) => string",
+      "ids": {
+        "stronglyDisagree": "Strongly disagree",
+        "disagree": "Disagree",
+        "somewhatDisagree": "Somewhat disagree",
+        "neitherAgreeNorDisagree": "Neither agree nor disagree",
+        "somewhatAgree": "Somewhat agree",
+        "agree": "Agree",
+        "stronglyAgree": "Strongly agree",
+        "veryDissatisfied": "Very dissatisfied",
+        "dissatisfied": "Dissatisfied",
+        "neutral": "Neutral",
+        "satisfied": "Satisfied",
+        "verySatisfied": "Very satisfied",
+        "notAtAllLikely": "Not at all likely",
+        "extremelyLikely": "Extremely likely"
       }
     },
     {
