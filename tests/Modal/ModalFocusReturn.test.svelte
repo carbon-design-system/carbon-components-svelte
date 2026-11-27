@@ -7,6 +7,7 @@
     undefined;
   export let passiveModal = false;
   export let hideCloseButton = false;
+  export let returnFocusTo: ComponentProps<Modal>["returnFocusTo"] = null;
 
   let open = false;
   let elsewhere: HTMLInputElement;
@@ -21,6 +22,7 @@
   {passiveModal}
   {preventCloseOnClickOutside}
   {hideCloseButton}
+  {returnFocusTo}
   on:close={() => {
     if (moveFocusOnClose) elsewhere.focus();
   }}

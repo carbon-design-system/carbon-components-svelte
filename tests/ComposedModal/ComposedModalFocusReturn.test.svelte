@@ -9,15 +9,19 @@
   export let preventCloseOnClickOutside: ComponentProps<ComposedModal>["preventCloseOnClickOutside"] =
     undefined;
   export let showFooter = true;
+  export let returnFocusTo: ComponentProps<ComposedModal>["returnFocusTo"] =
+    null;
 
   let open = false;
 </script>
 
 <button type="button" on:click={() => (open = true)}>Open Modal</button>
-<ComposedModal bind:open {preventCloseOnClickOutside}>
+<ComposedModal bind:open {preventCloseOnClickOutside} {returnFocusTo}>
   <ModalHeader title="Focus Return Test" {hideCloseButton} />
   <ModalBody />
   {#if showFooter}
     <ModalFooter primaryButtonText="Save" secondaryButtonText="Cancel" />
   {/if}
 </ComposedModal>
+
+<input aria-label="Elsewhere" />
