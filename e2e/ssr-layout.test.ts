@@ -207,3 +207,19 @@ test("a Flag and its code box are the same size as the server draws them", async
   expect([flag[2], flag[3]]).toEqual([32, 24]);
   expect([box[2], box[3]]).toEqual([32, 24]);
 });
+
+test("a CountryPicker row is as tall with a code box as with a drawn flag", async ({
+  page,
+}) => {
+  // The flags load the first time the menu opens, so a row first shows its
+  // code in a box of the flag's size. Switzerland has a flag and Kosovo
+  // does not, so their rows differ only in what stands in front of the name.
+  // The picker starts open: the open Tearsheet above takes the pointer.
+  const rows = page.locator("[data-testid=country] [role=option]");
+  await expect(rows).toHaveCount(2);
+  await expect(rows.first().locator(".bx--flag")).toBeVisible();
+  const heights = await rows.evaluateAll((els) =>
+    els.map((el) => Math.round(el.getBoundingClientRect().height)),
+  );
+  expect(heights[0]).toBe(heights[1]);
+});

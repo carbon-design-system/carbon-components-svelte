@@ -590,6 +590,48 @@
       "defaultKind": "text"
     },
     {
+      "component": "CountryPicker",
+      "prop": "emptyText",
+      "type": "string",
+      "default": "No results",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CountryPicker",
+      "prop": "filterResultsText",
+      "type": "(count: number) => string",
+      "default": "(count) => count === 0\n  ? \"No results\"\n  : `${count} result${count === 1 ? \"\" : \"s\"} available`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "CountryPicker",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CountryPicker",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CountryPicker",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CountryPicker",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
       "component": "DataTable",
       "prop": "emptyText",
       "type": "string",
