@@ -433,6 +433,20 @@ $css--helpers: true;
     background-color: transparent;
   }
 
+  // NumberInput runs its field left to right in RTL, for Safari's caret
+  // (#5740), which would put this start border on the wrong side. A page
+  // number has no sign, so it keeps the page's direction. The page input's
+  // class is on the field root, so this matches the input inside it.
+  [dir="rtl"]
+    .#{$prefix}--pagination
+    .#{$prefix}--pagination__page-number-input
+    .#{$prefix}--number
+    input[type="number"] {
+    direction: ccs-dir(ltr, rtl);
+    padding-inline: $carbon--spacing-05;
+    text-align: left;
+  }
+
   .#{$prefix}--pagination--xs
     .#{$prefix}--pagination__page-number-input
     .#{$prefix}--number

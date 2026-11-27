@@ -622,11 +622,9 @@
   // under `unicode-bidi: plaintext` in a right-to-left page, but places the
   // caret as if it ran right to left: a click before the "-" lands after
   // the "5" (#5740). So the field runs left to right there. That turns its inline sides, so put
-  // the steppers' room back on the page's inline end. A page number has no
-  // sign, and its start border must stay on the page's side.
-  [dir="rtl"]
-    .#{$prefix}--number
-    input[type="number"]:not(.#{$prefix}--pagination__page-number-input),
+  // the steppers' room back on the page's inline end. Pagination's page
+  // number keeps the page's direction (pagination-page-input).
+  [dir="rtl"] .#{$prefix}--number input[type="number"],
   [dir="rtl"] .#{$prefix}--number input[type="text"] {
     direction: ltr;
     padding-inline: ccs-dir(

@@ -15,7 +15,11 @@ const SAME_BOTH_WAYS = new Set([
   "[dir=rtl] .bx--list-box--decorator .bx--list-box__selection--multi left",
   "[dir=rtl] .bx--list-box--decorator .bx--list-box__selection--multi right",
   // A number runs left to right in an LTR region too (#5740).
-  "[dir=rtl] .bx--number input[type=number]:not(.bx--pagination__page-number-input) direction",
+  "[dir=rtl] .bx--number input[type=number] direction",
+  // Pagination's page number puts back the padding and alignment the
+  // number rule above changes.
+  "[dir=rtl] .bx--pagination .bx--pagination__page-number-input .bx--number input[type=number] padding-inline",
+  "[dir=rtl] .bx--pagination .bx--pagination__page-number-input .bx--number input[type=number] text-align",
   "[dir=rtl] .bx--number input[type=text] direction",
 ]);
 
