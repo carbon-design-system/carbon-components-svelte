@@ -194,6 +194,21 @@ until every segment is filled.
 </Form>
 ```
 
+### Submit on complete
+
+Set `submitOnComplete` to `true` to submit the form when the user fills the last segment, pastes a full code, or corrects a character in a full code. It calls `form.requestSubmit()`, so validation and `on:submit` handlers run as usual, after the hidden input holds the new value. Setting `code` from script does not submit.
+
+```svelte
+<Form method="POST" action="?/verify">
+  <PinCodeInput
+    name="code"
+    submitOnComplete
+    count={6}
+    labelText="Verification code"
+  />
+</Form>
+```
+
 ## States
 
 Reflect validation and interaction states.
