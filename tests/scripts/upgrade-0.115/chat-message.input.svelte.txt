@@ -1,0 +1,12 @@
+<script>
+  import { ChatLog, ChatMessage } from "carbon-components-svelte";
+
+  export let reply = { text: "", done: false };
+</script>
+
+<ChatLog labelText="Assistant">
+  <ChatMessage author="You" from="me">Hi</ChatMessage>
+  <ChatMessage author="Assistant" streaming={!reply.done}>
+    {reply.text}
+  </ChatMessage>
+</ChatLog>

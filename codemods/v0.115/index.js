@@ -80,6 +80,7 @@ export const NOTE_TITLES = {
   dialog: "Dialog closes after its animation",
   notification: "Escape closes notifications",
   "link-segments": "linkSegments links fewer URLs",
+  "chat-message": "A streaming ChatMessage says when it starts and ends",
   parse: "Files not fully migrated",
 };
 
@@ -539,6 +540,15 @@ function checkComponent(context, node, name, ancestors, imports, fieldClasses) {
       node.start,
       "notification",
       `Escape now closes ${name} while focus is inside it. Set closeOnEscape={false} to keep it open`,
+    );
+  }
+
+  if (name === "ChatMessage" && has("streaming")) {
+    note(
+      context,
+      node.start,
+      "chat-message",
+      "A streaming ChatMessage is no longer read as it grows. Screen readers hear streamStartedDescription and streamCompleteDescription, and reach the text by moving to the message",
     );
   }
 

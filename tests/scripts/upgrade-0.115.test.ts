@@ -43,6 +43,7 @@ const CASES: {
   { name: "classes", ext: "scss" },
   { name: "link-segments", ext: "svelte" },
   { name: "link-segments-module", ext: "ts" },
+  { name: "chat-message", ext: "svelte" },
   { name: "untouched", ext: "svelte" },
 ];
 
