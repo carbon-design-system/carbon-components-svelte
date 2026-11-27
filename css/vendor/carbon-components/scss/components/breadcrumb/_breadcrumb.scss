@@ -331,3 +331,41 @@
 @include exports('breadcrumb-icon') {
   @include breadcrumb-icon;
 }
+
+/// `overflow="menu"`: one line, with the middle items that don't fit hidden
+/// and listed in an overflow menu. Hidden items stay in the layout, out of
+/// flow, so `Breadcrumb` can measure them again when the line grows. The
+/// last item may wrap, so a long current page never runs off a narrow
+/// screen.
+/// @access private
+/// @group components
+@mixin breadcrumb-overflow-menu {
+  .#{$prefix}--breadcrumb--overflow-menu {
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    // On the first line of a wrapped last item.
+    align-items: flex-start;
+  }
+
+  .#{$prefix}--breadcrumb--overflow-menu .#{$prefix}--breadcrumb-item {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--breadcrumb--overflow-menu .#{$prefix}--breadcrumb-item:last-child {
+    flex-shrink: 1;
+    white-space: normal;
+  }
+
+  .#{$prefix}--breadcrumb-item--hidden {
+    position: absolute;
+    inset-block-start: 0;
+    @include ccs-inset-inline($start: 0);
+    visibility: hidden;
+  }
+}
+
+@include exports("breadcrumb-overflow-menu") {
+  @include breadcrumb-overflow-menu;
+}

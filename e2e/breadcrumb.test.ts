@@ -46,3 +46,50 @@ test("wraps an item too long for a narrow trail", async ({ page }) => {
   expect(projects?.height).toBeLessThan(24);
   expect(sentence?.height).toBeGreaterThan(24);
 });
+
+// `overflow="menu"` keeps one line: the middle items that don't fit move
+// into a menu after the first item, in focus order, with their links.
+for (const dir of ["ltr", "rtl"]) {
+  test(`collapses middle items into a menu (${dir})`, async ({ page }) => {
+    await page.goto("/breadcrumb.html");
+    await page.evaluate((d) => {
+      document.documentElement.dir = d;
+    }, dir);
+    const trail = page.getByTestId("overflow-menu");
+    const trigger = trail.getByRole("button", {
+      name: "Show hidden levels",
+    });
+    await expect(trigger).toBeVisible();
+    await expect(
+      trail.getByRole("link", { name: "Finance team" }),
+    ).toBeHidden();
+    await expect(trail.getByRole("link", { name: "Q4 close" })).toBeVisible();
+
+    const [home, button, current, box] = await Promise.all([
+      trail.getByRole("link", { name: "Workspaces" }).boundingBox(),
+      trigger.boundingBox(),
+      trail.getByRole("link", { name: "Europe" }).boundingBox(),
+      trail.boundingBox(),
+    ]);
+    if (!home || !button || !current || !box) throw new Error("box");
+    // One line, inside the trail, with the button after the first item.
+    expect(Math.abs(home.y - current.y)).toBeLessThan(4);
+    expect(current.x).toBeGreaterThanOrEqual(box.x - 1);
+    expect(current.x + current.width).toBeLessThanOrEqual(
+      box.x + box.width + 1,
+    );
+    if (dir === "rtl") expect(button.x).toBeLessThan(home.x);
+    else expect(button.x).toBeGreaterThan(home.x);
+
+    await trail.getByRole("link", { name: "Workspaces" }).focus();
+    await page.keyboard.press("Tab");
+    await expect(trigger).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(
+      page.getByRole("menuitem", { name: "Finance team" }),
+    ).toHaveAttribute("href", "/finance");
+    await expect(
+      page.getByRole("menuitem", { name: "Ledgers" }),
+    ).toHaveAttribute("href", "/finance/ledgers");
+  });
+}

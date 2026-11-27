@@ -65,6 +65,13 @@
       "defaultKind": "text"
     },
     {
+      "component": "Breadcrumb",
+      "prop": "overflowMenuDescription",
+      "type": "string",
+      "default": "Show hidden breadcrumb items",
+      "defaultKind": "text"
+    },
+    {
       "component": "Button",
       "prop": "iconDescription",
       "type": "string | undefined",
