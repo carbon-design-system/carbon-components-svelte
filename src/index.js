@@ -153,6 +153,7 @@ export { default as LikertMatrix } from "./LikertMatrix/LikertMatrix.svelte";
 export { default as Link } from "./Link/Link.svelte";
 export { default as LinkDownload } from "./Link/LinkDownload.svelte";
 export { default as OutboundLink } from "./Link/OutboundLink.svelte";
+export { default as LinkifiedText } from "./LinkifiedText/LinkifiedText.svelte";
 export { default as ListBox } from "./ListBox/ListBox.svelte";
 export { default as ListBoxField } from "./ListBox/ListBoxField.svelte";
 export { default as ListBoxMenu } from "./ListBox/ListBoxMenu.svelte";
