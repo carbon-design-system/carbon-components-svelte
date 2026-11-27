@@ -235,9 +235,11 @@
     .join(" ");
 </script>
 
-<!-- The toolbar is 48px tall, so its search keeps the xl size. -->
+<!-- The toolbar is 48px tall, so its search keeps the xl size. A persistent
+  search sits on the toolbar's own surface, so it takes the ghost look. -->
 <Search
   size="xl"
+  variant={persistent ? "ghost" : "default"}
   {labelText}
   tabindex={tabindexAttribute(tabindex)}
   {disabled}

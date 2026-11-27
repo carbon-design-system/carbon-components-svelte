@@ -158,18 +158,11 @@
     }
   }
 
-  .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-close,
-  .#{$prefix}--toolbar-search-container-persistent
-    .#{$prefix}--search-close:hover,
+  // ccs: the persistent search's clear button takes Search's ghost variant
   .#{$prefix}--toolbar-search-container-active .#{$prefix}--search-close,
   .#{$prefix}--toolbar-search-container-active .#{$prefix}--search-close:hover {
     border: none;
     background-color: transparent;
-  }
-
-  .#{$prefix}--toolbar-search-container-persistent
-    .#{$prefix}--search-close::before {
-    display: none;
   }
 
   .#{$prefix}--overflow-menu.#{$prefix}--toolbar-action {
@@ -253,15 +246,6 @@
   .#{$prefix}--toolbar-search-container-persistent
     .#{$prefix}--search-input:focus:not([disabled]) {
     @include focus-outline('outline');
-  }
-
-  .#{$prefix}--toolbar-search-container-persistent
-    .#{$prefix}--search-input:hover:not([disabled]), // ccs: dedupe
-  .#{$prefix}--toolbar-search-container-persistent
-    .#{$prefix}--search-input:active:not([disabled]),
-  .#{$prefix}--toolbar-search-container-persistent
-    .#{$prefix}--search-input:not(:placeholder-shown) {
-    background-color: $field-hover;
   }
 
   .#{$prefix}--toolbar-search-container-persistent .#{$prefix}--search-close {
