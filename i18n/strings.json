@@ -1466,6 +1466,13 @@
     },
     {
       "component": "PinCodeInput",
+      "prop": "loadingDescription",
+      "type": "string",
+      "default": "Verifying code",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PinCodeInput",
       "prop": "segmentLabelText",
       "type": "(position: number, count: number, labelText: string, type: \"numeric\" | \"alphanumeric\") => string",
       "default": "(position,\n    count,\n    labelText,\n    type) => `${labelText || \"Pin code\"} ${type === \"numeric\" ? \"digit\" : \"character\"} ${position} of ${count}`",

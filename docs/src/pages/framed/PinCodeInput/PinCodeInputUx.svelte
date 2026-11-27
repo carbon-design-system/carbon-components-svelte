@@ -2,7 +2,6 @@
   import {
     Button,
     ButtonSet,
-    InlineLoading,
     InlineNotification,
     PinCodeInput,
     Stack,
@@ -76,7 +75,7 @@
     count={EXPECTED_CODE.length}
     labelText="Invite code"
     helperText="Enter the code sent to your email (try {EXPECTED_CODE})"
-    disabled={loading}
+    {loading}
     {invalid}
     {invalidText}
     on:complete={handleComplete}
@@ -84,9 +83,7 @@
     on:clear={clearVerificationState}
   />
 
-  {#if loading}
-    <InlineLoading status="active" description="Verifying code..." />
-  {:else if verified}
+  {#if verified}
     <InlineNotification
       kind="success"
       title="Code verified"

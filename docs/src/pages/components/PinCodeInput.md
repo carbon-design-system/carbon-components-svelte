@@ -194,6 +194,21 @@ until every segment is filled.
 </Form>
 ```
 
+### Submit on complete
+
+Set `submitOnComplete` to `true` to submit the form when the user fills the last segment, pastes a full code, or corrects a character in a full code. It calls `form.requestSubmit()`, so validation and `on:submit` handlers run as usual, after the hidden input holds the new value. Setting `code` from script does not submit.
+
+```svelte
+<Form method="POST" action="?/verify">
+  <PinCodeInput
+    name="code"
+    submitOnComplete
+    count={6}
+    labelText="Verification code"
+  />
+</Form>
+```
+
 ## States
 
 Reflect validation and interaction states.
@@ -221,6 +236,12 @@ Set `disabled` to `true` to disable every segment.
 Set `readonly` to `true` to display a code that cannot be edited.
 
 <PinCodeInput readonly value="0182" labelText="Verification code" />
+
+### Loading
+
+Set `loading` to `true` while the code is being verified. A spinner appears after the segments and edits are blocked, but the segments stay enabled so focus does not move. Invalid and warning states are hidden until `loading` is `false` again. Set `loadingDescription` to change the spinner's accessible description.
+
+<PinCodeInput loading value="0182" labelText="Verification code" />
 
 ## Skeleton
 

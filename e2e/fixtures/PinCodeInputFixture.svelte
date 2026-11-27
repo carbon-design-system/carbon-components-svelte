@@ -55,6 +55,10 @@
     <PinCodeInput labelText="Verification code" readonly={true} value="0182" />
   </div>
 
+  <div data-testid="pin-code-input-loading">
+    <PinCodeInput labelText="Verification code" loading value="0182" />
+  </div>
+
   <div data-testid="pin-code-input-programmatic">
     <PinCodeInput
       bind:this={pinCodeInput}
