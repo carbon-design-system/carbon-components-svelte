@@ -47,6 +47,12 @@ Set `iconDescription` to override the accessible label announced for the status 
 
 <InlineLoading status="error" iconDescription="Upload failed" description="Failed to upload file" />
 
+### Decorative icon
+
+Set `decorative` to `true` when `description` already says the state. The icon is then hidden from screen readers and has no title, so "Saving..." is not read as "loading, Saving...".
+
+<InlineLoading decorative description="Saving..." />
+
 ### Live region roles
 
 The `"error"` status renders `role="alert"`, interrupting the screen reader immediately, as demonstrated by the four `<InlineLoading>` examples above. Every other status renders `role="status"`, announced politely so it doesn't interrupt. Pass `role` through rest props to override either default.

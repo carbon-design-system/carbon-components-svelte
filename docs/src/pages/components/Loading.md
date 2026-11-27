@@ -31,6 +31,8 @@ Set `description` to name the spinner for screen readers. The overlay also uses 
 
 <Loading description="Loading metrics..." withOverlay={false} />
 
+Set `decorative` to `true` when text beside the spinner already says what is loading. The spinner is then hidden from screen readers and has no title. An overlay keeps `description` as the name of its dialog.
+
 ## Delay
 
 Set `delay` to wait a number of milliseconds after `active` becomes `true` before showing the spinner. Work that finishes within the delay shows no spinner. Once shown, the spinner stays for at least 500 ms so it does not flash.
