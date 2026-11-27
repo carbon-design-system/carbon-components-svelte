@@ -500,7 +500,7 @@ export function stripRenderedMarkup(body: string) {
 }
 
 /**
- * Renders a guide page (`src/pages/<name>.svx`) to Markdown with the same
+ * Renders a guide page (`src/pages/<name>.md`) to Markdown with the same
  * steps as a component page: the frontmatter is split off (its `title`
  * becomes the heading), `<FileSource>` is inlined, and Svelte fences,
  * Markdown, and characters are normalized. Returns the title and the Markdown. Pass `pagesDir` to resolve
