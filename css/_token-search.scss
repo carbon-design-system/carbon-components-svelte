@@ -1,0 +1,216 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/component-tokens";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/components/tag/tokens";
+
+/// `TokenSearch`: a `Search` whose qualifiers (`key:value`) are drawn
+/// behind the text, and a list box menu that floats at the word under the
+/// caret.
+///
+/// The text stays the input's own, so the caret, the selection, spell
+/// checking, the IME and forced colors are the browser's. The layer behind
+/// it holds the same text in a transparent color and draws only what the
+/// text cannot: a fill and a rule under each qualifier. It sits in the
+/// field's box, so it takes the field's fill and the input gives its own up.
+/// Nothing in the layer changes a glyph's width (no horizontal padding, no
+/// bold), or it would drift from the input.
+/// @access private
+/// @group components
+@mixin token-search {
+  $blue: get-token-value($tag-colors, "tag-background-blue");
+  $blue-border: get-token-value($tag-colors, "tag-border-blue");
+  $purple: get-token-value($tag-colors, "tag-background-purple");
+  $purple-border: get-token-value($tag-colors, "tag-border-purple");
+  $red: get-token-value($tag-colors, "tag-background-red");
+  $gray: get-token-value($tag-colors, "tag-background-gray");
+  $gray-border: get-token-value($tag-colors, "tag-border-gray");
+
+  .#{$prefix}--token-search--highlight {
+    // A stacking context, so the layer can sit behind the input's text and
+    // still in front of the field's fill.
+    isolation: isolate;
+    background-color: $field;
+  }
+
+  .#{$prefix}--token-search--highlight .#{$prefix}--search-input,
+  .#{$prefix}--token-search--highlight .#{$prefix}--search-input[disabled] {
+    background-color: transparent;
+  }
+
+  // The box of the input's text: inside the padding that clears the icon and
+  // the clear button, above the bottom rule. Text scrolls inside it.
+  .#{$prefix}--token-search__backdrop {
+    @include type-style("body-compact-01");
+
+    position: absolute;
+    z-index: -1;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    pointer-events: none;
+    color: transparent;
+    forced-color-adjust: none;
+    inset-block: 0 to-rem(1px);
+    inset-inline: $carbon--spacing-08;
+    user-select: none;
+  }
+
+  .#{$prefix}--token-search__backdrop[hidden] {
+    display: none;
+  }
+
+  .#{$prefix}--search--xs > .#{$prefix}--token-search__backdrop {
+    inset-inline: to-rem(24px);
+  }
+
+  .#{$prefix}--search--sm > .#{$prefix}--token-search__backdrop {
+    inset-inline: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--search--xl > .#{$prefix}--token-search__backdrop {
+    inset-inline: $carbon--spacing-09;
+  }
+
+  .#{$prefix}--token-search__content {
+    // Placed by the component, from the left edge of the box: `dir="auto"`
+    // may turn the line's direction, which an inline offset would follow.
+    position: absolute;
+    left: 0;
+    // The input is a plain line: runs of spaces stay, nothing wraps, and a
+    // line reads in its own direction as the input's does.
+    unicode-bidi: plaintext;
+    white-space: pre;
+  }
+
+  .#{$prefix}--token-search__qualifier {
+    padding-block: to-rem(2px);
+    border-block-end: 1px solid $blue-border;
+    background-color: $blue;
+  }
+
+  .#{$prefix}--token-search__qualifier--negated {
+    border-block-end-style: dashed;
+    border-block-end-color: $purple-border;
+    background-color: $purple;
+  }
+
+  .#{$prefix}--token-search__phrase {
+    padding-block: to-rem(2px);
+    border-block-end: 1px dotted $gray-border;
+    background-color: $gray;
+  }
+
+  // A wavy rule, as a spell checker draws one: it does not rest on color.
+  .#{$prefix}--token-search__qualifier--error {
+    border-block-end-color: transparent;
+    background-color: $red;
+  }
+
+  .#{$prefix}--token-search__error {
+    text-decoration: underline wavy $support-error;
+    text-decoration-skip-ink: none;
+    text-underline-offset: to-rem(3px);
+  }
+
+  .#{$prefix}--token-search__anchor {
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 100%;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .#{$prefix}--token-search__menu {
+    min-width: to-rem(224px);
+    max-width: min(to-rem(384px), calc(100vw - #{$carbon--spacing-05}));
+    background-color: $field;
+    box-shadow: 0 2px 6px rgba($carbon--black-100, 0.3);
+  }
+
+  .#{$prefix}--token-search__menu .#{$prefix}--list-box__menu-item {
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--token-search__menu .#{$prefix}--list-box__menu-item__option {
+    display: flex;
+    height: to-rem(32px);
+    align-items: center;
+    padding-top: to-rem(7px);
+    padding-bottom: to-rem(7px);
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--token-search__menu--md .#{$prefix}--list-box__menu-item {
+    height: to-rem(40px);
+  }
+
+  .#{$prefix}--token-search__menu--md
+    .#{$prefix}--list-box__menu-item__option {
+    height: to-rem(40px);
+    padding-top: to-rem(11px);
+    padding-bottom: to-rem(11px);
+  }
+
+  .#{$prefix}--token-search__menu--lg .#{$prefix}--list-box__menu-item {
+    height: to-rem(48px);
+  }
+
+  .#{$prefix}--token-search__menu--lg
+    .#{$prefix}--list-box__menu-item__option {
+    height: to-rem(48px);
+    padding-top: to-rem(15px);
+    padding-bottom: to-rem(15px);
+  }
+
+  .#{$prefix}--token-search__text {
+    min-width: 0;
+    unicode-bidi: plaintext;
+    flex: 0 1 auto;
+    overflow: hidden;
+    color: $text-primary;
+    text-overflow: ellipsis;
+  }
+
+  .#{$prefix}--token-search__secondary {
+    min-width: 0;
+    unicode-bidi: plaintext;
+    flex: 1 1 0;
+    overflow: hidden;
+    color: $text-secondary;
+    text-overflow: ellipsis;
+  }
+
+  @media (forced-colors: active) {
+    // The layer opts out of forcing, so that its text stays clear, and
+    // names its system colors. The fills would stay pale under the light
+    // text of a dark palette, so they go; the rules carry the meaning.
+    .#{$prefix}--token-search__qualifier,
+    .#{$prefix}--token-search__qualifier--negated,
+    .#{$prefix}--token-search__qualifier--error,
+    .#{$prefix}--token-search__phrase {
+      border-block-end-color: CanvasText;
+      background-color: transparent;
+    }
+
+    .#{$prefix}--token-search__qualifier--error {
+      border-block-end-color: transparent;
+    }
+
+    .#{$prefix}--token-search__error {
+      text-decoration-color: CanvasText;
+    }
+
+    .#{$prefix}--list-box__menu-item--highlighted .#{$prefix}--token-search__text,
+    .#{$prefix}--list-box__menu-item--highlighted
+      .#{$prefix}--token-search__secondary {
+      color: HighlightText;
+    }
+  }
+}
+
+@include exports("token-search") {
+  @include token-search;
+}
