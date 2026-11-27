@@ -130,8 +130,13 @@ fs.writeFileSync(
         verbatimModuleSyntax: true,
         types: [],
         paths: {
+          // The subpaths in package.json `exports`, so an example can't
+          // import a deep path that an app can't resolve.
           "carbon-components-svelte": [relative("../src")],
-          "carbon-components-svelte/*": [relative("../src/*")],
+          "carbon-components-svelte/motion": [relative("../src/motion")],
+          "carbon-components-svelte/syntax": [relative("../src/syntax")],
+          "carbon-components-svelte/tokens": [relative("../src/tokens")],
+          "carbon-components-svelte/src/*": [relative("../src/*")],
         },
       },
       include: ["*.svelte", relative("src/pages/framed/**/*.svelte")],
