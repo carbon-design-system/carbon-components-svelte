@@ -1,0 +1,93 @@
+---
+components: ["InlineSuggest"]
+description: InlineSuggest shows grey text that continues what the user typed in a TextInput or TextArea, to accept with a key. Use it for email domains, recent values and AI completions.
+---
+
+## Basic
+
+Pass the `ref` of a [TextInput](/components/TextInput) or [TextArea](/components/TextArea) to `field`, and a list of candidates to `source`. As the user types, the first candidate the text is a prefix of is shown after the caret in grey. Press <DocKbd label="Tab" /> or <DocKbd label="ArrowRight" /> to accept it. <DocKbd label="Escape" /> dismisses it, and typing on keeps it for as long as the text still matches.
+
+`InlineSuggest` renders no field. It attaches to the one you give it, so every prop of `TextInput` and `TextArea`, such as `maxCount`, `invalid`, `helperText` or `bind:value`, works as before.
+
+A suggestion shows only while the field has focus, the caret sits at the end of the text with nothing selected, and no IME composition is open.
+
+<FileSource src="/framed/InlineSuggest/InlineSuggestEmail" />
+
+## Sources
+
+### List
+
+An array is searched in order, so put the likeliest candidate first. Set `after` to complete only what follows a marker: with `after="@"`, `ada@gm` offers `ail.com`. Without it the whole text is matched. Set `scope` to `"line"` or `"word"` to match only the current line or word, for a field that holds more than one thing.
+
+The suggestion is the candidate's own tail, so the user's casing stays: `ada@GM` becomes `ada@GMail.com`. Set `ignoreCase={false}` to match exactly, and `minLength` to wait for more typing.
+
+<FileSource src="/framed/InlineSuggest/InlineSuggestRecent" />
+
+<FileSource src="/framed/InlineSuggest/InlineSuggestTemplates" />
+
+### Async
+
+Pass a function that takes the text so far and returns the text to show after it, or a promise of that. Return only the continuation, not the whole text. The function gets `{ signal }`: pass it to `fetch`, or listen for its `abort` event, to stop a request the user has typed past.
+
+The function runs after `debounce` milliseconds of quiet. Only the newest request may answer: a slower, older response is dropped even when the function ignores the signal, and an answer that arrives after the caret moved is dropped too. While a suggestion is on screen and the user types its next letters, the suggestion is kept and nothing is requested. A function that throws or rejects shows no suggestion.
+
+<FileSource src="/framed/InlineSuggest/InlineSuggestAI" />
+
+## Accepting
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="Tab" /> | Accept all of the suggestion. Taken only while one shows |
+| <DocKbd label="ArrowRight" /> | Accept all of it. In a right-to-left field, <DocKbd label="ArrowLeft" />, the arrow along the line |
+| <DocKbd label="Ctrl" />+<DocKbd label="ArrowRight" />, <DocKbd label="Alt" />+<DocKbd label="ArrowRight" /> | Accept the next word. What is left stays |
+| <DocKbd label="Escape" /> | Dismiss. It stops there, so a Modal stays open. The next key typed asks again |
+| <DocKbd label="Shift" />+<DocKbd label="Tab" />, any key with <DocKbd label="Meta" /> | Left to the field |
+
+Both Tab and the arrow do nothing special when no suggestion shows, so keyboard users are never trapped: after Tab accepts, the next Tab moves on, and <DocKbd label="Escape" /> then Tab leaves without accepting. The text goes in as typing would, so undo takes it back and `bind:value` and the field's `input` handlers see it.
+
+### Keeping Tab for focus
+
+Tab accepts by default because GitHub Copilot and Gmail Smart Compose teach it. In a form people tab through, a Tab pressed right after typing accepts a suggestion nobody asked for. Pass `acceptKeys={["ArrowRight"]}` to take only the arrow.
+
+<FileSource src="/framed/InlineSuggest/InlineSuggestKeys" />
+
+| Do | Why |
+| :--- | :--- |
+| Keep the default in an editor or a message box | The user is writing, and Tab has no other job there |
+| Use `acceptKeys={["ArrowRight"]}` in a form of several short fields | Tab moves between fields, and an accidental accept changes the value |
+| Leave `acceptWord` on for long suggestions | A user who wants only the first words can take them, and type the rest |
+
+### Touch
+
+A touch screen has no Tab key or arrows. With `acceptButton="auto"`, the default, a button appears at the end of the field when the primary pointer is coarse. Set it to `true` to always show one, or `false` for none. The button never takes focus from the field, so the caret and the on-screen keyboard stay.
+
+<FileSource src="/framed/InlineSuggest/InlineSuggestButton" />
+
+## Accessibility
+
+The field stays a text box with `aria-autocomplete="inline"`, the ARIA value for text suggested after the caret. A visually hidden hint joins the field's `aria-describedby`, so a screen reader reads the keys when focus lands: "Suggestions appear as you type. Tab or Right Arrow accepts. Control or Option plus arrow accepts one word. Escape dismisses."
+
+A polite live region says "Suggestion: ail.com" when a suggestion appears after a pause, and "Suggestion accepted" after it is accepted. Typing through a suggestion says nothing, so a screen reader is not interrupted at every key. Translate the texts with `hintText`, `suggestionText`, `acceptedText` and `acceptText`.
+
+The suggestion is drawn in `$text-helper`, a different colour from typed text. In forced colors it is `GrayText`, so it does not rest on colour or opacity alone. It follows the field's direction, and shows nothing while an IME composes.
+
+| Do | Why |
+| :--- | :--- |
+| Keep the field's own label and helper text | `InlineSuggest` adds no label of its own, and its hint joins the field's description |
+| Say in `helperText` what is suggested when it is not obvious | A sighted user learns the feature from the grey text, and a screen reader user from the hint |
+| Return a short continuation from an async source | The text is announced in full, and a long one is slow to hear |
+| Do not put the only copy of a value in a suggestion | The text is not in the field until accepted, and a form does not submit it |
+
+## Behaviour
+
+| Situation | What happens |
+| :--- | :--- |
+| The caret is not at the end, or text is selected | No suggestion, and none is asked for |
+| A field is empty | A suggestion needs `minLength` characters. Pass `minLength={0}` to suggest from an empty field. The placeholder is hidden while one shows |
+| The suggestion would pass `maxlength` | It is cut to fit |
+| The value is changed from code | The suggestion is dropped at the next key |
+| The suggestion would move the typed text, which stays where the field put it | No suggestion. This is English in a right-to-left field, Hebrew or Arabic in a left-to-right one, and a word that would wrap to the next line once completed. Set `dir="ltr"` on an email field in a right-to-left page |
+| An IME is composing | Nothing is suggested, and no key is taken, until it commits |
+| The field is `disabled` or `readonly` | Nothing is suggested |
+
+A long suggestion that runs past the end of a single line, or past the last visible line of a `TextArea`, is clipped at the field's edge rather than scrolling the field. It is complete when accepted.
