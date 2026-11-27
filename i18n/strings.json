@@ -1543,6 +1543,13 @@
     },
     {
       "component": "RadioButtonGroup",
+      "prop": "requiredInvalidText",
+      "type": "string",
+      "default": "Select an option",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RadioButtonGroup",
       "prop": "warnText",
       "type": "string",
       "default": "",
