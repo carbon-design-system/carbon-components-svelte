@@ -46,21 +46,78 @@ describe("linkSegments", () => {
     ]);
   });
 
+  it("leaves URLs with credentials as text", () => {
+    for (const text of [
+      "https://google.com@evil.example/",
+      "Log in at https://user:pass@example.com/admin",
+    ]) {
+      expect(linkSegments(text)).toEqual([{ text }]);
+    }
+  });
+
+  it("ends a link at a bidi control or a zero-width character", () => {
+    expect(linkSegments("https://example.com/‮fdp.exe")).toEqual([
+      { text: "https://example.com/", href: "https://example.com/" },
+      { text: "‮fdp.exe" },
+    ]);
+    expect(linkSegments("See https://example.com/a​b")).toEqual([
+      { text: "See " },
+      { text: "https://example.com/a", href: "https://example.com/a" },
+      { text: "​b" },
+    ]);
+  });
+
+  // The splits that changed when linkSegments moved onto linkify.
+  it.each([
+    ["www.example", [{ text: "www.example" }]],
+    [
+      "https://example.com/a。next",
+      [
+        { text: "https://example.com/a", href: "https://example.com/a" },
+        { text: "。next" },
+      ],
+    ],
+    [
+      "https://example.com/{id}",
+      [
+        { text: "https://example.com/", href: "https://example.com/" },
+        { text: "{id}" },
+      ],
+    ],
+    [
+      "https://example.com/a|b",
+      [
+        { text: "https://example.com/a", href: "https://example.com/a" },
+        { text: "|b" },
+      ],
+    ],
+  ])("splits %j as linkify does", (text, segments) => {
+    expect(linkSegments(text)).toEqual(segments);
+  });
+
+  it("leaves a URL longer than 2,048 characters as text", () => {
+    const text = `https://${"a".repeat(2050)}.com`;
+
+    expect(linkSegments(text)).toEqual([{ text }]);
+  });
+
   // A message is untrusted input, so a crafted one must not stall the
   // thread that renders it.
   describe("long runs", () => {
     const BUDGET = 1000;
 
     it("trims a run of closing brackets in linear time", () => {
-      const text = `https://example.com/${")".repeat(40_000)}`;
+      const within = `https://example.com/${")".repeat(1500)}`;
+      // Past the 2,048-character cap on a link, the run stays text.
+      const beyond = `https://example.com/${")".repeat(40_000)}`;
       const start = performance.now();
-      const segments = linkSegments(text);
 
-      expect(performance.now() - start).toBeLessThan(BUDGET);
-      expect(segments).toEqual([
+      expect(linkSegments(within)).toEqual([
         { text: "https://example.com/", href: "https://example.com/" },
-        { text: ")".repeat(40_000) },
+        { text: ")".repeat(1500) },
       ]);
+      expect(linkSegments(beyond)).toEqual([{ text: beyond }]);
+      expect(performance.now() - start).toBeLessThan(BUDGET);
     });
 
     it("scans a dotted run in linear time", () => {
