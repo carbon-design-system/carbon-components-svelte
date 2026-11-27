@@ -1,11 +1,13 @@
 import type { Targets } from "lightningcss";
 
-// Svelte 5 minimum browsers — https://svelte.dev/docs/svelte/browser-support
+// The first versions with `:has()`, pinned (#5288). Move them only in a
+// minor release, so a patch never drops a browser.
 export const BROWSERS = {
-  chrome: "87",
-  edge: "87",
-  firefox: "83",
-  safari: "14.1",
+  chrome: "105",
+  edge: "105",
+  firefox: "121",
+  safari: "15.4",
+  ios_saf: "15.4",
 } as const;
 
 /** A `major.minor.patch` version as lightningcss packs it: one byte each. */

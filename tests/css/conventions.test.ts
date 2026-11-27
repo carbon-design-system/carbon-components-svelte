@@ -74,25 +74,88 @@ const KNOWN_LITERAL_ANIMATIONS: Record<string, number> = {
   "_chat.scss": 4,
 };
 
-// `:has()` outside an `@supports selector(:has(…))` block, as 1-based line
-// numbers. A gated block is the one place `:has()` may appear: a browser
-// without it skips the block whole instead of dropping a rule it shares.
-// Use it only where no markup can carry the state, such as a set that must
-// know about a later child before the server has rendered that child.
-function ungatedHas(lines: string[]): number[] {
-  const found: number[] = [];
-  let depth = 0;
-  let gateDepth = -1;
-  lines.forEach((line, index) => {
-    const code = line.split("//")[0].replace(/#\{[^}]*\}/g, "PFX");
-    if (gateDepth < 0 && /@supports\s+selector\(\s*:has\(/.test(code))
-      gateDepth = depth;
-    if (gateDepth < 0 && code.includes(":has(")) found.push(index + 1);
-    depth += (code.match(/\{/g) ?? []).length;
-    depth -= (code.match(/\}/g) ?? []).length;
-    if (gateDepth >= 0 && depth <= gateDepth) gateDepth = -1;
+// Selectors newer than the browser baseline (Chrome 105, Firefox 121,
+// Safari 15.4). One unknown selector drops the whole rule it sits in.
+// `:dir()`: Chrome 120, Safari 16.4. `:nth-child(… of …)`: Chrome 111,
+// Firefox 113. `:modal`: Safari 15.6. `:user-invalid`: Chrome 119.
+// `:popover-open`: Chrome 114, Safari 17. `:state()`: Chrome 125.
+const NEWER_SELECTORS =
+  /:dir\(|:nth(-last)?-(child|of-type)\([^)]*\bof\b|:modal\b|:user-(in)?valid\b|:popover-open\b|:state\(|:open\b|:has-slotted\b|::details-content\b|::picker\(/;
+
+// Pseudo-classes a `:has()` argument may hold. Safari 15.4 shipped
+// `:has()` without invalidation for state pseudo-classes (`:checked`,
+// `:focus`, `:disabled`; WebKit bugs 234556 and 238451), so a rule keyed on
+// one would not update when the state changes. `:is()` and `:where()` inside
+// `:has()` invalidate wrongly in WebKit (bugs 241098 and 273125), and
+// `:has()` inside `:has()` is invalid. Classes, combinators and these
+// structural pseudo-classes are safe.
+const SAFE_HAS_PSEUDOS = new Set([
+  "not",
+  "first-child",
+  "last-child",
+  "only-child",
+  "nth-child",
+  "nth-last-child",
+  "first-of-type",
+  "last-of-type",
+  "only-of-type",
+  "nth-of-type",
+  "empty",
+]);
+
+/** Offset and balanced argument of each `pseudo(` in `source`. */
+function pseudoArguments(source: string, pseudo: RegExp) {
+  return [...source.matchAll(pseudo)].map((match) => {
+    const start = (match.index ?? 0) + match[0].length;
+    let depth = 1;
+    let end = start;
+    while (end < source.length && depth > 0) {
+      if (source[end] === "(") depth++;
+      if (source[end] === ")") depth--;
+      end++;
+    }
+    return { index: match.index ?? 0, argument: source.slice(start, end - 1) };
   });
-  return found;
+}
+
+/** Whether `argument` is a list: a comma outside any parentheses. */
+function isList(argument: string): boolean {
+  let depth = 0;
+  for (const char of argument) {
+    if (char === "(") depth++;
+    if (char === ")") depth--;
+    if (char === "," && depth === 0) return true;
+  }
+  return false;
+}
+
+// `:has()` the baseline can't keep up to date, as 1-based line numbers:
+// an argument holding a pseudo-element or a pseudo-class outside
+// SAFE_HAS_PSEUDOS, or a `:has()` in a selector list inside `:is()`,
+// `:where()` or `:not()`. Firefox 121 to 125 don't re-match
+// `:is(.a, :has(.b))` when the other branch changes (Mozilla bug 1874042).
+// A `:has()` alone in `:where()`, to keep a rule's specificity, is fine.
+// Reads the whole file, so a selector the formatter wraps is still seen.
+// Sass interpolation is blanked first, so `#{$prefix}` reads as a class.
+function unsafeHas(lines: string[]): number[] {
+  const source = lines
+    .map((line) => line.split("//")[0].replace(/#\{[^}]*\}/g, "PFX"))
+    .join("\n");
+  const lineOf = (index: number) => source.slice(0, index).split("\n").length;
+  const unsafeArgument = pseudoArguments(source, /:has\(/g).filter(
+    ({ argument }) =>
+      [...argument.matchAll(/(::?)([a-z-]+)/g)].some(
+        ([, colons, name]) => colons === "::" || !SAFE_HAS_PSEUDOS.has(name),
+      ),
+  );
+  const inList = pseudoArguments(source, /:(is|where|not)\(/g).filter(
+    ({ argument }) => argument.includes(":has(") && isList(argument),
+  );
+  return [
+    ...new Set(
+      [...unsafeArgument, ...inList].map(({ index }) => lineOf(index)),
+    ),
+  ].sort((a, b) => a - b);
 }
 
 // `:hover` outside an `(any-hover: hover)` block, as 1-based line numbers.
@@ -431,30 +494,6 @@ describe("css partial conventions", () => {
     );
   });
 
-  it("avoids :has(), which is newer than the browser baseline", () => {
-    const found = PARTIALS.flatMap((name) =>
-      ungatedHas(readFileSync(join(CSS_DIR, name), "utf8").split("\n")).map(
-        (line) => `${name}:${line}`,
-      ),
-    );
-    expect(found).toEqual([]);
-  });
-
-  it("lets :has() through only inside its @supports gate", () => {
-    const lines = [
-      ".a:has(.b) {}",
-      "@supports selector(:has(*)) {",
-      "  .a:has(.b) {",
-      "    @include carbon--breakpoint(md) {",
-      "      .#{$prefix}--c:has(.d) {}",
-      "    }",
-      "  }",
-      "}",
-      ".a:has(.b) {}",
-    ];
-    expect(ungatedHas(lines)).toEqual([1, 9]);
-  });
-
   it("does not pad specificity by repeating a class in one compound", () => {
     // The lookahead matters: without it, `.foo.foo--bar` (a base class next
     // to its own BEM modifier, a normal 2-class compound) false-positives,
@@ -502,7 +541,6 @@ const PATCH_RULES: Record<string, (lines: string[]) => number[]> = {
   "var() with literal fallback": matching(
     /var\(--cds-[\w-]+,\s*(rgba?\(|#[0-9a-f])/i,
   ),
-  ":has()": ungatedHas,
   "repeated class": matching(/(\.#\{\$prefix\}--[\w-]+)\1(?![\w-])/),
   "literal timing": (lines) => literalTimings(lines).found,
   "unguarded :hover": unguardedHover,
@@ -578,12 +616,13 @@ const CCS_EDITS = scssFiles(VENDOR_DIR).flatMap((file) => {
 // Single-line rules only: an edited line has no rule structure around it.
 // Value style (`$spacing-*`, raw rem) is left to match the upstream lines
 // around the edit; these are the rules that hold either way.
-const CCS_EDIT_RULES = [
-  "literal .bx-- class",
-  "hex color",
-  ":has()",
-  "repeated class",
-];
+const CCS_EDIT_RULES: Record<string, (lines: string[]) => number[]> = {
+  "literal .bx-- class": PATCH_RULES["literal .bx-- class"],
+  "hex color": PATCH_RULES["hex color"],
+  "repeated class": PATCH_RULES["repeated class"],
+  "selector newer than the baseline": matching(NEWER_SELECTORS),
+  ":has() the baseline can't invalidate": unsafeHas,
+};
 
 describe("in-place `// ccs:` edits", () => {
   it("finds the edited lines", () => {
@@ -591,9 +630,9 @@ describe("in-place `// ccs:` edits", () => {
   });
 
   it("follow the selector and color conventions", () => {
-    const found = CCS_EDIT_RULES.flatMap((rule) =>
+    const found = Object.entries(CCS_EDIT_RULES).flatMap(([rule, find]) =>
       CCS_EDITS.flatMap(({ name, lines }) =>
-        PATCH_RULES[rule](lines).map((line) => `${rule}: ${name}:${line}`),
+        find(lines).map((line) => `${rule}: ${name}:${line}`),
       ),
     );
     expect(found).toEqual([]);
@@ -656,6 +695,8 @@ const SHARED_RULES: Record<string, (lines: string[]) => number[]> = {
   // Win on specificity or custom-property inheritance instead; consumers
   // cannot override an `!important` without one of their own.
   "!important": matching(/!important/),
+  "selector newer than the baseline": matching(NEWER_SELECTORS),
+  ":has() the baseline can't invalidate": unsafeHas,
 };
 
 // Same contract as KNOWN_PATCH_VIOLATIONS: exact counts that only shrink.
@@ -701,6 +742,27 @@ describe("hand-authored conventions (partials and patch blocks)", () => {
     expect(
       [...REPOINTED_V11_HOOKS].filter((hook) => !declared.includes(hook)),
     ).toEqual([]);
+  });
+
+  it("flags a :has() the baseline can't invalidate", () => {
+    expect(
+      unsafeHas([
+        ".a:has(> .b) {}",
+        ".#{$prefix}--a:has(+ .#{$prefix}--b:not(.c)) {}",
+        ".a:where(:has(.b:last-child)) {}",
+        ".a:has(> .b):not(:has(> .c)) {}",
+        ".a:has(:checked) {}",
+        ".a:has(.b:focus-visible) {}",
+        ".a:has(:is(.b, .c)) {}",
+        ".a:has(.b ::before) {}",
+        ".a:is(.b, :has(.c)) {}",
+        ".a:not(",
+        "    .b,",
+        "    :has(.c)",
+        "  ) {}",
+        ".a:has(.b) // .c:has(:focus)",
+      ]),
+    ).toEqual([5, 6, 7, 8, 9, 10]);
   });
 
   it("still flags an !important declaration", () => {

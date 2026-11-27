@@ -4,10 +4,11 @@ import { join } from "node:path";
 import { parse } from "acorn";
 
 // The calendar ships as unbundled source, so whatever it uses reaches users
-// as written. Keep it inside the Svelte 5 browser baseline the CSS targets
-// (Firefox 83, Safari 14). `test:src-svelte` checks the .js files against the
-// ES2021 library; this covers what it can't see: syntax, browser APIs, and
-// the scripts of .svelte files.
+// as written. Keep it inside the browser baseline (Chrome 105, Firefox 121,
+// Safari 15.4). `test:src-svelte` checks the .js files against the ES2022
+// library; this covers what it can't see: syntax, browser APIs, and the
+// scripts of .svelte files. The syntax stays ES2021: ES2022's class static
+// blocks need Safari 16.4.
 
 // @depends-on src/DatePicker/*
 const DIR = join(import.meta.dirname, "../../src/DatePicker");
@@ -18,24 +19,27 @@ const files = (extension: string) =>
 
 /** Browser APIs (outside the ES library) -> first Firefox / Safari with them. */
 const NEWER_BROWSER_APIS: Array<[RegExp, string]> = [
-  [/structuredClone\(/, "structuredClone: Firefox 94, Safari 15.4"],
   [
     /AbortSignal\.(any|timeout)\(/,
-    "AbortSignal.any/timeout: Firefox 124, Safari 17.4",
+    "AbortSignal.any/timeout: Chrome 124, Firefox 124, Safari 17.4",
   ],
-  [/\bsignal\s*[:,}]/, "addEventListener `signal`: Safari 15"],
+  [/startViewTransition\(/, "View Transitions: Firefox 144, Safari 18"],
 ];
 
-/** ES2022+ APIs, for the .svelte scripts, whose type errors are baselined. */
+/** ES2023+ APIs newer than the baseline, for the .svelte scripts. */
 const NEWER_ES_APIS: Array<[RegExp, string]> = [
-  [/\.at\(/, "Array/String#at: Firefox 90, Safari 15.4"],
-  [/Object\.hasOwn\(/, "Object.hasOwn: Firefox 92, Safari 15.4"],
-  [/\.findLast(Index)?\(/, "Array#findLast: Firefox 104, Safari 15.4"],
   [
     /\.to(Sorted|Reversed|Spliced)\(/,
-    "change-array-by-copy: Firefox 115, Safari 16",
+    "change-array-by-copy: Chrome 110, Firefox 115, Safari 16",
   ],
-  [/Promise\.withResolvers/, "Promise.withResolvers: Firefox 121, Safari 17.4"],
+  [/Promise\.withResolvers/, "Promise.withResolvers: Chrome 119, Safari 17.4"],
+  [/(Object|Map)\.groupBy\(/, "Object.groupBy: Chrome 117, Safari 17.4"],
+  [
+    /\.(union|intersection|difference|symmetricDifference)\(/,
+    "Set methods: Chrome 122, Firefox 127, Safari 17",
+  ],
+  [/Promise\.try\(/, "Promise.try: Firefox 134, Safari 18.2"],
+  [/\.(toArray|drop|take)\(\)/, "Iterator helpers: Firefox 131, Safari 18.4"],
 ];
 
 const COMMENTS = /\/\*[\s\S]*?\*\/|\/\/.*$/gm;
