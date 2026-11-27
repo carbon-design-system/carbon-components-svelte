@@ -43,6 +43,18 @@ Access the breakpoints dictionary to map from BreakpointSize to BreakpointValue.
 
 <FileSource src="/framed/Breakpoint/BreakpointObserver" />
 
+## Fallback size
+
+Set `fallback` to the size to assume before the first measurement: in the server render, and in runtimes without `matchMedia`. Once the browser measures the viewport, the measured size replaces it.
+
+`change` does not fire for the fallback. It fires only for a measured size.
+
+<Breakpoint fallback="lg" let:size>
+  <p>Current size: {size}</p>
+</Breakpoint>
+
+`breakpointObserver` takes the same option: `breakpointObserver({ fallback: "lg" })`.
+
 ## use:hideAtBreakpoint
 
 Use the `hideAtBreakpoint` action to hide an element outside a breakpoint range, without wrapping it in `Breakpoint`. Set `above`, `below`, or both. Resize the browser to see the elements toggle.
