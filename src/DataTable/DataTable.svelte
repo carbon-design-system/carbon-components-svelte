@@ -590,7 +590,11 @@
    */
   export let filterMode = "remove";
 
-  /** Specify the number of items to display in a page */
+  /**
+   * Specify the number of items to display in a page. This slices `rows`
+   * client side. For server pagination, pass only the current page as `rows`
+   * and bind `page` and `pageSize` on `Pagination` instead.
+   */
   export let pageSize = 0;
 
   /** Set to `number` to set current page */
