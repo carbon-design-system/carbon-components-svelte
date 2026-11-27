@@ -234,6 +234,7 @@ export { default as StructuredListHead } from "./StructuredList/StructuredListHe
 export { default as StructuredListInput } from "./StructuredList/StructuredListInput.svelte";
 export { default as StructuredListRow } from "./StructuredList/StructuredListRow.svelte";
 export { default as StructuredListSkeleton } from "./StructuredList/StructuredListSkeleton.svelte";
+export { default as Swatch } from "./Swatch/Swatch.svelte";
 export { default as TableOfContents } from "./TableOfContents/TableOfContents.svelte";
 export { default as TableOfContentsItem } from "./TableOfContents/TableOfContentsItem.svelte";
 export { default as TableOfContentsGroup } from "./TableOfContents/TableOfContentsGroup.svelte";
