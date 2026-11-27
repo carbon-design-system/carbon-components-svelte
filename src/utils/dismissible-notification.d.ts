@@ -1,11 +1,18 @@
 export interface DismissibleNotification {
-  close: (closeFromTimeout?: unknown) => void;
+  close: (
+    closeFromTimeout?: unknown,
+    trigger?: "close-button" | "escape-key" | "timeout",
+  ) => void;
   /** `hasAction` makes the notification ignore `timeout` (WCAG 2.2.1). */
   sync: (open: boolean, timeout: number, hasAction?: boolean) => void;
   syncFocusOnOpen: (open: boolean, enabled: boolean) => void;
-  handleActionableKeydown: (
+  handleKeydown: (
     event: KeyboardEvent,
-    options: { closeOnEscape: boolean; hideCloseButton: boolean },
+    options: {
+      actionable: boolean;
+      closeOnEscape: boolean;
+      hideCloseButton: boolean;
+    },
   ) => void;
   handleMouseenter: () => void;
   handleMouseleave: (event: MouseEvent) => void;

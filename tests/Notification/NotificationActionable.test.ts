@@ -84,7 +84,10 @@ describe.each(["inline", "toast"] as const)("actionable (%s)", (type) => {
 
     expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
     expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose.mock.calls[0][0].detail).toEqual({ timeout: false });
+    expect(onClose.mock.calls[0][0].detail).toEqual({
+      timeout: false,
+      trigger: "escape-key",
+    });
     expect(trigger).toHaveFocus();
     // A surrounding modal must not also close on the same key.
     expect(onKeydown.mock.calls.some(([event]) => event.key === "Escape")).toBe(
@@ -249,7 +252,7 @@ describe.each(["inline", "toast"] as const)("actionable (%s)", (type) => {
     );
   });
 
-  it("keeps today's role, labels, focus, and keys when not actionable", async () => {
+  it("keeps role, labels and Tab order when not actionable, and closes on Escape", async () => {
     const onClose = vi.fn();
     render(NotificationActionable, {
       props: { type, actionable: false, onClose },
@@ -272,15 +275,17 @@ describe.each(["inline", "toast"] as const)("actionable (%s)", (type) => {
     expect(trigger).toHaveFocus();
 
     screen.getByRole("button", { name: "Undo" }).focus();
-    await user.keyboard("{Escape}");
-    expect(region).toBeInTheDocument();
-    expect(onClose).not.toHaveBeenCalled();
-
     await user.tab();
     expect(
       screen.getByRole("button", { name: "Close notification" }),
     ).toHaveFocus();
     await user.tab();
     expect(screen.getByRole("button", { name: "After" })).toHaveFocus();
+
+    // Escape closes it, as it does any notification with a close button.
+    screen.getByRole("button", { name: "Undo" }).focus();
+    await user.keyboard("{Escape}");
+    expect(region).not.toBeInTheDocument();
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 });

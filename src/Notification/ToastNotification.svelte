@@ -3,6 +3,7 @@
    * @restProps {div}
    * @event close
    * @property {boolean} timeout
+   * @property {"close-button" | "escape-key" | "timeout"} trigger
    */
 
   /**
@@ -53,9 +54,10 @@
   export let focusOnOpen = true;
 
   /**
-   * Set to `false` to keep an actionable notification open on Escape.
-   * With `hideCloseButton` also set, Tab can leave the notification.
-   * Has no effect unless `actionable` is `true`.
+   * Set to `false` to keep the notification open on Escape. Escape closes
+   * a notification with a close button, or an actionable one without it.
+   * With `hideCloseButton` also set, Tab can leave an actionable
+   * notification.
    */
   export let closeOnEscape = true;
 
@@ -154,7 +156,7 @@
     close,
     sync,
     syncFocusOnOpen,
-    handleActionableKeydown,
+    handleKeydown,
     handleMouseenter,
     handleMouseleave,
     handleFocusIn,
@@ -249,9 +251,7 @@
       on:focusin={handleFocusIn}
       on:focusout={handleFocusOut}
       on:keydown={(event) => {
-        if (actionable) {
-          handleActionableKeydown(event, { closeOnEscape, hideCloseButton });
-        }
+        handleKeydown(event, { actionable, closeOnEscape, hideCloseButton });
       }}
     >
       <ToastNotificationContent
@@ -318,9 +318,7 @@
       on:focusin={handleFocusIn}
       on:focusout={handleFocusOut}
       on:keydown={(event) => {
-        if (actionable) {
-          handleActionableKeydown(event, { closeOnEscape, hideCloseButton });
-        }
+        handleKeydown(event, { actionable, closeOnEscape, hideCloseButton });
       }}
     >
       <ToastNotificationContent

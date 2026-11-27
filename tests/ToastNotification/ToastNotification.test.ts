@@ -171,7 +171,10 @@ describe("ToastNotification", () => {
     vi.advanceTimersByTime(1000);
     await tick();
     expect(onclose).toHaveBeenCalledTimes(1);
-    expect(onclose.mock.calls[0][0].detail).toEqual({ timeout: true });
+    expect(onclose.mock.calls[0][0].detail).toEqual({
+      timeout: true,
+      trigger: "timeout",
+    });
   });
 
   it("renders no actions wrapper without the actions slot", () => {
