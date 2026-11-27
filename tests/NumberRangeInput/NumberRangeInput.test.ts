@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import NumberRangeInput from "./NumberRangeInput.test.svelte";
+import Translated from "./NumberRangeInputTranslated.test.svelte";
 
 const minInput = () => screen.getByRole("spinbutton", { name: /^Minimum/ });
 const maxInput = () => screen.getByRole("spinbutton", { name: /^Maximum/ });
@@ -125,7 +126,7 @@ describe("NumberRangeInput", () => {
 
     it("submits each end under its own name", () => {
       const { container } = render(NumberRangeInput, {
-        props: { value: [10, 250], name: "price", nameUpper: "price-max" },
+        props: { value: [10, 250], minName: "price", maxName: "price-max" },
       });
 
       const data = new FormData();
@@ -249,6 +250,42 @@ describe("NumberRangeInput", () => {
       expect(minInput()).toHaveAccessibleErrorMessage("Enter a minimum.");
       expect(maxInput()).not.toHaveAttribute("aria-invalid");
       expect(component.valid).toBe(false);
+    });
+
+    it("takes a message from setTranslateContext, with the limit", async () => {
+      const translate = vi.fn((id: string, params?: { limit: string }) =>
+        id === "aboveMax" ? `Höchstens ${params?.limit}.` : undefined,
+      );
+      render(Translated, { props: { translate } });
+
+      await user.type(maxInput(), "101");
+      await user.tab();
+
+      expect(maxInput()).toHaveAccessibleErrorMessage("Höchstens 100.");
+      expect(translate).toHaveBeenCalledWith("aboveMax", { limit: "100" });
+    });
+
+    it("keeps English for an id the context leaves out", async () => {
+      render(Translated, { props: { translate: () => undefined } });
+
+      await user.type(minInput(), "5");
+      await user.tab();
+
+      expect(minInput()).toHaveAccessibleErrorMessage("Enter 10 or more.");
+    });
+
+    it("prefers its own translateWithId over the context", async () => {
+      render(Translated, {
+        props: {
+          translate: () => "from the context",
+          translateWithId: (id: string) => `own:${id}`,
+        },
+      });
+
+      await user.type(maxInput(), "101");
+      await user.tab();
+
+      expect(maxInput()).toHaveAccessibleErrorMessage("own:aboveMax");
     });
 
     it("lets translateWithId reword a message", async () => {

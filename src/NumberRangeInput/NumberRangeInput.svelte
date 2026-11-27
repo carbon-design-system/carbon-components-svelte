@@ -76,6 +76,7 @@
   /**
    * Set to `true` to show a dual-handle slider below the fields, kept in
    * sync with them. Needs `min` and `max`. An open end rests at its bound.
+   * A second way to enter the same range, present or not, so a boolean.
    */
   export let slider = false;
 
@@ -170,13 +171,17 @@
   export let hideLabel = false;
 
   /**
-   * Override the messages shown on a field.
-   * `values.limit` is the bound, step or other end, formatted for the
-   * `locale`.
-   * @type {(id: NumberRangeInputTranslationId, values: { limit: string }) => string}
+   * Override the messages shown on a field. Unset, it uses
+   * `setTranslateContext`, which receives the same id and `params`, then
+   * English. `params.limit` is the bound, step or other end, formatted for
+   * the `locale`.
+   * @type {(id: NumberRangeInputTranslationId, params: { limit: string }) => string}
    */
-  export let translateWithId = function translateWithId(id, { limit }) {
-    return defaultTranslations[id](limit);
+  export let translateWithId = function translateWithId(id, params) {
+    return (
+      translate?.(id, params) ??
+      defaultTranslations[id].replace("{limit}", params.limit)
+    );
   };
 
   /**
@@ -195,15 +200,17 @@
 
   /**
    * Specify a name attribute for the minimum field.
+   * An open end submits an empty string.
    * @type {string | undefined}
    */
-  export let name = undefined;
+  export let minName = undefined;
 
   /**
    * Specify a name attribute for the maximum field.
+   * An open end submits an empty string.
    * @type {string | undefined}
    */
-  export let nameUpper = undefined;
+  export let maxName = undefined;
 
   /**
    * Specify the id of the form the fields belong to.
@@ -212,7 +219,7 @@
   export let form = undefined;
 
   /** Set an id for the range. The fields and messages derive theirs from it. */
-  export let id = uniqueId();
+  export let id = useId("number-range-input");
 
   /**
    * Obtain a reference to the outer element.
@@ -236,6 +243,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
+  import { createIdScope, useId } from "../utils/id-scope.js";
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
   import {
     fromSliderValues,
@@ -250,25 +258,29 @@
     parse,
     parseLocaleValue,
   } from "../utils/numeric-format.js";
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
+  import { getTranslateContext } from "../utils/translate-context.js";
 
+  // `{limit}` stands for the bound, step or other end, formatted for the
+  // `locale`.
   const defaultTranslations = {
-    belowMin: (/** @type {string} */ limit) => `Enter ${limit} or more.`,
-    aboveMax: (/** @type {string} */ limit) => `Enter ${limit} or less.`,
-    step: (/** @type {string} */ limit) => `Use whole steps, such as ${limit}.`,
-    crossedMin: (/** @type {string} */ limit) =>
-      `Must not be above the maximum, ${limit}.`,
-    crossedMax: (/** @type {string} */ limit) =>
-      `Must not be below the minimum, ${limit}.`,
-    requiredMin: () => "Enter a minimum.",
-    requiredMax: () => "Enter a maximum.",
+    [translationIds.belowMin]: "Enter {limit} or more.",
+    [translationIds.aboveMax]: "Enter {limit} or less.",
+    [translationIds.step]: "Use whole steps, such as {limit}.",
+    [translationIds.crossedMin]: "Must not be above the maximum, {limit}.",
+    [translationIds.crossedMax]: "Must not be below the minimum, {limit}.",
+    [translationIds.requiredMin]: "Enter a minimum.",
+    [translationIds.requiredMax]: "Enter a maximum.",
   };
 
   // The group, not the field, decides what is invalid: a field would judge
   // its text against `min` and `max` while it is typed.
   const returnTrue = () => true;
 
+  // The slider, when shown, takes its own default id from this scope.
+  createIdScope(id);
+
+  const translate = getTranslateContext();
   const dispatch = createEventDispatcher();
   const formContext = getContext(FORM_CONTEXT_KEY);
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
@@ -280,7 +292,7 @@
 
   $: [lo, hi] = normalizeRange(value);
   $: isFluid = fluid || !!formContext?.isFluid;
-  $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
+  $: effectiveSize = normalizeFieldSize(size ?? $formSize);
 
   // The range as last known, to tell a write of ours from the parent's.
   let known = normalizeRange(value);
@@ -517,8 +529,8 @@
   $: maxText = messageFor("max", shown.max);
   // "Minimum" alone names a field in the group; "Minimum Price" names it
   // wherever the controls are listed apart from the legend.
-  $: minName = [minLabelText, labelText].filter(Boolean).join(" ");
-  $: maxName = [maxLabelText, labelText].filter(Boolean).join(" ");
+  $: minAriaLabel = [minLabelText, labelText].filter(Boolean).join(" ");
+  $: maxAriaLabel = [maxLabelText, labelText].filter(Boolean).join(" ");
 
   // A field points at its own message, else at the range's. Always passed,
   // never dropped: Svelte 3 and 4 turn a spread key that goes away into
@@ -575,7 +587,7 @@
             {min}
             {max}
             {step}
-            {name}
+            name={minName}
             {form}
             {locale}
             {formatOptions}
@@ -593,7 +605,7 @@
             disabled={effectiveDisabled}
             placeholder={minPlaceholder ??
               (min === undefined ? undefined : format(min))}
-            aria-label={minName}
+            aria-label={minAriaLabel}
             aria-errormessage={minErrorId}
             on:input={(event) => setEnd("min", event.detail, false)}
             on:change={(event) => setEnd("min", event.detail, true)}
@@ -613,7 +625,7 @@
             {min}
             {max}
             {step}
-            name={nameUpper}
+            name={maxName}
             {form}
             {locale}
             {formatOptions}
@@ -631,7 +643,7 @@
             disabled={effectiveDisabled}
             placeholder={maxPlaceholder ??
               (max === undefined ? undefined : format(max))}
-            aria-label={maxName}
+            aria-label={maxAriaLabel}
             aria-errormessage={maxErrorId}
             on:input={(event) => setEnd("max", event.detail, false)}
             on:change={(event) => setEnd("max", event.detail, true)}

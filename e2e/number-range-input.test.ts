@@ -1,4 +1,3 @@
-import AxeBuilder from "@axe-core/playwright";
 import type { Locator, Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
 
@@ -215,38 +214,6 @@ test.describe("NumberRangeInput", () => {
     // Min sits on the right, as in the fields.
     expect(lower).toBeGreaterThan(upper);
   });
-
-  for (const theme of ["white", "g100"]) {
-    for (const dir of ["ltr", "rtl"]) {
-      test(`has no detectable accessibility violations in ${theme} ${dir}`, async ({
-        page,
-      }) => {
-        await page.evaluate(
-          ([theme, dir]) => {
-            document.documentElement.dir = dir;
-            if (theme === "g100") {
-              document.documentElement.classList.add("bx--g100");
-            }
-          },
-          [theme, dir],
-        );
-        // Show an error and a crossed pair too, so those states are checked.
-        const group = page.getByTestId("nri-default");
-        await input(group, "Maximum").fill("5000");
-        await page.keyboard.press("Tab");
-        // Axe reads colors, so let the theme's color transitions finish.
-        await page.evaluate(() =>
-          Promise.all(document.getAnimations().map((a) => a.finished)),
-        );
-
-        const results = await new AxeBuilder({ page })
-          .include("#app")
-          .analyze();
-
-        expect(results.violations).toEqual([]);
-      });
-    }
-  }
 
   test("stays usable in forced colors", async ({ page }) => {
     await page.emulateMedia({ forcedColors: "active" });

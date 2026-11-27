@@ -10,8 +10,14 @@
 @mixin number-range-input {
   // Sizes by its own width, not the viewport's: the same range sits in a
   // 288px sidebar and a full-width form. See the end for the stacking.
+  //
+  // Inline-size containment gives the root an intrinsic width of 0, so it
+  // takes the width of its parent (`inline-size: 100%`) and never sizes to
+  // its content. The row is two fields side by side without the query, so a
+  // browser with no container queries still lays it out.
   .#{$prefix}--number-range-input {
     container: #{$prefix}--number-range-input / inline-size;
+    inline-size: 100%;
   }
 
   // A fieldset's default minimum width is its content's, which would keep

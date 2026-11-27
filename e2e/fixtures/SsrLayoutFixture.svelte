@@ -7,6 +7,7 @@
     ImageCompare,
     LanguagePicker,
     Link,
+    NumberRangeInput,
     OverflowMenu,
     OverflowMenuItem,
     ShellBanner,
@@ -102,4 +103,22 @@
       { id: "b", time: Date.now() - 26 * 3_600_000, titleText: "Started" },
     ]}
   />
+</div>
+
+<!-- The root is a size container: it must take its parent's width, side by
+     side when it fits two fields and stacked under 14rem, even as an
+     auto-width flex item. -->
+<div data-testid="range-wide" style="max-width: 24rem; padding: 1rem;">
+  <NumberRangeInput labelText="Price" />
+</div>
+
+<div data-testid="range-narrow" style="width: 12rem; padding: 1rem;">
+  <NumberRangeInput labelText="Price" />
+</div>
+
+<div
+  data-testid="range-flex"
+  style="display: flex; max-width: 24rem; padding: 1rem;"
+>
+  <NumberRangeInput labelText="Price" />
 </div>

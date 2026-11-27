@@ -17,6 +17,7 @@
   import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
   import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
   import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+  import NumberRangeInput from "carbon-components-svelte/NumberRangeInput/NumberRangeInput.svelte";
   import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
   import OverflowMenuItem from "carbon-components-svelte/OverflowMenu/OverflowMenuItem.svelte";
   import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
@@ -160,6 +161,16 @@
       <SelectItem value="pm" text="PM" />
     </TimePickerSelect>
   </TimePicker>
+{:else if family === "NumberRangeInput"}
+  <NumberRangeInput
+    id="fixed"
+    labelText="Price"
+    helperText="In dollars"
+    min={0}
+    max={100}
+    slider
+    value={[10, 50]}
+  />
 {:else if family === "TagSet"}
   <TagSet id="fixed">
     <Tag>One</Tag>

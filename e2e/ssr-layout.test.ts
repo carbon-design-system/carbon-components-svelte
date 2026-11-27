@@ -163,3 +163,36 @@ test("a Timeline row keeps its height when the relative time arrives", async ({
     });
   expect(await rect(page, selector)).toEqual(mounted);
 });
+
+test("a NumberRangeInput lays its fields side by side, stacked only when narrow", async ({
+  page,
+}) => {
+  const top = (testId: string, side: "Minimum" | "Maximum") =>
+    page
+      .getByTestId(testId)
+      .locator(`.bx--number-range-input__field input[aria-label^="${side}"]`)
+      .evaluate((el) => Math.round(el.getBoundingClientRect().top));
+
+  expect(await top("range-wide", "Minimum")).toBe(
+    await top("range-wide", "Maximum"),
+  );
+  expect(await top("range-narrow", "Maximum")).toBeGreaterThan(
+    await top("range-narrow", "Minimum"),
+  );
+});
+
+test("a NumberRangeInput never sizes to its content, even as a flex item", async ({
+  page,
+}) => {
+  const widths = await Promise.all(
+    ["range-wide", "range-flex"].map((testId) =>
+      page
+        .getByTestId(testId)
+        .locator(".bx--number-range-input")
+        .evaluate((el) => Math.round(el.getBoundingClientRect().width)),
+    ),
+  );
+
+  // 24rem less the parent's padding.
+  expect(widths).toEqual([352, 352]);
+});
