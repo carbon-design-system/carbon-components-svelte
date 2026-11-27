@@ -2911,8 +2911,7 @@ describe("DatePicker", () => {
   });
 
   // Regression test: SCSS scopes the shorter calendar height to these modes
-  // via a marker class instead of `:has()` (unsupported at the Svelte 5
-  // browser baseline).
+  // via a marker class instead of `:has()`.
   it.each([
     ["month", "F Y"],
     ["year", "Y"],
