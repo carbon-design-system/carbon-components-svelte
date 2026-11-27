@@ -110,6 +110,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   TableOfContents: "0.114.0",
   Tabs: "0.2.0",
   TabsVertical: "0.110.0",
+  Swatch: "0.115.0",
   Tag: "0.2.0",
   TagInput: "0.114.0",
   TagSet: "0.110.0",

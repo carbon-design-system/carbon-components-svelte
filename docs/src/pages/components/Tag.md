@@ -159,7 +159,7 @@ Set `title` to customize the close button's tooltip, shown on hover and focus, a
 
 ## Custom icon
 
-Add a custom icon to the tag. Note: custom icons cannot be used with the filterable variant.
+Add a custom icon to the tag. For a color dot that marks a category, such as a team or an issue label, put a [Swatch](/components/Swatch) in the `icon` slot.
 
 <Tag icon={IbmCloud}>IBM Cloud</Tag>
 

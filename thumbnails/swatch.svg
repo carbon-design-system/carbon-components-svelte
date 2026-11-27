@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>swatch</title>
+    <g id="swatch" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="magenta">
+            <circle cx="126" cy="66" r="6" fill="#9F1853"></circle>
+            <rect x="140" y="62" width="56" height="8" fill="var(--cds-text-secondary, #525252)"></rect>
+        </g>
+        <g id="teal">
+            <circle cx="126" cy="90" r="6" fill="#005D5D"></circle>
+            <rect x="140" y="86" width="40" height="8" fill="var(--cds-text-secondary, #525252)"></rect>
+        </g>
+        <g id="blue">
+            <circle cx="126" cy="114" r="6" fill="#002D9C"></circle>
+            <rect x="140" y="110" width="48" height="8" fill="var(--cds-text-secondary, #525252)"></rect>
+        </g>
+    </g>
+</svg>
