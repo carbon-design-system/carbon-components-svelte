@@ -85,6 +85,24 @@ Enable the expandable variant to show a compact search icon that expands on focu
 
 <FileSource src="/framed/Search/SearchExpandableReactive" />
 
+## Variants
+
+Set `variant` to fit the surface the field sits on. Each keeps the field's height, so fields line up with other controls in a row.
+
+| Variant | Looks like | Use for |
+| :--- | :--- | :--- |
+| `"default"` | Field fill and a bottom border | Forms and a search on its own |
+| `"fill"` | Field fill, no border | A toolbar of filled controls, or one with its own border below |
+| `"ghost"` | No fill or border until hover or a value | A surface with its own background, such as a header or a toolbar |
+
+### Fill
+
+<Search size="sm" variant="fill" placeholder="Search icons" />
+
+### Ghost
+
+<Search size="sm" variant="ghost" placeholder="Search icons" />
+
 ## On a layer
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
