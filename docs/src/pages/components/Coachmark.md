@@ -113,4 +113,24 @@ A tour that spans several controls is one coachmark per stop, opened by the cons
 
 <FileSource src="/framed/Coachmark/CoachmarkTour" />
 
-A tab is itself a control, so a beacon inside one would nest a button in a button. For a stop on a tab, anchor the coachmark to an inert marker in the tab, set `portalTooltip` so the dialog is rendered outside the tab and out of its name, and open it from the tour.
+### Stop on a tab
+
+This is an advanced recipe, and it needs no extra API. A tab is itself a control, so a beacon inside one would nest a button in a button. For a stop on a tab:
+
+1. Fill the `"target"` slot with an inert marker, such as a small dot, so nothing inside the tab takes focus.
+2. Set `portalTooltip`, so the dialog renders outside the tab and out of the tab's accessible name.
+3. Open it from the tour with `bind:open`, and set `focusOnOpen`, since code opens it and not the user.
+
+```svelte
+<Tab>
+  Overview
+  <Coachmark titleText="Details moved" portalTooltip focusOnOpen bind:open={tabTip}>
+    <span slot="target" class="dot" aria-hidden="true"></span>
+    Find the details here now.
+  </Coachmark>
+</Tab>
+```
+
+### Heading level
+
+The title is a heading that names the dialog. It is an `h2` by default. Inside a [Section](/components/Heading), it is one level below the section's heading, so the coachmark fits the page outline without a prop.
