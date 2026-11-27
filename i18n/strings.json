@@ -185,6 +185,13 @@
     },
     {
       "component": "Checkbox",
+      "prop": "requiredInvalidText",
+      "type": "string",
+      "default": "Check this box to continue",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Checkbox",
       "prop": "warnText",
       "type": "string",
       "default": "",
