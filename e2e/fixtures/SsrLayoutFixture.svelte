@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    Coachmark,
     ExpandableTile,
     OverflowMenu,
     OverflowMenuItem,
@@ -21,4 +22,13 @@
     <OverflowMenuItem text="Edit" />
     <OverflowMenuItem text="Delete" />
   </OverflowMenu>
+</div>
+
+<div
+  data-testid="coachmark"
+  style="position: relative; height: 12rem; padding: 1rem;"
+>
+  <Coachmark open titleText="Export in bulk" align="bottom-start">
+    Select rows, then export them together.
+  </Coachmark>
 </div>

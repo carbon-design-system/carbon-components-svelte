@@ -266,6 +266,12 @@ test.describe("Coachmark", () => {
       expect(
         await ring.evaluate((el) => getComputedStyle(el).animationName),
       ).toBe("coachmark-beacon-pulse");
+      // The pulse stops by itself: two cycles, not a loop (WCAG 2.2.2).
+      expect(
+        await ring.evaluate(
+          (el) => getComputedStyle(el).animationIterationCount,
+        ),
+      ).toBe("2");
 
       await page.emulateMedia({ reducedMotion: "reduce" });
 
