@@ -2780,3 +2780,58 @@ test.describe("right-to-left nested regions", () => {
     }
   });
 });
+
+test.describe("right-to-left DurationInput", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/duration-input.html");
+  });
+
+  test("keeps the digits left to right and the field at the inline start", async ({
+    page,
+  }) => {
+    const segments = page
+      .getByTestId("duration-default")
+      .getByRole("spinbutton");
+    const lefts = () =>
+      segments.evaluateAll((nodes) =>
+        nodes.map((node) => Math.round(node.getBoundingClientRect().left)),
+      );
+    const field = page.getByTestId("duration-default").locator("fieldset");
+    const box = () =>
+      field.evaluate((node) => {
+        const rect = node.getBoundingClientRect();
+        return { left: rect.left, right: rect.right };
+      });
+
+    const ltr = await lefts();
+    expect(ltr).toEqual([...ltr].sort((a, b) => a - b));
+
+    await setDirection(page, "rtl");
+    // The segments sit in a `dir="ltr"` row, so hours stay first on the left,
+    // as digits read in every language.
+    const rtl = await lefts();
+    expect(rtl).toEqual([...rtl].sort((a, b) => a - b));
+    await expect(
+      page
+        .getByTestId("duration-default")
+        .locator(".bx--duration-input__segments"),
+    ).toHaveAttribute("dir", "ltr");
+    // The label and the row still start at the right edge of the page.
+    const label = page.getByTestId("duration-default").locator("legend");
+    const labelBox = await label.boundingBox();
+    const rowBox = await box();
+    expect(labelBox).not.toBeNull();
+    expect(rowBox.right).toBeGreaterThan(0);
+    expect(Math.round(labelBox!.x + labelBox!.width)).toBeGreaterThanOrEqual(
+      Math.round(rowBox.right) - 1,
+    );
+  });
+
+  test("draws the text mode in the page direction", async ({ page }) => {
+    const input = page.getByTestId("duration-text").getByRole("textbox");
+    await setDirection(page, "rtl");
+    expect(
+      await input.evaluate((node) => getComputedStyle(node).direction),
+    ).toBe("rtl");
+  });
+});

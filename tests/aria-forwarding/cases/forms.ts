@@ -143,7 +143,7 @@ export const forms: AriaEntry[] = [
     render: (attrs) =>
       render(DurationInput, {
         props: {
-          variant: "text",
+          mode: "text",
           labelText: "Length",
           helperText: "Per session",
           ...attrs,

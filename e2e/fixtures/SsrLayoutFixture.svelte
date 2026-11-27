@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    DurationInput,
     ExpandableTile,
     OverflowMenu,
     OverflowMenuItem,
@@ -21,4 +22,8 @@
     <OverflowMenuItem text="Edit" />
     <OverflowMenuItem text="Delete" />
   </OverflowMenu>
+</div>
+
+<div data-testid="duration" style="max-width: 24rem; padding: 1rem;">
+  <DurationInput labelText="Length" value={5_400_000} />
 </div>

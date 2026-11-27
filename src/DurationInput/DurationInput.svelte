@@ -19,7 +19,7 @@
    * `1h 30m`, `90m`, `1.5h`, `1:30` and ISO 8601 `PT1H30M`.
    * @type {"segmented" | "text"}
    */
-  export let variant = "segmented";
+  export let mode = "segmented";
 
   /**
    * Specify the largest unit. It has no upper limit of its own, so `"hour"`
@@ -29,8 +29,8 @@
   export let largestUnit = "hour";
 
   /**
-   * Specify the smallest unit. The segmented variant shows every unit from
-   * `largestUnit` down to it, and the text variant counts a bare number in it.
+   * Specify the smallest unit. The segmented mode shows every unit from
+   * `largestUnit` down to it, and the text mode counts a bare number in it.
    * @type {"hour" | "minute" | "second" | "millisecond"}
    */
   export let smallestUnit = "second";
@@ -101,7 +101,8 @@
 
   /**
    * Specify a name attribute for native form participation.
-   * A hidden input submits the duration in milliseconds, or an empty string.
+   * A hidden input submits the duration as ISO 8601, such as `PT1H30M`, or
+   * an empty string. `value` stays in milliseconds.
    * @type {string | undefined}
    */
   export let name = undefined;
@@ -114,13 +115,13 @@
   export let form = undefined;
 
   /**
-   * Specify the placeholder of the `"text"` variant.
+   * Specify the placeholder of the `"text"` mode.
    * @type {string | undefined}
    */
   export let placeholder = undefined;
 
   /**
-   * Specify the message of the `"text"` variant for text that is not a
+   * Specify the message of the `"text"` mode for text that is not a
    * duration. It shows as an invalid state until the text changes.
    */
   export let parseErrorText = "Enter a duration, such as 1h 30m";
@@ -139,12 +140,12 @@
    * the locale, such as `"hours"`.
    * @type {(unit: "day" | "hour" | "minute" | "second" | "millisecond", label: string) => string}
    */
-  export let segmentLabelText = function segmentLabelText(unit, label) {
+  export let segmentLabelText = function segmentLabelText(_unit, label) {
     return label;
   };
 
   /** Set an id for the field */
-  export let id = uniqueId();
+  export let id = useId("duration-input");
 
   /**
    * Obtain a reference to the outer element.
@@ -153,16 +154,18 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, getContext } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { createAnnouncerChannel } from "../utils/announcer.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     asciiDigits,
     clampDuration,
     formatCompactDuration,
     formatDuration,
+    formatISODuration,
     joinDuration,
     parseDuration,
     segmentDigits,
@@ -181,10 +184,10 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { useId } from "../utils/id-scope.js";
   import { localeDirection } from "../utils/locale-direction.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
 
   /**
    * @typedef {import("../utils/duration.js").DurationUnit} DurationUnit
@@ -201,9 +204,13 @@
   $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
+  // The committed text is spoken through the shared announcer, which also
+  // reaches a field inside an open modal dialog.
+  const status = createAnnouncerChannel(() => ref);
+  onMount(() => status.connect());
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
+  $: effectiveSize = normalizeFieldSize(size ?? $formSize);
 
   /** @type {HTMLInputElement[]} */
   let inputs = [];
@@ -217,7 +224,6 @@
   );
   let text = "";
   let parseFailed = false;
-  let announcement = "";
 
   $: units = unitRange(largestUnit, smallestUnit);
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
@@ -523,7 +529,7 @@
   }
 
   function handleFormReset() {
-    if (variant === "text") {
+    if (mode === "text") {
       const parsed = parseDuration(textRef?.value ?? "", smallestUnit);
       text = textRef?.value ?? "";
       parseFailed = parsed === undefined;
@@ -557,7 +563,7 @@
             max,
           );
     text = next == null ? "" : formatCompactDuration(next, units);
-    announcement = next == null ? "" : durationText(next, units, locale);
+    status.announce(next == null ? "" : durationText(next, units, locale));
     setValue(next);
   }
 
@@ -590,7 +596,7 @@
     ariaDescribedBy,
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
-  $: submitted = value == null ? "" : String(Math.round(value));
+  $: submitted = value == null ? "" : formatISODuration(value);
 </script>
 
 <div
@@ -598,14 +604,20 @@
   bind:this={ref}
   class:bx--form-item={true}
   class:bx--duration-input={true}
-  class:bx--duration-input--text={variant === "text"}
+  class:bx--duration-input--text={mode === "text"}
   class:bx--duration-input--readonly={readonly}
   {...wrapperProps}
 >
   {#if name}
-    <input type="hidden" {name} {form} value={submitted} />
+    <input
+      type="hidden"
+      {name}
+      {form}
+      value={submitted}
+      disabled={effectiveDisabled}
+    />
   {/if}
-  {#if variant === "text"}
+  {#if mode === "text"}
     {#if labelText || $$slots.labelChildren}
       <label
         for={id}
@@ -662,7 +674,6 @@
         on:keydown={handleTextKeydown}
       />
     </div>
-    <span class:bx--visually-hidden={true} role="status">{announcement}</span>
   {:else}
     <fieldset
       use:formReset={handleFormReset}

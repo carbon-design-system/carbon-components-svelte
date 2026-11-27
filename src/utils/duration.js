@@ -284,6 +284,8 @@ export function parseDuration(text, bareUnit = "minute") {
   return Math.round(total);
 }
 
+const TRAILING_ZEROS = /0+$/;
+
 /**
  * ISO 8601, such as `PT1H30M`. Days are the largest unit used.
  *
@@ -292,12 +294,17 @@ export function parseDuration(text, bareUnit = "minute") {
  */
 export function formatISODuration(total) {
   const parts = splitDuration(total, DURATION_UNITS);
-  const seconds = (parts.second ?? 0) + (parts.millisecond ?? 0) / 1000;
+  const ms = parts.millisecond ?? 0;
+  // Built from the integer parts, so a fraction never picks up float noise.
+  const fraction = ms
+    ? `.${String(ms).padStart(3, "0").replace(TRAILING_ZEROS, "")}`
+    : "";
+  const seconds = parts.second || ms ? `${parts.second ?? 0}${fraction}S` : "";
   const date = parts.day ? `${parts.day}D` : "";
   const time =
     (parts.hour ? `${parts.hour}H` : "") +
     (parts.minute ? `${parts.minute}M` : "") +
-    (seconds ? `${seconds}S` : "");
+    seconds;
   if (!date && !time) return "PT0S";
   return `P${date}${time ? `T${time}` : ""}`;
 }

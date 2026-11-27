@@ -198,6 +198,9 @@ describe("formatISODuration", () => {
     [0, "PT0S"],
     [26 * HOUR, "P1DT2H"],
     [1500, "PT1.5S"],
+    [61005, "PT1M1.005S"],
+    [7, "PT0.007S"],
+    [3 * HOUR + 2300, "PT3H2.3S"],
   ])("writes %d ms as %s", (total, iso) => {
     expect(formatISODuration(total)).toBe(iso);
     expect(parseDuration(iso)).toBe(total);
@@ -229,8 +232,10 @@ describe("formatDuration", () => {
     intl.DurationFormat = undefined;
 
     expect(formatDuration(90 * MINUTE, hms)).toBe("1 hour, 30 minutes");
-    expect(formatDuration(90 * MINUTE, hms, { locale: "de" })).toBe(
-      "1 Stunde, 30 Minuten",
+    // Engines carry different list data: Bun joins with "und" where V8 and
+    // SpiderMonkey use a comma.
+    expect(formatDuration(90 * MINUTE, hms, { locale: "de" })).toMatch(
+      /^1 Stunde(,| und) 30 Minuten$/,
     );
     expect(formatDuration(0, hms, { style: "short" })).toBe("0 sec");
   });
@@ -249,7 +254,8 @@ describe("formatDuration", () => {
 describe("unitLabel", () => {
   it("is the unit in the locale", () => {
     expect(unitLabel("hour", "en", "narrow")).toBe("h");
-    expect(unitLabel("minute", "de", "narrow")).toBe("Min.");
+    // The narrow German unit is "Min." in V8 and "min" in Bun.
+    expect(unitLabel("minute", "de", "narrow")).toMatch(/^[Mm]in\.?$/);
     expect(unitLabel("minute", "de", "long")).toBe("Minuten");
     expect(unitLabel("hour", "en", "long")).toBe("hours");
   });

@@ -27,7 +27,7 @@
 
   <div data-testid="duration-text">
     <DurationInput
-      variant="text"
+      mode="text"
       labelText="Time estimate"
       smallestUnit="minute"
       helperText="Try 1h 30m, 90m, 1.5h or PT1H30M"

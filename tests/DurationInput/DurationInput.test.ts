@@ -193,11 +193,53 @@ describe("DurationInput segmented", () => {
     for (const segment of segments()) expect(segment).toBeDisabled();
   });
 
-  it("submits the duration in milliseconds under `name`", () => {
+  it("submits the duration as ISO 8601 under `name`", () => {
     mount({ value: 90 * MINUTE, fieldProps: { name: "length" } });
 
     const form = screen.getByTestId<HTMLFormElement>("form");
-    expect(new FormData(form).get("length")).toBe(String(90 * MINUTE));
+    expect(new FormData(form).get("length")).toBe("PT1H30M");
+  });
+
+  it("submits what a form reset restores", async () => {
+    mount({ value: 90 * MINUTE, fieldProps: { name: "length" } });
+    const form = screen.getByTestId<HTMLFormElement>("form");
+    // The server prints the segments' defaults; a reset returns to them.
+    segments().forEach((segment, index) => {
+      segment.defaultValue = ["01", "30", "00"][index];
+    });
+
+    await user.click(segments()[1]);
+    await user.keyboard("{ArrowUp}");
+    expect(new FormData(form).get("length")).toBe("PT1H31M");
+
+    form.reset();
+    // The reset is read back on the next task.
+    await vi.waitFor(() =>
+      expect(new FormData(form).get("length")).toBe("PT1H30M"),
+    );
+    expect(texts()).toEqual(["01", "30", "00"]);
+  });
+
+  it("submits an empty string when empty, and nothing when disabled", async () => {
+    const { rerender } = mount({ fieldProps: { name: "length" } });
+    const form = screen.getByTestId<HTMLFormElement>("form");
+    expect(new FormData(form).get("length")).toBe("");
+
+    await rerender({
+      value: 90 * MINUTE,
+      fieldProps: { name: "length", disabled: true },
+    });
+    expect(new FormData(form).has("length")).toBe(false);
+  });
+
+  it("submits the text mode's duration as ISO 8601 too", async () => {
+    mount({ fieldProps: { mode: "text", name: "length" } });
+
+    await user.type(screen.getByRole("textbox"), "1.5h");
+    await user.tab();
+
+    const form = screen.getByTestId<HTMLFormElement>("form");
+    expect(new FormData(form).get("length")).toBe("PT1H30M");
   });
 });
 
@@ -205,7 +247,7 @@ describe("DurationInput text", () => {
   const field = () => screen.getByRole<HTMLInputElement>("textbox");
 
   it("reads the typed duration on blur", async () => {
-    mount({ fieldProps: { variant: "text" } });
+    mount({ fieldProps: { mode: "text" } });
 
     await user.type(field(), "1.5h");
     await user.tab();
@@ -215,7 +257,7 @@ describe("DurationInput text", () => {
   });
 
   it("reads ISO 8601 and commits on Enter", async () => {
-    mount({ fieldProps: { variant: "text" } });
+    mount({ fieldProps: { mode: "text" } });
 
     await user.type(field(), "PT2H15M{Enter}");
 
@@ -225,7 +267,7 @@ describe("DurationInput text", () => {
 
   it("counts a bare number in the smallest unit", async () => {
     mount({
-      fieldProps: { variant: "text", smallestUnit: "minute" },
+      fieldProps: { mode: "text", smallestUnit: "minute" },
     });
 
     await user.type(field(), "90{Enter}");
@@ -234,7 +276,7 @@ describe("DurationInput text", () => {
   });
 
   it("flags text that is not a duration and keeps the value", async () => {
-    mount({ value: HOUR, fieldProps: { variant: "text" } });
+    mount({ value: HOUR, fieldProps: { mode: "text" } });
 
     await user.clear(field());
     await user.type(field(), "soon{Enter}");
@@ -252,7 +294,7 @@ describe("DurationInput text", () => {
   it("rounds to `step` and keeps the value inside `max`", async () => {
     mount({
       fieldProps: {
-        variant: "text",
+        mode: "text",
         smallestUnit: "minute",
         step: 15,
         max: 2 * HOUR,
@@ -268,7 +310,7 @@ describe("DurationInput text", () => {
   });
 
   it("empties the value for empty text, and announces the parsed duration", async () => {
-    mount({ fieldProps: { variant: "text" } });
+    mount({ fieldProps: { mode: "text" } });
 
     await user.type(field(), "90m{Enter}");
     expect(screen.getByRole("status")).toHaveTextContent("1 hour, 30 minutes");

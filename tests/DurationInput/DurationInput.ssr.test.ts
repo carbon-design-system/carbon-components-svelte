@@ -24,13 +24,13 @@ describe("DurationInput server render", () => {
     ).toEqual(["h", "m", "s"]);
     expect(document.querySelector("input[type=hidden]")).toHaveAttribute(
       "value",
-      "5400000",
+      "PT1H30M",
     );
   });
 
-  it("writes the text variant as the syntax it reads back", () => {
+  it("writes the text mode as the syntax it reads back", () => {
     const { document } = renderSSR(DurationInput, {
-      variant: "text",
+      mode: "text",
       value: 5_400_000,
       labelText: "Length",
     });

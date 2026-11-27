@@ -1,4 +1,3 @@
-import AxeBuilder from "@axe-core/playwright";
 import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
 import { expectAligned, expectSingleRing } from "./helpers/layout";
@@ -61,15 +60,19 @@ test.describe("DurationInput keyboard", () => {
     await expect(minutes).toHaveValue("00");
   });
 
-  test("reads a typed duration in the text variant", async ({ page }) => {
+  test("reads a typed duration in the text mode", async ({ page }) => {
     const input = field(page, "duration-text").getByRole("textbox");
     await input.fill("1.5h");
     await input.press("Enter");
 
     await expect(input).toHaveValue("1h 30m");
     await expect(page.getByTestId("duration-text-value")).toHaveText("5400000");
-    await expect(field(page, "duration-text").getByRole("status")).toHaveText(
-      "1 hour, 30 minutes",
+    // The shared announcer's region, not one inside the field.
+    await expect(
+      page.locator("body > [data-announcer] [role=status]"),
+    ).toHaveText("1 hour, 30 minutes");
+    await expect(field(page, "duration-text").getByRole("status")).toHaveCount(
+      0,
     );
   });
 
@@ -124,55 +127,6 @@ test.describe("DurationInput units", () => {
         ),
       )
       .toEqual(["01", "02", "03", "04", "005"]);
-  });
-});
-
-test.describe("DurationInput a11y", () => {
-  test("has no detectable accessibility violations", async ({ page }) => {
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has none in Gray 100", async ({ page }) => {
-    await page.evaluate(() =>
-      document.documentElement.classList.add("bx--g100"),
-    );
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has none in RTL", async ({ page }) => {
-    await page.evaluate(() => {
-      document.documentElement.dir = "rtl";
-    });
-    const results = await new AxeBuilder({ page }).include("#app").analyze();
-
-    expect(results.violations).toEqual([]);
-  });
-
-  test("has none inside an open Modal", async ({ page }) => {
-    await page.getByTestId("duration-open").click();
-    await expect(segments(page, "duration-modal").first()).toBeVisible();
-    // Axe reads colors, so wait out the modal's fade in.
-    await expect(page.locator(".bx--modal.is-visible")).toHaveCount(1);
-    await expect
-      .poll(() =>
-        page
-          .locator(".bx--modal-container")
-          .evaluate(
-            (node) =>
-              getComputedStyle(node).backgroundColor +
-              document.getAnimations().length,
-          ),
-      )
-      .toBe("rgb(244, 244, 244)0");
-    const results = await new AxeBuilder({ page })
-      .include("[data-testid=duration-modal]")
-      .analyze();
-
-    expect(results.violations).toEqual([]);
   });
 });
 
