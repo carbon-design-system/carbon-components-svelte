@@ -86,6 +86,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Text",
       "Prose",
       "Kbd",
+      "LinkifiedText",
       "Tag",
       "TagSet",
       "Swatch",
