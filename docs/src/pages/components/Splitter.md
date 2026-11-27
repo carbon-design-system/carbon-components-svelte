@@ -11,7 +11,7 @@ description: Splitters divide a view into two resizable panes, such as a list be
 
 ## Basic
 
-Place content in the `start` and `end` slots. The splitter fills its container, so give the container a height. `size` sets the start pane's share as a percentage and defaults to `50`.
+Place content in the `start` and `end` slots. The splitter fills its container, so give the container a height. `size` sets the start pane's share as a percentage and defaults to `50`; it also takes a pixel length (see [Pixel size](#pixel-size)).
 
 Drag the separator to resize the panes, or focus it and use the arrow keys; <DocKbd label="Shift" /> + arrow key moves 10 times as far. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the limits, <DocKbd label="Enter" /> collapses the start pane and restores it, and a double click restores the starting size. On a touch screen, the separator takes taps across 24px.
 
@@ -35,7 +35,7 @@ Set `min` and `max` to keep the start pane within a percentage range. <DocKbd la
 
 ### Pixel bounds
 
-Pass a pixel length such as `"200px"` to `min` or `max` to hold the start pane at a fixed size as the splitter resizes, for example a sidebar that should never get narrower than its content. `size` stays a percentage. When `min` is larger than `max`, `min` wins.
+Pass a pixel length such as `"200px"` to `min` or `max` to hold the start pane at a fixed size as the splitter resizes, for example a sidebar that should never get narrower than its content. When `min` is larger than `max`, `min` wins.
 
 <Box height="12rem" border="subtle">
   <Splitter size={30} min="200px" max="400px" separatorLabel="Resize service list">
@@ -119,6 +119,12 @@ This example highlights the separators at once.
 Use `bind:size` to read or set the size. It updates on every step of a drag, while `on:resize` fires once when the user finishes resizing, which suits saving the layout.
 
 <FileSource src="/framed/Splitter/SplitterResize" />
+
+### Pixel size
+
+Set `size` to a pixel length such as `"240px"` to keep the start pane at that width as the splitter resizes, like an editor's sidebar. It stays within `min` and `max`, which can mix pixels and percentages. Resizing writes back in pixels, rounded to whole pixels, so `bind:size` and `on:resize` get `"312px"`, not a percentage. An arrow key still moves the separator by `step` percent of the splitter, converted to pixels.
+
+<FileSource src="/framed/Splitter/SplitterPixelSize" />
 
 ## Disabled
 
