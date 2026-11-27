@@ -1,0 +1,1 @@
+8:38 theme Theme's `dropdown` object replaced its defaults, so the control had labelText="". ThemeDropdown has labelText="Themes". Set them to keep the old labels

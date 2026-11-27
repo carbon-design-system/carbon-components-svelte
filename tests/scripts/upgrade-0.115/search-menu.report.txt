@@ -1,0 +1,2 @@
+8:1 size SearchMenu is 40px now, not 48px. Add size="xl" to keep 48px, or run with --keep-sizes
+10:1 size SearchMenu is 40px now unless `size` is set, and a spread here may set it

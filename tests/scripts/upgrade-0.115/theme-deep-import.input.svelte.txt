@@ -1,0 +1,9 @@
+<script lang="ts">
+  import Theme from "carbon-components-svelte/src/Theme/Theme.svelte";
+
+  let theme = "white";
+</script>
+
+<p>The page picks a theme.</p>
+<Theme theme="g90" render="dropdown" dropdown={{ size: "sm", themes: ["white", "g90"] }} />
+<p>{theme}</p>

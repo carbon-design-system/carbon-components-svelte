@@ -1,0 +1,15 @@
+<script lang="ts">
+  import {
+    Content,
+    Theme,
+    ThemeSelect,
+  } from "carbon-components-svelte";
+
+  const selectProps = { labelText: "Theme", inline: true };
+  let theme: "white" | "g100" = "g100";
+</script>
+
+<ThemeSelect bind:theme {...selectProps} />
+<Theme bind:theme let:theme={current}>
+  <Content>Current theme: {current}</Content>
+</Theme>

@@ -1,0 +1,3 @@
+8:8 theme Theme `render` is dynamic. Replace it with ThemeToggle, ThemeSelect or ThemeDropdown, bound to the same theme with `bind:theme`
+9:8 theme Theme `theme` is an expression, so a control can't bind to it. Bind Theme to a variable, then replace `render` with ThemeToggle, ThemeSelect or ThemeDropdown bound to it
+10:8 theme Removed Theme `toggle`: it did nothing without a `render` control

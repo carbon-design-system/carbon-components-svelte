@@ -1,0 +1,9 @@
+<script>
+  import * as Carbon from "carbon-components-svelte";
+
+  let { children } = $props();
+</script>
+
+<Carbon.Theme render="toggle">
+  {@render children()}
+</Carbon.Theme>

@@ -1,0 +1,15 @@
+<script>
+  import { Content, Theme } from "carbon-components-svelte";
+  import Nav from "./Nav.svelte";
+
+  export let title = "";
+</script>
+
+<Theme
+  persist
+  render="toggle"
+  toggle={{ themes: ["g10", "g90"], labelText: "Dark mode", labelA: "", labelB: "", size: "sm" }}
+/>
+
+<Nav {title} />
+<Content><slot /></Content>

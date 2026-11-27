@@ -1,0 +1,5 @@
+17:15 deprecated Removed CardFooter `actionSet`: the footer finds its CardActions
+20:7 deprecated Removed CardAction `iconOnly`: the action finds an icon-only Button or OverflowMenu
+27:18 deprecated Removed ListBoxMenuItem `hasLeftIcon`: the option finds its left icon
+29:18 deprecated Removed ContentSwitcher `iconOnly`: the switcher fits switches that all set `icon`
+34:18 deprecated ContentSwitcher `iconOnly` is deprecated, but a Switch here sets no `icon`, so the switcher would stop fitting its switches. Left in place

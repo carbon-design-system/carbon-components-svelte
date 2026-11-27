@@ -1,0 +1,66 @@
+<script>
+  import {
+    Box,
+    Button,
+    ButtonSet,
+    Checkbox,
+    ComboBox,
+    DataTable,
+    Dialog,
+    Dropdown,
+    Form,
+    InlineNotification,
+    InputGroup,
+    MenuButton,
+    Search,
+    TextInput,
+    ToastNotification,
+    Toolbar,
+    ToolbarContent,
+    ToolbarSearch,
+  } from "carbon-components-svelte";
+
+  let open = false;
+</script>
+
+<ComboBox name="contact" items={[]} />
+<ComboBox name="plan" inputName="plan_text" items={[]} />
+
+<InputGroup>
+  <Search labelText="Search" />
+  <Box width="16rem">
+    <Dropdown labelText="Category" items={[]} />
+  </Box>
+  <MenuButton labelText="Actions" />
+  <MenuButton size="sm" labelText="Small" />
+</InputGroup>
+
+<Form size="sm">
+  <Search labelText="Find" />
+  <TextInput required labelText="Workspace" />
+  <TextInput required requiredInvalidText="Name it" labelText="Named" />
+  <Checkbox required={false} labelText="Optional" />
+  <ButtonSet>
+    <Button kind="secondary">Cancel</Button>
+    <Button type="submit">Save</Button>
+  </ButtonSet>
+  <ButtonSet stacked>
+    <Button>Stacked</Button>
+  </ButtonSet>
+</Form>
+
+<DataTable headers={[]} rows={[]}>
+  <Toolbar>
+    <ToolbarContent>
+      <ToolbarSearch shouldFilterRows />
+    </ToolbarContent>
+  </Toolbar>
+</DataTable>
+<DataTable headers={[]} rows={[]} noResultsText="" />
+
+<Dialog bind:open on:close={() => console.log("closed")}>Hi</Dialog>
+
+<InlineNotification title="Saved" />
+<InlineNotification hideCloseButton title="Pinned" />
+<ToastNotification closeOnEscape={false} title="Kept" />
+<div class="bx--tabs--tall"></div>

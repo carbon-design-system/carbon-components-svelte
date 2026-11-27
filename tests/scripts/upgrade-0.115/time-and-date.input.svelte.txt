@@ -1,0 +1,26 @@
+<script>
+  import {
+    DatePicker,
+    DatePickerInput,
+    SelectItem,
+    TimePicker,
+    TimePickerSelect,
+  } from "carbon-components-svelte";
+</script>
+
+<TimePicker labelText="Start">
+  <TimePickerSelect labelText="AM or PM">
+    <SelectItem value="am" text="AM" />
+  </TimePickerSelect>
+</TimePicker>
+<TimePicker labelText="Alone" />
+
+<DatePicker datePickerType="simple">
+  <DatePickerInput labelText="Typed" placeholder="mm/dd/yyyy" />
+</DatePicker>
+<DatePicker datePickerType="simple">
+  <DatePickerInput labelText="Worded" patternInvalidText="Use mm/dd/yyyy" />
+</DatePicker>
+<DatePicker datePickerType="single">
+  <DatePickerInput labelText="Calendar" />
+</DatePicker>

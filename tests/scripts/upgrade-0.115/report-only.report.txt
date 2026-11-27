@@ -1,0 +1,9 @@
+26:11 combo-box ComboBox `name` submits `selectedId` through a hidden input now, not the typed text. Add `inputName` to submit the text too
+30:3 layout In an InputGroup, Search now splits the row with the other fields. Wrap it in a Box with a width to fix its width
+34:3 layout In an InputGroup, MenuButton now takes the group's size
+40:14 required A blocked submit now shows TextInput's invalid state and focuses it, instead of the browser's bubble. Set `requiredInvalidText` to change the message
+43:3 layout ButtonSet buttons now start from their label's width instead of splitting the set evenly
+52:1 data-table A filter that matches no rows now shows a "No results" row. Set noResultsText="" to keep an empty body
+61:1 dialog Dialog animates its close now: `open` turns false and `close` fires up to 240 ms later
+63:1 notification Escape now closes InlineNotification while focus is inside it. Set closeOnEscape={false} to keep it open
+66:13 classes `bx--tabs--tall` is no longer rendered. Select `.bx--tabs:has(.bx--tabs__nav-item-secondary-label)` instead
