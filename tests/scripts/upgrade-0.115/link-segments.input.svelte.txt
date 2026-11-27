@@ -1,0 +1,20 @@
+<script>
+  import {
+    ChatLog,
+    ChatMessage,
+    Link,
+    linkSegments,
+  } from "carbon-components-svelte";
+
+  export let messages = [];
+</script>
+
+<ChatLog labelText="Support">
+  {#each messages as message (message.id)}
+    <ChatMessage author={message.author}>
+      {#each linkSegments(message.text) as part}
+        {#if part.href}<Link href={part.href}>{part.text}</Link>{:else}{part.text}{/if}
+      {/each}
+    </ChatMessage>
+  {/each}
+</ChatLog>

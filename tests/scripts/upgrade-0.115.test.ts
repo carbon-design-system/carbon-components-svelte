@@ -41,6 +41,8 @@ const CASES: {
   { name: "report-only", ext: "svelte" },
   { name: "time-and-date", ext: "svelte" },
   { name: "classes", ext: "scss" },
+  { name: "link-segments", ext: "svelte" },
+  { name: "link-segments-module", ext: "ts" },
   { name: "untouched", ext: "svelte" },
 ];
 
@@ -78,6 +80,15 @@ describe("upgrade 0.115", () => {
     const { notes } = transform(source, { filename: "page.svx", parse });
     expect(notes.map((note) => `${note.line} ${note.kind}`)).toEqual([
       "4 classes",
+    ]);
+  });
+
+  it("reports linkSegments in a script, not in .svx code", () => {
+    const source =
+      '```js\nimport { linkSegments } from "carbon-components-svelte";\n```\n\n<script>\n  import { linkSegments } from "carbon-components-svelte";\n</script>\n';
+    const { notes } = transform(source, { filename: "page.svx", parse });
+    expect(notes.map((note) => `${note.line} ${note.kind}`)).toEqual([
+      "6 link-segments",
     ]);
   });
 

@@ -1,0 +1,2 @@
+2:10 link-segments linkSegments now leaves URLs with credentials, like `https://google.com@evil.example/`, as text, and ends a link at a bidi or zero-width character, a quote, `{`, `}`, `|` or CJK punctuation. Check the text it splits and tests of its output
+6:47 link-segments linkSegments now leaves URLs with credentials, like `https://google.com@evil.example/`, as text, and ends a link at a bidi or zero-width character, a quote, `{`, `}`, `|` or CJK punctuation. Check the text it splits and tests of its output
