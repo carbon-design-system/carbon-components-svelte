@@ -1,0 +1,426 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// MergeResolver: a three-way merge of ours, theirs and an editable result.
+/// Code reads left to right in every language, so the panes, rows and the
+/// textarea set `direction: ltr` and only the chrome around them (the
+/// toolbar, titles, action rows and the order of the panes) follows the
+/// page. Rows are a fixed height, so a window of them can be placed by
+/// arithmetic: `--ccs-merge-row-height`, set once on the root, is the one
+/// number the panes and the result's textarea share.
+///
+/// A row's cue is never only its color: the edge is drawn double for a
+/// conflict, solid once resolved and dotted for a change one side made, and
+/// the gutter carries a mark (`!`, a check, `~`).
+/// @access private
+/// @group components
+@mixin merge-resolver {
+  .#{$prefix}--merge-resolver {
+    --ccs-merge-row-height: #{to-rem(20px)};
+
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: $carbon--spacing-03;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--merge-resolver__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: $carbon--spacing-02 $carbon--spacing-03;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+    gap: $carbon--spacing-02 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--merge-resolver__nav,
+  .#{$prefix}--merge-resolver__accept,
+  .#{$prefix}--merge-resolver__history,
+  .#{$prefix}--merge-resolver__switcher {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--merge-resolver__history {
+    margin-inline-start: auto;
+  }
+
+  // v10 leaves 63px after a button's text for an icon.
+  .#{$prefix}--merge-resolver__toolbar
+    .#{$prefix}--btn:not(.#{$prefix}--btn--icon-only),
+  .#{$prefix}--merge-resolver__head .#{$prefix}--btn,
+  .#{$prefix}--merge-resolver__switcher .#{$prefix}--btn {
+    padding-inline-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--merge-resolver__status {
+    @include type-style("body-compact-01");
+
+    margin-inline-start: $carbon--spacing-03;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--merge-resolver__status strong {
+    margin-inline-end: $carbon--spacing-03;
+    color: $text-primary;
+    font-weight: 600;
+  }
+
+  // Undo and redo point back and forward by meaning, so they swap in RTL.
+  .#{$prefix}--merge-resolver__undo svg {
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--merge-resolver__redo svg {
+    transform: scaleX(-1);
+
+    @include ccs-mirror-rtl(scaleX(-1));
+  }
+
+  .#{$prefix}--merge-resolver__panes {
+    @include type-style("code-02");
+
+    display: grid;
+    height: var(--ccs-merge-height);
+    gap: $carbon--spacing-03;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .#{$prefix}--merge-resolver--columns .#{$prefix}--merge-resolver__panes {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1.4fr)
+      minmax(0, 1fr);
+  }
+
+  .#{$prefix}--merge-resolver--stacked .#{$prefix}--merge-resolver__panes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 2fr) minmax(0, 3fr);
+  }
+
+  .#{$prefix}--merge-resolver--stacked .#{$prefix}--merge-resolver__pane--ours {
+    grid-area: 1 / 1;
+  }
+
+  .#{$prefix}--merge-resolver--stacked
+    .#{$prefix}--merge-resolver__pane--theirs {
+    grid-area: 1 / 2;
+  }
+
+  .#{$prefix}--merge-resolver--stacked
+    .#{$prefix}--merge-resolver__pane--result {
+    grid-area: 2 / 1 / 3 / 3;
+  }
+
+  .#{$prefix}--merge-resolver__pane {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    flex-direction: column;
+    border: 1px solid $border-subtle;
+    background-color: $background;
+  }
+
+  .#{$prefix}--merge-resolver__pane--hidden {
+    display: none;
+  }
+
+  .#{$prefix}--merge-resolver__title {
+    @include type-style("label-01");
+
+    padding: $carbon--spacing-02 $carbon--spacing-03;
+    border-bottom: 1px solid $border-subtle;
+    background-color: $layer;
+    color: $text-secondary;
+  }
+
+  // The scroller and the editor are the code: left to right, one row height.
+  .#{$prefix}--merge-resolver__scroller,
+  .#{$prefix}--merge-resolver__editor {
+    min-height: 0;
+    flex: 1 1 0;
+    direction: ltr;
+    line-height: var(--ccs-merge-row-height);
+    tab-size: 4;
+  }
+
+  .#{$prefix}--merge-resolver__scroller {
+    position: relative;
+    overflow: auto;
+  }
+
+  .#{$prefix}--merge-resolver__scroller:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--merge-resolver__sizer {
+    position: relative;
+  }
+
+  .#{$prefix}--merge-resolver__window {
+    position: absolute;
+    width: 100%;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+  }
+
+  .#{$prefix}--merge-resolver__row {
+    position: relative;
+    display: flex;
+    height: var(--ccs-merge-row-height);
+    direction: ltr;
+    font-variant-ligatures: none;
+    isolation: isolate;
+    white-space: pre;
+  }
+
+  // The tint is behind the text and the edge is above the gutter. The edge
+  // is a pseudo-element so a row without one keeps its text in line.
+  .#{$prefix}--merge-resolver__row--conflict::before,
+  .#{$prefix}--merge-resolver__row--resolved::before,
+  .#{$prefix}--merge-resolver__row--changed::before {
+    position: absolute;
+    z-index: -1;
+    content: "";
+    inset: 0;
+    opacity: 0.12;
+  }
+
+  .#{$prefix}--merge-resolver__row--conflict::after,
+  .#{$prefix}--merge-resolver__row--resolved::after,
+  .#{$prefix}--merge-resolver__row--changed::after {
+    position: absolute;
+    z-index: 2;
+    border-inline-start: to-rem(4px) solid;
+    content: "";
+    inset-block: 0;
+    inset-inline-start: 0;
+  }
+
+  .#{$prefix}--merge-resolver__row--conflict::before {
+    background-color: $support-warning;
+  }
+
+  .#{$prefix}--merge-resolver__row--conflict::after {
+    border-inline-start-color: $support-warning;
+    border-inline-start-style: double;
+  }
+
+  .#{$prefix}--merge-resolver__row--resolved::before {
+    background-color: $support-success;
+  }
+
+  .#{$prefix}--merge-resolver__row--resolved::after {
+    border-inline-start-color: $support-success;
+  }
+
+  .#{$prefix}--merge-resolver__row--changed::before {
+    background-color: $support-info;
+  }
+
+  .#{$prefix}--merge-resolver__row--changed::after {
+    border-inline-start-color: $support-info;
+    border-inline-start-style: dotted;
+  }
+
+  .#{$prefix}--merge-resolver__row--current::before {
+    opacity: 0.28;
+  }
+
+  .#{$prefix}--merge-resolver__gutter {
+    position: sticky;
+    z-index: 1;
+    display: inline-flex;
+    width: var(--ccs-merge-gutter);
+    flex: none;
+    box-sizing: border-box;
+    padding-inline-start: to-rem(4px);
+    background-color: $layer;
+    color: $text-secondary;
+    inset-inline-start: 0;
+    user-select: none;
+  }
+
+  .#{$prefix}--merge-resolver__sign {
+    width: 2ch;
+    flex: none;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .#{$prefix}--merge-resolver__no {
+    flex: 1;
+    padding-inline-end: 1ch;
+    text-align: end;
+  }
+
+  .#{$prefix}--merge-resolver__code {
+    padding-inline-start: 1ch;
+  }
+
+  .#{$prefix}--merge-resolver__mark {
+    background-color: $highlight;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: to-rem(3px);
+  }
+
+  .#{$prefix}--merge-resolver__head {
+    display: flex;
+    height: calc(2 * var(--ccs-merge-row-height));
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: $carbon--spacing-03;
+    border-block: 1px solid $border-subtle;
+    background-color: $layer;
+    inset-inline-start: 0;
+    position: sticky;
+    width: var(--ccs-merge-viewport, 100%);
+    gap: $carbon--spacing-03;
+    white-space: normal;
+  }
+
+  // The scroller is left to right for the code, so the action row follows
+  // the page's direction itself.
+  [dir="rtl"] .#{$prefix}--merge-resolver__head {
+    flex-direction: ccs-dir(row, row-reverse);
+  }
+
+  // The current conflict's action row has a heavier edge, which forced
+  // colors keep, since they keep borders.
+  .#{$prefix}--merge-resolver__head--current {
+    border-block: 3px solid $border-interactive;
+  }
+
+  .#{$prefix}--merge-resolver__head-label {
+    @include type-style("heading-compact-01");
+
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    color: $text-primary;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--merge-resolver__badge {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--merge-resolver__head--resolved .#{$prefix}--merge-resolver__badge {
+    color: $text-primary;
+  }
+
+  // The result: a textarea with the rows painted around it. Tint sits below
+  // the textarea so its selection draws over it, and text sits above so the
+  // selection never hides it. The textarea's own text is transparent.
+  .#{$prefix}--merge-resolver__editor {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .#{$prefix}--merge-resolver__layer {
+    position: absolute;
+    overflow: hidden;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--merge-resolver__layer--gutter {
+    z-index: 1;
+    width: var(--ccs-merge-gutter);
+    inset-inline-end: auto;
+  }
+
+  .#{$prefix}--merge-resolver__layer--code {
+    z-index: 1;
+    inset-inline-start: var(--ccs-merge-gutter);
+  }
+
+  .#{$prefix}--merge-resolver__row--marker {
+    color: $text-secondary;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--merge-resolver__textarea {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    padding-inline: calc(var(--ccs-merge-gutter) + 1ch) 1ch;
+    border: 0;
+    margin: 0;
+    background-color: transparent;
+    caret-color: $text-primary;
+    color: transparent;
+    direction: ltr;
+    font: inherit;
+    font-variant-ligatures: none;
+    inset: 0;
+    overflow: auto;
+    resize: none;
+    white-space: pre;
+  }
+
+  .#{$prefix}--merge-resolver__textarea:focus {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--merge-resolver__shortcuts {
+    @include type-style("helper-text-01");
+
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+    color: $text-secondary;
+    gap: $carbon--spacing-02 $carbon--spacing-05;
+    list-style: none;
+  }
+
+  .#{$prefix}--merge-resolver__probe {
+    position: absolute;
+    overflow: hidden;
+    width: 1ch;
+    height: var(--ccs-merge-row-height);
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--merge-resolver__row--current {
+      border-inline-start-color: Highlight;
+    }
+
+    .#{$prefix}--merge-resolver__mark {
+      background-color: Mark;
+      color: MarkText;
+    }
+
+    // Colors are forced, so the textarea would paint its own text over the
+    // rows' copy. Keep it transparent and give the caret a forced color.
+    .#{$prefix}--merge-resolver__textarea {
+      caret-color: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("merge-resolver") {
+  @include merge-resolver;
+}
