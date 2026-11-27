@@ -238,6 +238,17 @@
   export let virtualize = undefined;
 
   /**
+   * Specify the maximum height of the menu. A number is pixels; a string
+   * is any CSS length, such as `"20rem"` or `"50vh"`. The menu scrolls once
+   * its options exceed it. Applies whether the menu renders in place, in a
+   * portal or virtualized; a virtualized menu resolves a string to pixels
+   * each time it opens, and a `containerHeight` on `virtualize` wins.
+   * Defaults to the size-based height.
+   * @type {number | string | undefined}
+   */
+  export let maxHeight = undefined;
+
+  /**
    * Specify the message shown in the open menu when `items` is empty, such as
    * before async options arrive. Screen readers hear it through the status
    * live region, also when the `empty` slot replaces the visible text.
@@ -392,6 +403,7 @@
   import { createAnnouncerChannel } from "../utils/announcer.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { clampIndex } from "../utils/clamp-index.js";
+  import { resolveCssLength, toCssLength } from "../utils/css-length.js";
   import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
@@ -678,6 +690,14 @@
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
 
+  // Windowing needs the viewport in pixels. A string resolves on each open,
+  // so a viewport length follows the window between opens.
+  $: maxHeightPx =
+    typeof maxHeight === "number"
+      ? maxHeight
+      : open && shouldVirtualize
+        ? resolveCssLength(maxHeight)
+        : undefined;
   $: if (shouldVirtualize && !menuWindow) menuWindow = createWindow();
   $: menuState = menuWindow
     ? menuWindow.update({
@@ -691,6 +711,7 @@
         size: effectiveSize,
         fluid: hasFluidMenuItems,
         scrollTop: listScrollTop,
+        containerHeight: maxHeightPx,
       })
     : unwindowedMenuState(menuRows, effectiveSize);
   $: ({
@@ -1260,9 +1281,11 @@
         style={[
           isWindowed
             ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
-            : effectivePortalMenu
-              ? `max-height: ${menuMaxHeight};`
-              : "",
+            : maxHeight === undefined
+              ? effectivePortalMenu
+                ? `max-height: ${menuMaxHeight};`
+                : ""
+              : `max-height: ${toCssLength(maxHeight)};`,
           menuWidth === null
             ? ""
             : `min-width: ${menuWidth}px; max-width: ${menuWidth}px;`,
