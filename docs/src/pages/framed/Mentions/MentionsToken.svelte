@@ -1,0 +1,38 @@
+<script>
+  import {
+    CodeSnippet,
+    Mentions,
+    mentionsToPlainText,
+    Stack,
+    TextArea,
+  } from "carbon-components-svelte";
+
+  let ref = null;
+  let value = "";
+  let mentions = [];
+
+  const people = [
+    { id: "u-1042", text: "Priya Raman", secondary: "@praman" },
+    { id: "u-2290", text: "Marcus Oyelaran", secondary: "@moyelaran" },
+    { id: "u-3118", text: "Hannah Lindqvist", secondary: "@hlindqvist" },
+  ];
+</script>
+
+<Stack gap={5}>
+  <div>
+    <TextArea bind:ref bind:value labelText="Comment" rows={3} />
+    <Mentions
+      field={ref}
+      triggers={[{ char: "@", items: people, format: "token" }]}
+      bind:mentions
+    />
+  </div>
+  <CodeSnippet
+    type="multi"
+    code={JSON.stringify(
+      { value, text: mentionsToPlainText(value, ["@"]), mentions },
+      null,
+      2,
+    )}
+  />
+</Stack>
