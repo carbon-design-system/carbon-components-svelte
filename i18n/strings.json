@@ -2040,6 +2040,13 @@
     },
     {
       "component": "TextInput",
+      "prop": "requiredInvalidText",
+      "type": "string",
+      "default": "Enter a value",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TextInput",
       "prop": "warnText",
       "type": "string",
       "default": "",
