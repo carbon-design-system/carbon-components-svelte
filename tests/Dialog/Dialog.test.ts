@@ -204,6 +204,39 @@ describe("Dialog", () => {
     expect(opener).toHaveFocus();
   });
 
+  it("focuses returnFocusTo when the opener unmounted while the dialog was open", async () => {
+    render(Dialog, {
+      props: {
+        modal: true,
+        returnFocusTo: () => screen.getByTestId("fallback"),
+      },
+    });
+
+    const opener = screen.getByTestId("opener");
+    await user.click(opener);
+    await tick();
+    opener.remove();
+
+    await user.click(screen.getByTestId("close-button"));
+    await tick();
+
+    expect(screen.getByTestId("fallback")).toHaveFocus();
+  });
+
+  it("leaves focus alone without returnFocusTo when the opener unmounted", async () => {
+    render(Dialog, { props: { modal: true } });
+
+    const opener = screen.getByTestId("opener");
+    await user.click(opener);
+    await tick();
+    opener.remove();
+
+    await user.click(screen.getByTestId("close-button"));
+    await tick();
+
+    expect(screen.getByTestId("fallback")).not.toHaveFocus();
+  });
+
   it("syncs open to false when the browser closes the dialog, so it can open again", async () => {
     const onopen = vi.fn();
     const onclose = vi.fn();

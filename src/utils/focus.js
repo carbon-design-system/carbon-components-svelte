@@ -2,6 +2,10 @@
 import { tick } from "svelte";
 import { selectorTabbable } from "./trap-focus.js";
 
+/**
+ * @typedef {HTMLElement | null | undefined | (() => HTMLElement | null | undefined)} FocusFallback
+ */
+
 const selectorFirstInput =
   'input:not([type="hidden"]):not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"])';
 
@@ -131,17 +135,23 @@ export function isPointerFocus(node) {
  * is still connected. With nothing focused, it saves the control a pointer
  * last pressed (Safari does not focus a clicked button). Pass the overlay as
  * `region` to skip the restore when focus has already moved outside it (e.g. a
- * close handler opened another dialog).
+ * close handler opened another dialog). Pass `fallback`, an element or a
+ * function returning one, to focus instead when the saved element has left the
+ * DOM, for example a deleted row.
  *
- * @returns {{ save: () => void; restore: (region?: Element | null) => void }}
+ * @returns {{ save: () => void; restore: (region?: Element | null, fallback?: FocusFallback) => void }}
  */
 export function restoreFocus() {
   /** @type {HTMLElement | null} */
   let prevFocus = null;
+  // A restore runs once per save: a later one (the closing transition's
+  // timer after `transitionend`) must not run the fallback again.
+  let saved = false;
   return {
     save() {
       // Also runs while rendering an open overlay on the server.
       if (typeof document === "undefined") return;
+      saved = true;
       const active = document.activeElement;
       prevFocus = active instanceof HTMLElement ? active : null;
       // Safari does not focus a button on click, so `<body>` holds focus when
@@ -155,12 +165,18 @@ export function restoreFocus() {
           prevFocus = pressed;
       }
     },
-    restore(region) {
-      if (!prevFocus?.isConnected) return;
-      if (region === undefined || focusIsFree(region)) {
-        focusQuietly(prevFocus);
-      }
+    restore(region, fallback) {
+      if (!saved) return;
+      saved = false;
+      const previous = prevFocus;
       prevFocus = null;
+      const target = previous?.isConnected
+        ? previous
+        : typeof fallback === "function"
+          ? fallback()
+          : fallback;
+      if (!target?.isConnected) return;
+      if (region === undefined || focusIsFree(region)) focusQuietly(target);
     },
   };
 }
