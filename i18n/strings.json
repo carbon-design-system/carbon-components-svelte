@@ -185,6 +185,20 @@
     },
     {
       "component": "ChatMessage",
+      "prop": "streamCompleteDescription",
+      "type": "string",
+      "default": "Response complete",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ChatMessage",
+      "prop": "streamStartedDescription",
+      "type": "string",
+      "default": "Response started",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ChatMessage",
       "prop": "typingText",
       "type": "string",
       "default": "Typing",

@@ -1,7 +1,11 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { act, render, screen, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import Chat from "./Chat.test.svelte";
 import ChatTyping from "./Chat.typing.test.svelte";
+
+// What the page's shared live region holds.
+const spoken = () =>
+  document.querySelector("[data-announcer] [role=status]")?.textContent ?? "";
 
 describe("Chat", () => {
   it("renders a focusable, named log around a list of messages", () => {
@@ -37,10 +41,28 @@ describe("Chat", () => {
     );
   });
 
-  it("holds a streaming message's announcement until it's done", () => {
-    render(Chat, { streaming: true });
+  // Screen readers ignore aria-busy, so the log read the reply a chunk at
+  // a time.
+  it("says when a streamed reply starts and ends, never its text", async () => {
+    vi.useFakeTimers();
+    try {
+      const { rerender } = render(Chat, { streaming: true });
+      const message = screen.getByTestId("second");
+      const bubble = message.querySelector(".bx--chat-message__bubble");
+      expect(message).toHaveAttribute("aria-busy", "true");
+      expect(bubble).toHaveAttribute("aria-live", "off");
+      // The shared region takes a message once it is 150 ms old.
+      await act(() => vi.advanceTimersByTimeAsync(150));
+      expect(spoken()).toBe("Response started");
 
-    expect(screen.getByTestId("second")).toHaveAttribute("aria-busy", "true");
+      await rerender({ streaming: false });
+      await act(() => vi.advanceTimersByTimeAsync(0));
+      expect(spoken()).toBe("Response complete");
+      expect(message).not.toHaveAttribute("aria-busy");
+      expect(bubble).toHaveAttribute("aria-live", "off");
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("shows the avatar on the first of a run and leaves it out after", () => {
