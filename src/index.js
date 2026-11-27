@@ -371,9 +371,11 @@ export {
 } from "./utils/keyboard-shortcut.js";
 export { getLayoutDirection } from "./utils/layout-direction.js";
 export { linkSegments } from "./utils/link-segments.js";
+export { linkify } from "./utils/linkify.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";
+export { safeUrl } from "./utils/safe-url.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
 export { setTranslateContext } from "./utils/translate-context.js";
 export { trapFocus } from "./utils/trap-focus.js";
