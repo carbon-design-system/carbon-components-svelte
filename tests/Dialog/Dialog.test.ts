@@ -237,6 +237,58 @@ describe("Dialog", () => {
     expect(screen.getByTestId("fallback")).not.toHaveFocus();
   });
 
+  it("close(value) closes as programmatic and sets returnValue", async () => {
+    const onclose = vi.fn();
+    render(Dialog, { props: { open: true, modal: true, onclose } });
+
+    await user.click(screen.getByTestId("close-with-value"));
+    await tick();
+
+    expect(onclose).toHaveBeenCalledTimes(1);
+    expect(onclose.mock.calls[0][0].detail).toEqual({
+      trigger: "programmatic",
+    });
+    expect(screen.getByRole("dialog", { hidden: true })).not.toHaveAttribute(
+      "open",
+    );
+    expect(screen.getByTestId("return-value")).toHaveTextContent("save");
+  });
+
+  it("clears returnValue when the dialog opens again", async () => {
+    render(Dialog, { props: { open: true, modal: true } });
+
+    await user.click(screen.getByTestId("close-with-value"));
+    await tick();
+    expect(screen.getByTestId("return-value")).toHaveTextContent("save");
+
+    await user.click(screen.getByTestId("opener"));
+    await tick();
+
+    expect(screen.getByTestId("return-value").textContent).toBe("");
+  });
+
+  it('ignores backdrop clicks when closedby is "none"', async () => {
+    const onclose = vi.fn();
+    render(Dialog, {
+      props: { open: true, modal: true, closedby: "none", onclose },
+    });
+
+    const dialogEl = screen.getByRole("dialog");
+    await user.click(dialogEl);
+
+    expect(onclose).not.toHaveBeenCalled();
+    expect(dialogEl).toHaveAttribute("open");
+  });
+
+  it("forwards closedby as an attribute", () => {
+    render(Dialog, { props: { open: true, closedby: "closerequest" } });
+
+    expect(screen.getByRole("dialog")).toHaveAttribute(
+      "closedby",
+      "closerequest",
+    );
+  });
+
   it("syncs open to false when the browser closes the dialog, so it can open again", async () => {
     const onopen = vi.fn();
     const onclose = vi.fn();
