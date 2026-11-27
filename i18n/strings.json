@@ -2,6 +2,27 @@
   "generatedBy": "scripts/generate-strings.ts (bun run build:strings)",
   "text": [
     {
+      "component": "AccordionSearch",
+      "prop": "emptyText",
+      "type": "string",
+      "default": "No items match your search.",
+      "defaultKind": "text"
+    },
+    {
+      "component": "AccordionSearch",
+      "prop": "filterText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "AccordionSearch",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
       "component": "AILabel",
       "prop": "aiText",
       "type": "string",
