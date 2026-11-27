@@ -110,6 +110,22 @@ Add an overflow menu to handle long breadcrumb trails. Use overflow menu item co
   </BreadcrumbItem>
 </Breadcrumb>
 
+### Collapse into a menu
+
+Set `overflow` to `"menu"` to keep the trail on one line and collapse the
+middle items that don't fit into an overflow menu after the first item. The
+first item and the current page stay visible, and the items closest to the
+current page are the last to collapse. Each menu item keeps its link and
+`aria-current`. Drag the slider to change the container width.
+
+| Do | Why |
+| --- | --- |
+| Use `"menu"` for deep trails in headers and other single-line places. | The trail keeps one line's height at any width. |
+| Write every item as a `BreadcrumbItem`. | The menu reads the hidden items' text, link and `aria-current` from them. |
+| Keep the default `"wrap"` where the trail may take more lines. | Every level stays visible without opening a menu. |
+
+<FileSource src="/framed/Breadcrumb/BreadcrumbOverflowMenu" />
+
 ### Small
 
 Use `size="sm"` for a compact breadcrumb. This pairs with an overflow menu when space is tight.
