@@ -1676,6 +1676,13 @@
     },
     {
       "component": "Select",
+      "prop": "requiredInvalidText",
+      "type": "string",
+      "default": "Select an option",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Select",
       "prop": "warnText",
       "type": "string",
       "default": "",
