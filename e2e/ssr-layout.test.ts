@@ -196,3 +196,14 @@ test("a NumberRangeInput never sizes to its content, even as a flex item", async
   // 24rem less the parent's padding.
   expect(widths).toEqual([352, 352]);
 });
+
+test("a Flag and its code box are the same size as the server draws them", async ({
+  page,
+}) => {
+  // Both are sized by `size` alone, so neither waits on a stylesheet, a
+  // font or the code's text to settle: 32 wide and 24 high.
+  const flag = await rect(page, "[data-testid=flags] svg.bx--flag");
+  const box = await rect(page, "[data-testid=flags] span.bx--flag");
+  expect([flag[2], flag[3]]).toEqual([32, 24]);
+  expect([box[2], box[3]]).toEqual([32, 24]);
+});

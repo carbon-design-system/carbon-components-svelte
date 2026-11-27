@@ -3,6 +3,7 @@
     Button,
     Coachmark,
     ExpandableTile,
+    Flag,
     HoverCard,
     ImageCompare,
     LanguagePicker,
@@ -14,6 +15,7 @@
     Tearsheet,
     Timeline,
   } from "carbon-components-svelte";
+  import { JP } from "carbon-components-svelte/flags";
 </script>
 
 <div data-testid="tile" style="width: 14rem; padding: 1rem;">
@@ -121,4 +123,9 @@
   style="display: flex; max-width: 24rem; padding: 1rem;"
 >
   <NumberRangeInput labelText="Price" />
+</div>
+
+<div data-testid="flags" style="padding: 1rem;">
+  <Flag flag={JP} size={32} />
+  <Flag code="XK" size={32} />
 </div>

@@ -9,6 +9,7 @@ import type {
   createTheme,
   DataTable as BarrelDataTable,
   dismiss,
+  Flag as BarrelFlag,
   floatingPosition,
   focusHandoff,
   formatFileSize,
@@ -26,6 +27,8 @@ import type {
   trapFocus,
   useId,
 } from "carbon-components-svelte";
+import { type FlagData, JP } from "carbon-components-svelte/flags";
+import { flags, getFlag } from "carbon-components-svelte/flags/all";
 import {
   collapse,
   type CollapseOptions,
@@ -134,6 +137,7 @@ type _LayoutDirectionProps = LayoutDirectionProps<"section">["dir"];
 type _MultiSelectSkeleton = MultiSelectSkeleton;
 type _QueryParam = ReturnType<typeof queryParam<string>>;
 type _HeaderSearchResult = HeaderSearchResult;
+type _BarrelFlag = BarrelFlag;
 type _ThemeProps = ThemeProps;
 type _ColorTokenValue = (typeof colorTokens)[ColorToken]["g100"];
 type _TypeTokenSize = (typeof typeTokens)[TypeToken]["font-size"];
@@ -199,3 +203,6 @@ const _transitionProps: TransitionProp<SlideParams>[] = [
   { duration: "slow01", axis: "x" },
   { fn: fly, y: 8 },
 ];
+const _flag: FlagData = JP;
+const _flagByCode: FlagData | undefined = getFlag("JP");
+const _flagCode: string = flags.JP.code;
