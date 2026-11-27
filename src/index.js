@@ -275,6 +275,7 @@ export { default as FluidTimePickerSkeleton } from "./TimePicker/FluidTimePicker
 export { default as TimePicker } from "./TimePicker/TimePicker.svelte";
 export { default as TimePickerSelect } from "./TimePicker/TimePickerSelect.svelte";
 export { default as TimePickerSkeleton } from "./TimePicker/TimePickerSkeleton.svelte";
+export { default as TimeRangePicker } from "./TimeRangePicker/TimeRangePicker.svelte";
 export { default as Toggle } from "./Toggle/Toggle.svelte";
 export { default as ToggleSkeleton } from "./Toggle/ToggleSkeleton.svelte";
 export { default as ToggleButton } from "./ToggleButtonGroup/ToggleButton.svelte";
@@ -354,6 +355,22 @@ export { linkSegments } from "./utils/link-segments.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";
+export {
+  calendarRange,
+  defaultTimeRanges,
+  describeTimeRange,
+  formatAbsoluteRange,
+  formatTimeRange,
+  lastRange,
+  parseTimeRangeText,
+  relativeRangeLabel,
+  resolveRange,
+  stepRange,
+  timeRangeFromSearchParams,
+  timeRangeToSearchParams,
+  validateRange,
+  zoomRange,
+} from "./utils/time-range.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
 export { setTranslateContext } from "./utils/translate-context.js";
 export { trapFocus } from "./utils/trap-focus.js";
