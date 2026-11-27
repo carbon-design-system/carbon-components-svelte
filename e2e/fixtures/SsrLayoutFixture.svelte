@@ -2,6 +2,7 @@
   import {
     Button,
     ExpandableTile,
+    ImageCompare,
     LanguagePicker,
     OverflowMenu,
     OverflowMenuItem,
@@ -50,4 +51,17 @@
     values={["ar", "en"]}
     portalMenu={false}
   />
+</div>
+
+<div data-testid="compare" style="width: 20rem; padding: 1rem;">
+  <ImageCompare ratio="2x1" value={30}>
+    <div
+      slot="before"
+      style="width: 100%; height: 100%; background: #e0e0e0;"
+    ></div>
+    <div
+      slot="after"
+      style="width: 100%; height: 100%; background: #a7f0ba;"
+    ></div>
+  </ImageCompare>
 </div>
