@@ -268,10 +268,9 @@ for (const componentName of getComponentNames()) {
   );
   const fileContent = fs.readFileSync(filePath, "utf8");
   const { body } = splitFrontmatter(fileContent);
-  const components = readFrontmatter(fileContent, filePath).components ?? [];
-
-  const componentsForUsage =
-    components.length > 0 ? components : [componentName];
+  // `components: []` marks a page with no component API, such as History.
+  const componentsForUsage = readFrontmatter(fileContent, filePath)
+    .components ?? [componentName];
 
   const bodyWithoutLeadingScript = body.replace(
     LEADING_SVELTE_SCRIPT_BLOCK_RE,

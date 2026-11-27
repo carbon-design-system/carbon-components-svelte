@@ -1,9 +1,12 @@
 ---
+components: []
 description: createHistory keeps an undo and redo timeline for commands or state snapshots, folds a drag or a burst of typing into one step, and historyKeys binds it to the keyboard.
 ---
 
 <script>
 </script>
+
+## Basic
 
 `createHistory` keeps a timeline of steps. Each step is a pair of functions, so
 one history serves edits you describe as commands and edits you capture as
