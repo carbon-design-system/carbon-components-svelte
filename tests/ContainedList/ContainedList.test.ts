@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import ContainedListComponent from "carbon-components-svelte/ContainedList/ContainedList.svelte";
 import type ContainedListItemComponent from "carbon-components-svelte/ContainedList/ContainedListItem.svelte";
 import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
@@ -272,6 +273,38 @@ describe("ContainedList", () => {
     expect(staticItem.querySelector("button")).toBeNull();
     expect(staticItem.querySelector("a")).toBeNull();
     expect(staticItem).not.toHaveClass("bx--contained-list-item--clickable");
+  });
+
+  it("spreads rest props on the root and naming on the list", () => {
+    render(ContainedListComponent, {
+      props: {
+        labelText: "Services",
+        class: "my-list",
+        style: "margin-top: 2rem",
+        "data-sortable-group": "services",
+        "aria-describedby": "hint",
+      },
+    });
+
+    expect(root()).toHaveClass("bx--contained-list", "my-list");
+    expect(root()?.style.marginTop).toBe("2rem");
+    expect(root()).toHaveAttribute("data-sortable-group", "services");
+    expect(root()).not.toHaveAttribute("aria-describedby");
+    expect(screen.getByRole("list")).toHaveAccessibleName("Services");
+    expect(screen.getByRole("list")).toHaveAttribute(
+      "aria-describedby",
+      "hint",
+    );
+  });
+
+  it("names the list with a consumer aria-label over its label", () => {
+    render(ContainedListComponent, {
+      props: { labelText: "Services", "aria-label": "Deployment order" },
+    });
+
+    expect(screen.getByRole("list")).toHaveAccessibleName("Deployment order");
+    expect(screen.getByRole("list")).not.toHaveAttribute("aria-labelledby");
+    expect(root()).not.toHaveAttribute("aria-label");
   });
 
   describe("ContainedListItem Generics", () => {
