@@ -190,8 +190,8 @@
    * Specify the text a screen reader announces about the results, such as
    * `"12 results"`. It is announced politely once typing pauses, after
    * `debounce` milliseconds when set, otherwise after 500 ms. A change to
-   * `""` clears it without an announcement. Leave it unset to render no
-   * live region.
+   * `""` clears it without an announcement. Leave it unset to announce
+   * nothing.
    * @type {string | undefined}
    */
   export let resultsDescription = undefined;
@@ -214,6 +214,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
+  import { createAnnouncerChannel } from "../utils/announcer.js";
   import { debounce as debounceFn } from "../utils/debounce.js";
   import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import {
@@ -393,43 +394,32 @@
         : null;
   }
 
-  // The live region starts empty, so the server HTML and a value set on
-  // mount announce nothing. Each change waits for typing to pause, and a
-  // newer one replaces it.
-  let announcedResults = "";
+  // Results go to the page's shared live region, or into the dialog this
+  // search is in. A value set on mount announces nothing. Each change waits
+  // for typing to pause, and a newer one replaces it.
+  const resultsStatus = createAnnouncerChannel(() => ref);
   let prevResultsDescription = resultsDescription;
-  /** @type {null | import("../utils/debounce.js").Debounced<(text: string) => void>} */
-  let announceResults = null;
-
-  // A new `debounce` applies from the next change and drops a pending one.
-  /** @param {number} _delay */
-  function resetResultsAnnouncer(_delay) {
-    announceResults?.cancel();
-    announceResults = null;
-  }
-  $: resetResultsAnnouncer(debounce);
 
   $: if (resultsDescription !== prevResultsDescription) {
     prevResultsDescription = resultsDescription;
     if (resultsDescription) {
-      announceResults ??= debounceFn(
-        /** @param {string} text */
-        (text) => {
-          announcedResults = text;
-        },
-        debounce > 0 ? debounce : RESULTS_ANNOUNCE_DELAY_MS,
-      );
-      announceResults(resultsDescription);
+      resultsStatus.announce(resultsDescription, {
+        debounce: debounce > 0 ? debounce : RESULTS_ANNOUNCE_DELAY_MS,
+      });
     } else {
-      announceResults?.cancel();
-      announcedResults = "";
+      resultsStatus.clear();
     }
   }
 
   onMount(() => {
+    // Hold the region while results are described, so it is in the page
+    // before the first announcement.
+    const disconnectResults =
+      resultsDescription === undefined ? undefined : resultsStatus.connect();
     return () => {
       dispatchSearch?.cancel();
-      announceResults?.cancel();
+      disconnectResults?.();
+      resultsStatus.clear();
       loadingIndicator.cancel();
       detachTooltip();
       tooltip.destroy();
@@ -731,13 +721,6 @@
   {/if}
   {#if showWarn && !isFluid && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
-  {/if}
-  {#if resultsDescription !== undefined}
-    <!-- Rendered while empty, so assistive tech registers the region before
-         its text changes. -->
-    <span role="status" aria-live="polite" class:bx--visually-hidden={true}
-      >{announcedResults}</span
-    >
   {/if}
 {/if}
 
