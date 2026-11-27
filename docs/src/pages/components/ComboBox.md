@@ -516,6 +516,23 @@ Set `portalMenu` to `true` to always render the menu in a portal, for example to
 
 <FileSource src="/framed/ComboBox/ComboBoxPortalMenu" />
 
+### Maximum height
+
+Set `maxHeight` to cap the height of the menu. A number is pixels; a string is any CSS length, such as `"10rem"`. The cap applies whether the menu renders in place, in a portal, or virtualized. A virtualized menu resolves a string to pixels each time it opens, and a `containerHeight` in `virtualize` takes precedence.
+
+<ComboBox maxHeight="10rem" labelText="Contact" items={[
+  { id: "0", text: "Slack" },
+  { id: "1", text: "Email" },
+  { id: "2", text: "Fax" },
+  { id: "3", text: "Phone" },
+  { id: "4", text: "Mail" },
+  { id: "5", text: "SMS" },
+  { id: "6", text: "WhatsApp" },
+  { id: "7", text: "Teams" },
+  { id: "8", text: "Zoom" },
+  { id: "9", text: "In person" },
+]} />
+
 ### Wrapped options
 
 Option labels are truncated to one line. At a 320px viewport, that hides text and can leave two options looking identical, a WCAG 1.4.10 Reflow failure.
