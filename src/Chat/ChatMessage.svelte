@@ -37,10 +37,24 @@
 
   /**
    * Set to `true` while the message is still arriving, such as a reply
-   * streamed word by word. Screen readers wait and announce it once, in
-   * full, instead of every chunk.
+   * streamed word by word. Screen readers don't read the text as it grows:
+   * they hear `streamStartedDescription` when it starts and
+   * `streamCompleteDescription` when it ends, and reach the text by moving
+   * to the message.
    */
   export let streaming = false;
+
+  /**
+   * Specify the text screen readers announce when the message starts to
+   * stream. Set to an empty string to announce nothing.
+   */
+  export let streamStartedDescription = "Response started";
+
+  /**
+   * Specify the text screen readers announce when the message has finished
+   * streaming. Set to an empty string to announce nothing.
+   */
+  export let streamCompleteDescription = "Response complete";
 
   /**
    * Set to `true` to show a typing indicator in place of the content.
@@ -74,12 +88,13 @@
   /** Specify the text of the Retry button for a failed message */
   export let retryText = "Retry";
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import CheckmarkOutline from "../icons/CheckmarkOutline.svelte";
   import CircleDash from "../icons/CircleDash.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { createAnnouncerChannel } from "../utils/announcer.js";
 
   const dispatch = createEventDispatcher();
 
@@ -90,6 +105,42 @@
     read: CheckmarkFilled,
     failed: WarningFilled,
   };
+
+  /** @type {null | HTMLLIElement} */
+  let element = null;
+
+  // The log around the messages announces what is added to it, and screen
+  // readers ignore `aria-busy`, so a streamed reply was read a chunk at a
+  // time. Once a message streams, its text stays out of the log's
+  // announcements, and the starts and ends of the stream are said instead,
+  // on one channel: a reply that finishes before "started" is spoken says
+  // only "complete".
+  const channel = createAnnouncerChannel(() => element);
+  /** @type {undefined | (() => void)} */
+  let disconnect;
+  let mounted = false;
+  let wasStreaming = false;
+  let streamed = false;
+
+  /** @param {boolean} next */
+  function announceEdge(next) {
+    if (next === wasStreaming) return;
+    wasStreaming = next;
+    if (next) streamed = true;
+    // Most messages never stream, so only one that does holds the region.
+    if (mounted) disconnect ??= channel.connect();
+    const text = next ? streamStartedDescription : streamCompleteDescription;
+    if (text) channel.announce(text);
+    else channel.clear();
+  }
+
+  $: announceEdge(streaming);
+
+  onMount(() => {
+    mounted = true;
+    if (streamed) disconnect = channel.connect();
+    return () => disconnect?.();
+  });
 </script>
 
 <li
@@ -101,6 +152,7 @@
   class:bx--chat-message--with-status={!!status && !typing}
   aria-busy={streaming ? "true" : undefined}
   {...$$restProps}
+  bind:this={element}
 >
   {#if from === "them"}
     <span class:bx--chat-message__avatar={true}>
@@ -131,7 +183,12 @@
           <span class:bx--visually-hidden={true}>{typingText}</span>
         </div>
       {:else}
-        <div class:bx--chat-message__bubble={true}><slot /></div>
+        <div
+          class:bx--chat-message__bubble={true}
+          aria-live={streamed ? "off" : undefined}
+        >
+          <slot />
+        </div>
       {/if}
       {#if $$slots.actions && !typing}
         <span class:bx--chat-message__actions={true}
