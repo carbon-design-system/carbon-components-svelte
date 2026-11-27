@@ -262,6 +262,7 @@ export { default as ThemeDropdown } from "./Theme/ThemeDropdown.svelte";
 export { default as ThemeSelect } from "./Theme/ThemeSelect.svelte";
 export { default as ThemeToggle } from "./Theme/ThemeToggle.svelte";
 export { themeScript } from "./Theme/theme-script.js";
+export { default as ThemeBuilder } from "./ThemeBuilder/ThemeBuilder.svelte";
 export { default as ThemeZone } from "./ThemeZone/ThemeZone.svelte";
 export { default as ClickableTile } from "./Tile/ClickableTile.svelte";
 export { default as ExpandableTile } from "./Tile/ExpandableTile.svelte";

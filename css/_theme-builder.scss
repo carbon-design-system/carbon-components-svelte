@@ -1,0 +1,278 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// The `ThemeBuilder` layout: a toolbar, a token editor beside a live
+/// preview, a contrast table, and an export panel. The preview sets its own
+/// custom properties on a `ThemeZone`, so these rules read the page's tokens
+/// and never the previewed ones.
+/// @access private
+/// @group components
+@mixin theme-builder {
+  .#{$prefix}--theme-builder {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-06;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--theme-builder__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--theme-builder__toolbar > .#{$prefix}--form-item {
+    flex: 0 1 to-rem(220px);
+  }
+
+  .#{$prefix}--theme-builder__count {
+    @include type-style("helper-text-01");
+
+    margin-inline-start: auto;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--theme-builder__main {
+    display: grid;
+    gap: $carbon--spacing-06;
+    grid-template-columns: minmax(0, 1fr);
+    // A flex or grid child can't shrink below its content without this.
+    min-inline-size: 0;
+
+    @include carbon--breakpoint(lg) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+      align-items: start;
+    }
+  }
+
+  .#{$prefix}--theme-builder__editor {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-04;
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--theme-builder__group-help {
+    @include type-style("helper-text-01");
+
+    margin-block-end: $carbon--spacing-03;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--theme-builder__list {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--theme-builder__empty {
+    @include type-style("body-compact-01");
+
+    color: $text-secondary;
+  }
+
+  // The editor's rows read the page theme, so a dark page keeps a dark
+  // editor beside a light preview.
+  .#{$prefix}--theme-builder__token {
+    display: grid;
+    align-items: end;
+    gap: $carbon--spacing-03;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .#{$prefix}--theme-builder__token-field {
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--theme-builder__token-state {
+    display: flex;
+    align-items: center;
+    // Reserves the row for one tag and a button so the field doesn't resize
+    // when a token becomes edited.
+    min-block-size: to-rem(32px);
+    gap: $carbon--spacing-02;
+  }
+
+  // The swatch is a native color input, drawn flat. The border keeps a
+  // swatch that matches the page background visible, and
+  // `forced-color-adjust` keeps the color itself under forced colors.
+  .#{$prefix}--theme-builder__swatch {
+    box-sizing: border-box;
+    padding: 0;
+    border: 1px solid $border-strong;
+    margin: 0;
+    background: none;
+    block-size: to-rem(32px);
+    cursor: pointer;
+    forced-color-adjust: none;
+    inline-size: to-rem(32px);
+
+    &::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    &::-webkit-color-swatch {
+      border: 0;
+    }
+
+    &::-moz-color-swatch {
+      border: 0;
+    }
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--theme-builder__swatch--static {
+    display: inline-block;
+    cursor: default;
+  }
+
+  .#{$prefix}--theme-builder__reset {
+    @include type-style("body-compact-01");
+
+    padding: 0;
+    border: 0;
+    background: none;
+    color: $link-primary;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--theme-builder__preview {
+    position: relative;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+
+    @include carbon--breakpoint(lg) {
+      position: sticky;
+      inset-block-start: $carbon--spacing-05;
+    }
+  }
+
+  // A shadow ring, not a border: forced colors drops a shadow, so the
+  // components inside don't draw edges against a second one.
+  .#{$prefix}--theme-builder__zone {
+    padding: $carbon--spacing-05;
+    box-shadow: inset 0 0 0 1px $border-subtle;
+  }
+
+  .#{$prefix}--theme-builder__gallery {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--theme-builder__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--theme-builder__form {
+    display: grid;
+    gap: $carbon--spacing-05;
+    grid-template-columns: repeat(auto-fit, minmax(to-rem(200px), 1fr));
+  }
+
+  .#{$prefix}--theme-builder__nested {
+    padding: $carbon--spacing-05;
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  // Forced colors replaces every theme color with a system color, so the
+  // preview can't show the tokens. Say so, only when it applies.
+  .#{$prefix}--theme-builder__forced-note {
+    @include type-style("helper-text-01");
+
+    display: none;
+    margin-block-start: $carbon--spacing-03;
+    color: $text-secondary;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--theme-builder__forced-note {
+      display: block;
+    }
+  }
+
+  .#{$prefix}--theme-builder__heading {
+    @include type-style("heading-03");
+
+    margin-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--theme-builder__contrast,
+  .#{$prefix}--theme-builder__export {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-04;
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--theme-builder__summary {
+    @include type-style("body-compact-02");
+  }
+
+  .#{$prefix}--theme-builder__note {
+    @include type-style("helper-text-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--theme-builder__options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: $carbon--spacing-05;
+    margin-block-end: $carbon--spacing-04;
+  }
+
+  // The table scrolls inside this box on a narrow screen, so the page doesn't.
+  .#{$prefix}--theme-builder__table-wrap {
+    overflow-x: auto;
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--theme-builder__table {
+    @include type-style("body-compact-01");
+
+    border-collapse: collapse;
+    inline-size: 100%;
+
+    th,
+    td {
+      padding: $carbon--spacing-03 $carbon--spacing-05;
+      border-block-end: 1px solid $border-subtle;
+      text-align: start;
+    }
+
+    thead th {
+      @include type-style("heading-compact-01");
+
+      background-color: $layer-accent;
+    }
+
+    tbody th {
+      font-weight: 400;
+    }
+  }
+}
+
+@include exports("theme-builder") {
+  @include theme-builder;
+}
