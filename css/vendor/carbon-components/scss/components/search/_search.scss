@@ -546,3 +546,53 @@
 @include exports("search-text-align") {
   @include search-text-align;
 }
+
+// carbon-components-svelte patch (search-variant)
+/// `variant`: `fill` keeps the field's fill without its bottom border, for a
+/// toolbar of filled controls. `ghost` drops the fill too until hover or a
+/// value, for a surface with its own background, as the persistent
+/// ToolbarSearch is. The border turns transparent rather than going, so the
+/// field keeps its height and its text and icons stay put. Forced colors
+/// paint a transparent border `CanvasText`, so the field keeps its box there.
+/// @access private
+/// @group components
+@mixin search-variant {
+  // The clear button's border is already transparent at rest; listing it
+  // beside its hover restates that rather than adding a hover effect.
+  .#{$prefix}--search--fill .#{$prefix}--search-input,
+  .#{$prefix}--search--fill .#{$prefix}--search-close,
+  .#{$prefix}--search--fill .#{$prefix}--search-close:hover,
+  .#{$prefix}--search--ghost .#{$prefix}--search-input,
+  .#{$prefix}--search--ghost .#{$prefix}--search-close,
+  .#{$prefix}--search--ghost .#{$prefix}--search-close:hover {
+    border-bottom-color: transparent;
+  }
+
+  .#{$prefix}--search--ghost .#{$prefix}--search-input,
+  .#{$prefix}--search--ghost .#{$prefix}--search-close,
+  .#{$prefix}--search--ghost .#{$prefix}--search-close:hover {
+    background-color: transparent;
+  }
+
+  // The clear button's start-edge strip is painted in the field's fill.
+  .#{$prefix}--search--ghost .#{$prefix}--search-close::before {
+    display: none;
+  }
+
+  // A query keeps the field filled, on touch screens too, so an active
+  // search reads as one.
+  .#{$prefix}--search--ghost
+    .#{$prefix}--search-input:not(:placeholder-shown):not([disabled]) {
+    background-color: $field-hover;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--search--ghost .#{$prefix}--search-input:hover:not([disabled]) {
+      background-color: $field-hover;
+    }
+  }
+}
+
+@include exports("search-variant") {
+  @include search-variant;
+}

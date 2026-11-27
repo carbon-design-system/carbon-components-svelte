@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import type SearchComponent from "carbon-components-svelte/Search/Search.svelte";
+import SearchField from "carbon-components-svelte/Search/Search.svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
@@ -11,6 +12,21 @@ import SearchInitialEvent from "./SearchInitialEvent.test.svelte";
 import SearchSkeleton from "./SearchSkeleton.test.svelte";
 
 describe("Search", () => {
+  it.each([
+    ["fill", false, "bx--search--fill"],
+    ["ghost", false, "bx--search--ghost"],
+    ["ghost", true, null],
+  ] as const)("marks the %s variant (fluid: %s)", (variant, fluid, marker) => {
+    const { container } = render(SearchField, {
+      props: { variant, fluid, labelText: "Search" },
+    });
+    const root = container.querySelector(".bx--search");
+    for (const name of ["bx--search--fill", "bx--search--ghost"]) {
+      if (name === marker) expect(root).toHaveClass(name);
+      else expect(root).not.toHaveClass(name);
+    }
+  });
+
   const getSearchInput = (label?: string | RegExp) =>
     screen.getByRole("searchbox", { name: label });
   const getClearButton = (label = "Clear search input") =>

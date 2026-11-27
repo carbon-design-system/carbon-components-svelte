@@ -45,6 +45,19 @@
    */
   export let readonly = false;
 
+  /**
+   * Set the field's look.
+   * - `"default"`: the field fill and a bottom border
+   * - `"fill"`: the field fill, no bottom border, for a toolbar of filled
+   *   controls or one with its own border below
+   * - `"ghost"`: no fill or border until hover or a value, for a surface
+   *   with its own background, such as a header or a toolbar
+   *
+   * The field keeps its height in each. Has no effect on the fluid variant.
+   * @type {"default" | "fill" | "ghost"}
+   */
+  export let variant = "default";
+
   /** Set to `true` to enable the expandable variant */
   export let expandable = false;
 
@@ -373,6 +386,8 @@
     class:bx--search--expandable={expandable}
     class:bx--search--expanded={expanded}
     class:bx--search--fluid={isFluid}
+    class:bx--search--fill={variant === "fill" && !isFluid}
+    class:bx--search--ghost={variant === "ghost" && !isFluid}
     class:bx--search--shortcut={hasShortcutHint}
     style:--ccs-search-shortcut-width={hasShortcutHint
       ? `${shortcutWidth}ch`

@@ -25,3 +25,24 @@
   <Search labelText="Sticky search" shortcut="/" />
 </div>
 <div style="height: 200vh"></div>
+<div data-testid="variants" style="width: 20rem">
+  {#each ["default", "fill", "ghost"] as variant (variant)}
+    <div data-variant={variant}>
+      <Search
+        size="sm"
+        {variant}
+        labelText="Search {variant}"
+        closeButtonLabelText="Clear {variant}"
+      />
+    </div>
+  {/each}
+  <div data-variant="ghost-value">
+    <Search
+      size="sm"
+      variant="ghost"
+      value="arrow"
+      labelText="Search ghost with a value"
+      closeButtonLabelText="Clear ghost with a value"
+    />
+  </div>
+</div>

@@ -1097,6 +1097,19 @@ test.describe("forced colors", () => {
   // painted its transparent resting outline as a 2px CanvasText box, and its
   // start-edge strip and hover fill as Canvas, on top of the field's 4px
   // Highlight ring.
+  // A variant's border is transparent, which forced colors paint
+  // CanvasText, so the field keeps its edge.
+  test("fill and ghost Search fields keep their bottom edge", async ({
+    page,
+  }) => {
+    for (const name of ["Fill search", "Ghost search"]) {
+      const edge = await page
+        .getByRole("searchbox", { name })
+        .evaluate((el) => getComputedStyle(el).borderBottomColor);
+      expect.soft(edge, name).toBe(system.CanvasText);
+    }
+  });
+
   test("a Search focus ring runs past its clear button", async ({ page }) => {
     for (const group of ["fields", "fluid-fields"]) {
       const scope = `[data-testid=${group}] [data-testid=search]`;
