@@ -5,6 +5,10 @@
 
   export let labels: string[] = ["Tag 1", "Tag 2", "Tag 3", "Tag 4"];
   export let dismissible = false;
+  /** Remove a tag from `labels` when it closes, as a consumer would. */
+  export let removeOnClose = false;
+  export let removedDescription: ComponentProps<TagSet>["removedDescription"] =
+    undefined;
   export let values: Array<string | number> | undefined = undefined;
   export let maxVisible: ComponentProps<TagSet>["maxVisible"] = undefined;
   export let size: ComponentProps<TagSet>["size"] = undefined;
@@ -25,6 +29,13 @@
   }) => void = () => {};
   export let onOverflowClick: (event: CustomEvent) => void = () => {};
   export let onOverflowChange: (detail: { count: number }) => void = () => {};
+
+  function handleTagClose(detail: { tag: unknown; index: number }) {
+    onTagClose(detail);
+    if (removeOnClose) {
+      labels = labels.filter((_, index) => index !== detail.index);
+    }
+  }
 </script>
 
 <div bind:this={outer} data-testid="outer">
@@ -36,8 +47,9 @@
     {multiline}
     {align}
     {measurementOffset}
+    {...removedDescription ? { removedDescription } : {}}
     containingElement={measureOuter ? outer : undefined}
-    on:close:tag={({ detail }) => onTagClose(detail)}
+    on:close:tag={({ detail }) => handleTagClose(detail)}
     on:click:overflow={onOverflowClick}
     on:overflow:change={({ detail }) => onOverflowChange(detail)}
   >

@@ -233,6 +233,46 @@ describe("TagSet", () => {
     );
   });
 
+  it.each([
+    { removedDescription: undefined, text: "Tag 1 removed" },
+    {
+      removedDescription: (label: string) => `Filter ${label} cleared`,
+      text: "Filter Tag 1 cleared",
+    },
+  ])(
+    "announces a removed tag as $text",
+    async ({ removedDescription, text }) => {
+      const { container } = render(TagSetFixture, {
+        dismissible: true,
+        removeOnClose: true,
+        removedDescription,
+      });
+
+      const [first] = within(container).getAllByRole("button", {
+        name: /^Clear filter/,
+      });
+      await user.click(first);
+
+      await waitFor(() => {
+        expect(screen.getByRole("status")).toHaveTextContent(text);
+      });
+    },
+  );
+
+  it("announces nothing when the consumer keeps the tag", async () => {
+    const { container } = render(TagSetFixture, { dismissible: true });
+    const region = screen.getByRole("status");
+
+    const [first] = within(container).getAllByRole("button", {
+      name: /^Clear filter/,
+    });
+    await user.click(first);
+    await tick();
+
+    expect(first).toBeInTheDocument();
+    expect(region).toHaveTextContent("");
+  });
+
   it("dispatches click:overflow when the indicator is clicked", async () => {
     const onOverflowClick = vi.fn();
     const { container } = render(TagSetFixture, { onOverflowClick });
