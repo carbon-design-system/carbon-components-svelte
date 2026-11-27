@@ -129,3 +129,20 @@ test("an open HoverCard sits under its trigger before it's placed", async ({
     });
   expect(await rect(page, selector)).toEqual(mounted);
 });
+
+test("an open Coachmark sits where the server printed it, before it fits", async ({
+  page,
+}) => {
+  const selector = "[data-testid=coachmark] .bx--popover";
+  const mounted = await rect(page, selector);
+  // The server prints the requested side. A fit that finds room keeps it.
+  await page.locator(selector).evaluate((el) => {
+    for (const name of [...el.classList]) {
+      if (/^bx--popover--(top|bottom|left|right)/.test(name)) {
+        el.classList.remove(name);
+      }
+    }
+    el.classList.add("bx--popover--bottom-left");
+  });
+  expect(await rect(page, selector)).toEqual(mounted);
+});

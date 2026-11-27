@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
     Button,
+    Coachmark,
     ExpandableTile,
     HoverCard,
     ImageCompare,
@@ -76,4 +77,13 @@
     <Link slot="trigger" href="#user">@octocat</Link>
     Maintainer. San Francisco.
   </HoverCard>
+</div>
+
+<div
+  data-testid="coachmark"
+  style="position: relative; height: 12rem; padding: 1rem;"
+>
+  <Coachmark open titleText="Export in bulk" align="bottom-start">
+    Select rows, then export them together.
+  </Coachmark>
 </div>

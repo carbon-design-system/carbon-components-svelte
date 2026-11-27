@@ -5,6 +5,7 @@ import type { ComponentEvents, ComponentProps } from "svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { user } from "../utils/user";
 import Coachmark from "./Coachmark.test.svelte";
+import CoachmarkInSection from "./CoachmarkInSection.test.svelte";
 import CoachmarkTarget from "./CoachmarkTarget.test.svelte";
 
 const beacon = () => screen.getByRole("button", { name: "Show coachmark" });
@@ -231,6 +232,19 @@ describe("Coachmark", () => {
 
       expect(onClose).toHaveBeenCalledWith({ trigger: "programmatic" });
     });
+  });
+
+  it("is an h2 outside a Section and one level below the Section it sits in", () => {
+    const { unmount } = render(Coachmark, { props: { open: true } });
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Export in bulk" }),
+    ).toBeInTheDocument();
+    unmount();
+
+    render(CoachmarkInSection, { props: { level: 3 } });
+    expect(
+      screen.getByRole("heading", { level: 4, name: "Export in bulk" }),
+    ).toBeInTheDocument();
   });
 
   it("types the close trigger and the focus props", () => {
