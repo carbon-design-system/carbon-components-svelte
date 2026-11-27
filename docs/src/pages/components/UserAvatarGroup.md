@@ -49,6 +49,20 @@ Every slotted avatar still mounts; CSS hides the ones past `max`. For large list
   <UserAvatar backgroundColor="auto" name="Dinesh Chugtai" tooltipText="Dinesh Chugtai" />
 </UserAvatarGroup>
 
+### See all members
+
+Set `interactiveOverflow` to make the "+N" chip a control that dispatches `click:overflow`. Its `detail.hidden` lists the slotted avatars past `max` as `{ id, name }`. Use it to open a modal, panel or popover with everyone. Without the prop, the chip stays as it is: the trigger of its names tooltip, or a plain avatar with no tab stop when there are no names.
+
+| Do | Why |
+| --- | --- |
+| Open a surface that lists everyone, such as a passive Modal | The chip's label is only the count |
+| Expect `aria-expanded` on a chip with names to follow the names tooltip | The chip is the tooltip's trigger button, so it can't also describe the surface you open |
+| Use the `overflow` slot for content rendered after the chip | It takes `let:hidden` and works with or without `interactiveOverflow` |
+
+The chip sets no `aria-haspopup`, since the group can't know what the click opens.
+
+<FileSource src="/framed/UserAvatarGroup/UserAvatarGroupInteractiveOverflow" />
+
 ## Spacing
 
 Leave `gap` unset for the default overlapping layout. Set `gap` to a positive value to space the avatars apart, or to a negative length string to tighten the overlap.
