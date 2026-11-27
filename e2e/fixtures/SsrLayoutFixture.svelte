@@ -4,6 +4,7 @@
     ExpandableTile,
     OverflowMenu,
     OverflowMenuItem,
+    ShellBanner,
     Tearsheet,
   } from "carbon-components-svelte";
 </script>
@@ -34,3 +35,9 @@
     <Button>Next</Button>
   </svelte:fragment>
 </Tearsheet>
+
+<ShellBanner
+  placement="above-header"
+  title="Viewing as jane@acme.com."
+  subtitle="This session is read only. Changes you make here are not saved to the production workspace until you exit impersonation and sign in again with your own account."
+/>

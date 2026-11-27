@@ -2032,6 +2032,20 @@
       "defaultKind": "text"
     },
     {
+      "component": "ShellBanner",
+      "prop": "closeButtonDescription",
+      "type": "string",
+      "default": "Dismiss banner",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ShellBanner",
+      "prop": "statusIconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
       "component": "SidePanel",
       "prop": "closeIconDescription",
       "type": "string",

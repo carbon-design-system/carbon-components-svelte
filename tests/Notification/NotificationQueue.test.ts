@@ -13,6 +13,8 @@ function getQueue(
   return queue;
 }
 
+const shellTop = "calc(var(--ccs-shell-offset, 0px) + 3rem)";
+
 describe("NotificationQueue", () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -391,7 +393,7 @@ describe("NotificationQueue", () => {
       className: "bx--notification-queue--top-right",
       styles: {
         position: "fixed",
-        top: "3rem",
+        top: shellTop,
         right: "1rem",
         "z-index": "9000",
       },
@@ -400,13 +402,13 @@ describe("NotificationQueue", () => {
     {
       position: "top-left",
       className: "bx--notification-queue--top-left",
-      styles: { top: "3rem", left: "1rem" },
+      styles: { top: shellTop, left: "1rem" },
       absent: ["bottom", "right", "transform"],
     },
     {
       position: "top-center",
       className: "bx--notification-queue--top-center",
-      styles: { top: "3rem", left: "50%", transform: "translateX(-50%)" },
+      styles: { top: shellTop, left: "50%", transform: "translateX(-50%)" },
       absent: ["bottom", "right"],
     },
     {
