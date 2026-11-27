@@ -289,6 +289,34 @@
       "defaultKind": "text"
     },
     {
+      "component": "Coachmark",
+      "prop": "beaconDescription",
+      "type": "string",
+      "default": "Show coachmark",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Coachmark",
+      "prop": "closeIconDescription",
+      "type": "string",
+      "default": "Close",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Coachmark",
+      "prop": "titleText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CoachmarkBeacon",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
       "component": "CodeSnippet",
       "prop": "copyButtonDescription",
       "type": "string | undefined",
