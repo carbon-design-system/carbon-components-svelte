@@ -26,4 +26,15 @@ describe("DataTable focus after a row is removed", () => {
 
     expect(button("Delete Beta")).toHaveFocus();
   });
+
+  it("leaves focus alone when the app removes a row focus is not in", async () => {
+    render(DataTableRowDelete);
+
+    button("Delete Gamma").focus();
+    button("Remove Alpha").click();
+    await flushMacrotask();
+
+    expect(screen.queryByText("Alpha")).not.toBeInTheDocument();
+    expect(button("Delete Gamma")).toHaveFocus();
+  });
 });

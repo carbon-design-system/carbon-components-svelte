@@ -31,3 +31,6 @@
     {/if}
   </svelte:fragment>
 </DataTable>
+<Button on:click={() => (rows = rows.filter((r) => r.id !== "a"))}>
+  Remove Alpha
+</Button>

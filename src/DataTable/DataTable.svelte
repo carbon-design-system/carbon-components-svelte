@@ -663,6 +663,7 @@
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { toCssLength } from "../utils/css-length.js";
+  import { focusHandoff } from "../utils/focus-handoff.js";
   import { formReset } from "../utils/form-reset.js";
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
   import { createIdScope, useId } from "../utils/id-scope.js";
@@ -687,7 +688,6 @@
     resolvePath,
     shouldIgnoreRowClick,
   } from "./data-table-utils.js";
-  import { keepRowFocus } from "./row-focus.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -1909,7 +1909,13 @@
           {/each}
         </TableRow>
       </TableHead>
-      <tbody use:keepRowFocus={{ enabled: !virtualData?.isVirtualized }}>
+      <tbody
+        use:focusHandoff={{
+          items: "tr[data-row]",
+          subtree: false,
+          enabled: !virtualData?.isVirtualized,
+        }}
+      >
         {#if emptyRowShown}
           <tr class:bx--data-table--empty-row={true}>
             <td colspan={totalColumns} class:bx--table-cell={true}>
