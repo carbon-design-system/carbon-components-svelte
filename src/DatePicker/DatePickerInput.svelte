@@ -51,6 +51,29 @@
   /** Specify the invalid state text */
   export let invalidText = "";
 
+  /**
+   * Set to `true` to mark the input as required. A wrapping `<form>` blocks
+   * submission while it is empty, and the input shows its invalid state with
+   * `requiredInvalidText` instead of the browser's error bubble.
+   */
+  export let required = false;
+
+  /**
+   * Specify the invalid state text shown when a required input blocks
+   * submission. Cleared once the input changes. `invalid` and `invalidText`
+   * take precedence.
+   */
+  export let requiredInvalidText = "Enter a date";
+
+  /**
+   * Specify the invalid state text shown when a date that doesn't match
+   * `pattern` (by default, `dateFormat`) blocks submission. Only the
+   * "simple" type keeps such text: a calendar parses typed dates on change.
+   * Cleared once the input changes. `invalid` and `invalidText` take
+   * precedence.
+   */
+  export let patternInvalidText = "Enter a valid date";
+
   /** Set to `true` to indicate a warning state */
   export let warn = false;
 
@@ -91,6 +114,7 @@
   import { formReset } from "../utils/form-reset.js";
   import { useId } from "../utils/id-scope.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
+  import { requiredInvalid } from "../utils/required-invalid.js";
   import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { getCalendarLocale } from "./calendar-dates.js";
@@ -152,9 +176,41 @@
   $: if (ref) declareRef({ id, ref });
   $: setReadonly(id, readonly);
   $: setDisabled(id, effectiveDisabled);
+  /**
+   * The constraint that blocked form submission, shown until the value
+   * changes.
+   * @type {undefined | "valueMissing" | "patternMismatch"}
+   */
+  let nativeError;
+  let nativeErrorValue = "";
+  // A calendar pick always matches the pattern, so only typed text needs the
+  // submit-attempt listeners before the field is required.
+  let typed = false;
+  $: if (nativeError && currentValue !== nativeErrorValue) {
+    nativeError = undefined;
+  }
+  $: shownInvalidText =
+    nativeError && !invalid
+      ? nativeError === "valueMissing"
+        ? requiredInvalidText
+        : patternInvalidText
+      : invalidText;
+
+  /** @param {boolean} blocked */
+  function handleNativeInvalid(blocked) {
+    nativeErrorValue = currentValue;
+    if (blocked) {
+      nativeError = ref?.validity.valueMissing
+        ? "valueMissing"
+        : "patternMismatch";
+    } else {
+      nativeError = undefined;
+    }
+  }
+
   // Invalid/warn states are suppressed when the input is disabled or read-only.
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
-    invalid,
+    invalid: invalid || !!nativeError,
     warn,
     disabled: effectiveDisabled,
     readonly,
@@ -207,7 +263,7 @@
     showInvalid,
     showWarn,
     isFluid: $isFluid,
-    invalidText,
+    invalidText: shownInvalidText,
     warnText,
     helperText,
     errorId,
@@ -289,14 +345,20 @@
         !effectiveDisabled &&
         !$multiple}
       use:attachFormReset={handleFormReset}
+      use:requiredInvalid={{
+        enabled: required || typed,
+        pattern: true,
+        onChange: handleNativeInvalid,
+      }}
       data-invalid={showInvalid || undefined}
       aria-invalid={showInvalid ? "true" : undefined}
-      aria-errormessage={showInvalid && invalidText ? errorId : undefined}
+      aria-errormessage={showInvalid && shownInvalidText ? errorId : undefined}
       {id}
       {name}
       {placeholder}
       {type}
       pattern={actualPattern}
+      {required}
       disabled={effectiveDisabled}
       {readonly}
       {...controlProps}
@@ -318,6 +380,8 @@
         const { value: inputValue } = /** @type {HTMLInputElement} */ (
           event.target
         );
+        typed = true;
+        nativeError = undefined;
         overlayValue = inputValue;
         updateValue({ type: "input", value: inputValue });
       }}
@@ -405,9 +469,9 @@
       />
     {/if}
   </div>
-  {#if showInvalid && invalidText}
+  {#if showInvalid && shownInvalidText}
     <div class:bx--form-requirement={true} id={errorId} role="alert">
-      {invalidText}
+      {shownInvalidText}
     </div>
   {/if}
   {#if showWarn && warnText}

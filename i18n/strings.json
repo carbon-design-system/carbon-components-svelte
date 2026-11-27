@@ -584,6 +584,20 @@
     },
     {
       "component": "DatePickerInput",
+      "prop": "patternInvalidText",
+      "type": "string",
+      "default": "Enter a valid date",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DatePickerInput",
+      "prop": "requiredInvalidText",
+      "type": "string",
+      "default": "Enter a date",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DatePickerInput",
       "prop": "warnText",
       "type": "string",
       "default": "",
