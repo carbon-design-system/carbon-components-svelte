@@ -156,6 +156,20 @@ test.describe("announcer", () => {
     expect(await spoken(page)).toEqual(["Saved in the dialog"]);
   });
 
+  test("a ComboBox in Modal says its count inside the modal", async ({
+    page,
+  }) => {
+    await page.goto("/announcer.html");
+    await page.getByTestId("open-modal").click();
+    await page.getByRole("combobox", { name: "Contact" }).fill("sl");
+
+    await expect(
+      page.locator(".bx--modal-container [data-announcer] [role=status]"),
+    ).toHaveText("1 result available");
+    await expect(page.locator("body > [data-announcer]")).toHaveCount(0);
+    expect(await spoken(page)).toEqual(["1 result available"]);
+  });
+
   test("puts a message in a native modal dialog inside it, where a region in the body is out of the tree", async ({
     page,
   }) => {
