@@ -1,0 +1,13 @@
+<script lang="ts">
+  import Theme from "carbon-components-svelte/src/Theme/Theme.svelte";
+  import ThemeDropdown from "carbon-components-svelte/src/Theme/ThemeDropdown.svelte";
+
+  let currentTheme: import("carbon-components-svelte/src/Theme/theme-labels.js").CarbonTheme = "g90";
+
+  let theme = "white";
+</script>
+
+<p>The page picks a theme.</p>
+<Theme bind:theme={currentTheme} />
+<ThemeDropdown bind:theme={currentTheme} size="sm" themes={["white", "g90"]} />
+<p>{theme}</p>

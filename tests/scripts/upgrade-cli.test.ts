@@ -1,5 +1,5 @@
 // @vitest-environment node
-// @depends-on codemods/** tests/scripts/upgrade-0.114/**
+// @depends-on codemods/** tests/scripts/upgrade-0.114/** tests/scripts/upgrade-0.115/**
 import { spawnSync } from "node:child_process";
 import {
   mkdirSync,
@@ -15,8 +15,14 @@ import { fileURLToPath } from "node:url";
 const CLI = fileURLToPath(new URL("../../codemods/cli.js", import.meta.url));
 const FIXTURES = fileURLToPath(new URL("./upgrade-0.114/", import.meta.url));
 
+const FIXTURES_0115 = fileURLToPath(
+  new URL("./upgrade-0.115/", import.meta.url),
+);
+
 const fixture = (file: string) =>
   readFileSync(path.join(FIXTURES, `${file}.txt`), "utf8");
+const fixture115 = (file: string) =>
+  readFileSync(path.join(FIXTURES_0115, `${file}.txt`), "utf8");
 
 describe("carbon-components-svelte-upgrade", () => {
   const run = (cwd: string, ...args: string[]) =>
@@ -94,6 +100,41 @@ describe("carbon-components-svelte-upgrade", () => {
     const { stdout } = run(app);
     expect(stdout).toMatch(/^Upgrading from 0\.113\.4 \(installed\): 0\.114/);
     expect(stdout).toContain("2 files of 2 checked would change.");
+  });
+
+  it("chains each release's codemod on the one before's output", () => {
+    install("0.113.4");
+    write(
+      "src/Shell.svelte",
+      '<script>\n  import { Theme } from "carbon-components-svelte";\n</script>\n\n<Theme render="toggle" tokens={{ "ui-01": "#fff" }} />\n',
+    );
+    const { stdout } = run(app, "src/Shell.svelte", "--write");
+    expect(stdout).toMatch(
+      /^Upgrading from 0\.113\.4 \(installed\): 0\.114, 0\.115\./,
+    );
+    expect(stdout).toContain("Also in 0.115\n  Chrome and Edge 105");
+    expect(readFileSync(path.join(app, "src", "Shell.svelte"), "utf8")).toBe(
+      `<script>
+  import { Theme, ThemeToggle } from "carbon-components-svelte";
+
+  /** @type {import("carbon-components-svelte/src/Theme/theme-labels.js").CarbonTheme} */
+  let theme = "white";
+</script>
+
+<Theme bind:theme tokens={{ "layer-01": "#fff" }} />
+<ThemeToggle bind:theme />
+`,
+    );
+  });
+
+  it("starts after the installed minor", () => {
+    install("0.114.3");
+    write("src/Search.svelte", fixture115("search-menu.input.svelte"));
+    const { stdout } = run(app, "src/Search.svelte", "--keep-sizes");
+    expect(stdout).toMatch(/^Upgrading from 0\.114\.3 \(installed\): 0\.115\./);
+    expect(stdout).toContain(
+      '    8 + <SearchMenu size="xl" labelText="Search"',
+    );
   });
 
   it("reads the version package.json names when nothing is installed", () => {

@@ -1,0 +1,4 @@
+2:4 classes `bx--tabs--tall` is no longer rendered. Select `.bx--tabs:has(.bx--tabs__nav-item-secondary-label)` instead
+7:4 classes `bx--tile--decorator` is no longer rendered. Select `.bx--tile:has(> .bx--tile--inner-decorator)` instead
+11:4 classes `bx--content-switcher--icon-only` is no longer rendered. Select `.bx--content-switcher:has(> .bx--content-switcher-btn--icon)` instead
+15:3 form-field `.bx--search-input.toolbar-search` expects `.toolbar-search` on the control. Form fields put `class` on their root now; select `.toolbar-search .bx--search-input`

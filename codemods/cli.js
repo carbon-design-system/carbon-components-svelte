@@ -27,6 +27,11 @@ import {
   SUMMARY as summary0114,
   transform as transform0114,
 } from "./v0.114/index.js";
+import {
+  NOTE_TITLES as notes0115,
+  SUMMARY as summary0115,
+  transform as transform0115,
+} from "./v0.115/index.js";
 
 /**
  * @typedef {{
@@ -47,6 +52,14 @@ const CODEMODS = new Map([
       transform: transform0114,
       NOTE_TITLES: notes0114,
       SUMMARY: summary0114,
+    },
+  ],
+  [
+    "0.115",
+    {
+      transform: transform0115,
+      NOTE_TITLES: notes0115,
+      SUMMARY: summary0115,
     },
   ],
 ]);
@@ -81,6 +94,8 @@ folders are skipped.
 
 Versions:
   0.114    Carbon v11 names, light to Layer, DatePicker and CopyInput props
+  0.115    Theme render to ThemeToggle, ThemeSelect or ThemeDropdown, props
+           :has() made redundant, and a report of what changed
 
 Options:
   --from <version>        Run every codemod after <version>
@@ -88,6 +103,8 @@ Options:
   --write                 Write the changes
   --keep-layer-03-color   0.114: rewrite Box and ScrollGradient "layer-03"
                           to "layer-accent", which keeps the 0.113 color
+  --keep-sizes            0.115: add size="xl" to SearchMenu, which keeps
+                          the 0.114 height of 48px
   -h, --help              Show this help`;
 
 const useColor = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -109,6 +126,7 @@ function readOptions(argv) {
       write: { type: "boolean", default: false },
       "dry-run": { type: "boolean", default: false },
       "keep-layer-03-color": { type: "boolean", default: false },
+      "keep-sizes": { type: "boolean", default: false },
       help: { type: "boolean", short: "h", default: false },
     },
   });
@@ -120,6 +138,7 @@ function readOptions(argv) {
     from: values.from,
     write: values.write && !values["dry-run"],
     keepLayer03Color: values["keep-layer-03-color"],
+    keepSizes: values["keep-sizes"],
     help: values.help,
   };
 }
@@ -427,6 +446,7 @@ function main(argv) {
         filename: file,
         parse,
         keepLayer03Color: options.keepLayer03Color,
+        keepSizes: options.keepSizes,
       });
       const kinds = /** @type {Map<string, string[]>} */ (
         followUps.get(version)

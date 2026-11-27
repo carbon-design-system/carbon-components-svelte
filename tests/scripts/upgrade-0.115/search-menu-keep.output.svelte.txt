@@ -1,0 +1,10 @@
+<script>
+  import { SearchMenu } from "carbon-components-svelte";
+
+  export let items = [];
+  export let props = {};
+</script>
+
+<SearchMenu size="xl" labelText="Search" {items} />
+<SearchMenu size="sm" labelText="Small" {items} />
+<SearchMenu {...props} {items} />

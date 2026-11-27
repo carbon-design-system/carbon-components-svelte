@@ -1,0 +1,37 @@
+<script>
+  import {
+    Button,
+    Card,
+    CardAction,
+    CardFooter,
+    ContentSwitcher,
+    ListBoxMenuItem,
+    OverflowMenu,
+    Switch,
+  } from "carbon-components-svelte";
+  import Grid from "carbon-icons-svelte/lib/Grid.svelte";
+  import List from "carbon-icons-svelte/lib/List.svelte";
+</script>
+
+<Card>
+  <CardFooter actionSet>
+    <CardAction><Button kind="secondary">Share</Button></CardAction>
+    <CardAction
+      iconOnly
+    >
+      <OverflowMenu flipped iconDescription="More options" />
+    </CardAction>
+  </CardFooter>
+</Card>
+
+<ListBoxMenuItem hasLeftIcon={true}>Option</ListBoxMenuItem>
+
+<ContentSwitcher iconOnly>
+  <Switch icon={Grid} text="Grid" />
+  <Switch icon={List} text="List" />
+</ContentSwitcher>
+
+<ContentSwitcher iconOnly>
+  <Switch icon={Grid} text="Grid" />
+  <Switch text="Table" />
+</ContentSwitcher>

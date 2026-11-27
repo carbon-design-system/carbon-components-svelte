@@ -1,0 +1,10 @@
+<script>
+  import { Theme } from "carbon-components-svelte";
+
+  export let mode = "toggle";
+  export let dark = false;
+</script>
+
+<Theme render={mode} />
+<Theme theme={dark ? "g100" : "white"} render="select" />
+<Theme />

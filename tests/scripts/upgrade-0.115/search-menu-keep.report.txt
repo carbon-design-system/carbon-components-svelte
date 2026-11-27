@@ -1,0 +1,1 @@
+10:1 size SearchMenu is 40px now unless `size` is set, and a spread here may set it

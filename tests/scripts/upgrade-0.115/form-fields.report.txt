@@ -1,0 +1,7 @@
+11:12 form-field TextInput puts `class` on its root now, not on its <input>
+12:9 form-field Select puts `style` on its root now, not on its <select>
+15:14 form-field MultiSelect puts `class` on its root now, not on its `.bx--list-box__field`
+16:21 form-field FileUploaderButton puts `class` on its button now, not on the hidden file input
+20:11 form-field `.name-field` styled TextInput's control. It now matches the field's root; select `.name-field input` for the control
+24:17 form-field `.tags` styled MultiSelect's control. It now matches the field's root; select `.tags .bx--list-box__field` for the control
+28:11 form-field `.bx--text-input.wide` expects `.wide` on the control. Form fields put `class` on their root now; select `.wide .bx--text-input`

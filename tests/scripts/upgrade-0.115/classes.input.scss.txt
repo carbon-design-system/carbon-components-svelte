@@ -1,0 +1,19 @@
+.app {
+  .bx--tabs--tall .bx--tabs__nav-link {
+    height: 4rem;
+  }
+
+  .bx--tile--decorator-rounded,
+  .bx--tile--decorator {
+    padding-inline-end: 3rem;
+  }
+
+  .bx--content-switcher--icon-only {
+    width: auto;
+  }
+
+  .bx--search-input.toolbar-search,
+  .toolbar-search .bx--search-input {
+    border: 0;
+  }
+}

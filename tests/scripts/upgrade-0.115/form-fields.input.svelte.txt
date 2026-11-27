@@ -1,0 +1,35 @@
+<script>
+  import {
+    FileUploaderButton,
+    MultiSelect,
+    Select,
+    SelectItem,
+    TextInput,
+  } from "carbon-components-svelte";
+</script>
+
+<TextInput class="name-field wide" labelText="Name" />
+<Select style="margin-top: 1rem" labelText="Plan">
+  <SelectItem value="team" />
+</Select>
+<MultiSelect class="tags" items={[]} />
+<FileUploaderButton class="upload" />
+<TextInput labelText="Unstyled" />
+
+<style>
+  :global(.name-field) {
+    font-weight: 600;
+  }
+
+  .form :global(.tags) {
+    max-width: 20rem;
+  }
+
+  :global(.bx--text-input.wide) {
+    width: 100%;
+  }
+
+  :global(.bx--text-input.bx--text-input--invalid) {
+    outline: none;
+  }
+</style>

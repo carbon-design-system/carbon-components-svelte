@@ -1,0 +1,23 @@
+<script lang="ts">
+  import {
+    Card,
+    CardFooter,
+    ComboBox,
+    SearchMenu,
+    Theme,
+    ThemeToggle,
+  } from "carbon-components-svelte";
+  import TextInput from "./TextInput.svelte";
+
+  let theme: "white" | "g100" = "white";
+</script>
+
+<Theme bind:theme persist />
+<ThemeToggle bind:theme />
+<Card>
+  <CardFooter>Footer</CardFooter>
+</Card>
+<ComboBox name="id" inputName="text" items={[]} />
+<SearchMenu size="xl" items={[]} />
+<TextInput class="local" required />
+<div class="bx--tabs">Not a removed class: bx--tabs--tall-ish</div>

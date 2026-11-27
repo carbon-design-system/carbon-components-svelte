@@ -1,0 +1,13 @@
+<script>
+  import * as Carbon from "carbon-components-svelte";
+
+  /** @type {import("carbon-components-svelte/src/Theme/theme-labels.js").CarbonTheme} */
+  let theme = $state("white");
+
+  let { children } = $props();
+</script>
+
+<Carbon.ThemeToggle bind:theme />
+<Carbon.Theme bind:theme>
+  {@render children()}
+</Carbon.Theme>

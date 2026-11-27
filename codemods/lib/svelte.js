@@ -43,6 +43,8 @@ const FRONT_MATTER = /^---\r?\n[\s\S]*?\r?\n---[ \t]*(?=\r?\n|$)/;
 const FENCE =
   /^ {0,3}(`{3,}|~{3,})[^\n]*\n[\s\S]*?(?:^ {0,3}\1[ \t]*$|(?![\s\S]))/gm;
 const INLINE_CODE = /`[^`\n]+`/g;
+const MODULE_SCRIPT = /\bcontext\s*=\s*["']module["']|(?:^|\s)module(?:\s|=|$)/;
+const TS_SCRIPT = /\blang\s*=\s*["']ts["']/;
 export const WHITESPACE = /^\s*$/;
 const SAFE_STRING = /^[^"{}]*$/;
 export const INDENT = /\n([ \t]*)\S/;
@@ -108,6 +110,20 @@ export function findBlocks(text, svx = false) {
 }
 
 /**
+ * The component's instance script: the `<script>` without `context="module"`
+ * or `module`.
+ * @param {Block[]} blocks
+ */
+export function instanceScript(blocks) {
+  return blocks.find(
+    (block) => block.tag === "script" && !MODULE_SCRIPT.test(block.attributes),
+  );
+}
+
+/** @param {Block} block */
+export const isTypeScript = (block) => TS_SCRIPT.test(block.attributes);
+
+/**
  * Parses markup with styles and .svx code blanked out (Sass and Markdown
  * may not parse), then with scripts blanked too (Svelte 3 and 4 can't read
  * TypeScript).
@@ -137,7 +153,7 @@ export function parseMarkup(text, blocks, parse) {
  * @param {string} text
  * @param {{ start: number; end: number }[]} ranges
  */
-function blank(text, ranges) {
+export function blank(text, ranges) {
   let out = text;
   for (const { start, end } of ranges) {
     out =
@@ -194,7 +210,7 @@ function walkScript(node, visit, seen = new WeakSet()) {
  * @param {string} text
  * @param {boolean} svx
  */
-function scriptText(text, svx) {
+export function scriptText(text, svx) {
   return findBlocks(text, svx)
     .filter((block) => block.tag === "script")
     .map((block) => text.slice(block.start, block.end).replace(COMMENT, ""))
@@ -255,6 +271,21 @@ export function resolveComponent(imports, node) {
 }
 
 /**
+ * A node's attributes of one type, by name.
+ * @param {any} node
+ * @param {string} [type]
+ * @returns {Map<string, any>}
+ */
+export function attributesOf(node, type = "Attribute") {
+  /** @type {Map<string, any>} */
+  const attributes = new Map();
+  for (const attribute of node.attributes ?? []) {
+    if (attribute.type === type) attributes.set(attribute.name, attribute);
+  }
+  return attributes;
+}
+
+/**
  * `true` or `false` for `prop`, `prop={true}` and `prop={false}`;
  * `undefined` for anything else.
  * @param {any} attribute
@@ -263,6 +294,23 @@ export function staticBoolean(attribute) {
   if (attribute.value === true) return true;
   const expression = attributeExpression(attribute);
   if (expression?.type === "Literal" && typeof expression.value === "boolean") {
+    return expression.value;
+  }
+  return undefined;
+}
+
+/**
+ * The value of `prop="text"` or `prop={"text"}`; `undefined` for anything
+ * else.
+ * @param {any} attribute
+ */
+export function staticString(attribute) {
+  const { value } = attribute;
+  if (!Array.isArray(value)) return undefined;
+  if (value.length === 0) return "";
+  if (value.length === 1 && value[0].type === "Text") return value[0].data;
+  const expression = attributeExpression(attribute);
+  if (expression?.type === "Literal" && typeof expression.value === "string") {
     return expression.value;
   }
   return undefined;
@@ -337,6 +385,38 @@ export function removeAttribute(text, node, attribute) {
     if (text.startsWith("/>", after)) return { start, end: after, text: " " };
   }
   return { start, end: attribute.end, text: "" };
+}
+
+/**
+ * The offset just past the `>` of a node's start tag.
+ * @param {string} text
+ * @param {any} node
+ */
+function startTagEnd(text, node) {
+  const last = node.attributes?.at(-1);
+  const from = last ? last.end : node.start + 1 + node.name.length;
+  return text.indexOf(">", from) + 1;
+}
+
+/**
+ * Whether a node closes itself: `<Theme />`.
+ * @param {string} text
+ * @param {any} node
+ */
+export function isSelfClosing(text, node) {
+  return text.slice(node.start, startTagEnd(text, node)).endsWith("/>");
+}
+
+/**
+ * The whitespace before a node on its line, or `undefined` when other text
+ * comes first.
+ * @param {string} text
+ * @param {number} offset
+ */
+export function lineIndent(text, offset) {
+  const lineStart = text.lastIndexOf("\n", offset - 1) + 1;
+  const before = text.slice(lineStart, offset);
+  return WHITESPACE.test(before) ? before : undefined;
 }
 
 /**
