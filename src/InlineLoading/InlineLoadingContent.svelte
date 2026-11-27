@@ -18,6 +18,9 @@
   /** Set to `true` to draw the checkmark when the status turns finished. */
   export let drawCheck = false;
 
+  /** Set to `true` to hide the icon from assistive technology. */
+  export let decorative = false;
+
   import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
 </script>
@@ -26,7 +29,7 @@
   {#if status === "error"}
     <ErrorFilled
       class="bx--inline-loading--error"
-      title={iconDescription || status}
+      title={decorative ? undefined : iconDescription || status}
     />
   {:else if status === "finished"}
     <svg
@@ -36,9 +39,12 @@
       width="16"
       height="16"
       preserveAspectRatio="xMidYMid meet"
-      role="img"
+      role={decorative ? undefined : "img"}
+      aria-hidden={decorative ? "true" : undefined}
     >
-      <title>{iconDescription || status}</title>
+      {#if !decorative}
+        <title>{iconDescription || status}</title>
+      {/if}
       <circle cx="16" cy="16" r="14"></circle>
       <polyline
         class:bx--inline-loading__checkmark={true}
@@ -50,6 +56,7 @@
     <LoadingSpinner
       small
       description={iconDescription}
+      {decorative}
       active={status === "active"}
     />
   {/if}

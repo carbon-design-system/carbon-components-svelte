@@ -19,6 +19,14 @@
   export let description = "loading";
 
   /**
+   * Set to `true` when text beside the spinner already says what is loading.
+   * The spinner is then hidden from assistive technology and has no title,
+   * so a screen reader does not read "loading" next to that text. An
+   * overlay keeps its `description` as the name of its dialog.
+   */
+  export let decorative = false;
+
+  /**
    * Wait this many milliseconds after `active` turns `true` before showing
    * the spinner. Once shown, the spinner stays for at least 500 ms, so fast
    * work shows nothing and slow work never flashes. While it waits, the
@@ -125,7 +133,7 @@
       on:outrostart={handleOutroStart}
       on:outroend
     >
-      <LoadingSpinner {small} active={spinning} {description} />
+      <LoadingSpinner {small} active={spinning} {description} {decorative} />
     </div>
   {:else if withOverlay}
     <div
@@ -139,7 +147,7 @@
       {...$$restProps}
       use:overlayFocus={shown}
     >
-      <LoadingSpinner {small} active={spinning} {description} />
+      <LoadingSpinner {small} active={spinning} {description} {decorative} />
     </div>
   {:else if animated}
     <div
@@ -157,10 +165,13 @@
       <svg
         class:bx--loading__svg={true}
         viewBox="0 0 100 100"
-        role="img"
+        role={decorative ? undefined : "img"}
+        aria-hidden={decorative ? "true" : undefined}
         style:animation-duration={revealAfter}
       >
-        <title>{description}</title>
+        {#if !decorative}
+          <title>{description}</title>
+        {/if}
         {#if small}
           <circle
             class:bx--loading__background={true}
@@ -183,6 +194,7 @@
       {small}
       active={spinning}
       {description}
+      {decorative}
       {revealAfter}
     />
   {/if}
