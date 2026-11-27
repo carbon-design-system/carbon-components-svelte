@@ -21,6 +21,12 @@ items.
 
 By default, the chevron icon is on the right side of the accordion item.
 
+Every enabled header stays in the <DocKbd label="Tab" /> order. With focus on a
+header, <DocKbd label="Up" /> and <DocKbd label="Down" /> move to the previous
+or next enabled header, wrapping at the ends. <DocKbd label="Home" /> and
+<DocKbd label="End" /> move to the first and last enabled header. Moving focus
+never expands or collapses an item.
+
 <Accordion>
   <AccordionItem title="Billing and invoices">
    <p>Manage payment methods, view invoice history, and download receipts for your organization's subscription.
@@ -185,7 +191,8 @@ track which item was toggled and to what state without binding to `open`.
 ## Nested
 
 Put an `Accordion` inside an `AccordionItem` to compose nested clusters.
-Nested items keep their own open state, independent of the parent.
+Nested items keep their own open state, independent of the parent. Arrow keys
+move through the headers of the accordion that has focus, not its parent's.
 
 <Accordion>
   <AccordionItem open title="Platform services">
