@@ -11,9 +11,10 @@ import { TRANSLATE_CONTEXT_KEY } from "../constants/context-keys.js";
  * English text. A component's own `translateWithId` prop takes precedence,
  * and a `Kbd` also prefers `setKbdTranslations`. Ids are shared by all
  * components, so one function covers an app; the ids are listed in the
- * string table. Call during component initialization, such as in the app's
+ * string table. A string built from a value, such as NumberRangeInput's
+ * "Enter 5 or more.", gets the value in a second argument, `params`. Call during component initialization, such as in the app's
  * root layout.
- * @param {(id: string) => string | undefined} translateWithId
+ * @param {(id: string, params?: any) => string | undefined} translateWithId
  * @example
  * setTranslateContext((id) => messages[id]);
  */
@@ -24,7 +25,7 @@ export function setTranslateContext(translateWithId) {
 /**
  * The function set by the nearest `setTranslateContext`, if any. Call
  * during component initialization.
- * @returns {undefined | ((id: string) => string | undefined)}
+ * @returns {undefined | ((id: string, params?: any) => string | undefined)}
  */
 export function getTranslateContext() {
   return getContext(TRANSLATE_CONTEXT_KEY);

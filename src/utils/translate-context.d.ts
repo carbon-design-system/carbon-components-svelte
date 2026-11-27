@@ -7,11 +7,12 @@
  * English text. A component's own `translateWithId` prop takes precedence,
  * and a `Kbd` also prefers `setKbdTranslations`. Ids are shared by all
  * components, so one function covers an app; the ids are listed in the
- * string table. Call during component initialization, such as in the app's
+ * string table. A string built from a value, such as NumberRangeInput's
+ * "Enter 5 or more.", gets the value in a second argument, `params`. Call during component initialization, such as in the app's
  * root layout.
  */
 export function setTranslateContext(
-  translateWithId: (id: string) => string | undefined,
+  translateWithId: (id: string, params?: any) => string | undefined,
 ): void;
 
 /**
@@ -19,4 +20,4 @@ export function setTranslateContext(
  * during component initialization.
  */
 export function getTranslateContext():
-  undefined | ((id: string) => string | undefined);
+  undefined | ((id: string, params?: any) => string | undefined);

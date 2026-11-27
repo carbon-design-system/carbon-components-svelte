@@ -13,6 +13,7 @@ export const FAMILIES = [
   "DataTable",
   "DatePicker",
   "TimePicker",
+  "NumberRangeInput",
   "TagSet",
   "TreeView",
   "FileUploader",
