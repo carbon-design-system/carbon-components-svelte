@@ -1949,6 +1949,13 @@
     },
     {
       "component": "TagSet",
+      "prop": "removedDescription",
+      "type": "(label: string) => string",
+      "default": "(label) => label ? `${label} removed` : \"Tag removed\"",
+      "defaultKind": "function"
+    },
+    {
+      "component": "TagSet",
       "prop": "viewAllText",
       "type": "string",
       "default": "View all",

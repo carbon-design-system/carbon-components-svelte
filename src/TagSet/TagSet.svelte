@@ -98,6 +98,15 @@
    */
   export let overflowLabel = (count) => `+${count} more tags`;
 
+  /**
+   * Text a screen reader announces once a dismissible tag has left the set.
+   * Nothing is announced when the `close:tag` handler keeps the tag.
+   * @type {(label: string) => string}
+   */
+  export let removedDescription = function removedDescription(label) {
+    return label ? `${label} removed` : "Tag removed";
+  };
+
   /** Hard cap on visible tags regardless of available space.
    * @type {number | undefined}
    */
@@ -147,6 +156,7 @@
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
+  import { createAnnouncerChannel } from "../utils/announcer.js";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
@@ -216,9 +226,12 @@
 
     dispatch("close:tag", { tag: item, index });
 
-    if (!hadFocus) return;
     tick().then(() => {
+      // The consumer decides whether the tag goes away; announce only a
+      // removal that happened.
       if (item.node?.isConnected) return;
+      removedStatus.announce(removedDescription(item.label));
+      if (!hadFocus) return;
       returnFocus(
         [...neighbours, overflowTriggerRef].find((el) => el?.isConnected),
       );
@@ -398,6 +411,7 @@
 
   onMount(() => {
     mounted = true;
+    const disconnectRemoved = removedStatus.connect();
     // Tags register in a batched microtask after mount, so `$items` is almost
     // always empty here and there is nothing to measure yet. Reading
     // `offsetWidth` regardless forces a synchronous layout for every TagSet on
@@ -429,6 +443,7 @@
       active = false;
       for (const stop of stops) stop();
       throttledMeasure.cancel();
+      disconnectRemoved();
     };
   });
 
@@ -467,6 +482,12 @@
   let allTagsQuery = "";
   /** @type {null | HTMLUListElement} */
   let allTagsListRef = null;
+
+  // Removals go to the page's shared live region, or into the dialog the
+  // set is in: the "View all" modal while it is open.
+  const removedStatus = createAnnouncerChannel(() =>
+    allTagsOpen && allTagsListRef?.isConnected ? allTagsListRef : wrapperRef,
+  );
   $: allTagsMatches = allTagsOpen
     ? filterTags($items, allTagsQuery.trim().toLocaleLowerCase())
     : [];
