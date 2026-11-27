@@ -536,7 +536,6 @@
     applyPostClearOptions,
     createMenuCloseHandler,
     createMenuOpenHandler,
-    createStatusAnnouncer,
   } from "../ListBox/menu-status.js";
   import {
     createMenuWindow,
@@ -554,6 +553,7 @@
   } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { createAnnouncerChannel } from "../utils/announcer.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { debounce } from "../utils/debounce.js";
   import { deepEqual } from "../utils/deep-equal.js";
@@ -675,8 +675,6 @@
   /** Wrapper of the selected-item tags, for focus tracking. */
   /** @type {null | HTMLDivElement} */
   let selectedTagsRef = null;
-  /** Text content of the visually-hidden status live region. */
-  let statusText = "";
   /** Accumulated characters for first-character typeahead in the non-filterable field. */
   // Rows are items or group headers, told apart by the row index in the
   // template, so the window's row type is `any`.
@@ -1059,7 +1057,12 @@
     return true;
   }
 
-  const announceStatus = createStatusAnnouncer((text) => (statusText = text));
+  // Messages go to the page's shared live region, or into the dialog this
+  // multi-select is in. The menu's own messages (the result count, the empty
+  // text) are dropped when it closes, but not the "Selection cleared" said as
+  // it closes.
+  const status = createAnnouncerChannel(() => multiSelectRef);
+  const menuStatus = createAnnouncerChannel(() => multiSelectRef);
 
   /**
    * Clear the multiselect selection programmatically.
@@ -1078,7 +1081,7 @@
     prevSelectedIds = [];
     prevSelectedItemId = null;
     sortedItems = sortedItems.map((item) => ({ ...item, checked: false }));
-    announceStatus(selectionClearedText);
+    status.announce(selectionClearedText);
     await applyPostClearOptions(
       options,
       (v) => (open = v),
@@ -1105,13 +1108,17 @@
     /** @param {number} count */ (count) => {
       if (count === announcedFilterCount) return;
       announcedFilterCount = count;
-      announceStatus(filterResultsText(count));
+      menuStatus.announce(filterResultsText(count));
     },
     800,
   );
 
   onMount(() => {
+    const disconnect = status.connect();
+    const disconnectMenu = menuStatus.connect();
     return () => {
+      disconnect();
+      disconnectMenu();
       announceFilterResults.cancel();
       typeahead.clear();
       menuWindow?.destroy();
@@ -1544,7 +1551,7 @@
   }
   $: if (!open) {
     announcedFilterCount = null;
-    statusText = "";
+    menuStatus.clear();
   }
   // Without a filter, only an empty `items` list (a select-all item aside)
   // leaves nothing to show, such as before async options arrive.
@@ -1564,7 +1571,7 @@
   // The row is hidden from assistive tech. Filtering announces its result
   // count; without a filter, the live region carries the message instead.
   $: if (hasNoMatches && !filterable && emptyMessage) {
-    announceStatus(emptyMessage);
+    menuStatus.announce(emptyMessage);
   }
   $: highlightedId =
     highlightedIndex > -1
@@ -2495,9 +2502,4 @@
       >{selectionCountText(selectionCount)}. {clearSelectionText}</span
     >
   {/if}
-  <!-- Live region for selection announcements. Always rendered (even while
-       empty) so assistive tech registers the region before its text changes. -->
-  <span role="status" aria-live="polite" class:bx--visually-hidden={true}
-    >{statusText}</span
-  >
 </div>
