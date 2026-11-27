@@ -358,6 +358,7 @@ const OUTPUT = "an output the component writes, not read back";
 const INTERNAL = "internal, not exported; covered through its parent";
 
 export const exempt: Exemptions = {
+  "BreadcrumbOverflow.items": INTERNAL,
   "ComboBox.items": NO_REFERENCE_CHECK,
   "DataTable.highlightedRowIds": NO_REFERENCE_CHECK,
   "DataTable.nonExpandableRowIds": NO_REFERENCE_CHECK,

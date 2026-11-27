@@ -532,6 +532,11 @@ export const interactive: AriaEntry[] = [
     target: () => screen.getByRole("tree"),
   },
   {
+    name: "Breadcrumb",
+    render: (attrs) => render(BreadcrumbItemFixture, { props: { nav: attrs } }),
+    target: () => screen.getByRole("navigation"),
+  },
+  {
     name: "BreadcrumbItem",
     variant: "href",
     render: (attrs) => render(BreadcrumbItemFixture, { props: attrs }),

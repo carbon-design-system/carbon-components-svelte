@@ -37,7 +37,20 @@
 
   setContext("carbon:BreadcrumbItem", {});
 
-  const { separator: separatorStore } = getContext("carbon:Breadcrumb");
+  const {
+    separator: separatorStore,
+    overflow: overflowStore,
+    overflowMenu: overflowMenuStore,
+  } = getContext("carbon:Breadcrumb");
+
+  /** @type {null | HTMLLIElement} */
+  let ref = null;
+
+  // With `overflow="menu"`, Breadcrumb hides the middle items that don't
+  // fit and lists them in a menu after its first item.
+  $: hidden = ref !== null && $overflowStore.hidden.has(ref);
+  $: menuItems =
+    ref !== null && $overflowStore.first === ref ? $overflowStore.items : [];
 
   $: ({ "aria-current": ariaCurrent, ...liProps } = $$restProps);
   // With an `href`, naming and description belong on the link, not the `li`.
@@ -51,7 +64,9 @@
 </script>
 
 <li
+  bind:this={ref}
   class:bx--breadcrumb-item={true}
+  class:bx--breadcrumb-item--hidden={hidden}
   class:bx--breadcrumb-item--current={isCurrentPage || ariaCurrent === "page"}
   {...href ? linkItemProps : liProps}
   on:click
@@ -93,3 +108,11 @@
     </span>
   {/if}
 </li>
+{#if menuItems.length > 0}
+  <svelte:component
+    this={$overflowMenuStore.component}
+    items={menuItems}
+    size={$overflowMenuStore.size}
+    description={$overflowMenuStore.description}
+  />
+{/if}
