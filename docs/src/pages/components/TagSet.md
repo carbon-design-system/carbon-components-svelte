@@ -187,6 +187,14 @@ Set `filter` on a `Tag` to render it as closable. `TagSet` dispatches `close:tag
 
 <FileSource src="/framed/TagSet/TagSetDismissible" />
 
+Once the tag has left the set, a screen reader hears its label followed by "removed". Nothing is announced if your handler keeps the tag. Pass `removedDescription`, a function of the label, to change or translate the text.
+
+```svelte
+<TagSet removedDescription={(label) => `Filter ${label} removed`}>
+  <Tag filter>Region</Tag>
+</TagSet>
+```
+
 ### Single tab stop
 
 By default, every dismissible or interactive tag is its own tab stop. Set `navigation="roving"` to make the whole set one tab stop instead: Tab enters the set, the arrow keys, Home, and End move between tags and the "+N" indicator, and Delete or Backspace closes the focused tag. Read-only tags are skipped. Use it when a set holds more than a handful of dismissible tags.
