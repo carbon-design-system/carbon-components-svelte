@@ -22,9 +22,9 @@
     time={Date.UTC(2026, 10, 5, 13, 30)}
     {now}
     timeZone="UTC"
-    title="Assigned to Support"
-    description="Priority raised to high."
+    titleText="Assigned to Support"
+    descriptionText="Priority raised to high."
     status="warning"
   />
-  <TimelineItem title="Awaiting a fix" status="pending" />
+  <TimelineItem titleText="Awaiting a fix" status="pending" />
 </Timeline>

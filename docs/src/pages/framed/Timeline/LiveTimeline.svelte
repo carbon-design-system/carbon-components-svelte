@@ -5,15 +5,15 @@
     {
       id: 1,
       time: Date.now() - 3 * 60_000,
-      title: "Build started",
+      titleText: "Build started",
       status: "info",
     },
   ];
 
   const steps = [
-    { title: "Tests passed", status: "success" },
-    { title: "Deployed to staging", status: "success" },
-    { title: "Smoke test failed", status: "error" },
+    { titleText: "Tests passed", status: "success" },
+    { titleText: "Deployed to staging", status: "success" },
+    { titleText: "Smoke test failed", status: "error" },
   ];
 
   function addEvent() {
