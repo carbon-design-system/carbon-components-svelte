@@ -16,10 +16,19 @@
   export let disabled = false;
 
   /**
-   * Set to `true` to require at least one selection.
+   * Set to `true` to require at least one selection. A wrapping `<form>`
+   * blocks submission while none is checked, and the group shows its invalid
+   * state with `requiredInvalidText` instead of the browser's error bubble.
    * @type {boolean | undefined}
    */
   export let required = undefined;
+
+  /**
+   * Specify the invalid state text shown when a required group blocks
+   * submission. Cleared once a checkbox is checked. `invalid` and
+   * `invalidText` take precedence.
+   */
+  export let requiredInvalidText = "Select at least one option";
 
   /**
    * Specify a name attribute for the checkbox inputs.
@@ -103,6 +112,7 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { createIdScope } from "../utils/id-scope.js";
+  import { requiredInvalid } from "../utils/required-invalid.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;
@@ -200,10 +210,15 @@
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
   $: $groupDisabled = effectiveDisabled;
-  $: $groupInvalid = invalid;
+  /** Set when the group, required and empty, blocked form submission. */
+  let requiredError = false;
+  $: if (!required || $selectedValues.length > 0) requiredError = false;
+  $: shownInvalidText =
+    requiredError && !invalid ? requiredInvalidText : invalidText;
+  $: $groupInvalid = invalid || requiredError;
   $: $groupWarn = warn;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
-    invalid,
+    invalid: invalid || requiredError,
     warn,
     disabled: effectiveDisabled,
     readonly,
@@ -231,6 +246,10 @@
 >
   <fieldset
     {form}
+    use:requiredInvalid={{
+      enabled: !!required,
+      onChange: (missing) => (requiredError = missing),
+    }}
     class:bx--checkbox-group={true}
     class:bx--checkbox-group--horizontal={orientation === "horizontal"}
     class:bx--checkbox-group--readonly={readonly}
@@ -246,7 +265,7 @@
       resolveStatusDescribedBy({
         showInvalid,
         showWarn,
-        invalidText,
+        invalidText: shownInvalidText,
         warnText,
         helperText,
         errorId,
@@ -275,9 +294,9 @@
     <div class:bx--checkbox-group__validation-msg={true}>
       {#if showInvalid}
         <WarningFilled class="bx--checkbox__invalid-icon" />
-        {#if invalidText}
+        {#if shownInvalidText}
           <div id={errorId} class:bx--form-requirement={true} role="alert">
-            {invalidText}
+            {shownInvalidText}
           </div>
         {/if}
       {:else if showWarn}

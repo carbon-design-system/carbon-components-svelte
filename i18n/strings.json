@@ -227,6 +227,13 @@
     },
     {
       "component": "CheckboxGroup",
+      "prop": "requiredInvalidText",
+      "type": "string",
+      "default": "Select at least one option",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CheckboxGroup",
       "prop": "warnText",
       "type": "string",
       "default": "",
