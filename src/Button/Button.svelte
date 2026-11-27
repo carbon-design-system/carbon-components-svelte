@@ -526,8 +526,10 @@
   // `loading` does not change the button's width.
   $: spinnerOverLabel =
     showSpinner && !spinnerInShortcut && !hasIconOnly && !icon && !$$slots.icon;
-  // Spreads `$$restProps` and sets `type` over the `<button>`'s own
-  // literal one (which the linter wants), so it's typed as the loose bag it is.
+  // The link and the button share one template rather than two copies.
+  $: tag = href && !isDisabled ? "a" : "button";
+  // Sets `type` only on the `<button>` and spreads `$$restProps`, so it's
+  // typed as the loose bag it is.
   /** @type {Record<string, unknown>} */
   $: buttonProps = {
     type: href && !isDisabled ? undefined : type,
@@ -604,147 +606,10 @@
   />
 {:else if as}
   <slot props={buttonProps} />
-{:else if href && !isDisabled}
-  {#if $$slots.badge}
-    <div class:bx--btn__badge-wrapper={true}>
-      <a
-        bind:this={ref}
-        use:dismiss={escapeListener}
-        use:ignoreTooltipClicks
-        use:closeOverControls={{ onCover: handleTooltipCover }}
-        {...buttonProps}
-        on:click={handleClick}
-        on:click
-        on:mousedown
-        on:focus
-        on:focus={handleFocus}
-        on:blur
-        on:blur={handleBlur}
-        on:mouseover
-        on:mouseenter
-        on:mouseenter={handleMouseenter}
-        on:mouseenter={handlePortalMouseEnter}
-        on:mouseleave
-        on:mouseleave={handleMouseleave}
-        on:mouseleave={handlePortalMouseLeave}
-      >
-        {#if hasIconOnly && iconDescription && !showSpinner}
-          <span class:bx--assistive-text={true}
-            >{iconDescription}{#if shortcut}<span
-                class:bx--btn__tooltip-shortcut={true}
-                aria-hidden="true"><Kbd {shortcut} variant="muted" /></span
-              >{/if}</span
-          >
-        {/if}
-        {#if !hasIconOnly}
-          <slot />
-          {#if shortcut}
-            <span class:bx--btn__shortcut={true}>
-              {#if showSpinner && spinnerInShortcut}
-                <LoadingSpinner
-                  small
-                  description={loadingDescription}
-                  class="bx--btn__loading"
-                />
-              {/if}
-              <Kbd {shortcut} variant="muted" aria-hidden="true" />
-            </span>
-          {/if}
-        {/if}
-        {#if showSpinner && !spinnerInShortcut}
-          <LoadingSpinner
-            small
-            description={loadingDescription}
-            class="bx--btn__loading"
-            style={iconStyle}
-          />
-        {:else if $$slots.icon}
-          <!-- An svg in the slot takes the icon's styles without the class. -->
-          <span class:bx--btn__icon-slot={true}>
-            <slot
-              name="icon"
-              style={iconStyle}
-              aria-hidden="true"
-              class="bx--btn__icon"
-            />
-          </span>
-        {:else if icon}
-          <svelte:component this={icon} {...iconComponentProps} />
-        {/if}
-      </a>
-      <slot name="badge" />
-    </div>
-  {:else}
-    <a
-      bind:this={ref}
-      use:dismiss={escapeListener}
-      use:ignoreTooltipClicks
-      use:closeOverControls={{ onCover: handleTooltipCover }}
-      {...buttonProps}
-      on:click={handleClick}
-      on:click
-      on:mousedown
-      on:focus
-      on:focus={handleFocus}
-      on:blur
-      on:blur={handleBlur}
-      on:mouseover
-      on:mouseenter
-      on:mouseenter={handleMouseenter}
-      on:mouseenter={handlePortalMouseEnter}
-      on:mouseleave
-      on:mouseleave={handleMouseleave}
-      on:mouseleave={handlePortalMouseLeave}
-    >
-      {#if hasIconOnly && iconDescription && !showSpinner}
-        <span class:bx--assistive-text={true}
-          >{iconDescription}{#if shortcut}<span
-              class:bx--btn__tooltip-shortcut={true}
-              aria-hidden="true"><Kbd {shortcut} variant="muted" /></span
-            >{/if}</span
-        >
-      {/if}
-      {#if !hasIconOnly}
-        <slot />
-        {#if shortcut}
-          <span class:bx--btn__shortcut={true}>
-            {#if showSpinner && spinnerInShortcut}
-              <LoadingSpinner
-                small
-                description={loadingDescription}
-                class="bx--btn__loading"
-              />
-            {/if}
-            <Kbd {shortcut} variant="muted" aria-hidden="true" />
-          </span>
-        {/if}
-      {/if}
-      {#if showSpinner && !spinnerInShortcut}
-        <LoadingSpinner
-          small
-          description={loadingDescription}
-          class="bx--btn__loading"
-          style={iconStyle}
-        />
-      {:else if $$slots.icon}
-        <!-- An svg in the slot takes the icon's styles without the class. -->
-        <span class:bx--btn__icon-slot={true}>
-          <slot
-            name="icon"
-            style={iconStyle}
-            aria-hidden="true"
-            class="bx--btn__icon"
-          />
-        </span>
-      {:else if icon}
-        <svelte:component this={icon} {...iconComponentProps} />
-      {/if}
-    </a>
-  {/if}
 {:else if $$slots.badge}
   <div class:bx--btn__badge-wrapper={true}>
-    <button
-      type="button"
+    <svelte:element
+      this={tag}
       bind:this={ref}
       use:dismiss={escapeListener}
       use:ignoreTooltipClicks
@@ -808,12 +673,12 @@
       {:else if icon}
         <svelte:component this={icon} {...iconComponentProps} />
       {/if}
-    </button>
+    </svelte:element>
     <slot name="badge" />
   </div>
 {:else}
-  <button
-    type="button"
+  <svelte:element
+    this={tag}
     bind:this={ref}
     use:dismiss={escapeListener}
     use:ignoreTooltipClicks
@@ -877,7 +742,7 @@
     {:else if icon}
       <svelte:component this={icon} {...iconComponentProps} />
     {/if}
-  </button>
+  </svelte:element>
 {/if}
 
 <!-- Only while a shortcut is set, so a Button without one leaves the
