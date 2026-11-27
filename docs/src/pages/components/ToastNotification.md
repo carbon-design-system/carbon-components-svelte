@@ -17,6 +17,11 @@ Display a basic error notification with title, subtitle, and timestamp by defaul
 
 Control notification visibility by binding to `open` to show, hide, and reuse the same component with different messages. Open defaults to true.
 
+<DocKbd label="Escape" /> closes a toast while focus is inside it, as the close
+button does, and focus returns to where it was before. Set `closeOnEscape` to
+`false` to keep it open. Escape does nothing when `hideCloseButton` is set,
+unless the toast is [actionable](#actionable).
+
 <FileSource src="/framed/ToastNotification/ToastNotificationReusable" />
 
 ## Autoclose
