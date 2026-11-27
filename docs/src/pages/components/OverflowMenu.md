@@ -36,7 +36,7 @@ Control where and how the menu opens.
 
 ### Portal
 
-A menu that a container would cut off, such as a box with `overflow: hidden` or a scroll area, opens in a floating portal. The container in the example below hides its overflow, so the menu moves to a portal when it opens. Inside a [Modal](/components/Modal#modal-with-dropdowns), the menu always opens in a portal.
+A menu that a container would cut off, such as a box with `overflow: hidden` or a scroll area, opens in a floating portal, unless lining it up with the button's other edge keeps it inside (see [Flipped](#flipped)). The container in the example below hides its overflow, so the menu moves to a portal when it opens. Inside a [Modal](/components/Modal#modal-with-dropdowns), the menu always opens in a portal.
 
 Set `portalMenu` to `true` to always render the menu in a portal, for example to escape a z-index stacking context. Set it to `false` to keep the menu in place. A portalled menu leaves its container in the DOM, so CSS that targets the menu as a descendant of the container does not match it.
 
@@ -45,6 +45,8 @@ Set `portalMenu` to `true` to always render the menu in a portal, for example to
 ### Flipped
 
 Set `flipped` to `true` to align the menu with the button's inline end: its right edge, or its left edge in a right-to-left layout.
+
+Either way, a menu that would run past the side of the window, or of a box that clips it, lines up with the button's other edge when that runs past less. A menu that fits keeps the alignment `flipped` asks for.
 
 <OverflowMenu flipped>
   <OverflowMenuItem text="Manage credentials" />
