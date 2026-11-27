@@ -288,7 +288,7 @@ bun test:types   # type-check tests/ (svelte-typecheck)
 
 `bun setup` already runs `build:docs` once. Repeat `build:docs` only when the component API changes.
 
-When you remove or rename a prop, search `e2e/fixtures/` and `docs/src/pages/framed/` for the old name. Nothing type-checks the e2e fixtures, and the docs examples are type-checked only on PRs that change `docs/`. Svelte ignores an unknown prop, so a stale one passes until an E2E assertion fails or the next docs PR does.
+When you remove or rename a prop, search `docs/src/pages/framed/` for the old name. The docs examples are type-checked only on PRs that change `docs/`, and Svelte ignores an unknown prop, so a stale one passes until the next docs PR does. `bun run check:fixtures` type-checks the e2e fixtures as strict TypeScript on every PR, after `build:docs`.
 
 #### Component script types
 
@@ -1339,6 +1339,8 @@ Headless Chromium has no scrollbar to drag. Send large `page.mouse.wheel` deltas
 `page.keyboard.press` calls in a loop without waits land inside one frame, faster than anyone types. Use that to reproduce timing races, and wait between presses only when the test judges a settled position. A race can fail in only some runs: one round of 12 presses failed 4 runs in 10. Repeat the sequence inside the test, and check with `--repeat-each=10` that it fails with the fix reverted. See [`listbox-virtualized.test.ts`](e2e/listbox-virtualized.test.ts).
 
 To cover an opt-in mode with existing assertions, have the fixture read a query flag and run the suite once for each value. The measured-menu suites run a second time with `?optimizeFastScroll`.
+
+Write a fixture's script as `<script lang="ts">`, with `as const` on literal arrays such as `{#each ["sm", "lg"] as const as size}`. `bun run check:fixtures` checks it with the repo's `strict` config and fails on any error not in `e2e/fixtures.baseline.json`. It doesn't read a plain JS script, so a fixture without `lang="ts"` goes unchecked.
 
 Add a link to `e2e/fixtures/index.html` so the fixture is reachable from the index page.
 
