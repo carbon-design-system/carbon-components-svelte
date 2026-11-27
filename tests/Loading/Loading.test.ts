@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import LoadingComponent from "carbon-components-svelte/Loading/Loading.svelte";
 import { tick } from "svelte";
 import Loading from "./Loading.test.svelte";
 import LoadingDelay from "./LoadingDelay.test.svelte";
@@ -81,6 +82,20 @@ describe("Loading", () => {
     expect(spinners.length).toBeGreaterThan(4);
     expect(container.querySelectorAll("[aria-live]")).toHaveLength(0);
   });
+
+  it.each([true, false])(
+    "hides the spinner from screen readers when decorative (overlay: %s)",
+    (withOverlay) => {
+      render(LoadingComponent, {
+        props: { withOverlay, decorative: true, description: "Saving" },
+      });
+      expect(screen.queryByRole("img")).toBeNull();
+      expect(document.querySelector("svg title")).toBeNull();
+      if (withOverlay) {
+        expect(screen.getByRole("dialog", { name: "Saving" })).toBeVisible();
+      }
+    },
+  );
 
   it("supports custom description", () => {
     render(Loading);

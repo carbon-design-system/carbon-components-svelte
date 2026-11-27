@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import InlineLoadingComponent from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 import { tick } from "svelte";
 import InlineLoading from "./InlineLoading.test.svelte";
 import InlineLoadingDelay from "./InlineLoadingDelay.test.svelte";
@@ -25,6 +26,18 @@ describe("InlineLoading", () => {
     const description = wrapper.querySelector(".bx--inline-loading__text");
     expect(description).toHaveTextContent("Loading metrics...");
   });
+
+  it.each(["active", "finished", "error"] as const)(
+    "hides the %s icon from screen readers when decorative",
+    (status) => {
+      render(InlineLoadingComponent, {
+        props: { status, description: "Saving", decorative: true },
+      });
+      expect(screen.queryByRole("img")).toBeNull();
+      expect(document.querySelector("svg title")).toBeNull();
+      expect(screen.getByText("Saving")).toBeInTheDocument();
+    },
+  );
 
   it("supports active state", () => {
     render(InlineLoading);

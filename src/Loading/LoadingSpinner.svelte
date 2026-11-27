@@ -13,6 +13,9 @@
   /** Specify the description to describe the loading state */
   export let description = "loading";
 
+  /** Set to `true` to hide the spinner from assistive technology. */
+  export let decorative = false;
+
   /**
    * Set by Loading while a delayed spinner waits: CSS reveals it after
    * `revealAfter` (for example "300ms").
@@ -34,10 +37,13 @@
   <svg
     class:bx--loading__svg={true}
     viewBox="0 0 100 100"
-    role="img"
+    role={decorative ? undefined : "img"}
+    aria-hidden={decorative ? "true" : undefined}
     style:animation-duration={revealAfter}
   >
-    <title>{description}</title>
+    {#if !decorative}
+      <title>{description}</title>
+    {/if}
     {#if small}
       <circle
         class:bx--loading__background={true}

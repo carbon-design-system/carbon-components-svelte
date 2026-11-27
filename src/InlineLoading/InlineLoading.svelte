@@ -29,6 +29,14 @@
    */
   export let iconDescription = undefined;
 
+  /**
+   * Set to `true` to hide the icon from assistive technology, when
+   * `description` already says the state ("Saving...", "Saved"). The icon
+   * then has no title, so a screen reader does not read "loading" or
+   * "finished" before the text.
+   */
+  export let decorative = false;
+
   /** Specify the timeout delay (ms) before the `success` event fires after `status` is set to "finished" */
   export let successDelay = 1500;
 
@@ -175,6 +183,7 @@
       status={shownStatus}
       description={shownDescription}
       iconDescription={shownIconDescription}
+      {decorative}
       {drawCheck}
     />
   </div>
@@ -196,6 +205,7 @@
       status={shownStatus}
       description={shownDescription}
       iconDescription={shownIconDescription}
+      {decorative}
       {drawCheck}
     />
   </div>
