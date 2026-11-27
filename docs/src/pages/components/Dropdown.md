@@ -219,6 +219,23 @@ Set `portalMenu` to `true` to always render the menu in a portal, for example to
 
 <FileSource src="/framed/Dropdown/DropdownPortalMenu" />
 
+### Maximum height
+
+Set `maxHeight` to cap the height of the menu. A number is pixels; a string is any CSS length, such as `"10rem"`. The cap applies whether the menu renders in place, in a portal, or virtualized. A virtualized menu resolves a string to pixels each time it opens, and a `containerHeight` in `virtualize` takes precedence.
+
+<Dropdown maxHeight="10rem" labelText="Contact" items={[
+  { id: "0", text: "Slack" },
+  { id: "1", text: "Email" },
+  { id: "2", text: "Fax" },
+  { id: "3", text: "Phone" },
+  { id: "4", text: "Mail" },
+  { id: "5", text: "SMS" },
+  { id: "6", text: "WhatsApp" },
+  { id: "7", text: "Teams" },
+  { id: "8", text: "Zoom" },
+  { id: "9", text: "In person" },
+]} />
+
 ### Open by default
 
 Set `open` to `true` to render the dropdown already expanded. The prop is bindable (`bind:open`), so you can also drive it externally, such as from a trigger elsewhere on the page.
@@ -328,7 +345,7 @@ By default, item height matches the menu row for each size: 24px (`xs`), 32px (`
 
 ### Custom container height
 
-The virtualized menu's scrollable container defaults to a maximum height of 300px. Set `containerHeight` within the `virtualize` object to change it. Providing any `virtualize` object (even with a short list, as below) activates the sizing behavior, though items only get windowed once the list reaches `threshold`.
+The virtualized menu's scrollable container defaults to a maximum height of 300px. Set `containerHeight` within the `virtualize` object to change it. To cap the menu the same way whether or not it virtualizes, set [`maxHeight`](#maximum-height) instead. Providing any `virtualize` object (even with a short list, as below) activates the sizing behavior, though items only get windowed once the list reaches `threshold`.
 
 <Dropdown virtualize={{ containerHeight: 150 }} labelText="Contact" items={[
   { id: "0", text: "Slack" },
