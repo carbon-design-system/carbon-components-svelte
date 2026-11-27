@@ -29,13 +29,15 @@ export function focusActionableNotification(root) {
 /**
  * Shared open/close + auto-dismiss-timeout + pause-on-hover wiring for
  * `InlineNotification` and `ToastNotification`: closing dispatches a
- * cancelable "close" event (detail `{ timeout }`) and only applies `setOpen(false)`
- * when no listener calls `preventDefault()`; an auto-dismiss timeout closes
- * the same way, with `timeout: true`. Closing while focus is inside returns
+ * cancelable "close" event (detail `{ timeout, trigger }`) and only applies
+ * `setOpen(false)` when no listener calls `preventDefault()`; an auto-dismiss
+ * timeout closes the same way, with `timeout: true`. Closing while focus is inside returns
  * it to the element focused before focus entered the notification.
  *
- * An actionable notification (`role="alertdialog"`) also moves focus in
- * when it opens, closes on Escape, and wraps Tab inside itself.
+ * Escape closes any notification with a close button while focus is inside
+ * it. An actionable notification (`role="alertdialog"`) also moves focus in
+ * when it opens, closes on Escape even without a close button, and wraps
+ * Tab inside itself.
  * @param {object} options
  * @param {(
  *   name: string,
@@ -46,12 +48,19 @@ export function focusActionableNotification(root) {
  * @param {(open: boolean) => void} options.setOpen
  * @param {() => HTMLElement | null | undefined} [options.getRef]
  * @returns {{
- *   close: (closeFromTimeout?: unknown) => void,
+ *   close: (
+ *     closeFromTimeout?: unknown,
+ *     trigger?: "close-button" | "escape-key" | "timeout",
+ *   ) => void,
  *   sync: (open: boolean, timeout: number, hasAction?: boolean) => void,
  *   syncFocusOnOpen: (open: boolean, enabled: boolean) => void,
- *   handleActionableKeydown: (
+ *   handleKeydown: (
  *     event: KeyboardEvent,
- *     options: { closeOnEscape: boolean, hideCloseButton: boolean },
+ *     options: {
+ *       actionable: boolean,
+ *       closeOnEscape: boolean,
+ *       hideCloseButton: boolean,
+ *     },
  *   ) => void,
  *   handleMouseenter: () => void,
  *   handleMouseleave: (event: MouseEvent) => void,
@@ -131,13 +140,18 @@ export function createDismissibleNotification({
    * as the click handler for the close button (so it commonly receives a
    * `MouseEvent`, which is intentionally not `=== true`).
    * @param {unknown} [closeFromTimeout]
+   * @param {"close-button" | "escape-key" | "timeout"} [trigger]
    */
-  function close(closeFromTimeout) {
+  function close(closeFromTimeout, trigger) {
     dismiss.clear();
 
+    const timedOut = closeFromTimeout === true;
     const shouldContinue = dispatch(
       "close",
-      { timeout: closeFromTimeout === true },
+      {
+        timeout: timedOut,
+        trigger: timedOut ? "timeout" : (trigger ?? "close-button"),
+      },
       { cancelable: true },
     );
     if (shouldContinue) {
@@ -187,21 +201,31 @@ export function createDismissibleNotification({
 
   /**
    * Escape closes through `close()`, so the close event and focus return
-   * work as they do for the close button. Tab wraps inside, as in Carbon
-   * React, but only while the keyboard can close the notification.
+   * work as they do for the close button. A notification with a close
+   * button closes on Escape, as in Carbon React. An actionable one closes
+   * even without it, and Tab wraps inside, but only while the keyboard can
+   * close the notification.
    * @param {KeyboardEvent} event
-   * @param {{ closeOnEscape: boolean, hideCloseButton: boolean }} options
+   * @param {{
+   *   actionable: boolean,
+   *   closeOnEscape: boolean,
+   *   hideCloseButton: boolean,
+   * }} options
    */
-  function handleActionableKeydown(event, { closeOnEscape, hideCloseButton }) {
+  function handleKeydown(
+    event,
+    { actionable, closeOnEscape, hideCloseButton },
+  ) {
     if (event.key === "Escape") {
       // Escape that cancels an IME composition is not a close.
       if (!closeOnEscape || isImeComposition(event)) return;
+      if (!actionable && hideCloseButton) return;
       // Keep a surrounding modal or popover from closing on the same key,
       // and a native modal `<dialog>`, which closes as Escape's default.
       event.stopPropagation();
       event.preventDefault();
-      close();
-    } else if (event.key === "Tab" && !event.defaultPrevented) {
+      close(undefined, "escape-key");
+    } else if (actionable && event.key === "Tab" && !event.defaultPrevented) {
       // With no Escape and no close button, a trap would have no exit
       // (WCAG 2.1.2, No Keyboard Trap), so let Tab leave.
       if (!closeOnEscape && hideCloseButton) return;
@@ -223,7 +247,7 @@ export function createDismissibleNotification({
     close,
     sync,
     syncFocusOnOpen,
-    handleActionableKeydown,
+    handleKeydown,
     handleMouseenter,
     handleMouseleave,
     handleFocusIn: trackFocusIn,

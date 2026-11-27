@@ -22,7 +22,7 @@ describe("createDismissibleNotification", () => {
 
     expect(dispatch).toHaveBeenCalledWith(
       "close",
-      { timeout: false },
+      { timeout: false, trigger: "close-button" },
       { cancelable: true },
     );
     expect(setOpen).toHaveBeenCalledWith(false);
@@ -53,7 +53,7 @@ describe("createDismissibleNotification", () => {
     notification.close(true);
     expect(dispatch).toHaveBeenCalledWith(
       "close",
-      { timeout: true },
+      { timeout: true, trigger: "timeout" },
       { cancelable: true },
     );
 
@@ -61,7 +61,7 @@ describe("createDismissibleNotification", () => {
     notification.close(new MouseEvent("click"));
     expect(dispatch).toHaveBeenLastCalledWith(
       "close",
-      { timeout: false },
+      { timeout: false, trigger: "close-button" },
       { cancelable: true },
     );
   });
@@ -81,7 +81,7 @@ describe("createDismissibleNotification", () => {
 
     expect(dispatch).toHaveBeenCalledWith(
       "close",
-      { timeout: true },
+      { timeout: true, trigger: "timeout" },
       { cancelable: true },
     );
     expect(setOpen).toHaveBeenCalledWith(false);
@@ -103,7 +103,7 @@ describe("createDismissibleNotification", () => {
     vi.advanceTimersByTime(100);
     expect(dispatch).toHaveBeenCalledWith(
       "close",
-      { timeout: true },
+      { timeout: true, trigger: "timeout" },
       { cancelable: true },
     );
   });
@@ -161,7 +161,7 @@ describe("createDismissibleNotification", () => {
     vi.advanceTimersByTime(50);
     expect(dispatch).toHaveBeenCalledWith(
       "close",
-      { timeout: true },
+      { timeout: true, trigger: "timeout" },
       { cancelable: true },
     );
   });
