@@ -1,67 +1,83 @@
-// @vitest-environment node
-import { compileEntry } from "./compile";
+// @depends-on css/**
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { scssFiles } from "./scss-files";
+
+const CSS_DIR = join(__dirname, "../../css");
+const VENDOR_DIR = join(CSS_DIR, "vendor/carbon-components/scss");
+const PATCH_BANNER = "// carbon-components-svelte patch";
+const HOVER_BLOCK = /^\s*@media\s*\(any-hover:\s*hover\)\s*\{/;
+
+type Unit = { name: string; lines: string[] };
+
+// One unit per hand-authored partial. A vendored file is split at its
+// patch banners: the upstream part above the first banner is one unit, and
+// each patch is another, named after the first mixin it declares, since a
+// patch plays the part a partial does.
+function units(): Unit[] {
+  const partials = readdirSync(CSS_DIR)
+    .filter((name) => name.startsWith("_") && name.endsWith(".scss"))
+    .map((name) => ({
+      name,
+      lines: readFileSync(join(CSS_DIR, name), "utf8").split("\n"),
+    }));
+  const vendored = scssFiles(VENDOR_DIR).flatMap((file) => {
+    const name = file.slice(VENDOR_DIR.length + 1);
+    const sections: Unit[] = [{ name, lines: [] }];
+    for (const line of readFileSync(file, "utf8").split("\n")) {
+      if (line.startsWith(PATCH_BANNER)) sections.push({ name, lines: [] });
+      sections[sections.length - 1].lines.push(line);
+    }
+    return sections.map((section, index) => {
+      if (index === 0) return section;
+      const mixin = section.lines.join("\n").match(/^@mixin\s+([\w-]+)/m)?.[1];
+      return { ...section, name: `${name} (${mixin ?? `patch ${index}`})` };
+    });
+  });
+  return [...partials, ...vendored];
+}
+
+// Lightning CSS merges only adjacent `(any-hover: hover)` blocks, so hover
+// rules scattered through a partial each ship their own block. A partial
+// (or a vendored patch) gets one, at the end of its mixin. This replaces a
+// single ceiling on the compiled sheet's total, which every new component
+// raised by one and every pair of branches conflicted on.
+//
+// Exact counts for what predates the rule, as in conventions.test.ts: lower
+// one when you merge two blocks, never raise it. Each extra block stays
+// where moving its rules into the first would reorder them against an
+// equal-specificity rule in between.
+const KNOWN_EXTRA_BLOCKS: Record<string, number> = {
+  // The header's block stays ahead of the stepper's `:active::after` and
+  // disabled `::after` rules; the day block stays ahead of the range states.
+  "_date-picker-calendar.scss": 3,
+  // The invalid field, the neutral divider, the disabled steppers and the
+  // readonly field, each beside the resting rule it overrides.
+  "_fluid-number-input.scss": 5,
+  // Upstream's hover rules, guarded where they stand among the unguarded
+  // rules around them.
+  "components/data-table/_data-table-action.scss": 3,
+  "components/data-table/_data-table-core.scss": 5,
+  "components/overflow-menu/_overflow-menu.scss": 3,
+  "components/tag/_tag.scss": 2,
+  "components/text-input/_text-input.scss": 2,
+  "components/ui-shell/_side-nav.scss": 7,
+  // One patch that declares four mixins: the disabled container, dismissible
+  // tabs, and the vertical row and column.
+  "components/tabs/_tabs.scss (tabs-icon)": 4,
+};
 
 describe("any-hover media query grouping", () => {
-  it("does not regress back to one block per hover rule", async () => {
-    const css = await compileEntry("all.scss");
-    // Grouped adjacent `(any-hover: hover)` rules per component close one
-    // @media block instead of N. Was 72 blocks before grouping (see
-    // .context/css-size-followup-results.md); this caps well below that so
-    // a future change re-scattering the blocks gets caught. Raised from 40
-    // when the hand-authored partials adopted the guard (one block each,
-    // more only where moving a hover rule would reorder the cascade).
-    // Raised again from 55 to 61 when Tabs guarded its base and patch hover
-    // rules (components/tabs/_tabs.scss): 1 block for the base mixin, 1 each
-    // for tabs-container-disabled-hover, tabs-dismissible, and vertical
-    // tabs' two breakpoint scopes, and 4 (one per size, from the `@each`
-    // loop) for tabs-size.
-    // Raised again from 61 to 62 for ToggleButtonGroup's one hover block
-    // (_toggle-button-group.scss).
-    // Raised again from 62 to 63 for the resizable SideNav handle's one
-    // hover block (side-nav-resize in components/ui-shell/_side-nav.scss).
-    // Raised again from 63 to 64 for the DatePicker clear button's one
-    // hover block (date-picker-clear in
-    // components/date-picker/_date-picker.scss).
-    // Raised again from 64 to 65 for the Carousel prev/next buttons' one
-    // hover block (_carousel.scss).
-    // Raised again from 65 to 67 for TabsVertical's pinned `orientation`
-    // row and column, one top-level hover block each (tabs-vertical in
-    // components/tabs/_tabs.scss).
-    // Raised again from 67 to 68 for the TableOfContents link's one hover
-    // block (_table-of-contents.scss).
-    // Lowered from 68 to 67 when the SideNav resize handle's hover block
-    // became a JS-toggled class (ui-shell/_side-nav.scss).
-    // Raised again from 67 to 68 for AILabel's one hover block
-    // (_ai-label.scss).
-    // Raised again from 68 to 69 for ChatMessage's actions, revealed on
-    // hover (_chat.scss).
-    // Raised again from 69 to 70 for FileDownloadItem's one hover block
-    // (_file-download-item.scss).
-    // Held at 70 when the calendar replaced flatpickr: the DatePicker month,
-    // quarter, and year grids gained one hover block (date-picker-grid in
-    // components/date-picker/_date-picker.scss, replacing four unguarded
-    // hover rules), and _calendar.scss has one fewer than _flatpickr.scss.
-    // Raised again from 70 to 71 for ChatButton's quick-action hover block
-    // (_chat-button.scss).
-    // Raised again from 71 to 72 for InlineEdit's one hover block
-    // (_inline-edit.scss).
-    // Raised again from 72 to 73 for the toast action button's one hover
-    // block (components/notification/_toast-notification.scss).
-    // Raised again from 73 to 74 for fluid Select's one hover block, which
-    // hides the status divider under a hovered field (_fluid-select.scss).
-    // Raised again from 74 to 75 for menu shortcuts' one hover block, which
-    // gives a hovered danger option's keys its color (_menu-shortcut.scss).
-    // Lowered from 75 to 73 when the calendar's header and stepper hover
-    // blocks merged, as did its range-end and disabled-day blocks
-    // (_date-picker-calendar.scss).
-    // Lowered from 73 to 72 when the calendar's month, quarter and year
-    // cells' hover rules joined the day block (_date-picker-calendar.scss).
-    // Raised again from 72 to 73 for Search's ghost variant, whose field
-    // fills on hover (search-variant in components/search/_search.scss).
-    // Whitespace-tolerant so the count holds for expanded and compressed
-    // output; the lower bound fails the test if the pattern stops matching.
-    const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
-    expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(73);
-  }, 30_000);
+  it("holds at most one grouped hover block per partial", () => {
+    const counts: Record<string, number> = {};
+    let total = 0;
+    for (const { name, lines } of units()) {
+      const count = lines.filter((line) => HOVER_BLOCK.test(line)).length;
+      total += count;
+      if (count > 1) counts[name] = count;
+    }
+    // Fails if the pattern stops matching, so the rule can't pass vacuously.
+    expect(total).toBeGreaterThan(40);
+    expect(counts).toEqual(KNOWN_EXTRA_BLOCKS);
+  });
 });
