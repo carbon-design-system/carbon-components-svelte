@@ -6,8 +6,9 @@
 /// UserAvatar backgrounds. Carbon v11 drops a light theme's 60 step to 50
 /// in the dark themes, and draws the initials and icon in `text-inverse`,
 /// so both stay at 5:1 or more. The `-strong` fills are Carbon's `order-7`
-/// to `order-12` steps (80 light, 30 dark), given to every hue. Read with
-/// `ccs-theme-color`.
+/// to `order-12` steps (80 light, 30 dark), given to every hue. The
+/// `-inverse` fills swap them (30 light, 80 dark) for a fill on an inverse
+/// surface. Read with `ccs-theme-color`.
 /// @access private
 /// @group components
 // prettier-ignore
@@ -32,4 +33,12 @@ $ccs-user-avatar-colors: (
   "user-avatar-gray-strong": (white: $gray-80, g10: $gray-80, g80: $gray-30, g90: $gray-30, g100: $gray-30),
   "user-avatar-cool-gray-strong": (white: $cool-gray-80, g10: $cool-gray-80, g80: $cool-gray-30, g90: $cool-gray-30, g100: $cool-gray-30),
   "user-avatar-warm-gray-strong": (white: $warm-gray-80, g10: $warm-gray-80, g80: $warm-gray-30, g90: $warm-gray-30, g100: $warm-gray-30),
+  "user-avatar-red-inverse": (white: $red-30, g10: $red-30, g80: $red-80, g90: $red-80, g100: $red-80),
+  "user-avatar-magenta-inverse": (white: $magenta-30, g10: $magenta-30, g80: $magenta-80, g90: $magenta-80, g100: $magenta-80),
+  "user-avatar-purple-inverse": (white: $purple-30, g10: $purple-30, g80: $purple-80, g90: $purple-80, g100: $purple-80),
+  "user-avatar-blue-inverse": (white: $blue-30, g10: $blue-30, g80: $blue-80, g90: $blue-80, g100: $blue-80),
+  "user-avatar-cyan-inverse": (white: $cyan-30, g10: $cyan-30, g80: $cyan-80, g90: $cyan-80, g100: $cyan-80),
+  "user-avatar-teal-inverse": (white: $teal-30, g10: $teal-30, g80: $teal-80, g90: $teal-80, g100: $teal-80),
+  "user-avatar-green-inverse": (white: $green-30, g10: $green-30, g80: $green-80, g90: $green-80, g100: $green-80),
+  "user-avatar-gray-inverse": (white: $gray-30, g10: $gray-30, g80: $gray-80, g90: $gray-80, g100: $gray-80),
 );
