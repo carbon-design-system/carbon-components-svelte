@@ -2,6 +2,7 @@
   import {
     announce,
     Announcer,
+    ComboBox,
     Dialog,
     Modal,
     Stack,
@@ -16,6 +17,12 @@
 
   let modalOpen = false;
   let dialogOpen = false;
+
+  const comboItems = [
+    { id: "0", text: "Slack" },
+    { id: "1", text: "Email" },
+    { id: "2", text: "Fax" },
+  ];
 
   /** @param {MouseEvent} event */
   function sayAbout(event) {
@@ -76,6 +83,13 @@
     <button type="button" data-testid="modal-say" on:click={sayAbout}>
       Say in the modal
     </button>
+    <ComboBox
+      labelText="Contact"
+      placeholder="Type to filter"
+      items={comboItems}
+      shouldFilterItem={(item, value) =>
+        item.text.toLowerCase().includes(value.toLowerCase())}
+    />
   </Stack>
 </Modal>
 
