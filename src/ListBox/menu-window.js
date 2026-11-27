@@ -369,6 +369,9 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * @param {boolean} [options.fluid] Whether menu items render at the fluid
    * height.
    * @param {number} options.scrollTop The menu's current scroll position.
+   * @param {number} [options.containerHeight] The viewport height in pixels
+   * when the consumer's `maxHeight` sets it. A `containerHeight` on
+   * `virtualize` still wins.
    * @returns {import("./menu-window.js").MenuWindowState}
    */
   function update(options) {
@@ -390,6 +393,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     size = "md",
     fluid = false,
     scrollTop,
+    containerHeight = undefined,
   }) {
     updating = true;
     try {
@@ -408,6 +412,9 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
         defaults: {
           itemHeight: getMenuItemHeight(size, { fluid }),
           measured: wrapOptions,
+          ...(containerHeight && containerHeight > 0
+            ? { containerHeight }
+            : {}),
         },
         heights,
         estimate,

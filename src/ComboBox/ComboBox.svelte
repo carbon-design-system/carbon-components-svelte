@@ -397,6 +397,17 @@
   export let virtualize = undefined;
 
   /**
+   * Specify the maximum height of the menu. A number is pixels; a string
+   * is any CSS length, such as `"20rem"` or `"50vh"`. The menu scrolls once
+   * its options exceed it. Applies whether the menu renders in place, in a
+   * portal or virtualized; a virtualized menu resolves a string to pixels
+   * each time it opens, and a `containerHeight` on `virtualize` wins.
+   * Defaults to the size-based height.
+   * @type {number | string | undefined}
+   */
+  export let maxHeight = undefined;
+
+  /**
    * Set to `true` to show a loading row after the options while the menu is
    * open, such as while fetching more items on `scrollend`. Marks the menu
    * `aria-busy` and hides the empty state; the options stay interactive.
@@ -491,6 +502,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { createAnnouncerChannel } from "../utils/announcer.js";
   import { clampIndex } from "../utils/clamp-index.js";
+  import { resolveCssLength, toCssLength } from "../utils/css-length.js";
   import { debounce } from "../utils/debounce.js";
   import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import { dismiss } from "../utils/dismiss.js";
@@ -1093,6 +1105,14 @@
         ? undefined
         : `${id}-${filteredItems[highlightedIndex].id}`;
 
+  // Windowing needs the viewport in pixels. A string resolves on each open,
+  // so a viewport length follows the window between opens.
+  $: maxHeightPx =
+    typeof maxHeight === "number"
+      ? maxHeight
+      : open && shouldVirtualize
+        ? resolveCssLength(maxHeight)
+        : undefined;
   $: if (shouldVirtualize && !menuWindow) menuWindow = createWindow();
   $: menuState = menuWindow
     ? menuWindow.update({
@@ -1106,6 +1126,7 @@
         size: effectiveSize,
         fluid: hasFluidMenuItems,
         scrollTop: listScrollTop,
+        containerHeight: maxHeightPx,
       })
     : unwindowedMenuState(menuRows, effectiveSize);
   $: ({
@@ -1708,9 +1729,11 @@
         bind:ref={listRef}
         style={isWindowed
           ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
-          : effectivePortalMenu
-            ? `max-height: ${menuMaxHeight};`
-            : undefined}
+          : maxHeight === undefined
+            ? effectivePortalMenu
+              ? `max-height: ${menuMaxHeight};`
+              : undefined
+            : `max-height: ${toCssLength(maxHeight)};`}
       >
         <!-- `isVirtualized` comes out of the window state, which a build-time
              specializer can't run. `shouldVirtualize` lets it drop VirtualWindow

@@ -19,6 +19,11 @@ export type MenuWindowUpdateOptions<
   /** Whether menu items render at the fluid height. */
   fluid?: boolean;
   scrollTop: number;
+  /**
+   * The viewport height in pixels when the consumer's `maxHeight` sets it.
+   * A `containerHeight` on `virtualize` still wins.
+   */
+  containerHeight?: number;
 };
 
 export type MenuWindowState<
