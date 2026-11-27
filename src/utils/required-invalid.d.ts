@@ -5,6 +5,8 @@ export type RequiredInvalidOptions = {
   getFocusTarget?: () => HTMLElement | null | undefined;
   /** Always cancel `invalid`, for a hidden input validating for a list box. */
   proxy?: boolean;
+  /** Also handle a `pattern` mismatch, for a pattern the user never wrote. */
+  pattern?: boolean;
   /** Set to `false` while the field isn't required, so it adds no listeners. */
   enabled?: boolean;
 };
