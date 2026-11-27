@@ -23,6 +23,46 @@ async function drag(
   await fireEvent.pointerUp(separator, { pointerId: 1 });
 }
 
+/**
+ * Stubs `ResizeObserver` for the rest of the describe block and returns a
+ * function that reports a splitter size to every observed element.
+ */
+function stubResizeObserver() {
+  const measurement = {
+    report: (_width: number, _height: number) => {},
+  };
+
+  beforeEach(() => {
+    class StubResizeObserver {
+      constructor(callback: ResizeObserverCallback) {
+        measurement.report = (width, height) =>
+          callback(
+            [...this.observed].map((target) => ({
+              target,
+              contentRect: { width, height },
+            })) as unknown as ResizeObserverEntry[],
+            this as unknown as ResizeObserver,
+          );
+      }
+      observed = new Set<Element>();
+      observe(target: Element) {
+        this.observed.add(target);
+      }
+      unobserve(target: Element) {
+        this.observed.delete(target);
+      }
+      disconnect() {}
+    }
+    vi.stubGlobal("ResizeObserver", StubResizeObserver);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  return (width: number, height: number) => measurement.report(width, height);
+}
+
 function setup(props: Record<string, unknown> = {}) {
   const onResize = vi.fn();
   const { rerender } = render(Splitter, { props: { onResize, ...props } });
@@ -292,35 +332,7 @@ describe("Splitter", () => {
   });
 
   describe("pixel bounds", () => {
-    let report: (width: number, height: number) => void = () => {};
-
-    beforeEach(() => {
-      class StubResizeObserver {
-        constructor(callback: ResizeObserverCallback) {
-          report = (width, height) =>
-            callback(
-              [...this.observed].map((target) => ({
-                target,
-                contentRect: { width, height },
-              })) as unknown as ResizeObserverEntry[],
-              this as unknown as ResizeObserver,
-            );
-        }
-        observed = new Set<Element>();
-        observe(target: Element) {
-          this.observed.add(target);
-        }
-        unobserve(target: Element) {
-          this.observed.delete(target);
-        }
-        disconnect() {}
-      }
-      vi.stubGlobal("ResizeObserver", StubResizeObserver);
-    });
-
-    afterEach(() => {
-      vi.unstubAllGlobals();
-    });
+    const report = stubResizeObserver();
 
     it("converts pixel bounds against the measured width", async () => {
       const { separator } = setup({ size: 50, min: "100px", max: "300px" });
@@ -441,6 +453,149 @@ describe("Splitter", () => {
         expect(startPane.style[unset]).toBe("");
       },
     );
+  });
+
+  describe("pixel size", () => {
+    const report = stubResizeObserver();
+
+    it("holds a pixel size as the splitter resizes, and reports it as a percentage once measured", async () => {
+      const { separator, startPane } = setup({ size: "240px" });
+
+      expect(startPane.style.flexBasis).toBe("240px");
+      expect(separator).not.toHaveAttribute("aria-valuenow");
+
+      report(800, 200);
+      await tick();
+      expect(separator).toHaveAttribute("aria-valuenow", "30");
+
+      report(400, 200);
+      await tick();
+      expect(startPane.style.flexBasis).toBe("240px");
+      expect(separator).toHaveAttribute("aria-valuenow", "60");
+      expect(boundSize()).toHaveTextContent("240px");
+    });
+
+    it("writes a drag back in whole pixels", async () => {
+      const { onResize, separator } = setup({ size: "100px" });
+      report(400, 200);
+      await tick();
+
+      await drag(separator, 100, 150.6);
+
+      expect(boundSize()).toHaveTextContent("151px");
+      expect(onResize.mock.calls).toEqual([[{ size: "151px" }]]);
+    });
+
+    it.each([
+      { keys: "{ArrowRight}", expected: "104px" },
+      { keys: "{Shift>}{ArrowLeft}{/Shift}", expected: "60px" },
+      { keys: "{Home}", expected: "40px" },
+      { keys: "{End}", expected: "300px" },
+    ])(
+      "moves with $keys to $expected, converting percentages",
+      async ({ keys, expected }) => {
+        const { onResize, separator } = setup({
+          size: "100px",
+          min: 10,
+          max: "300px",
+        });
+        report(400, 200);
+        await tick();
+
+        separator.focus();
+        await user.keyboard(keys);
+
+        expect(boundSize()).toHaveTextContent(expected);
+        expect(onResize.mock.calls).toEqual([[{ size: expected }]]);
+      },
+    );
+
+    it("clamps to a percentage max, in CSS before it is measured", async () => {
+      const { separator, startPane } = setup({ size: "300px", max: 50 });
+
+      expect(startPane.style.flexBasis).toBe("300px");
+      expect(startPane.style.maxWidth).toBe("50%");
+
+      report(400, 200);
+      await tick();
+      expect(startPane.style.flexBasis).toBe("200px");
+      expect(separator).toHaveAttribute("aria-valuemax", "50");
+      expect(boundSize()).toHaveTextContent("300px");
+    });
+
+    it("ignores keys until the splitter is measured", async () => {
+      const { onResize, separator } = setup({ size: "240px" });
+
+      separator.focus();
+      await user.keyboard("{End}");
+
+      expect(boundSize()).toHaveTextContent("240px");
+      expect(onResize).not.toHaveBeenCalled();
+    });
+
+    it("collapses below a pixel min and restores the pixel size", async () => {
+      const { onResize, separator, startPane } = setup({
+        size: "240px",
+        min: "100px",
+        collapsedSize: 0,
+      });
+      report(400, 200);
+      await tick();
+
+      separator.focus();
+      await user.keyboard("{Enter}");
+      expect(startPane.style.flexBasis).toBe("0px");
+      expect(boundCollapsed()).toHaveTextContent("true");
+
+      await user.click(
+        screen.getByRole("button", { name: "Toggle collapsed" }),
+      );
+      expect(boundSize()).toHaveTextContent("240px");
+      expect(onResize.mock.calls).toEqual([[{ size: "0px" }]]);
+    });
+
+    it("restores the initial pixel size on double click", async () => {
+      const { onResize, separator } = setup({ size: "120px" });
+      report(400, 200);
+      await tick();
+
+      separator.focus();
+      await user.keyboard("{End}");
+      await user.dblClick(separator);
+
+      expect(boundSize()).toHaveTextContent("120px");
+      expect(onResize).toHaveBeenLastCalledWith({ size: "120px" });
+    });
+
+    it("steps by a share of the height when vertical", async () => {
+      const { separator, startPane } = setup({
+        size: "100px",
+        orientation: "vertical",
+      });
+      report(400, 200);
+      await tick();
+
+      separator.focus();
+      await user.keyboard("{ArrowDown}");
+
+      expect(boundSize()).toHaveTextContent("102px");
+      expect(startPane.style.maxHeight).toBe("100%");
+      expect(separator).toHaveAttribute("aria-valuenow", "51");
+    });
+
+    it("grows a pixel size as the separator is dragged left in RTL", async () => {
+      document.documentElement.style.direction = "rtl";
+      onTestFinished(() => {
+        document.documentElement.style.removeProperty("direction");
+      });
+      const { separator } = setup({ size: "100px" });
+      report(400, 200);
+      await tick();
+
+      await drag(separator, 300, 250);
+
+      expect(boundSize()).toHaveTextContent("150px");
+    });
   });
 
   it("makes a pane shrunk to nothing inert", async () => {

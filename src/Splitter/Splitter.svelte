@@ -1,17 +1,21 @@
 <script>
   /**
    * @restProps {div}
+   * @template {number | `${number}px`} [Size=number]
    * @slot {{}} start - Content of the start pane, sized by `size`.
    * @slot {{}} end - Content of the end pane, which fills the remaining space.
-   * @event {{ size: number }} resize - Fires once the user finishes resizing (drag release, key press, or double click) and the size changed.
+   * @event {{ size: Size }} resize - Fires once the user finishes resizing (drag release, key press, or double click) and the size changed. `size` is in the unit `size` was given in.
    */
 
   /**
-   * Specify the size of the start pane as a percentage of the splitter.
-   * Rendered clamped to `[min, max]`.
+   * Specify the size of the start pane, as a percentage of the splitter,
+   * or as a pixel length such as `"240px"` that the pane holds while the
+   * splitter resizes. Resizing writes back in the same unit, rounded to
+   * whole pixels. Rendered clamped to `[min, max]`.
+   * @type {Size}
    * @bindable writable
    */
-  export let size = 50;
+  export let size = /** @type {Size} */ (50);
 
   /**
    * Set to `true` to collapse the start pane to `collapsedSize`, or `min`
@@ -45,8 +49,9 @@
   export let max = 100;
 
   /**
-   * Set the percentage an arrow key moves the separator.
-   * Shift + arrow key moves 10 times as far.
+   * Set the percentage of the splitter an arrow key moves the separator.
+   * Shift + arrow key moves 10 times as far. With a pixel `size`, the
+   * distance is converted to pixels.
    */
   export let step = 1;
 
@@ -132,14 +137,15 @@
   let dragStartSize = 0;
   let dragDirection = 1;
   // Size that Enter or `collapsed = false` restores after the start pane
-  // reaches `min`.
+  // reaches `min`, in the unit `size` had then.
   let expandedSize = size;
   // The `collapsed` value last matched to the size; a difference means the
   // prop was set from outside. Starts `false` so `collapsed={true}` on
   // mount collapses the pane.
   let syncedCollapsed = false;
 
-  // The splitter's size, measured only while `min` or `max` is in pixels.
+  // The splitter's size, measured only while `size`, `min`, `max` or
+  // `collapsedSize` is in pixels.
   let containerSize = { width: 0, height: 0 };
   let stopObserving = noop;
 
@@ -167,13 +173,70 @@
    */
   function toPercent(bound, length, fallback) {
     if (typeof bound === "number") return bound;
-    if (!length) return fallback;
-    const percent = (Number.parseFloat(bound) / length) * 100;
-    return Math.round(clamp(percent, 0, 100) * 100) / 100;
+    return pixelsToPercent(Number.parseFloat(bound), length, fallback);
   }
 
-  // Below `min`, a size renders at `min`, and at `collapsedPercent` once it
-  // reaches it. A drag or arrow key also snaps to `collapsedPercent` past
+  /**
+   * @param {number} pixels
+   * @param {number} length
+   * @param {number} fallback
+   */
+  function pixelsToPercent(pixels, length, fallback) {
+    if (!length) return fallback;
+    return Math.round(clamp((pixels / length) * 100, 0, 100) * 100) / 100;
+  }
+
+  // A size or bound in whole pixels, held within the splitter once it is
+  // measured. A percentage needs the measurement; until then, and on the
+  // server, the pane's inline min/max size holds it.
+  /**
+   * @param {number | `${number}px`} value
+   * @param {number} length
+   * @param {number} fallback
+   */
+  function toPixels(value, length, fallback) {
+    if (typeof value === "string") {
+      const pixels = Number.parseFloat(value);
+      return length ? Math.round(clamp(pixels, 0, length)) : pixels;
+    }
+    return length
+      ? Math.round(clamp((value / 100) * length, 0, length))
+      : fallback;
+  }
+
+  /**
+   * @param {number | `${number}px`} value
+   * @param {boolean} pixels
+   * @param {number} length
+   * @param {number} fallback
+   */
+  function toUnit(value, pixels, length, fallback) {
+    return pixels
+      ? toPixels(value, length, fallback)
+      : toPercent(value, length, fallback);
+  }
+
+  /** @param {number | `${number}px`} value */
+  function sizeValue(value) {
+    return typeof value === "string" ? Number.parseFloat(value) : value;
+  }
+
+  // A size written back through `bind:size` or `resize` keeps the unit it
+  // was given in. Drag math yields long fractions: pixels round to whole
+  // pixels, and percentages to two decimals, which is finer than a pixel
+  // on any realistic splitter and keeps `aria-valuenow` readable.
+  /**
+   * @param {number} value
+   * @returns {Size}
+   */
+  function withUnit(value) {
+    return /** @type {Size} */ (
+      pixelSize ? `${Math.round(value)}px` : Math.round(value * 100) / 100
+    );
+  }
+
+  // Below `min`, a size renders at `min`, and at `collapsedBound` once it
+  // reaches it. A drag or arrow key also snaps to `collapsedBound` past
   // halfway between the two, so a `size` set from outside, or a splitter
   // that narrows, never collapses a pane the user left open. Without
   // `collapsedSize` the two match, and this is a plain clamp.
@@ -188,9 +251,9 @@
    */
   function constrain(
     value,
-    lower = minPercent,
-    upper = maxPercent,
-    collapsedTo = collapsedPercent,
+    lower = minBound,
+    upper = maxBound,
+    collapsedTo = collapsedBound,
     snap = false,
   ) {
     const snapAt = snap ? (collapsedTo + lower) / 2 : collapsedTo;
@@ -198,37 +261,39 @@
     return clamp(value, lower, upper);
   }
 
-  // Drag math yields long fractions; two decimals is finer than a pixel on
-  // any realistic splitter and keeps `aria-valuenow` readable.
   /**
    * @param {number} next
    * @param {boolean} [snap]
    */
   function setSize(next, snap = false) {
-    size =
-      Math.round(
-        constrain(next, minPercent, maxPercent, collapsedPercent, snap) * 100,
-      ) / 100;
+    size = withUnit(constrain(next, minBound, maxBound, collapsedBound, snap));
   }
 
   // `bind:size` updates on every step of a drag; `resize` fires once per
   // gesture, for example to persist the final size.
   /** @param {number} prevSize */
   function dispatchResize(prevSize) {
-    const nextSize = constrain(size);
+    const nextSize = constrain(sizeValue(size));
     if (nextSize === prevSize) return;
     // Whatever collapsed it (Enter, Home, a drag), restoring goes back to
     // where the gesture started.
-    if (nextSize <= collapsedPercent && prevSize > collapsedPercent) {
-      expandedSize = prevSize;
+    if (nextSize <= collapsedBound && prevSize > collapsedBound) {
+      expandedSize = withUnit(prevSize);
     }
-    dispatch("resize", { size: nextSize });
+    dispatch("resize", { size: withUnit(nextSize) });
   }
 
   function restoreSize() {
-    return expandedSize > collapsedPercent
-      ? expandedSize
-      : (minPercent + maxPercent) / 2;
+    const expanded = toUnit(
+      expandedSize,
+      pixelSize,
+      containerLength,
+      collapsedBound,
+    );
+    if (expanded > collapsedBound) return expanded;
+    // Before the splitter is measured, a pixel size has no middle of a
+    // percentage range to go to.
+    return Number.isFinite(maxBound) ? (minBound + maxBound) / 2 : minBound;
   }
 
   /**
@@ -238,15 +303,15 @@
   function syncCollapsed(nextCollapsed, currentSize) {
     if (nextCollapsed !== syncedCollapsed) {
       syncedCollapsed = nextCollapsed;
-      if (nextCollapsed && currentSize > collapsedPercent) {
-        expandedSize = currentSize;
-        setSize(collapsedPercent);
-      } else if (!nextCollapsed && currentSize <= collapsedPercent) {
+      if (nextCollapsed && currentSize > collapsedBound) {
+        expandedSize = withUnit(currentSize);
+        setSize(collapsedBound);
+      } else if (!nextCollapsed && currentSize <= collapsedBound) {
         setSize(restoreSize());
       }
       return;
     }
-    const atCollapsed = currentSize <= collapsedPercent;
+    const atCollapsed = currentSize <= collapsedBound;
     if (atCollapsed !== collapsed) collapsed = syncedCollapsed = atCollapsed;
   }
 
@@ -260,7 +325,7 @@
 
   /** @param {PointerEvent} event */
   function handleDragStart(event) {
-    if (disabled) return false;
+    if (disabled || !measured) return false;
     // The press focuses the separator natively, which, unlike a scripted
     // focus(), doesn't count as `:focus-visible` and draw the ring.
     resizing = true;
@@ -278,10 +343,8 @@
   function handleDragMove(event) {
     const { point, length } = getPointerAxis(event);
     if (!length) return;
-    setSize(
-      dragStartSize + dragDirection * ((point - dragStartPoint) / length) * 100,
-      true,
-    );
+    const moved = dragDirection * (point - dragStartPoint);
+    setSize(dragStartSize + (pixelSize ? moved : (moved / length) * 100), true);
   }
 
   function handleDragEnd() {
@@ -292,8 +355,11 @@
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     // Alt/Ctrl/Meta+Arrow belong to the browser (Alt/Cmd+Left is Back).
-    if (disabled || hasModifierKey(event)) return;
-    const distance = step * (event.shiftKey ? LARGE_STEP_MULTIPLIER : 1);
+    if (disabled || !measured || hasModifierKey(event)) return;
+    const distance =
+      step *
+      (event.shiftKey ? LARGE_STEP_MULTIPLIER : 1) *
+      (pixelSize ? containerLength / 100 : 1);
     const vertical = orientation === "vertical";
     // ArrowRight moves the separator toward the inline end, growing the
     // start pane.
@@ -304,12 +370,12 @@
     } else if (key === (vertical ? "ArrowDown" : "ArrowRight")) {
       next = renderedSize + distance;
     } else if (event.key === "Home") {
-      next = minPercent;
+      next = minBound;
     } else if (event.key === "End") {
-      next = maxPercent;
+      next = maxBound;
     } else if (event.key === "Enter") {
       // Collapse the start pane, or restore it if already collapsed.
-      next = renderedSize > collapsedPercent ? collapsedPercent : restoreSize();
+      next = renderedSize > collapsedBound ? collapsedBound : restoreSize();
     } else {
       return;
     }
@@ -322,35 +388,77 @@
   function handleDblclick() {
     if (disabled) return;
     const prevSize = renderedSize;
-    setSize(initialSize);
+    setSize(toUnit(initialSize, pixelSize, containerLength, renderedSize));
     dispatchResize(prevSize);
   }
 
-  // Pixel bounds also go on the start pane, where they hold before the
-  // splitter is measured.
-  $: minLength = typeof min === "string" ? min : undefined;
-  $: maxLength = typeof max === "string" ? max : undefined;
+  // The sizes and bounds below are in `size`'s unit: pixels for a pixel
+  // length, otherwise percentages.
+  $: pixelSize = typeof size === "string";
+  $: unit = pixelSize ? "px" : "%";
+  // Bounds in pixels, and with a pixel `size` percentages too, also go on
+  // the start pane, where they hold before the splitter is measured and
+  // on the server. A percentage there resolves against the splitter.
+  $: minLength =
+    typeof min === "string"
+      ? min
+      : pixelSize && min > 0
+        ? `${min}%`
+        : undefined;
+  $: maxLength =
+    typeof max === "string" ? max : pixelSize ? `${max}%` : undefined;
   $: observeContainer(
     ref,
-    [min, max, collapsedSize].some((bound) => typeof bound === "string"),
+    [size, min, max, collapsedSize].some((value) => typeof value === "string"),
   );
   $: vertical = orientation === "vertical";
   $: containerLength = vertical ? containerSize.height : containerSize.width;
-  $: minPercent = toPercent(min, containerLength, 0);
+  // Keys and drags wait for the measurement a pixel size needs to convert
+  // percentages: `step`, and `min` or `max` for Home and End.
+  $: measured = !pixelSize || containerLength > 0;
+  $: minBound = toUnit(min, pixelSize, containerLength, 0);
   // As with CSS min/max sizes, a `min` larger than `max` wins.
-  $: maxPercent = Math.max(toPercent(max, containerLength, 100), minPercent);
-  $: collapsedPercent =
+  $: maxBound = Math.max(
+    toUnit(max, pixelSize, containerLength, pixelSize ? Infinity : 100),
+    minBound,
+  );
+  $: collapsedBound =
     collapsedSize === undefined
-      ? minPercent
-      : Math.min(toPercent(collapsedSize, containerLength, 0), minPercent);
+      ? minBound
+      : Math.min(
+          toUnit(collapsedSize, pixelSize, containerLength, 0),
+          minBound,
+        );
   // Before `renderedSize`, so a size this sets renders in the same update.
   $: syncCollapsed(
     collapsed,
-    constrain(size, minPercent, maxPercent, collapsedPercent),
+    constrain(sizeValue(size), minBound, maxBound, collapsedBound),
   );
-  $: renderedSize = constrain(size, minPercent, maxPercent, collapsedPercent);
-  // A pixel `min` mustn't hold the pane open once it collapses below it.
-  $: belowMin = renderedSize < minPercent;
+  $: renderedSize = constrain(
+    sizeValue(size),
+    minBound,
+    maxBound,
+    collapsedBound,
+  );
+  // The pane's inline `min` mustn't hold it open once it collapses below.
+  $: belowMin = renderedSize < minBound;
+  // The separator's value stays a percentage, as ARIA defines it. A pixel
+  // size has none until the splitter is measured, so the server and the
+  // first client render leave `aria-valuenow` out rather than guess.
+  $: valueNow = pixelSize
+    ? containerLength
+      ? pixelsToPercent(renderedSize, containerLength, 0)
+      : undefined
+    : renderedSize;
+  $: valueMin = pixelSize
+    ? pixelsToPercent(collapsedBound, containerLength, 0)
+    : collapsedBound;
+  $: valueMax = pixelSize
+    ? pixelsToPercent(maxBound, containerLength, 100)
+    : maxBound;
+  $: endFilled = pixelSize
+    ? containerLength > 0 && renderedSize >= containerLength
+    : renderedSize === 100;
   // Rest props go on the root, but naming and description belong on the
   // separator, the element that takes focus.
   $: ({ ariaLabel, ariaLabelledBy, ariaDescribedBy, rest } =
@@ -397,7 +505,7 @@
     id="{id}-start"
     class:bx--splitter__pane={true}
     class:bx--splitter__pane--start={true}
-    style:flex-basis="{renderedSize}%"
+    style:flex-basis="{renderedSize}{unit}"
     style:min-width={vertical || belowMin ? undefined : minLength}
     style:max-width={vertical ? undefined : maxLength}
     style:min-height={vertical && !belowMin ? minLength : undefined}
@@ -417,9 +525,9 @@
     aria-describedby={ariaDescribedBy}
     aria-orientation={orientation === "vertical" ? "horizontal" : "vertical"}
     aria-controls="{id}-start"
-    aria-valuenow={disabled ? undefined : renderedSize}
-    aria-valuemin={disabled ? undefined : collapsedPercent}
-    aria-valuemax={disabled ? undefined : maxPercent}
+    aria-valuenow={disabled ? undefined : valueNow}
+    aria-valuemin={disabled ? undefined : valueMin}
+    aria-valuemax={disabled ? undefined : valueMax}
     class:bx--splitter__separator={true}
     class:bx--splitter__separator--disabled={disabled}
     class:bx--splitter__separator--hover={hovered}
@@ -437,7 +545,7 @@
   <div
     class:bx--splitter__pane={true}
     class:bx--splitter__pane--end={true}
-    inert={renderedSize === 100 || undefined}
+    inert={endFilled || undefined}
   >
     <slot name="end" />
   </div>

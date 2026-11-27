@@ -2,7 +2,7 @@
   import Splitter from "carbon-components-svelte/Splitter/Splitter.svelte";
   import type { ComponentProps } from "svelte";
 
-  export let size = 50;
+  export let size: number | `${number}px` = 50;
   export let collapsed = false;
   export let min: ComponentProps<Splitter>["min"] = 0;
   export let max: ComponentProps<Splitter>["max"] = 100;
@@ -15,7 +15,9 @@
   export let separatorLabel: ComponentProps<Splitter>["separatorLabel"] =
     undefined;
   export let enterDelayMs: ComponentProps<Splitter>["enterDelayMs"] = undefined;
-  export let onResize: (detail: { size: number }) => void = () => {};
+  export let onResize: (detail: {
+    size: number | `${number}px`;
+  }) => void = () => {};
 </script>
 
 <Splitter
