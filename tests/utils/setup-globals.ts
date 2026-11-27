@@ -146,8 +146,10 @@ if (
   HTMLDialogElement.prototype.show = function () {
     this.setAttribute("open", "");
   };
-  HTMLDialogElement.prototype.close = function () {
+  HTMLDialogElement.prototype.returnValue = "";
+  HTMLDialogElement.prototype.close = function (returnValue?: string) {
     if (this.hasAttribute("open")) {
+      if (returnValue !== undefined) this.returnValue = returnValue;
       this.removeAttribute("open");
       this.dispatchEvent(new Event("close"));
     }

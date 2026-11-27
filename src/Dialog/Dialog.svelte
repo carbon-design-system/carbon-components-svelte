@@ -34,6 +34,23 @@
    */
   export let returnFocusTo = null;
 
+  /**
+   * Set from the native `returnValue` when the dialog closes; cleared when
+   * it opens. Set it by calling `close(value)` on the component instance.
+   * @type {string}
+   * @bindable readonly
+   */
+  export let returnValue = "";
+
+  /**
+   * Forwarded as the `closedby` attribute, which controls which user
+   * interactions can close the dialog. Browsers without support ignore the
+   * attribute; `closedby="none"` also disables this component's own
+   * backdrop light-dismiss, since that logic runs in Svelte, not natively.
+   * @type {"any" | "closerequest" | "none" | undefined}
+   */
+  export let closedby = undefined;
+
   import { createEventDispatcher } from "svelte";
   import { restoreFocus } from "../utils/focus.js";
   import { createOutsideDismiss } from "../utils/outside-dismiss.js";
@@ -46,6 +63,17 @@
 
   /** @type {HTMLDialogElement} */
   let dialog;
+
+  /**
+   * Close the dialog programmatically, setting `returnValue` like the
+   * native `dialog.close(value)` API. Does nothing when the dialog is closed.
+   * @param {string} [value]
+   */
+  export function close(value) {
+    if (!dialog?.open) return;
+    pendingTrigger = "programmatic";
+    dialog.close(value);
+  }
 
   /**
    * Server-rendered `open` attribute so a non-modal dialog is visible in
@@ -88,6 +116,7 @@
         if (!node.open || fromAttribute) {
           if (fromAttribute) node.removeAttribute("open");
           focusReturn.save();
+          returnValue = "";
           if (isModal) {
             node.showModal();
           } else {
@@ -132,7 +161,9 @@
 
   /** @param {MouseEvent} event */
   function handleMouseUp(event) {
-    if (!modal || preventCloseOnClickOutside) return;
+    // closedby="none" disables light-dismiss here too: the attribute is inert
+    // without native support, and this component's own logic would still run.
+    if (!modal || preventCloseOnClickOutside || closedby === "none") return;
     if (isOnBackdrop(event)) outsideDismiss.release();
   }
 
@@ -140,6 +171,7 @@
   function handleClose(event) {
     const trigger = pendingTrigger ?? "close-button";
     pendingTrigger = null;
+    returnValue = event.currentTarget.returnValue;
     open = false;
     dispatch("close", { trigger });
     focusReturn.restore(event.currentTarget, returnFocusTo);
@@ -150,6 +182,7 @@
   class:bx--dialog={true}
   class:bx--dialog--modal={modal}
   use:dialogAction={{ open, modal }}
+  {closedby}
   {...initialOpen ? { ...$$restProps, open: true } : $$restProps}
   on:cancel={handleCancel}
   on:close={handleClose}
