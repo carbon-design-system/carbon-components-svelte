@@ -751,6 +751,55 @@
       "defaultKind": "text"
     },
     {
+      "component": "DurationInput",
+      "prop": "durationText",
+      "type": "(total: number, units: ReadonlyArray<\"day\" | \"hour\" | \"minute\" | \"second\" | \"millisecond\">, locale: string) => string",
+      "default": "(total, units, locale) => formatDuration(total, units, { locale })",
+      "defaultKind": "function"
+    },
+    {
+      "component": "DurationInput",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DurationInput",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DurationInput",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DurationInput",
+      "prop": "parseErrorText",
+      "type": "string",
+      "default": "Enter a duration, such as 1h 30m",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DurationInput",
+      "prop": "segmentLabelText",
+      "type": "(unit: \"day\" | \"hour\" | \"minute\" | \"second\" | \"millisecond\", label: string) => string",
+      "default": "(_unit, label) => label",
+      "defaultKind": "function"
+    },
+    {
+      "component": "DurationInput",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
       "component": "EmptyState",
       "prop": "subtitleText",
       "type": "string",
