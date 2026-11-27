@@ -1,0 +1,199 @@
+---
+components: ["PeoplePicker"]
+description: A people picker searches users and groups as you type and shows each choice as an avatar chip, for assigning work, sharing and inviting.
+---
+
+<script>
+  import { PeoplePicker } from "carbon-components-svelte";
+
+  const people = [
+    { id: "u-1042", name: "Priya Raman", email: "priya.raman@example.com" },
+    { id: "u-2290", name: "Marcus Oyelaran", email: "marcus@example.com" },
+    { id: "u-3118", name: "Hannah Lindqvist", email: "hannah@example.com" },
+  ];
+</script>
+
+## Basic
+
+Pass the people to choose from as `items`, and bind `value` to read or set the people chosen. Type to search by name, email and the `secondary` line, then press <DocKbd label="Enter" /> to add the highlighted person. Each choice becomes a chip with an avatar.
+
+<FileSource src="/framed/PeoplePicker/PeoplePickerBasic" />
+
+A person is an object with an `id` and a `name`. Everything else is optional.
+
+| Property | Use |
+| :--- | :--- |
+| `id` | Identifies the person. Submitted with the form |
+| `name` | Shown in the chip and the option, and used for the initials |
+| `email` | Matched by the query, shown beside the name, and used to catch a duplicate |
+| `avatar` | An image URL. Without one the avatar shows initials |
+| `secondary` | A muted line such as a job title. Also matched by the query |
+| `type` | `"group"` for a team or a list. The default is `"user"` |
+| `members`, `memberCount` | The people in a group, or only how many there are |
+| `disabled` | Shows the person in the menu but does not let them be chosen |
+
+| Do | Why |
+| :--- | :--- |
+| Use for a field that names people: "assign to", "share with", "invite" | The avatar and secondary line tell apart two people with the same name |
+| Use [MultiSelect](/components/MultiSelect) for a short, fixed list of roles | A picker is built for a directory too long to scroll |
+| Use [TagInput](/components/TagInput) for free text such as keywords | It has no search, no avatars and no menu |
+| Give the field a label | The menu takes its name from it |
+
+## Sources
+
+### Array
+
+Pass an array. It is ranked as the user types: a name that starts with the query comes first, then one with a word that starts with it, then one that contains it, then one that matches the email or `secondary` line only. Accents, case and Arabic vowel marks are ignored, so `jose` finds José and `محمد` finds مُحَمَّد.
+
+Replace the array, not its contents, to change the list: the lowercase copy that makes each key cheap is built once per array. A person already chosen is left out of the menu.
+
+### Large lists
+
+An array of 10,000 accounts needs no virtualization or server. A key ranks the array in one pass and stops as soon as enough names start with the query, and only the first few matches reach the DOM.
+
+<FileSource src="/framed/PeoplePicker/PeoplePickerLargeList" />
+
+### Async
+
+Pass a function that takes the query and returns the people, or a promise of them. The function gets `{ signal }`. Pass the signal to `fetch`, or listen for its `abort` event, to stop the request when a newer query replaces it. Only the newest request may answer: a slower, older response is dropped even when the function ignores the signal.
+
+The function is called after `debounce` milliseconds without typing, and once with an empty query when the menu opens, so return recent people for it or set `minQueryLength`. The menu keeps the last results while the next ones load, shows a loading row after `loadingDelay`, and shows `errorText` with a retry button when the function rejects. <DocKbd label="Enter" /> retries too.
+
+<FileSource src="/framed/PeoplePicker/PeoplePickerAsync" />
+
+### Suggestions
+
+Pass `suggestions` to offer recent or likely people before anything is typed. They show when the query is empty, or shorter than `minQueryLength`, under the heading `suggestionsText`, without calling a function source. Press <DocKbd label="ArrowDown" /> in the empty field to open them.
+
+<FileSource src="/framed/PeoplePicker/PeoplePickerSuggestions" />
+
+## Selection
+
+### Multiple
+
+The default. Chosen people are removed from the menu, so nobody is added twice. Set `max` to cap the count: a person past it is rejected with `maxText`.
+
+### Single
+
+Set `multiple` to `false` to choose one person. Choosing again replaces the chip, and `value` holds at most one person.
+
+<FileSource src="/framed/PeoplePicker/PeoplePickerSingle" />
+
+### Groups
+
+A person with `type: "group"` is a team or a list. Choosing it either adds the group as one chip, or adds its members.
+
+| Set | Use it when |
+| :--- | :--- |
+| `groups="chip"`, the default | The group is the thing you save, such as an access list that should follow the team as people join and leave |
+| `groups="expand"` | The people are the thing you save, such as invitees. The members come from `members`, or from `loadMembers(group, { signal })` when the group has none, and are added once each |
+
+A group whose members cannot be read stays one chip. A group chip shows a group glyph, and its option shows `memberCount`.
+
+<FileSource src="/framed/PeoplePicker/PeoplePickerGroups" />
+
+## Free entries
+
+Set `allowEmail` to let the user add someone who is not in `items`. Type an address and press <DocKbd label="Enter" />, `,` or `;`. The menu offers the typed address as an option unless it names someone listed.
+
+Paste `a@x.com, b@y.com` or one address per line to add several at once. `Ada Lovelace <ada@x.com>` and `"Lovelace, Ada" <ada@x.com>` read as a name and an address. An address that matches a known person adds that person, with their name and avatar, and a duplicate is dropped.
+
+An entry that fails `validateEntry` becomes an invalid chip, shown in red with a warning glyph and named for a screen reader. It is not submitted, and the form cannot be sent while one is left. Set `invalidEntries="reject"` to keep the text in the field with a message instead. Entries added this way have `free: true`, and `invalid: true` when they failed.
+
+<FileSource src="/framed/PeoplePicker/PeoplePickerEmails" />
+
+| Do | Why |
+| :--- | :--- |
+| Pass `validateEntry` to restrict addresses to your domain | The default accepts any address that looks like one |
+| Let invalid chips show | The user sees which entry of a pasted list failed, and removes just that one |
+| Check the address on the server too | The check here only looks at the shape |
+
+## Display
+
+### Collapsed chips
+
+With more than `maxVisible` people, the field shows the first few and a "+N" chip while it has no focus, so 50 people take one line and a half and not a wall. Focusing the field shows them all, wrapped. Set `maxVisible` to `0` to always show every chip.
+
+<FileSource src="/framed/PeoplePicker/PeoplePickerCollapse" />
+
+### Custom items
+
+Fill the `item` slot to draw each option. It receives the `person`, its `index`, the `query` and whether it is `highlighted`. Mark the text with `bx--people-picker__name` and `bx--people-picker__secondary` to keep the ellipsis and the colors. Fill the `chip` slot to draw a chip, and spread `props` onto a [Tag](/components/Tag) so its close button keeps removing the person.
+
+<FileSource src="/framed/PeoplePicker/PeoplePickerCustom" />
+
+## Sizes
+
+Set `size` to match the surrounding fields. Chips and options scale with it. Inside a `Form`, the field takes the form's `size` unless it sets its own.
+
+### Extra small
+
+<PeoplePicker size="xs" labelText="Assignees" items={people} value={[people[0]]} />
+
+### Small
+
+<PeoplePicker size="sm" labelText="Assignees" items={people} value={[people[0]]} />
+
+### Medium
+
+<PeoplePicker labelText="Assignees" items={people} value={[people[0]]} />
+
+### Extra large
+
+<PeoplePicker size="xl" labelText="Assignees" items={people} value={[people[0]]} />
+
+## States
+
+### Invalid
+
+<PeoplePicker labelText="Assignees" items={people} value={[people[0]]} invalid invalidText="Add at least two people" />
+
+### Warning
+
+<PeoplePicker labelText="Assignees" items={people} value={[people[0]]} warn warnText="Someone here is outside your team" />
+
+### Read-only
+
+A read-only field shows its chips without close buttons. Focusing it shows every chip.
+
+<PeoplePicker labelText="Assignees" items={people} value={people} readonly />
+
+### Disabled
+
+<PeoplePicker labelText="Assignees" items={people} value={people} disabled />
+
+## In a form
+
+Set `name` to submit one hidden input per person: the `id`, or the address of a free entry. Set `required` to ask for at least one person. Text left in the field that never became a chip does not count, and the field says so. The field follows its form's reset.
+
+## In a modal
+
+The menu opens above the modal and takes the keys the field would take. <DocKbd label="Escape" /> closes the menu first and the modal on the next press.
+
+<FileSource src="/framed/PeoplePicker/PeoplePickerModal" />
+
+## Keyboard
+
+Focus stays in the field while the menu is open. The chips are one tab stop, reached from the field and left again with the keys below. The field ignores a key while an IME is composing.
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="ArrowDown" /> | Open the menu, or highlight the next option, wrapping at the end |
+| <DocKbd label="ArrowUp" /> | Highlight the previous option, wrapping at the start |
+| <DocKbd label="Enter" /> | Choose the highlighted option, add the typed address, or retry a failed search |
+| <DocKbd label="Escape" /> | Close the menu and keep the text. With the menu closed, clear the text. In a modal, it stops there |
+| <DocKbd label="Backspace" /> or <DocKbd label="ArrowLeft" /> | At the start of the field, move to the last chip. The arrow flips in a right-to-left layout |
+| <DocKbd label="ArrowLeft" />, <DocKbd label="ArrowRight" /> | Move between chips |
+| <DocKbd label="Delete" /> or <DocKbd label="Backspace" /> | Remove the focused chip |
+| <DocKbd label="End" />, <DocKbd label="Escape" /> | Return from a chip to the field |
+
+## Accessibility
+
+The field is a combobox: `role="combobox"` on the text input with `aria-expanded`, `aria-controls` and `aria-activedescendant` pointing at the listbox and its highlighted option. A live region announces the number of results after a pause in typing, and says when nothing matched, the source is loading or it failed. A second one announces each addition and removal and the new count. Translate both with `resultsText`, `emptyText`, `loadingText`, `errorText`, `addedText` and `removedText`.
+
+| Do | Why |
+| :--- | :--- |
+| Keep the label, even visually hidden with `hideLabel` | It names the field, and the menu is named from it |
+| Pass `secondary` or `email` for people who share a name | A screen reader hears the option's name and its detail |
+| Keep `limit` at 8 or fewer unless you set `menuMaxHeight` | A menu that scrolls is a scrollable region that axe expects to be reachable by keyboard |
+| Pass an `avatar` URL only for people who have one | A missing or failed image falls back to initials |
