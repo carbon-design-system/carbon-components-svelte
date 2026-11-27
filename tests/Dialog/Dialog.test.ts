@@ -433,6 +433,25 @@ describe("Dialog", () => {
       expect(onclose.mock.calls[0][0].detail).toEqual({ trigger: "backdrop" });
     });
 
+    it("holds close(value) like close() and then sets returnValue", async () => {
+      const { dialogEl, closeSpy, onclose } = openDialog();
+
+      await fireEvent.click(screen.getByTestId("close-with-value"));
+
+      expect(dialogEl).toHaveClass("bx--dialog--closing");
+      expect(closeSpy).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(DIALOG_CLOSE_MS);
+      await tick();
+
+      expect(closeSpy).toHaveBeenCalledExactlyOnceWith("save");
+      expect(dialogEl).not.toHaveAttribute("open");
+      expect(screen.getByTestId("return-value")).toHaveTextContent("save");
+      expect(onclose.mock.calls[0][0].detail).toEqual({
+        trigger: "programmatic",
+      });
+    });
+
     it("holds an Escape and keeps it from closing at once", async () => {
       const { dialogEl, closeSpy, onclose } = openDialog();
 
