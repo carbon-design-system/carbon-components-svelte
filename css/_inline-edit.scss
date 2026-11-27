@@ -7,8 +7,8 @@
 /// (`packages/styles/scss/components/EditInPlace`), with the same v11
 /// tokens and three deliberate departures from upstream: the one `:has()`
 /// in the upstream stylesheet (showing the focus outline only while the
-/// input itself has focus) is replaced with `:focus-within`, which this
-/// library's Safari 14 baseline supports natively; the invalid and focus
+/// input itself has focus) is replaced with `:focus-within`, which needs no `:has()` and reads
+/// the same; the invalid and focus
 /// rings are inset outlines instead of a border, so `size` is the whole
 /// height in every state; and the toolbar is a constant width (room for
 /// both the save and cancel buttons) instead of animating wider on focus,

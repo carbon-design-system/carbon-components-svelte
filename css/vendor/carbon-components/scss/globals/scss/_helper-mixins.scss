@@ -283,7 +283,8 @@ $focus-outline-style: var(--#{$custom-property-prefix}-focus-outline-style, soli
 // carbon-components-svelte patch
 // Right-to-left helpers. Offsets are logical (`ccs-inset-inline`). What has
 // no logical form, such as a transform, mirrors under a `[dir="rtl"]`
-// ancestor, since `:dir()` is newer than the Safari 14.1 floor.
+// ancestor, since `:dir()` (Safari 16.4, Chrome 120) is newer than the
+// Safari 15.4 and Chrome 105 floor.
 
 /// The value for the nearest `dir`: `$ltr` under `dir="ltr"` (or no
 /// `dir`), `$rtl` under `dir="rtl"`. Use it in a `[dir="rtl"]` twin. The

@@ -161,10 +161,7 @@ function eventTarget(event) {
   );
 }
 
-/**
- * A set of listeners that can be removed together. `AbortSignal` listener
- * options are newer than Carbon's browser baseline, so remove by hand.
- */
+/** A set of listeners that can be removed together. */
 function createListenerGroup() {
   /** @type {Array<() => void>} */
   let removers = [];

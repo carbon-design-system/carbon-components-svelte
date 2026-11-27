@@ -7,8 +7,8 @@
  *
  * Native `Intl.Locale.prototype.getWeekInfo()` provides this data directly,
  * but only reached Baseline in mid-2026 — this repo's browser floor (Chrome
- * 87 / Firefox 83 / Safari 14 / Edge 87, see scripts/build-css.ts) predates
- * every engine's implementation, so this table is the primary path here, not
+ * 105 / Firefox 121 / Safari 15.4 / Edge 105, see scripts/lib/css-targets.ts)
+ * predates every engine's implementation, so this table is the primary path here, not
  * a progressive-enhancement fallback.
  *
  * Days are numbered like `Date.prototype.getDay()`: 0 = Sunday, 6 = Saturday.

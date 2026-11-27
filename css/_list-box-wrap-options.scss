@@ -17,8 +17,7 @@
 /// still break at their boundaries. `word-break: break-all`, which this rule
 /// carried first, breaks every word at the line edge, which reads badly and
 /// splits a highlighted match mid-word. `overflow-wrap: anywhere` would work
-/// too but needs Safari 15.4, past this library's Safari 14 baseline
-/// (`BROWSERSLIST` in `scripts/build-css.ts`).
+/// too.
 ///
 /// The marker class sits on the menu rather than the component root, since the
 /// menu can be portaled out of that root's subtree.
