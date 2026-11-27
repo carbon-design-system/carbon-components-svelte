@@ -2,6 +2,7 @@
   import {
     Button,
     ExpandableTile,
+    LanguagePicker,
     OverflowMenu,
     OverflowMenuItem,
     ShellBanner,
@@ -41,3 +42,12 @@
   title="Viewing as jane@acme.com."
   subtitle="This session is read only. Changes you make here are not saved to the production workspace until you exit impersonation and sign in again with your own account."
 />
+
+<div data-testid="language" style="height: 20rem; padding: 1rem;">
+  <LanguagePicker
+    open
+    labelText="Language"
+    values={["ar", "en"]}
+    portalMenu={false}
+  />
+</div>
