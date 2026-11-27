@@ -76,3 +76,18 @@ test("an above-header ShellBanner is the height the server reserves", async ({
   });
   expect(banner).toBe(estimate);
 });
+
+test("a LanguagePicker row keeps its height when the name in its own script arrives", async ({
+  page,
+}) => {
+  // The endonym is looked up while the browser is idle, in the language's
+  // own direction. Arabic is written right to left, English is not, and
+  // both rows are the same height. The picker starts open: the open
+  // Tearsheet above takes the pointer.
+  const rows = page.locator("[data-testid=language] [role=option]");
+  await expect(rows).toHaveCount(2);
+  const heights = await rows.evaluateAll((els) =>
+    els.map((el) => Math.round(el.getBoundingClientRect().height)),
+  );
+  expect(heights[0]).toBe(heights[1]);
+});

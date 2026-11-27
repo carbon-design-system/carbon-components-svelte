@@ -1038,6 +1038,48 @@
       "defaultKind": "function"
     },
     {
+      "component": "LanguagePicker",
+      "prop": "emptyText",
+      "type": "string",
+      "default": "No results",
+      "defaultKind": "text"
+    },
+    {
+      "component": "LanguagePicker",
+      "prop": "filterResultsText",
+      "type": "(count: number) => string",
+      "default": "(count) => count === 0\n  ? \"No results\"\n  : `${count} result${count === 1 ? \"\" : \"s\"} available`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "LanguagePicker",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "LanguagePicker",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "LanguagePicker",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "LanguagePicker",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
       "component": "LikertMatrix",
       "prop": "helperText",
       "type": "string",
