@@ -73,13 +73,14 @@
 
   /**
    * Close the dialog programmatically, setting `returnValue` like the
-   * native `dialog.close(value)` API. Does nothing when the dialog is closed.
+   * native `dialog.close(value)` API. Plays the exit motion first, like
+   * setting `open` to `false`. Does nothing when the dialog is closed.
    * @param {string} [value]
    */
   export function close(value) {
     if (!dialog?.open) return;
     pendingTrigger = "programmatic";
-    dialog.close(value);
+    requestClose(value);
   }
 
   /**
