@@ -150,6 +150,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     components: [
       "IconIndicator",
       "ShapeIndicator",
+      "TaskStatusList",
       "EmptyState",
       "FullPageError",
     ],

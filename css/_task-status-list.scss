@@ -1,0 +1,273 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/component-tokens";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./status-tokens";
+
+/// Task status list: steps with a status icon, a label and a time. Each
+/// status has its own shape, so the list reads without color, and forced
+/// colors repaint every shape `CanvasText`. Where motion is reduced, the
+/// spinner of a running step gives way to a static half-filled circle.
+/// @access private
+/// @group components
+@mixin task-status-list {
+  $status-red: get-token-value($status-colors, "status-red");
+  $status-blue: get-token-value($status-colors, "status-blue");
+  $status-green: get-token-value($status-colors, "status-green");
+  $status-gray: get-token-value($status-colors, "status-gray");
+
+  .#{$prefix}--task-status-list__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin-block-end: $carbon--spacing-03;
+    gap: $carbon--spacing-03 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--task-status-list__summary {
+    @include type-style("heading-compact-01");
+
+    margin: 0;
+    color: $text-primary;
+    unicode-bidi: plaintext;
+  }
+
+  .#{$prefix}--task-status-list__summary:focus {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--task-status-list__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--task-status-list__steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--task-status-list__step {
+    display: flex;
+    align-items: flex-start;
+    padding-block: $carbon--spacing-04;
+    gap: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--task-status-list__step:nth-last-child(n + 2) {
+    border-block-end: 1px solid $border-subtle;
+  }
+
+  // The icon box is one line of label tall, so the icon centers on the
+  // first line when the label wraps.
+  .#{$prefix}--task-status-list__icon {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    block-size: to-rem(22px);
+    inline-size: to-rem(20px);
+  }
+
+  .#{$prefix}--task-status-list__static {
+    display: none;
+  }
+
+  .#{$prefix}--task-status-list__content {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--task-status-list__line {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--task-status-list__label {
+    @include type-style("body-compact-02");
+
+    color: $text-primary;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--task-status-list__step--pending
+    .#{$prefix}--task-status-list__label,
+  .#{$prefix}--task-status-list__step--skipped
+    .#{$prefix}--task-status-list__label,
+  .#{$prefix}--task-status-list__step--canceled
+    .#{$prefix}--task-status-list__label {
+    color: $text-secondary;
+  }
+
+  // Weight, not only color, marks the step in progress.
+  .#{$prefix}--task-status-list__step--running
+    .#{$prefix}--task-status-list__label {
+    font-weight: 600;
+  }
+
+  // Tabular figures hold still as a running step counts up; plaintext
+  // gives the time the direction of its own text, so "1m 5s" keeps its
+  // order on an RTL page.
+  .#{$prefix}--task-status-list__duration {
+    @include type-style("body-compact-01");
+
+    display: block;
+    flex: none;
+    min-inline-size: to-rem(40px);
+    color: $text-secondary;
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+    unicode-bidi: plaintext;
+  }
+
+  .#{$prefix}--task-status-list__detail {
+    @include type-style("body-compact-01");
+
+    margin: 0;
+    color: $text-secondary;
+    overflow-wrap: anywhere;
+    unicode-bidi: plaintext;
+  }
+
+  .#{$prefix}--task-status-list__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-block-start: $carbon--spacing-02;
+    gap: 0 $carbon--spacing-03;
+  }
+
+  // A ghost button pads its text 16px from its edge; pull it back when it
+  // leads the row, so the text lines up with the label.
+  .#{$prefix}--task-status-list__toggle:first-child {
+    margin-inline-start: -$carbon--spacing-05;
+  }
+
+  .#{$prefix}--task-status-list__toggle[aria-expanded="true"]
+    .#{$prefix}--btn__icon {
+    transform: rotate(180deg);
+  }
+
+  .#{$prefix}--task-status-list__error {
+    @include type-style("code-01");
+
+    margin-block-start: $carbon--spacing-02;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border-inline-start: 3px solid $support-error;
+    background: $layer;
+    color: $text-primary;
+  }
+
+  // Code reads left to right in any language.
+  .#{$prefix}--task-status-list__error-text {
+    display: block;
+    direction: ltr;
+    overflow-wrap: anywhere;
+    // Not `pre-wrap`: its trailing space hangs past the edge at a wrap, and
+    // the line overflows the box by a space.
+    white-space: break-spaces;
+  }
+
+  .#{$prefix}--task-status-list__step--succeeded
+    .#{$prefix}--task-status-list__icon
+    svg {
+    fill: $status-green;
+  }
+
+  .#{$prefix}--task-status-list__step--failed
+    .#{$prefix}--task-status-list__icon
+    svg {
+    fill: $status-red;
+  }
+
+  .#{$prefix}--task-status-list__step--running
+    .#{$prefix}--task-status-list__static
+    svg {
+    fill: $status-blue;
+  }
+
+  .#{$prefix}--task-status-list__step--pending
+    .#{$prefix}--task-status-list__icon
+    svg,
+  .#{$prefix}--task-status-list__step--skipped
+    .#{$prefix}--task-status-list__icon
+    svg,
+  .#{$prefix}--task-status-list__step--canceled
+    .#{$prefix}--task-status-list__icon
+    svg {
+    fill: $status-gray;
+  }
+
+  // The compact size, for a modal or a panel.
+  .#{$prefix}--task-status-list--sm .#{$prefix}--task-status-list__step {
+    padding-block: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--task-status-list--sm .#{$prefix}--task-status-list__icon {
+    block-size: to-rem(18px);
+    inline-size: to-rem(16px);
+  }
+
+  .#{$prefix}--task-status-list--sm .#{$prefix}--task-status-list__label {
+    @include type-style("body-compact-01");
+  }
+
+  .#{$prefix}--task-status-list--sm
+    .#{$prefix}--task-status-list__step--running
+    .#{$prefix}--task-status-list__label {
+    font-weight: 600;
+  }
+
+  .#{$prefix}--task-status-list--sm .#{$prefix}--task-status-list__duration,
+  .#{$prefix}--task-status-list--sm .#{$prefix}--task-status-list__detail {
+    @include type-style("label-01");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--task-status-list__spinner {
+      display: none;
+    }
+
+    .#{$prefix}--task-status-list__static {
+      display: flex;
+    }
+  }
+
+  // Forced colors leave an SVG fill alone, so each shape keeps its theme
+  // color, which can be dark gray on a dark Canvas. The spinner's arc is
+  // an author stroke too. The shapes carry the meaning, so all of them
+  // read CanvasText, and the arc's track GrayText.
+  @media (forced-colors: active) {
+    .#{$prefix}--task-status-list__step .#{$prefix}--task-status-list__icon svg {
+      fill: CanvasText;
+    }
+
+    // The spinner's svg is a ring, so it stays unfilled.
+    .#{$prefix}--task-status-list__step
+      .#{$prefix}--task-status-list__spinner
+      svg {
+      fill: transparent;
+    }
+
+    .#{$prefix}--task-status-list__step
+      .#{$prefix}--task-status-list__spinner
+      .#{$prefix}--loading__stroke {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--task-status-list__step
+      .#{$prefix}--task-status-list__spinner
+      .#{$prefix}--loading__background {
+      stroke: GrayText;
+    }
+  }
+}
+
+@include exports("task-status-list") {
+  @include task-status-list;
+}
