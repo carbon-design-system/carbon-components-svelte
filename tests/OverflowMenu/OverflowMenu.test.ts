@@ -914,9 +914,10 @@ describe("OverflowMenu window listeners", () => {
   });
 });
 
-describe("OverflowMenu in RTL", () => {
+describe("OverflowMenu alignment", () => {
   afterEach(() => {
     document.documentElement.style.removeProperty("direction");
+    vi.restoreAllMocks();
   });
 
   /**
@@ -947,4 +948,46 @@ describe("OverflowMenu in RTL", () => {
       expect(await alignsRight({ flipped: true, portalMenu })).toBe(false);
     },
   );
+
+  // jsdom has no layout: a 1000px window, a 32px button `left` px in, and a
+  // 160px menu.
+  function stubLayout(left: number) {
+    vi.spyOn(document.documentElement, "clientWidth", "get").mockReturnValue(
+      1000,
+    );
+    const original = Element.prototype.getBoundingClientRect;
+    vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
+      function (this: Element) {
+        return this.matches("button.bx--overflow-menu")
+          ? rect({ top: 100, left, width: 32, height: 32 })
+          : original.call(this);
+      },
+    );
+    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockImplementation(
+      function (this: HTMLElement) {
+        return this.getAttribute("role") === "menu" ? 160 : 32;
+      },
+    );
+  }
+
+  it.each([false, true])(
+    "lines the menu up with the button's other edge when it would run past the window (portalMenu: %s)",
+    async (portalMenu) => {
+      stubLayout(960);
+      expect(await alignsRight({ flipped: false, portalMenu })).toBe(true);
+      vi.restoreAllMocks();
+
+      document.documentElement.style.direction = "rtl";
+      stubLayout(8);
+      expect(await alignsRight({ flipped: false, portalMenu })).toBe(false);
+    },
+  );
+
+  it("keeps the alignment of a menu that fits", async () => {
+    stubLayout(400);
+    expect(await alignsRight({ flipped: false, portalMenu: false })).toBe(
+      false,
+    );
+    expect(await alignsRight({ flipped: true, portalMenu: false })).toBe(true);
+  });
 });

@@ -44,7 +44,9 @@
   /**
    * Set to `true` to align the menu with the button's inline end instead of
    * its start. Under `dir="rtl"` the default menu aligns with the button's
-   * right edge, and a flipped one with its left.
+   * right edge, and a flipped one with its left. Either way, a menu that
+   * would run past the side of the window, or of a box that clips it, lines
+   * up with the button's other edge when that runs past less.
    */
   export let flipped = false;
 
@@ -163,7 +165,11 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { clippedBy } from "../utils/fit-align.js";
+  import {
+    clippedBy,
+    horizontalBounds,
+    shouldFlipAlign,
+  } from "../utils/fit-align.js";
   import { focusQuietly, returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { createIdScope, useId } from "../utils/id-scope.js";
@@ -277,9 +283,41 @@
       !ctxBreadcrumbItem &&
       resolveLayoutDirection($layoutDirection, buttonRef) === "rtl";
   }
+  // Set for one open when the menu, aligned as `flipped` asks, would run
+  // past the side of the window or of a box that clips it, and the button's
+  // other edge runs past less. A menu that fits never moves.
+  let fitFlip = false;
+  $: if (!open) fitFlip = false;
+
   // `flipped` aligns the menu with the button's inline end. The class and
   // the position below are physical: aligned with the button's right edge.
-  $: alignRight = flipped !== rtl;
+  $: alignRight = (flipped !== rtl) !== fitFlip;
+
+  /**
+   * Whether the menu runs past its bounds less lined up with the button's
+   * other edge. An in-place menu fits the box that clips it, within the
+   * window (`horizontalBounds`); a portalled menu fits the window. Decided
+   * from the alignment `flipped` asks for, so it doesn't change once the
+   * menu has flipped.
+   * @param {HTMLElement} button
+   * @param {HTMLElement} menu
+   * @returns {boolean}
+   */
+  function fitsBetterFlipped(button, menu) {
+    const width = menu.offsetWidth;
+    const bounds = effectivePortalMenu
+      ? { left: 0, right: document.documentElement.clientWidth }
+      : horizontalBounds(menu);
+    // No layout (jsdom), so nothing to fit inside.
+    if (width === 0 || bounds.right <= bounds.left) return false;
+    const { left, right } = button.getBoundingClientRect();
+    const start = flipped === rtl ? left : right - width;
+    return shouldFlipAlign(
+      { left: start, right: start + width },
+      (left + right) / 2,
+      bounds,
+    );
+  }
   // Opens down from the button's left edge: until it is placed (the
   // server's markup), such a menu takes its place in the flow instead.
   $: belowLeft = !alignRight && direction !== "top" && !ctxBreadcrumbItem;
@@ -479,6 +517,13 @@
 
       buttonWidth = width;
 
+      // Positioned below in this same pass, so read the side here rather
+      // than wait for `alignRight` to catch up.
+      if (menuRef && !ctxBreadcrumbItem) {
+        fitFlip = fitsBetterFlipped(buttonRef, menuRef);
+      }
+      const right = (flipped !== rtl) !== fitFlip;
+
       if (!effectivePortalMenu) {
         // Menu is a button sibling; position from offsetTop/offsetLeft.
         const { offsetTop, offsetLeft } = buttonRef;
@@ -505,7 +550,7 @@
             `${offsetTop + height}px`;
         }
 
-        if (alignRight) {
+        if (right) {
           /** @type {HTMLUListElement} */ (menuRef).style.left =
             `${offsetLeft + width - menuWidth}px`;
         } else {
