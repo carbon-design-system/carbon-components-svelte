@@ -1,4 +1,5 @@
 <script>
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { useId } from "../utils/id-scope.js";
 
   /**
@@ -6,6 +7,7 @@
    * @slot {{}} action - Interactive control in the header (for example a button or expandable Search).
    * @slot {{}} search - Search field below the header. Compose `Search` or expandable `Search`; filtering stays consumer-side.
    * @slot {{}}
+   * @restProps {div} Rest props are spread to the root div, except `aria-label`, `aria-labelledby`, and `aria-describedby`, which go on the list. A consumer `aria-label` or `aria-labelledby` replaces the list's label.
    */
 
   /**
@@ -43,6 +45,15 @@
   export let id = useId("contained-list");
 
   $: labelId = `label-${id}`;
+  $: ({
+    ariaLabel,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    rest: rootProps,
+  } = splitAriaNaming($$restProps));
+  $: listLabelledBy =
+    ariaLabelledBy ??
+    (!ariaLabel && (labelText || $$slots.labelChildren) ? labelId : undefined);
 </script>
 
 <div
@@ -58,6 +69,7 @@
   class:bx--layout--size-xl={size === "xl"}
   class:bx--contained-list--on-page={kind === "on-page"}
   class:bx--contained-list--disclosed={kind === "disclosed"}
+  {...rootProps}
 >
   {#if hideLabel && !$$slots.action && (labelText || $$slots.labelChildren)}
     <span id={labelId} class:bx--visually-hidden={true}>
@@ -94,7 +106,9 @@
   {/if}
   <ul
     {id}
-    aria-labelledby={labelText || $$slots.labelChildren ? labelId : undefined}
+    aria-label={ariaLabel}
+    aria-labelledby={listLabelledBy}
+    aria-describedby={ariaDescribedBy}
   >
     <slot />
   </ul>
