@@ -57,3 +57,22 @@ test("an open Tearsheet keeps its layout when its scrolling body takes a tab sto
     mounted,
   );
 });
+
+test("an above-header ShellBanner is the height the server reserves", async ({
+  page,
+}) => {
+  // The server writes `--ccs-shell-offset: 2.5rem` before the page measures
+  // the banner, and the banner is one line, so the shell does not move.
+  const { banner, estimate } = await page.evaluate(() => {
+    const rem = Number.parseFloat(
+      getComputedStyle(document.documentElement).fontSize,
+    );
+    return {
+      banner: document
+        .querySelector(".bx--shell-banner")
+        ?.getBoundingClientRect().height,
+      estimate: 2.5 * rem,
+    };
+  });
+  expect(banner).toBe(estimate);
+});

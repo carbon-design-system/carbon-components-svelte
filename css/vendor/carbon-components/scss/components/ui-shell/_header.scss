@@ -21,7 +21,7 @@
   .#{$prefix}--header {
     position: fixed;
     z-index: z('header');
-    top: 0;
+    top: var(--ccs-shell-offset, 0px); // ccs: below a `ShellBanner`
     right: 0;
     left: 0;
     display: flex;
