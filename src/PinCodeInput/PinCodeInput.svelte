@@ -144,6 +144,16 @@
    */
   export let form = undefined;
 
+  /**
+   * Set to `true` to submit the closest form after a user edit (typing,
+   * paste, or autofill) leaves every segment filled.
+   *
+   * Uses `form.requestSubmit()`, so constraint validation and `submit`
+   * listeners run as for a submit button. Programmatic `code` changes do
+   * not submit.
+   */
+  export let submitOnComplete = false;
+
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
 
@@ -214,7 +224,7 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
   import {
     FORM_CONTEXT_KEY,
@@ -419,6 +429,20 @@
     next[index] = char;
     code = next;
     dispatch("change", { value: code.join(""), code });
+    submitIfComplete();
+  }
+
+  // Wait for the flush so the hidden `name` input holds the new value and
+  // `complete` listeners run before the form submits.
+  async function submitIfComplete() {
+    if (!submitOnComplete) return;
+    if (!(count > 0 && code.length === count && code.every(Boolean))) return;
+    await tick();
+    // `.form` follows the `form` prop, so an outside form submits too.
+    const owner = inputs[0]?.form;
+    if (owner && typeof owner.requestSubmit === "function") {
+      owner.requestSubmit();
+    }
   }
 
   /** @type {(index: number, options?: { selectTextOnFocus?: boolean }) => void} */
@@ -452,6 +476,7 @@
     }
     code = next;
     dispatch("change", { value: code.join(""), code });
+    submitIfComplete();
 
     const firstEmpty = code.findIndex((char) => !char);
     focusInput(firstEmpty === -1 ? count - 1 : firstEmpty);
