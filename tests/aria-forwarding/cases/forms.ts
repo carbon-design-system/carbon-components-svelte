@@ -13,6 +13,7 @@ import FormGroup from "carbon-components-svelte/FormGroup/FormGroup.svelte";
 import FormRequirement from "carbon-components-svelte/FormRequirement/FormRequirement.svelte";
 import InlineEdit from "carbon-components-svelte/InlineEdit/InlineEdit.svelte";
 import InputGroup from "carbon-components-svelte/InputGroup/InputGroup.svelte";
+import LikertMatrix from "carbon-components-svelte/LikertMatrix/LikertMatrix.svelte";
 import ListBoxField from "carbon-components-svelte/ListBox/ListBoxField.svelte";
 import ListBoxMenu from "carbon-components-svelte/ListBox/ListBoxMenu.svelte";
 import ListBoxMenuItem from "carbon-components-svelte/ListBox/ListBoxMenuItem.svelte";
@@ -529,6 +530,19 @@ export const forms: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("img"),
+  },
+  {
+    name: "LikertMatrix",
+    render: (attrs) =>
+      render(LikertMatrix, {
+        props: {
+          legendText: "Setup",
+          helperText: "Rate each statement",
+          statements: [{ id: "a", text: "It was quick." }],
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "SurveyScale",
