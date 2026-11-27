@@ -125,6 +125,21 @@ otherwise have nothing to announce for the control.
   </AccordionItem>
 </Accordion>
 
+### Heading end
+
+Use the `headingEnd` slot for content at the end of the heading row, such as a
+status tag or an overflow menu. It renders beside the heading button, not
+inside it, so a button or menu there is valid HTML and has its own tab stop
+after the heading. Clicking it does not expand or collapse the item.
+
+| Do | Why |
+| --- | --- |
+| Put tags, icon buttons and overflow menus in `headingEnd`. | They sit beside the heading button, so each keeps its own role and tab stop. |
+| Keep interactive content out of the `title` slot. | The title renders inside the heading button, where a nested button or link is invalid HTML. |
+| Keep `headingEnd` short. | It does not wrap; the title shrinks to make room for it. |
+
+<FileSource src="/framed/Accordion/AccordionHeadingEnd" />
+
 ## Open state
 
 Control which items are open by default, exclusively, or programmatically.
