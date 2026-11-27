@@ -31,7 +31,10 @@ const KNOWN_VIOLATIONS: Record<string, number> = {
 
 // Text that is not for people: one entry per `kind: file: text`, with the
 // reason. Do not exempt a string a user can see or hear.
-const EXEMPT: Record<string, string> = {};
+const EXEMPT: Record<string, string> = {
+  "attribute: TimeRangePicker/TimeRangePicker.svelte: now":
+    "the `now` keyword of the range syntax, typed as is in every language",
+};
 
 describe("hard-coded English in markup", () => {
   it("finds every component", () => {

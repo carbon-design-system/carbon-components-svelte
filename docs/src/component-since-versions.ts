@@ -118,6 +118,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Tile: "0.2.0",
   TileGrid: "0.115.0",
   TimePicker: "0.2.0",
+  TimeRangePicker: "0.115.0",
   ToastNotification: "0.2.0",
   Toggle: "0.2.0",
   ToggleButtonGroup: "0.113.0",
