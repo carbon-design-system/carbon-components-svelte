@@ -30,6 +30,7 @@ export const THUMBNAIL_TOKENS: Record<string, string> = {
  * colors, theme swatches), so raw hex fills are expected.
  */
 export const RAW_COLOR_EXCEPTIONS = new Set([
+  "swatch",
   "tag",
   "tag-set",
   "theme",

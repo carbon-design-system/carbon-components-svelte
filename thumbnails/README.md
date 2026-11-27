@@ -229,7 +229,7 @@ some don't. `icon-inverse`, `layer-02`, and `background-inverse` flip;
 
 `bun run thumbnails audit` fails on any other token or a mismatched
 hex. Raw colors fail too, except in thumbnails whose idea is literal
-color (tag, tag-set, theme, user-avatar-group; see
+color (swatch, tag, tag-set, theme, user-avatar-group; see
 `RAW_COLOR_EXCEPTIONS` in `scripts/lib/thumbnails.ts`).
 
 To match what the component really renders, read its partial in
