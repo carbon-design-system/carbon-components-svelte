@@ -1,0 +1,1 @@
+9:3 chat-message A streaming ChatMessage is no longer read as it grows. Screen readers hear streamStartedDescription and streamCompleteDescription, and reach the text by moving to the message
