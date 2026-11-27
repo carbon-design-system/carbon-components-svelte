@@ -1,0 +1,153 @@
+---
+components: ["FormulaInput"]
+description: Formula input is a field for expressions, such as calculated columns and alert conditions, with highlighting, suggestions, signature help, inline errors and a result preview.
+---
+
+## Basic
+
+Describe the `fields` a formula may use. Each has an `id`, an optional `label` and a `type`. Pass a sample `row`, the values by field id, to see the result under the field. `bind:value` is the formula, `bind:diagnostics` its errors and `bind:result` the result.
+
+Type a name for suggestions. Choosing a function writes its parentheses and shows its signature, with the argument the caret is in marked. <DocKbd label="Ctrl" />+<DocKbd label="Space" /> offers every field and function where a value could start.
+
+<FileSource src="/framed/FormulaInput/FormulaInputPricing" />
+
+## Language
+
+A formula is an expression. Spaces and new lines mean nothing, so a long one can be laid out over lines.
+
+| Written | Means |
+| :--- | :--- |
+| `12`, `1.5`, `.5`, `1e3` | A number |
+| `"open"`, `'open'` | Text. `\"`, `\'`, `\\`, `\n` and `\t` escape inside it |
+| `TRUE`, `FALSE` | A true or false value |
+| `price`, `{unit price}` | A field, by id or by label. Braces allow spaces and any script. `\}` escapes inside them |
+| `ROUND(price, 2)` | A call to a function. Names ignore case |
+| `(a + b) * c` | Grouping |
+
+Operators, loosest first. An operator of one level takes its operands from the levels below it.
+
+| Level | Operators | Notes |
+| :--- | :--- | :--- |
+| 1 | `\|\|` `or` | True when either side is |
+| 2 | `&&` `and` | Stops when the left side is false |
+| 3 | `not` `!` | Takes a comparison: `not a = b` is `not (a = b)` |
+| 4 | `=` `<>` `<` `<=` `>` `>=` | `==` and `!=` are accepted. Text ignores case. Blank equals `0`, `""` and `FALSE` |
+| 5 | `&` | Joins text. Numbers and `TRUE` become text |
+| 6 | `+` `-` | Numbers only. Use `&` for text |
+| 7 | `*` `/` `%` | Dividing by zero is an error |
+| 8 | `-` `+` | Prefix |
+| 9 | `^` | Right to left, and tighter than a prefix `-`: `-2^2` is `-4` |
+
+The tokenizer and parser are functions: `parseFormula(text)` returns the tree, every token and every syntax error with its range. They accept any string and never throw. The parser keeps going after an error, so one pass finds them all, and it stops a formula nested more than 128 deep with one error rather than overflow the stack.
+
+## Functions
+
+The built-in set covers logic, math and text. Add to it with `functions`, as below.
+
+| Group | Functions |
+| :--- | :--- |
+| Logic | `IF` `IFERROR` `AND` `OR` `NOT` `COALESCE` `ISBLANK` `BLANK` |
+| Math | `ROUND` `FLOOR` `CEILING` `ABS` `SQRT` `POWER` `MOD` `MIN` `MAX` `SUM` `AVERAGE` `PI` |
+| Text | `LEN` `UPPER` `LOWER` `TRIM` `LEFT` `RIGHT` `MID` `CONCAT` `REPT` `SUBSTITUTE` `CONTAINS` `TEXT` `VALUE` |
+
+A function is data: `{ name, params, returns, description, evaluate }`. A parameter is `{ name, type, optional, rest, description }`. The checker reads `params` and `returns`, the suggestions and signature help read them with `description`, and the preview calls `evaluate` with the values of the arguments. A function with no `evaluate` still checks and suggests; the formula just has no preview. Set `evaluateLazy` instead to get a function per argument, as `IF` and `AND` do, so only the arguments needed are calculated. Throw with the `fail` of the second argument to report an error.
+
+<FileSource src="/framed/FormulaInput/FormulaInputFunctions" />
+
+## Fields
+
+### Types
+
+A field's `type` is `"number"`, `"string"` or `"boolean"`. A formula is checked against the types it knows: `price + status` is an error when `status` is text, so is `ROUND(status)`, and so is comparing a number with text. A field with no type, and anything a function returns as `"any"`, passes every check.
+
+### Labels
+
+A formula may name a field by its `id` or its `label`, ignoring case. Set `refBy="label"` for the completions to write the label. A name that is not a plain word is written in braces, and a Hebrew or Arabic word is a plain word. The formula reads left to right whatever the page's direction: only the label and the messages around the field follow it.
+
+<FileSource src="/framed/FormulaInput/FormulaInputRefs" />
+
+## Errors
+
+An error is drawn as a wavy rule under the text it covers, and the first one is listed under the field with a count. When the caret is in an error, that error is the one listed. Set `validate` to `false` to turn this off and keep the suggestions and the preview.
+
+| Code | Means |
+| :--- | :--- |
+| `unclosed-paren`, `unmatched-paren` | A `(` with no `)`, or a `)` with no `(`. The first is marked at the `(` |
+| `expected-operand`, `missing-argument`, `empty-group` | A value is missing: `1 +`, `f(a,)`, `()` |
+| `unexpected-token`, `unexpected-character` | A value where an operator belongs, or a character the language does not use |
+| `unterminated-string`, `unterminated-field`, `empty-field`, `number-range` | A quote or brace left open, `{}`, or a number too large to hold |
+| `too-deep` | Nested more than 128 deep |
+| `unknown-function`, `unknown-field` | A name that is not registered or not a field, with a suggestion for a typo |
+| `arg-count` | Too few or too many arguments. Not reported while the call is still open |
+| `type-mismatch` | An operand or argument of a type the operator or function does not take |
+
+Press <DocKbd label="F8" /> to select the next error and <DocKbd label="Shift" />+<DocKbd label="F8" /> for the one before. The field is `aria-invalid` and points at the message with `aria-errormessage`. Set `invalid` and `invalidText` for a rule of your own, such as a formula that must return a number; they replace the formula's own message.
+
+## Preview
+
+With a `row`, the result shows under the field. `bind:result` is `{ ok: true, value }` or `{ ok: false, error }`, and is unset while the formula has errors. A runtime error, such as dividing by zero, is shown as the preview and is not a diagnostic: the formula is valid, the row is not.
+
+<FileSource src="/framed/FormulaInput/FormulaInputAlert" />
+
+### Evaluate without the component
+
+`evaluateFormula(text, { row, fields, functions })` runs on a server too. It is for the same text a person typed, so it is safe for text you did not write.
+
+| Does | Why |
+| :--- | :--- |
+| Walks the tree and nothing else | There is no `eval`, no `Function`, no `import` and no property access past a row's own fields. `{constructor}` and `{__proto__}` read blank |
+| Counts a step for every node, with `maxSteps` | A formula of a million terms stops at 10,000 steps instead of running |
+| Checks the clock as steps pass, with `maxTime` | Default 20 ms |
+| Stops text at `maxStringLength` before it builds it | `REPT("a", 1e9)` is an error, not an allocation |
+| Charges for joining and replacing | A long value joined many times stops at the step limit |
+| Returns an error value | It never throws. `code` is `div0`, `num`, `value`, `name`, `limit` and so on, with the range |
+
+A function you register runs as you wrote it, and the limits are checked between steps, not inside one. Do not register a function that loops over its arguments without calling `charge`. The preview is a convenience: calculate again where the value matters.
+
+## Layout
+
+### Height
+
+The field is one line and grows with the formula. Set `maxRows` for the number of lines at which it scrolls instead. The default is `6`.
+
+### States
+
+Reflect validation and interaction states. `invalid`, `warn`, `disabled` and `readonly` work as on [TextArea](/components/TextArea). A disabled or read-only field shows no errors.
+
+### Fluid
+
+Set `fluid` to use the fluid variant. It is inherited from a `FluidForm`.
+
+## Keyboard
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="Ctrl" />+<DocKbd label="Space" />, <DocKbd label="Alt" />+<DocKbd label="ArrowDown" /> | Open the suggestions |
+| <DocKbd label="ArrowDown" />, <DocKbd label="ArrowUp" /> | Move in the list, wrapping |
+| <DocKbd label="Tab" />, <DocKbd label="Enter" /> | Choose the highlighted row. <DocKbd label="Shift" />+<DocKbd label="Enter" /> adds a line |
+| <DocKbd label="Escape" /> | Close the list, then the signature help. The key reaches a `Modal` only when neither is open |
+| <DocKbd label="F8" />, <DocKbd label="Shift" />+<DocKbd label="F8" /> | Select the next error, or the one before |
+| <DocKbd label=")" /> | Steps over a `)` that is already there, when no `)` is missing |
+
+The first row of the list is highlighted when it opens, so <DocKbd label="Enter" /> chooses it. Where nothing is offered, <DocKbd label="Enter" /> adds a line as in a text area. The list closes when the text is already what the row would write. During an IME composition the list is closed and every key is the IME's.
+
+## Accessibility
+
+| Part | How |
+| :--- | :--- |
+| Role | The field stays a textbox. A `<textarea>` cannot be a combobox, and `aria-expanded` is not allowed on a textbox |
+| Suggestions | `aria-autocomplete="list"`, `aria-controls` the list and `aria-activedescendant` the highlighted row |
+| Signature help | The field is described by it while it shows, and a polite live region reads it, held back 400 ms so a burst of typing speaks once |
+| Errors | `aria-invalid` and `aria-errormessage`. The message is also part of the description and is not an alert, so typing does not read it out. <DocKbd label="F8" /> reads the error it lands on |
+| Result | Part of the field's description |
+| Keys | A hint, "Press Control and Space for suggestions, and F8 for the next error", is part of the description. Set `keyboardHint` to replace or remove it |
+| Color | A wavy rule under an error, a dotted one under a field and a rule and weight on the current parameter, so nothing rests on color. In forced colors the layer paints no text and draws the rules in the system text color |
+
+Every string a person sees or hears is a prop: `listLabel`, `previewLabel`, `previewEmptyText`, `keyboardHint`, `suggestionsText`, `signatureText`, `diagnosticsText` and `errorPositionText`.
+
+| Do | Why |
+| :--- | :--- |
+| Give each field a `type` | The checker can then flag `price + status` as it is typed |
+| Pass a representative `row` | The preview shows a mistake that parses, such as a wrong field |
+| Keep the field's text as the saved value | It is the formula. Parse it with `parseFormula` where you need the tree |
+| Calculate again on the server | The preview is a convenience, and a client can send anything |
