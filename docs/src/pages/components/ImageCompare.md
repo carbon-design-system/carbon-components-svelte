@@ -37,7 +37,7 @@ Set `beforeSrc` and `afterSrc`, and describe each image with `beforeAlt` and `af
 | --- | --- |
 | Compare two views of the same thing, framed the same way. | The divider reveals one over the other, so a shifted or rescaled side reads as a change that is not there. |
 | Give each image its own `alt` that describes what is in it. | Both images are in the page for screen readers, and the label alone ("Before") does not say what changed. |
-| Name the comparison with `labelText`, such as "Denoised photo". | The divider is announced as "Comparison position" with a value like "Showing 40% of Before". The name says what is being compared. |
+| Name the comparison with `labelText`, such as "Denoised photo". | The divider is announced as "Comparison" with a value like "Showing 40% of Before". The name says what is being compared. |
 | Keep the labels. | The side names are text, so the meaning does not depend on which side is which color or position. |
 | Use `mode="side-by-side"` or `mode="toggle"` when the differences are small or the user needs to look at one side in full. | A moving divider hides half of each image at any moment. |
 | Leave interactive content out of the slots. | The comparison takes the pointer, so a link or a map the user can pan would not respond. |
@@ -69,8 +69,8 @@ Set `mode` to change how the two sides are compared. `"slider"` is the default.
     <ImageCompare
       mode="toggle"
       bind:selected
-      beforeLabel="Baseline"
-      afterLabel="Current"
+      beforeText="Baseline"
+      afterText="Current"
       beforeSrc={dashboard(false)}
       afterSrc={dashboard(true)}
       beforeAlt="Dashboard in the baseline build"
@@ -97,12 +97,12 @@ Set `orientation` to `"vertical"` to divide the frame top to bottom, with "befor
 
 ## Labels
 
-Set `beforeLabel` and `afterLabel` to name the sides for the task, such as "Original" and "Upscaled". Each label belongs to its side, so the divider covers it with the side it names. Set `hideLabels` to leave them off; the divider still announces them.
+Set `beforeText` and `afterText` to name the sides for the task, such as "Original" and "Upscaled". Each label belongs to its side, so the divider covers it with the side it names. Set `hideLabels` to leave them off; the divider still announces them.
 
 <Box maxWidth="40rem">
   <ImageCompare
-    beforeLabel="Original"
-    afterLabel="Upscaled"
+    beforeText="Original"
+    afterText="Upscaled"
     beforeSrc={photo(false)}
     afterSrc={photo(true)}
     beforeAlt="The original, flat and noisy"
@@ -130,7 +130,20 @@ Set `value` to the share of the frame that shows "before", from 0 to 100, and bi
   </Stack>
 </Box>
 
-Screen readers hear the position as "Showing 40% of Before" with the label you set. Pass `formatValueText` to change the sentence, such as for another language.
+`change` fires for each move of the divider, and its `detail` is `{ value }`.
+
+## Text for assistive technology
+
+Screen readers hear the divider named by `controlDescription` (default "Comparison") and its position as "Showing 40% of Before", with the text you set in `beforeText`. Pass `valueDescription` to change the sentence, such as for another language. It receives the value and the "before" text, so translators control the word order.
+
+```svelte
+<ImageCompare
+  controlDescription="Vergleich"
+  beforeText="Vorher"
+  afterText="Nachher"
+  valueDescription={(value, before) => `${Math.round(value)} % ${before}`}
+/>
+```
 
 ## Images of different sizes
 
@@ -153,8 +166,8 @@ Fill the `before` and `after` slots to compare anything that is not an image: tw
 <Box maxWidth="40rem">
   <ImageCompare
     ratio="16x9"
-    beforeLabel="Current"
-    afterLabel="Proposed"
+    beforeText="Current"
+    afterText="Proposed"
     labelText="Account settings redesign"
   >
     <Box slot="before" height="100%" padding={6} fill="layer-01">
@@ -184,8 +197,8 @@ Put a baseline screenshot and the current one in the two sides to review a visua
 <Box maxWidth="40rem">
   <ImageCompare
     value={30}
-    beforeLabel="Baseline"
-    afterLabel="Current"
+    beforeText="Baseline"
+    afterText="Current"
     labelText="Dashboard visual diff"
     beforeSrc={dashboard(false)}
     afterSrc={dashboard(true)}
