@@ -92,6 +92,16 @@
   export let spacerTag = undefined;
 
   /**
+   * Specify the total number of items when `items` holds only part of the
+   * list, such as the pages loaded so far. Assistive technology reads it as
+   * `aria-setsize` ("3 of 9,433"). Use `-1` when the total is not known.
+   * Defaults to the number of `items`.
+   * Applies only with `spacerTag`, where the rows are stamped.
+   * @type {undefined | number}
+   */
+  export let totalItems = undefined;
+
+  /**
    * Obtain a reference to the list container element.
    * `null` when `spacerTag` is set.
    * @type {null | HTMLDivElement}
@@ -323,7 +333,7 @@
    */
   function stampSpacedRows() {
     const rows = getSpacedRows();
-    const setsize = String(items.length);
+    const setsize = String(totalItems ?? items.length);
 
     // Most updates leave the window in place, so skip writes that would not
     // change anything.
