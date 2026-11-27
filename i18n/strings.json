@@ -2998,6 +2998,27 @@
       "defaultKind": "text"
     },
     {
+      "component": "UnsavedChangesPrompt",
+      "prop": "cancelText",
+      "type": "string",
+      "default": "Keep editing",
+      "defaultKind": "text"
+    },
+    {
+      "component": "UnsavedChangesPrompt",
+      "prop": "confirmText",
+      "type": "string",
+      "default": "Discard",
+      "defaultKind": "text"
+    },
+    {
+      "component": "UnsavedChangesPrompt",
+      "prop": "descriptionText",
+      "type": "string",
+      "default": "Your changes will be lost.",
+      "defaultKind": "text"
+    },
+    {
       "component": "UserAvatar",
       "prop": "imageDescription",
       "type": "string | undefined",

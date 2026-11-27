@@ -74,6 +74,7 @@ import OverflowMenuItem from "../fixtures/OverflowMenuItem.test.svelte";
 import RadioTile from "../fixtures/RadioTile.test.svelte";
 import SelectableTile from "../fixtures/SelectableTile.test.svelte";
 import TooltipDefinition from "../fixtures/TooltipDefinition.test.svelte";
+import UnsavedChangesPromptFixture from "../fixtures/UnsavedChangesPrompt.test.svelte";
 
 const nodes = [{ id: "docs", text: "Docs" }];
 
@@ -855,6 +856,11 @@ export const interactive: AriaEntry[] = [
     render: (attrs) =>
       render(QRCode, { props: { value: "https://example.com", ...attrs } }),
     target: () => screen.getByRole("img"),
+  },
+  {
+    name: "UnsavedChangesPrompt",
+    render: (attrs) => render(UnsavedChangesPromptFixture, { props: attrs }),
+    target: () => screen.getByRole("alertdialog"),
   },
   {
     name: "Countdown",
