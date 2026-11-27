@@ -2,6 +2,7 @@
   /**
    * Internal "+N" overflow avatar for `UserAvatarGroup`. Shadows the group
    * context so the inner `UserAvatar` does not register as a group item.
+   * @event {MouseEvent} click - The user activates the chip. Only when `interactive`.
    */
 
   /** @type {string} */
@@ -10,11 +11,24 @@
   /** @type {string} */
   export let names = "";
 
-  import { getContext, setContext } from "svelte";
+  /**
+   * Make the chip a control that forwards `click`. With `names`, the
+   * tooltip's trigger button is already the control; without, the avatar
+   * renders as a button.
+   */
+  export let interactive = false;
+
+  import {
+    createEventDispatcher,
+    getContext,
+    onMount,
+    setContext,
+  } from "svelte";
   import { readable } from "svelte/store";
   import UserAvatar from "../UserAvatar/UserAvatar.svelte";
   import { noop } from "../utils/noop.js";
 
+  const dispatch = createEventDispatcher();
   const parent = getContext("carbon:UserAvatarGroup");
 
   // Opt out of registration and overflow (empty items/max, no-op register) so
@@ -36,12 +50,46 @@
     /** @type {import("./UserAvatarGroup.svelte").CarbonUserAvatarGroupContext["updateNode"]} */
     updateNode: noop,
   });
+
+  /** @type {null | HTMLElement} */
+  let ref = null;
+
+  /** @param {MouseEvent} event */
+  function forwardClick(event) {
+    dispatch("click", event);
+  }
+
+  // Without names, the avatar itself is the button.
+  /** @param {MouseEvent} event */
+  function handleAvatarClick(event) {
+    if (interactive && !names) forwardClick(event);
+  }
+
+  // With names, the avatar is a span inside the tooltip's trigger button.
+  // Listen on that button: a keyboard press clicks the button, not the span.
+  /** @type {null | HTMLButtonElement} */
+  $: tooltipTrigger =
+    interactive && names && ref ? ref.closest("button") : null;
+
+  /** @type {null | HTMLButtonElement} */
+  let listening = null;
+  $: if (tooltipTrigger !== listening) {
+    listening?.removeEventListener("click", forwardClick);
+    tooltipTrigger?.addEventListener("click", forwardClick);
+    listening = tooltipTrigger;
+  }
+  onMount(() => () => listening?.removeEventListener("click", forwardClick));
 </script>
 
 <UserAvatar
-  class="bx--user-avatar-group__overflow"
+  bind:ref
+  class={interactive && names
+    ? "bx--user-avatar-group__overflow bx--user-avatar--interactive"
+    : "bx--user-avatar-group__overflow"}
   data-avatar-group-overflow="true"
   tooltipText={names}
+  interactive={interactive && !names}
+  on:click={handleAvatarClick}
 >
   <!-- In RTL, bidi moves the sign to the far side of the count ("1+"). -->
   <span class:bx--user-avatar__text={true} dir="ltr">{label}</span>

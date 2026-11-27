@@ -25,6 +25,10 @@
 <script>
   /**
    * Render a row of `UserAvatar` children. The group adds the "+N" overflow chip.
+   * @typedef {{ id: string; name: string }} UserAvatarGroupHiddenItem
+   * @event {{ hidden: UserAvatarGroupHiddenItem[] }} click:overflow - The user activates the "+N" chip. Only with `interactiveOverflow`. `hidden` lists the slotted avatars past `max`.
+   * @slot {{}}
+   * @slot {{ hidden: UserAvatarGroupHiddenItem[] }} overflow - Content rendered after the "+N" chip, such as the popover or modal that lists everyone. `hidden` lists the slotted avatars past `max`.
    * @restProps {div}
    */
 
@@ -76,13 +80,25 @@
    */
   export let overflowTooltipText = undefined;
 
-  import { onMount, setContext } from "svelte";
+  /**
+   * Set to `true` to make the "+N" chip a control that dispatches
+   * `click:overflow`, for example to open a list of everyone. Without
+   * hidden names the chip renders as a button. With them it is the
+   * names tooltip's trigger button, so its `aria-expanded` reflects the
+   * tooltip, not a surface the click opens, and it sets no
+   * `aria-haspopup`.
+   */
+  export let interactiveOverflow = false;
+
+  import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
   import UserAvatarGroupOverflow from "./UserAvatarGroupOverflow.svelte";
+
+  const dispatch = createEventDispatcher();
 
   /** @type {import("svelte/store").Writable<Array<{ id: string; name: string; node?: HTMLElement }>>} */
   const items = writable([]);
@@ -207,6 +223,16 @@
     overflowTooltipText,
   );
 
+  // The slotted avatars past `max`, for `click:overflow` and the `overflow`
+  // slot.
+  $: hidden = hasLimit
+    ? $items.slice(max).map(({ id, name }) => ({ id, name: name ?? "" }))
+    : [];
+
+  function handleOverflowClick() {
+    dispatch("click:overflow", { hidden });
+  }
+
   /** @type {(isMounted: boolean, registered: ReturnType<typeof overflowFor>) => ReturnType<typeof overflowFor>} */
   function shownOverflow(isMounted, registered) {
     return isMounted
@@ -268,6 +294,9 @@
     <UserAvatarGroupOverflow
       label={shownOverflow(mounted, overflow).label}
       names={shownOverflow(mounted, overflow).names}
+      interactive={interactiveOverflow}
+      on:click={handleOverflowClick}
     />
   {/if}
+  <slot name="overflow" {hidden} />
 </Stack>

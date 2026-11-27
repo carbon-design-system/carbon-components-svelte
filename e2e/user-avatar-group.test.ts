@@ -208,4 +208,29 @@ test.describe("UserAvatarGroup", () => {
     // The second avatar sits to the left and tucks 8px under the first.
     expect(second.x + second.width - first.x).toBeCloseTo(8, 0);
   });
+
+  test("interactiveOverflow: Enter on the +N chip dispatches click:overflow", async ({
+    page,
+  }) => {
+    const clicked = page.getByTestId("overflow-clicked");
+
+    // With names, the chip is the names tooltip's trigger button.
+    const named = page.getByTestId("interactive-overflow").getByRole("button");
+    await named.focus();
+    await page.keyboard.press("Enter");
+    await expect(clicked).toHaveText(
+      "Richard Hendricks, Dinesh Chugtai, Bertram Gilfoyle",
+    );
+
+    // Without names, the chip is a button of its own, in the tab order.
+    const unnamed = page
+      .getByTestId("interactive-overflow-unnamed")
+      .getByRole("button", { name: "+4" });
+    await named.focus();
+    await page.keyboard.press("Tab");
+    await expect(unnamed).toBeFocused();
+    await expect(unnamed).toHaveCSS("outline-style", "solid");
+    await page.keyboard.press("Enter");
+    await expect(clicked).toHaveText("unnamed");
+  });
 });
