@@ -88,6 +88,40 @@ test.describe("Search", () => {
     expect(await page.evaluate(() => window.scrollY)).toBe(before);
   });
 
+  test("draws each variant at the default's height", async ({ page }) => {
+    const read = (variant: string) =>
+      page
+        .locator(
+          `[data-variant="${variant}"] input[type="search"], [data-variant="${variant}"] input`,
+        )
+        .first()
+        .evaluate((el) => {
+          const style = getComputedStyle(el);
+          return {
+            height: el.getBoundingClientRect().height,
+            border: style.borderBottomColor,
+            background: style.backgroundColor,
+          };
+        });
+    const clear = "rgba(0, 0, 0, 0)";
+    const base = await read("default");
+    const fill = await read("fill");
+    const ghost = await read("ghost");
+
+    expect(base.border).not.toBe(clear);
+    expect(fill).toEqual({ ...base, border: clear });
+    expect(ghost).toEqual({ ...base, border: clear, background: clear });
+
+    // A ghost field fills on hover and while it holds a value.
+    const filled = await read("ghost-value");
+    expect(filled.background).not.toBe(clear);
+    await page.locator('[data-variant="ghost"] input').hover();
+    // The fill fades in.
+    await expect
+      .poll(async () => (await read("ghost")).background)
+      .toBe(filled.background);
+  });
+
   test("defaults to the 40px md height, as in v11", async ({ page }) => {
     await expect(page.getByTestId("search-query")).toHaveCSS("height", "40px");
   });

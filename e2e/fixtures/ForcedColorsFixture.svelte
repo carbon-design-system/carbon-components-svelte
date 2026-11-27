@@ -588,4 +588,8 @@
       { id: "plain", name: "Plain row" },
     ]}
   />
+  <div data-testid="search-variants">
+    <SearchField size="sm" variant="fill" labelText="Fill search" />
+    <SearchField size="sm" variant="ghost" labelText="Ghost search" />
+  </div>
 </main>
