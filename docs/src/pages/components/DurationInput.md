@@ -21,13 +21,13 @@ Bind `value` to read the duration. It is a number of milliseconds, so it works w
 
 <FileSource src="/framed/DurationInput/DurationInputBindable" />
 
-Set `name` to include the duration in a form. A hidden input submits the milliseconds, or an empty string, and a form reset restores the segments.
+Set `name` to include the duration in a form. A hidden input submits it as ISO 8601, such as `PT1H30M`, or an empty string, and a form reset restores the segments. The bound `value` stays in milliseconds. A disabled field submits nothing.
 
 ## Format
 
-Set `variant` to choose how the duration is entered. Both share the same value, range, states and form behavior.
+Set `mode` to choose how the duration is entered. Both share the same value, range, states and form behavior.
 
-| Variant | Use it when | Role |
+| Mode | Use it when | Role |
 | --- | --- | --- |
 | `"segmented"` | People enter clock-like times, or step through a few values with the keyboard. | A group of spinbuttons, one for each unit. |
 | `"text"` | People paste or type a length from elsewhere, or the range is wide. | One textbox. |
@@ -38,13 +38,13 @@ Set `variant` to choose how the duration is entered. Both share the same value, 
 
 ### Text
 
-The text variant reads `1h 30m`, `1 hour, 30 minutes`, `90m`, `1.5h`, `1:30`, `1:30:15` and ISO 8601 durations such as `PT1H30M` or `P1DT2H`. A bare number counts in `smallestUnit`. The field rewrites what it read as `1h 30m` once the text is committed with <DocKbd label="Enter" /> or when focus leaves, and announces the result in words. Text that is not a duration marks the field invalid, with `parseErrorText`, and keeps the previous value.
+The text mode reads `1h 30m`, `1 hour, 30 minutes`, `90m`, `1.5h`, `1:30`, `1:30:15` and ISO 8601 durations such as `PT1H30M` or `P1DT2H`. A bare number counts in `smallestUnit`. The field rewrites what it read as `1h 30m` once the text is committed with <DocKbd label="Enter" /> or when focus leaves, and announces the result in words. Text that is not a duration marks the field invalid, with `parseErrorText`, and keeps the previous value.
 
 Months and years vary in length, so `P1M` and `P1Y` are not durations here. The unit words are English abbreviations in every locale.
 
-<DurationInput variant="text" labelText="Time estimate" smallestUnit="minute" helperText="For example 1h 30m, 90m or PT1H30M" />
+<DurationInput mode="text" labelText="Time estimate" smallestUnit="minute" helperText="For example 1h 30m, 90m or PT1H30M" />
 
-The segmented variant accepts the same text when pasted into any segment.
+The segmented mode accepts the same text when pasted into any segment.
 
 ## Units
 
@@ -56,7 +56,7 @@ Set `largestUnit` and `smallestUnit` to choose the segments. The largest unit ha
   <DurationInput labelText="Meeting length" smallestUnit="minute" value={5400000} />
 </Stack>
 
-The largest segment takes two typed digits. Larger counts come from the arrow keys, a paste, the text variant, or a `max` that needs three digits.
+The largest segment takes two typed digits. Larger counts come from the arrow keys, a paste, the text mode, or a `max` that needs three digits.
 
 ### Step
 
@@ -154,8 +154,8 @@ Cleared segments count as zero in the value, and fill with `00` when focus leave
 
 | Do | Why |
 | --- | --- |
-| Use the segmented variant for a few values that people adjust. | The arrow keys carry across units, so no one does the arithmetic. |
-| Use the text variant for lengths people bring from elsewhere. | A pasted `1h 30m` or ISO 8601 value needs no unit boxes. |
+| Use the segmented mode for a few values that people adjust. | The arrow keys carry across units, so no one does the arithmetic. |
+| Use the text mode for lengths people bring from elsewhere. | A pasted `1h 30m` or ISO 8601 value needs no unit boxes. |
 | Set `smallestUnit` to the finest unit the task needs. | Seconds and milliseconds on a meeting length are noise to scan and to tab through. |
 | Give `max` when a longer value is a mistake, and say why in `helperText`. | Typing then stays inside the range instead of failing afterward. |
 | Keep `value` in milliseconds and format it for display with `Intl`. | One unit in your state; the field does the unit conversion. |
