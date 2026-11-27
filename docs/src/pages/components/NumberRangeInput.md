@@ -63,7 +63,7 @@ Enter a maximum below the minimum, then leave the field.
 
 ### Messages
 
-`translateWithId` returns the text for each message. `values.limit` is the bound, step or other end, formatted for the `locale`.
+`translateWithId(id, params)` returns the text for each message. `params.limit` is the bound, step or other end, formatted for the `locale`. Unset, it asks the function an app sets once with `setTranslateContext`, which receives the same id and `params`, and then falls back to English. A function that returns no value for an id keeps the English text.
 
 <NumberRangeInput
   labelText="Prix"
@@ -226,6 +226,6 @@ Settings rows with a required range, and a quota with open ends.
 
 ## Form
 
-Set `name` for the minimum and `nameUpper` for the maximum; an open end submits an empty string.
+Set `minName` for the minimum and `maxName` for the maximum; an open end submits an empty string.
 
-<NumberRangeInput labelText="Price" name="price_min" nameUpper="price_max" value={[10, null]} />
+<NumberRangeInput labelText="Price" minName="price_min" maxName="price_max" value={[10, null]} />
