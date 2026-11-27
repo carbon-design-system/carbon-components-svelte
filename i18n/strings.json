@@ -2116,6 +2116,13 @@
       "defaultKind": "text"
     },
     {
+      "component": "TileGroup",
+      "prop": "requiredInvalidText",
+      "type": "string",
+      "default": "Select an option",
+      "defaultKind": "text"
+    },
+    {
       "component": "TimePicker",
       "prop": "helperText",
       "type": "string",
