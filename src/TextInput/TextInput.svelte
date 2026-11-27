@@ -90,8 +90,19 @@
    */
   export let ref = null;
 
-  /** Set to `true` to mark the field as required */
+  /**
+   * Set to `true` to mark the field as required. A wrapping `<form>` blocks
+   * submission while it is empty, and the field shows its invalid state with
+   * `requiredInvalidText` instead of the browser's error bubble.
+   */
   export let required = false;
+
+  /**
+   * Specify the invalid state text shown when a required field blocks
+   * submission. Cleared once the field has a value. `invalid` and
+   * `invalidText` take precedence.
+   */
+  export let requiredInvalidText = "Enter a value";
 
   /** Set to `true` to use the inline variant */
   export let inline = false;
@@ -132,6 +143,7 @@
   import { useId } from "../utils/id-scope.js";
   import { createLimitAnnouncement } from "../utils/limit-announcement.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
+  import { requiredInvalid } from "../utils/required-invalid.js";
   import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
 
@@ -184,8 +196,13 @@
     }
   }
 
+  /** Set when the field, required and empty, blocked form submission. */
+  let requiredError = false;
+  $: if (!required || (value != null && value !== "")) requiredError = false;
+  $: shownInvalidText =
+    requiredError && !invalid ? requiredInvalidText : invalidText;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
-    invalid,
+    invalid: invalid || requiredError,
     warn,
     disabled: effectiveDisabled,
     readonly,
@@ -342,10 +359,16 @@
         bind:this={ref}
         use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
         use:formReset={handleFormReset}
+        use:requiredInvalid={{
+          enabled: required,
+          onChange: (missing) => (requiredError = missing),
+        }}
         data-invalid={showInvalid || undefined}
         aria-invalid={showInvalid ? "true" : undefined}
         data-warn={showWarn || undefined}
-        aria-errormessage={showInvalid && invalidText ? errorId : undefined}
+        aria-errormessage={showInvalid && shownInvalidText
+          ? errorId
+          : undefined}
         disabled={effectiveDisabled}
         {id}
         {name}
@@ -366,7 +389,7 @@
           resolveStatusDescribedBy({
             showInvalid,
             showWarn,
-            invalidText,
+            invalidText: shownInvalidText,
             warnText,
             helperText,
             isFluid,
@@ -399,9 +422,9 @@
       {#if isFluid}
         <hr class:bx--text-input__divider={true} />
       {/if}
-      {#if isFluid && showInvalid && invalidText}
+      {#if isFluid && showInvalid && shownInvalidText}
         <div class:bx--form-requirement={true} id={errorId} role="alert">
-          {invalidText}
+          {shownInvalidText}
         </div>
       {/if}
       {#if isFluid && showWarn && warnText}
@@ -418,9 +441,9 @@
         {helperText}
       </div>
     {/if}
-    {#if !isFluid && showInvalid && invalidText}
+    {#if !isFluid && showInvalid && shownInvalidText}
       <div class:bx--form-requirement={true} id={errorId} role="alert">
-        {invalidText}
+        {shownInvalidText}
       </div>
     {/if}
     {#if !isFluid && showWarn && warnText}
