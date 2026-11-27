@@ -75,7 +75,7 @@ Set `showAuthor` to also show the author's name above the first message of each 
 
 ## Streaming replies
 
-Set `streaming` on a message while it is still arriving, such as an assistant's reply streamed word by word. A caret blinks at the end of the text, holding still when reduced motion is preferred. The log announces new messages as they arrive, so without `streaming` screen readers would read every chunk; with it, they wait and read the reply once, in full.
+Set `streaming` on a message while it is still arriving, such as an assistant's reply streamed word by word. A caret blinks at the end of the text, holding still when reduced motion is preferred. The log announces new messages as they arrive, so without `streaming` screen readers would read every chunk. With it, they don't read the text as it grows: they hear "Response started" when it starts and "Response complete" when it ends, and reach the reply by moving to the message. Set `streamStartedDescription` and `streamCompleteDescription` to change what they hear, or to an empty string to say nothing.
 
 ```svelte
 <ChatMessage author="Assistant" streaming={!reply.done}>{reply.text}</ChatMessage>
