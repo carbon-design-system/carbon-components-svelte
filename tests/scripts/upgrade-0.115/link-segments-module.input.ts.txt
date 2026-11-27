@@ -1,0 +1,7 @@
+import * as Carbon from "carbon-components-svelte";
+import { linkSegments as split } from "carbon-components-svelte";
+import { Link } from "carbon-components-svelte";
+
+export const segments = (text: string) => split(text);
+export const viaNamespace = (text: string) => Carbon.linkSegments(text);
+export { Link };

@@ -79,6 +79,7 @@ export const NOTE_TITLES = {
   "data-table": "DataTable shows a row when a filter matches none",
   dialog: "Dialog closes after its animation",
   notification: "Escape closes notifications",
+  "link-segments": "linkSegments links fewer URLs",
   parse: "Files not fully migrated",
 };
 
@@ -106,6 +107,13 @@ const IMPORT_STATEMENT =
 const THEME_TYPE =
   'import("carbon-components-svelte/src/Theme/theme-labels.js").CarbonTheme';
 const MAX_LINE = 80;
+const CARBON_NAMED_IMPORT =
+  /import\s+(?:type\s+)?(?:\w+\s*,\s*)?\{[^}]*\}\s*from\s*(["'])carbon-components-svelte(?:\/[^"']*)?\1/g;
+const CARBON_NAMESPACE_IMPORT =
+  /import\s+\*\s+as\s+(\w+)\s+from\s*(["'])carbon-components-svelte\2/g;
+const LINK_SEGMENTS = /\blinkSegments\b/;
+const LINK_SEGMENTS_MESSAGE =
+  "linkSegments now leaves URLs with credentials, like `https://google.com@evil.example/`, as text, and ends a link at a bidi or zero-width character, a quote, `{`, `}`, `|` or CJK punctuation. Check the text it splits and tests of its output";
 
 /**
  * @param {string} source
@@ -118,10 +126,9 @@ export function transform(source, options) {
   const svelte = SVELTE_EXTENSION.test(options.filename);
   const blocks = svelte ? findBlocks(source, isSvx(options.filename)) : [];
 
-  reportRemovedClasses(
-    context,
-    blocks.filter((block) => block.tag === "code"),
-  );
+  const code = blocks.filter((block) => block.tag === "code");
+  reportRemovedClasses(context, code);
+  if (!CSS_EXTENSION.test(options.filename)) reportLinkSegments(context, code);
   if (svelte) {
     transformSvelte(context, blocks);
   } else if (CSS_EXTENSION.test(options.filename)) {
@@ -149,6 +156,36 @@ function reportRemovedClasses(context, skip) {
       "classes",
       `\`${match[1]}\` is no longer rendered. Select \`${REMOVED_CLASSES[match[1]]}\` instead`,
     );
+  }
+}
+
+/**
+ * Notes each import of `linkSegments`, and each use through a namespace
+ * import, outside .svx code. Its splits changed, and no file shows how.
+ * @param {Context} context
+ * @param {{ start: number; end: number }[]} skip
+ */
+function reportLinkSegments(context, skip) {
+  const { text } = context;
+  /** @param {number} offset */
+  const skipped = (offset) =>
+    skip.some((range) => offset >= range.start && offset < range.end);
+  for (const match of text.matchAll(CARBON_NAMED_IMPORT)) {
+    const name = LINK_SEGMENTS.exec(match[0]);
+    const offset = /** @type {number} */ (match.index) + (name?.index ?? 0);
+    if (name && !skipped(offset)) {
+      note(context, offset, "link-segments", LINK_SEGMENTS_MESSAGE);
+    }
+  }
+  for (const match of text.matchAll(CARBON_NAMESPACE_IMPORT)) {
+    if (skipped(/** @type {number} */ (match.index))) continue;
+    const use = new RegExp(`\\b${match[1]}\\.linkSegments\\b`, "g");
+    for (const member of text.matchAll(use)) {
+      const offset = /** @type {number} */ (member.index);
+      if (!skipped(offset)) {
+        note(context, offset, "link-segments", LINK_SEGMENTS_MESSAGE);
+      }
+    }
   }
 }
 
