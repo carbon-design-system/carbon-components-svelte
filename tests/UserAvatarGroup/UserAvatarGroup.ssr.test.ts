@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { renderSSR } from "../utils/ssr";
+import UserAvatarGroupOverflow from "./UserAvatarGroupOverflow.test.svelte";
 import UserAvatarGroupSsr from "./UserAvatarGroupSsr.test.svelte";
 
 describe("UserAvatarGroup server render", () => {
@@ -23,4 +24,20 @@ describe("UserAvatarGroup server render", () => {
   it("shows every avatar without a limit", () => {
     expect(render({ max: 0 })).toEqual({ hidden: 0, overflow: undefined });
   });
+
+  it.each([
+    [false, "SPAN"],
+    [true, "BUTTON"],
+  ])(
+    "renders a chip without names with interactiveOverflow %s as a %s",
+    (interactiveOverflow, tag) => {
+      const { document } = renderSSR(UserAvatarGroupOverflow, {
+        interactiveOverflow,
+        named: false,
+      });
+      expect(
+        document.querySelector(".bx--user-avatar-group__overflow")?.tagName,
+      ).toBe(tag);
+    },
+  );
 });

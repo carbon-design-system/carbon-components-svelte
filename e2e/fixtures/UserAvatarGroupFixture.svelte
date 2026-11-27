@@ -5,6 +5,8 @@
     UserAvatar,
     UserAvatarGroup,
   } from "carbon-components-svelte";
+
+  let overflowClicked = "";
 </script>
 
 <div data-testid="overlap">
@@ -113,6 +115,34 @@
     <UserAvatar backgroundColor="auto" name="Richard Hendricks" />
   </UserAvatarGroup>
 </Layer>
+
+<div data-testid="interactive-overflow">
+  <UserAvatarGroup
+    max={1}
+    interactiveOverflow
+    on:click:overflow={({ detail }) =>
+      (overflowClicked = detail.hidden.map((item) => item.name).join(", "))}
+  >
+    <UserAvatar backgroundColor="auto" name="Monica" />
+    <UserAvatar backgroundColor="auto" name="Richard Hendricks" />
+    <UserAvatar backgroundColor="auto" name="Dinesh Chugtai" />
+    <UserAvatar backgroundColor="auto" name="Bertram Gilfoyle" />
+  </UserAvatarGroup>
+</div>
+
+<!-- No names, so no tooltip: the chip is a button of its own. -->
+<div data-testid="interactive-overflow-unnamed">
+  <UserAvatarGroup
+    max={2}
+    total={6}
+    interactiveOverflow
+    on:click:overflow={() => (overflowClicked = "unnamed")}
+  >
+    <UserAvatar backgroundColor="auto" initials="MH" />
+    <UserAvatar backgroundColor="auto" initials="RH" />
+  </UserAvatarGroup>
+</div>
+<p data-testid="overflow-clicked">{overflowClicked}</p>
 
 <div dir="rtl" data-testid="rtl">
   <UserAvatarGroup max={0}>
