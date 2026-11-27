@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>country-picker</title>
+    <defs>
+        <filter id="country-picker-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="country-picker" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label" fill="var(--cds-layer-accent-active, #a8a8a8)" x="76" y="30" width="56" height="8"></rect>
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="76" y="46" width="168" height="32"></rect>
+        <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="77" width="168" height="1"></rect>
+        <rect id="typed" fill="var(--cds-text-secondary, #525252)" x="88" y="58" width="28" height="8"></rect>
+        <rect id="caret" fill="var(--cds-icon-primary, #161616)" x="119" y="55" width="1" height="14"></rect>
+        <path id="chevron" fill="var(--cds-icon-primary, #161616)" transform="translate(222, 54) scale(0.5)" d="M16 22 6 12l1.4-1.4 8.6 8.6 8.6-8.6L26 12z"></path>
+        <rect id="menu-shadow" fill="black" filter="url(#country-picker-shadow)" x="76" y="78" width="168" height="84"></rect>
+        <rect id="menu" fill="var(--cds-layer-02, #ffffff)" x="76" y="78" width="168" height="84"></rect>
+        <rect id="flag-1-0" fill="var(--cds-icon-primary, #161616)" x="88" y="91" width="6" height="12"></rect>
+        <rect id="flag-1-1" fill="var(--cds-layer-02, #ffffff)" x="94" y="91" width="6" height="12"></rect>
+        <rect id="flag-1-2" fill="var(--cds-support-error, #da1e28)" x="100" y="91" width="6" height="12"></rect>
+        <rect id="flag-1-edge" fill="none" stroke="var(--cds-layer-accent-active, #a8a8a8)" stroke-width="1" x="87.5" y="90.5" width="19" height="13"></rect>
+        <rect id="name-1" fill="var(--cds-text-secondary, #525252)" x="116" y="94" width="44" height="8"></rect>
+        <rect id="native-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="166" y="94" width="30" height="8"></rect>
+        <rect id="flag-2-0" fill="var(--cds-support-success, #198038)" x="88" y="111" width="6" height="12"></rect>
+        <rect id="flag-2-1" fill="var(--cds-layer-02, #ffffff)" x="94" y="111" width="6" height="12"></rect>
+        <rect id="flag-2-2" fill="var(--cds-support-error, #da1e28)" x="100" y="111" width="6" height="12"></rect>
+        <rect id="flag-2-edge" fill="none" stroke="var(--cds-layer-accent-active, #a8a8a8)" stroke-width="1" x="87.5" y="110.5" width="19" height="13"></rect>
+        <rect id="name-2" fill="var(--cds-text-secondary, #525252)" x="116" y="114" width="56" height="8"></rect>
+        <rect id="native-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="178" y="114" width="30" height="8"></rect>
+        <rect id="flag-3-0" fill="var(--cds-support-error, #da1e28)" x="88" y="131" width="6" height="12"></rect>
+        <rect id="flag-3-1" fill="var(--cds-support-warning, #f1c21b)" x="94" y="131" width="6" height="12"></rect>
+        <rect id="flag-3-2" fill="var(--cds-support-error, #da1e28)" x="100" y="131" width="6" height="12"></rect>
+        <rect id="flag-3-edge" fill="none" stroke="var(--cds-layer-accent-active, #a8a8a8)" stroke-width="1" x="87.5" y="130.5" width="19" height="13"></rect>
+        <rect id="name-3" fill="var(--cds-text-secondary, #525252)" x="116" y="134" width="36" height="8"></rect>
+        <rect id="native-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="158" y="134" width="30" height="8"></rect>
+    </g>
+</svg>

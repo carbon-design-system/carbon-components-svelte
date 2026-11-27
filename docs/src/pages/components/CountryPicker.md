@@ -1,0 +1,123 @@
+---
+components: ["CountryPicker"]
+description: Country pickers choose a country or territory by its ISO 3166 code, with names in the page's language and in the country's own.
+---
+
+<script>
+  import { Box, CountryPicker, LayoutDirection, Stack } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Create a picker with a label. The list and the names come from the browser's own `Intl` data, so the component ships none of them. Each row shows the [flag](/components/Flag), the name in the page's language, and the name in the country's own language when that differs, such as "Schweiz" beside "Switzerland".
+
+Type to search by either name or by the two-letter code. <DocKbd label="ArrowDown" /> opens the menu, <DocKbd label="Enter" /> picks the highlighted country and <DocKbd label="Escape" /> closes the menu.
+
+<CountryPicker labelText="Country" />
+
+## Value
+
+### Bind the value
+
+Bind `value` to read or set the country. It holds the ISO 3166-1 code, such as `"CH"`, and an empty string when nothing is chosen. The `change` event fires when the user chooses or clears a country, and carries the names.
+
+<FileSource src="/framed/CountryPicker/CountryBinding" />
+
+### Detect from the locale
+
+Set `detect` to `true` to fill an empty field with the country `locale` is most used in once the field has mounted: "US" for `"en"` and "DE" for `"de"`. This is a guess from the language, not the user's location, so keep it for a default the user can change.
+
+<CountryPicker labelText="Billing country" detect locale="de" />
+
+### Restrict the list
+
+Pass `values` to list only some countries, in your order. A UN M.49 code names a group of countries, such as `"150"` for Europe.
+
+<CountryPicker labelText="Ships to" values={["US", "CA", "MX", "GB", "DE", "FR", "150"]} />
+
+## Flags
+
+Set `flag` to choose what stands in front of each name. The flags are [Flag](/components/Flag): drawn the same on every platform, in Carbon's style.
+
+| Value | Shows |
+| :--- | :--- |
+| `"auto"` | The region's flag, and a box of the same size where no flag is drawn yet, with the code on hover. The default |
+| `"badge"` | The two-letter code in a box, 24px wide so the code is 12px text |
+| `"none"` | The name alone |
+
+<Stack gap={5}>
+  <CountryPicker labelText="Flag" value="JP" />
+  <CountryPicker labelText="Badge" flag="badge" value="JP" />
+  <CountryPicker labelText="None" flag="none" value="JP" />
+</Stack>
+
+The flags are one module of every flag, so a picker loads it the first time its menu opens, and a page that never opens the menu does not fetch it. The rows show an empty box of the flag's size until it arrives. A flag is decoration and is hidden from screen readers, so the name is the same with and without it. Regions in dispute, and regions with no flag of their own, show an empty box with the code on hover: at the flag's size the box is too small for 12px text. See [Flag](/components/Flag#regions-and-disputes).
+
+| Do | Why |
+| :--- | :--- |
+| Keep the name beside the flag | Many flags look alike, and a flag is not the only way to tell regions apart |
+| Use `"badge"` for a list of codes, such as an address form's | The code is what the user types and reads back |
+| Pick `"none"` for a dense list | The names are the content |
+
+## Locale
+
+Set `locale` to write the names in another language. The country's own name stays in its own language, whatever the locale. The field and the open menu rename when it changes at runtime, and the list is sorted for the locale.
+
+<FileSource src="/framed/CountryPicker/CountryLocale" />
+
+`locale` is never read from the browser, so the server and the first paint of the browser write the same names. To follow the user's language, set it after mount. Where the browser has no data for a locale, the names are in English. The same goes for a country's own language: where the browser has no data for it, the row shows only the name in the page's language.
+
+### Right to left
+
+Names in Arabic and Hebrew follow the page direction, and the flag sits at the start edge.
+
+<LayoutDirection dir="rtl">
+  <CountryPicker labelText="البلد" locale="ar" value="EG" />
+</LayoutDirection>
+
+## Metadata
+
+Pass `metadata` to add to the `change` event. It receives the region code and returns anything, which arrives as `event.detail.metadata`. This is where a calling code belongs: the picker does not ship a table, since the browser has no data for it.
+
+<FileSource src="/framed/CountryPicker/CountryCallingCode" />
+
+## Sizes
+
+Set `size` to control the field height. The default is 40px.
+
+<Stack gap={5}>
+  <CountryPicker size="sm" labelText="Small" />
+  <CountryPicker labelText="Default" />
+  <CountryPicker size="xl" labelText="Extra large" />
+</Stack>
+
+## States
+
+Reflect validation and interaction states.
+
+<Stack gap={5}>
+  <CountryPicker labelText="Invalid" invalid invalidText="Choose a country" />
+  <CountryPicker labelText="Warning" warn warnText="We do not ship here yet" value="AQ" />
+  <CountryPicker labelText="Disabled" disabled value="FR" />
+  <CountryPicker labelText="Read-only" readonly value="FR" />
+</Stack>
+
+## In a form
+
+Set `name` to post the code with a form. The visible field holds the name, so a hidden input carries the code.
+
+<Box maxWidth="24rem">
+  <form on:submit|preventDefault>
+    <CountryPicker labelText="Country" name="country" required />
+  </form>
+</Box>
+
+## Server rendering
+
+The server renders the field with the selected country's name and no menu, so the list cannot differ between the server and the browser. The flags load in the browser, when the menu first opens.
+
+| Do | Why |
+| :--- | :--- |
+| Leave `locale` set to the page's language | The names are the same on the server and in the browser |
+| Pass `values` for the countries you serve | The default lists every country and territory the browser can name, which is most of the 249 ISO codes plus a few territories |
+| Keep the calling code in `metadata` | The browser has no calling codes, and a table in the picker would load for everyone who does not need it |
