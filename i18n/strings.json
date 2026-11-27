@@ -2655,6 +2655,62 @@
       "defaultKind": "text"
     },
     {
+      "component": "Timeline",
+      "prop": "groupText",
+      "type": "(time: number, context: TimelineGroupContext) => string",
+      "default": "defaultGroupText",
+      "defaultKind": "described"
+    },
+    {
+      "component": "Timeline",
+      "prop": "liveDescription",
+      "type": "(added: ReadonlyArray<TimelineEvent>) => string",
+      "default": "function defaultLiveDescription(added) {\n  if (added.length === 1) {\n    return added[0].titleText\n      ? `New event: ${added[0].titleText}`\n      : \"New event\";\n  }\n  return `${added.length} new events`;\n}",
+      "defaultKind": "function"
+    },
+    {
+      "component": "Timeline",
+      "prop": "showLessText",
+      "type": "(count: number) => string",
+      "default": "() => \"Show fewer events\"",
+      "defaultKind": "function"
+    },
+    {
+      "component": "Timeline",
+      "prop": "showMoreText",
+      "type": "(count: number) => string",
+      "default": "(count) => `Show ${count} earlier ${count === 1 ? \"event\" : \"events\"}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "Timeline",
+      "prop": "statusDescription",
+      "type": "(status: TimelineStatus | undefined) => string",
+      "default": "defaultStatusDescription",
+      "defaultKind": "described"
+    },
+    {
+      "component": "TimelineItem",
+      "prop": "descriptionText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TimelineItem",
+      "prop": "statusDescription",
+      "type": "(status: TimelineStatus | undefined) => string",
+      "default": "defaultStatusDescription",
+      "defaultKind": "described"
+    },
+    {
+      "component": "TimelineItem",
+      "prop": "titleText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
       "component": "TimePicker",
       "prop": "helperText",
       "type": "string",
