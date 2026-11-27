@@ -20,8 +20,9 @@ const SHEETS: Record<string, { floor: number; ceiling?: Size }> = {
   "white.scss": { floor: 545_000 },
   // Prose's opt-in sheet keeps a ceiling about 10% above its size. The
   // per-PR limit is sized for all.css and would let it grow by half.
-  // min 65,352 and gzip 4,960 measured 2026-11-07
-  "prose.scss": { floor: 55_000, ceiling: { min: 71_900, gzip: 5_450 } },
+  // min 58,762 and gzip 4,890 measured 2026-11-26, after the baseline
+  // moved to Chrome 105 and the `:where()` guards stopped emitting twins
+  "prose.scss": { floor: 47_000, ceiling: { min: 64_600, gzip: 5_400 } },
 };
 
 describe("css size", () => {

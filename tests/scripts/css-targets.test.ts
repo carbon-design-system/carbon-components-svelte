@@ -2,14 +2,13 @@
 import { targets } from "../../scripts/lib/css-targets";
 
 describe("css targets", () => {
-  it("packs each floor as browserslistToTargets did", () => {
-    // `browserslistToTargets(browserslist(["Chrome >= 87", "Firefox >= 83",
-    // "Safari >= 14.1", "Edge >= 87"]))` before browserslist was dropped.
+  it("packs each floor as major << 16 | minor << 8", () => {
     expect(targets).toEqual({
-      chrome: 87 << 16,
-      edge: 87 << 16,
-      firefox: 83 << 16,
-      safari: (14 << 16) | (1 << 8),
+      chrome: 105 << 16,
+      edge: 105 << 16,
+      firefox: 121 << 16,
+      safari: (15 << 16) | (4 << 8),
+      ios_saf: (15 << 16) | (4 << 8),
     });
   });
 });
