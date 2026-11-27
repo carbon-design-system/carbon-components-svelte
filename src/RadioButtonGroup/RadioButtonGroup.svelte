@@ -130,7 +130,25 @@
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { createIdScope } from "../utils/id-scope.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { requiredInvalid } from "../utils/required-invalid.js";
+  import { moveRadioInRtl } from "../utils/rtl-radio-keys.js";
+
+  const layoutDirection = getLayoutDirection();
+
+  /**
+   * WebKit moves native radios by DOM order, so in RTL ArrowRight went to
+   * the radio on the left. Chromium and Firefox already swap the keys.
+   * @param {KeyboardEvent} event
+   */
+  function handleKeydown(event) {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    const direction = resolveLayoutDirection($layoutDirection, fieldsetRef);
+    moveRadioInRtl(event, direction === "rtl");
+  }
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;
@@ -320,6 +338,7 @@
       onChange: (missing) => (requiredError = missing),
     }}
     role="radiogroup"
+    on:keydown={handleKeydown}
     aria-orientation={orientation}
     aria-readonly={readonly || undefined}
     aria-label={ariaLabel}

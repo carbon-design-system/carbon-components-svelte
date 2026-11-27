@@ -9,6 +9,8 @@
     OverflowMenuItem,
     ProgressIndicator,
     ProgressStep,
+    RadioButton,
+    RadioButtonGroup,
     Switch,
     Tag,
     TagSet,
@@ -96,6 +98,11 @@
     <Tag filter>Beta</Tag>
     <Tag filter>Gamma</Tag>
   </TagSet>
+  <RadioButtonGroup data-testid="radio-group" legendText="Size">
+    <RadioButton value="small" labelText="Small" />
+    <RadioButton value="medium" labelText="Medium" />
+    <RadioButton value="large" labelText="Large" />
+  </RadioButtonGroup>
 </div>
 
 <style>
