@@ -14,6 +14,8 @@
   export let withContent = false;
   export let withChildren = false;
   export let now = Date.parse("2026-11-06T15:00:00Z");
+  export let liveDescription:
+    ComponentProps<Timeline>["liveDescription"] | undefined = undefined;
 </script>
 
 <Timeline
@@ -24,6 +26,7 @@
   {limit}
   bind:expanded
   {live}
+  {...liveDescription ? { liveDescription } : {}}
   {now}
   locale="en-US"
   timeZone="UTC"
@@ -34,6 +37,6 @@
     {/if}
   </svelte:fragment>
   {#if withChildren}
-    <TimelineItem title="Composed" status="pending" />
+    <TimelineItem titleText="Composed" status="pending" />
   {/if}
 </Timeline>

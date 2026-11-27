@@ -1,6 +1,8 @@
 import { render, screen, within } from "@testing-library/svelte";
+import TimelineComponent from "carbon-components-svelte/Timeline/Timeline.svelte";
 import { user } from "../utils/user";
 import Timeline from "./Timeline.test.svelte";
+import TimelineInSection from "./TimelineInSection.test.svelte";
 
 const at = (iso: string) => Date.parse(iso);
 
@@ -8,17 +10,17 @@ const items = [
   {
     id: "a",
     time: at("2026-11-05T10:00:00Z"),
-    title: "Ordered",
+    titleText: "Ordered",
     status: "success" as const,
   },
   {
     id: "b",
     time: at("2026-11-06T09:00:00Z"),
-    title: "Shipped",
-    description: "Left the warehouse.",
+    titleText: "Shipped",
+    descriptionText: "Left the warehouse.",
     status: "warning" as const,
   },
-  { id: "c", title: "Delivered", status: "pending" as const },
+  { id: "c", titleText: "Delivered", status: "pending" as const },
 ];
 
 const titles = () =>
@@ -55,13 +57,17 @@ describe("Timeline", () => {
     const [ordered, shipped] = screen.getAllByRole("listitem");
     const time = ordered.querySelector("time");
     expect(time).toHaveAttribute("datetime", "2026-11-05T10:00:00.000Z");
-    expect(time).toHaveTextContent("Nov 5, 2026, 10:00 AM · yesterday");
+    // Engines differ on what joins the date and the time: a comma in V8, "at"
+    // in Bun.
+    expect(time).toHaveTextContent(/^Nov 5, 2026(,| at) 10:00 AM · yesterday$/);
     expect(shipped.querySelector("time")).toHaveTextContent("6 hours ago");
   });
 
   it("leaves out the age of an event older than relativeWithin", () => {
     render(Timeline, {
-      items: [{ id: "old", time: at("2026-09-01T10:00:00Z"), title: "Old" }],
+      items: [
+        { id: "old", time: at("2026-09-01T10:00:00Z"), titleText: "Old" },
+      ],
     });
 
     expect(screen.getByRole("listitem")).not.toHaveTextContent("ago");
@@ -71,6 +77,47 @@ describe("Timeline", () => {
     render(Timeline, { items, order: "desc" });
 
     expect(titles()).toEqual(["Delivered", "Shipped", "Ordered"]);
+  });
+
+  it("takes the heading level from the Section it sits in", () => {
+    const { unmount } = render(TimelineInSection, { level: 2 });
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Today" }),
+    ).toBeInTheDocument();
+    unmount();
+
+    const { unmount: second } = render(TimelineInSection, { level: 4 });
+    expect(
+      screen.getByRole("heading", { level: 5, name: "Today" }),
+    ).toBeInTheDocument();
+    second();
+
+    render(TimelineInSection, { level: 4, headingLevel: 2 });
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Today" }),
+    ).toBeInTheDocument();
+  });
+
+  it("reads the browser's clock once mounted when no now is set", () => {
+    vi.useFakeTimers({ now: at("2026-11-06T15:00:00Z"), toFake: ["Date"] });
+    try {
+      render(TimelineComponent, {
+        items,
+        groupBy: "day",
+        now: undefined,
+        locale: undefined,
+        timeZone: "UTC",
+      });
+
+      expect(
+        screen.getAllByRole("heading", { level: 3 }).map((h) => h.textContent),
+      ).toEqual([
+        expect.stringContaining("Yesterday"),
+        expect.stringContaining("Today"),
+      ]);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("nests each day's events under its heading", () => {
@@ -155,25 +202,47 @@ describe("Timeline", () => {
   });
 
   describe("live", () => {
-    it("stays silent for a static history and for the first render", () => {
-      render(Timeline, { items });
-      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    // The shared announcer's region, not one inside the timeline.
+    const spoken = () =>
+      document.querySelector("[data-announcer] [role=status]")?.textContent ??
+      "";
+
+    it("stays silent for a static history and for the first render", async () => {
+      const { container, rerender } = render(Timeline, { items });
+      expect(container.querySelector("[role=status]")).toBeNull();
+
+      await rerender({ items: [...items, { id: "d", titleText: "Added" }] });
+      expect(spoken()).toBe("");
     });
 
     it("announces an event added after the first render", async () => {
-      const { rerender } = render(Timeline, { items, live: true });
-      const status = screen.getByRole("status");
-      expect(status.textContent).toBe("");
+      const { container, rerender } = render(Timeline, { items, live: true });
+      expect(spoken()).toBe("");
 
       await rerender({
         items: [
           ...items,
-          { id: "d", time: at("2026-11-06T14:00:00Z"), title: "Signed for" },
+          {
+            id: "d",
+            time: at("2026-11-06T14:00:00Z"),
+            titleText: "Signed for",
+          },
         ],
       });
-      await vi.waitFor(() =>
-        expect(status).toHaveTextContent("New event: Signed for"),
-      );
+      await vi.waitFor(() => expect(spoken()).toBe("New event: Signed for"));
+      // The timeline has no live region of its own.
+      expect(container.querySelector("[role=status]")).toBeNull();
+    });
+
+    it("speaks what liveDescription returns", async () => {
+      const { rerender } = render(Timeline, {
+        items,
+        live: true,
+        liveDescription: (added: readonly unknown[]) => `${added.length} neu`,
+      });
+
+      await rerender({ items: [...items, { id: "d" }, { id: "e" }] });
+      await vi.waitFor(() => expect(spoken()).toBe("2 neu"));
     });
   });
 });

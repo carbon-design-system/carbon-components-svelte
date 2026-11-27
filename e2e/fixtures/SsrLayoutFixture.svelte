@@ -11,6 +11,7 @@
     OverflowMenuItem,
     ShellBanner,
     Tearsheet,
+    Timeline,
   } from "carbon-components-svelte";
 </script>
 
@@ -86,4 +87,19 @@
   <Coachmark open titleText="Export in bulk" align="bottom-start">
     Select rows, then export them together.
   </Coachmark>
+</div>
+
+<div data-testid="timeline" style="max-width: 24rem; padding: 1rem;">
+  <Timeline
+    aria-label="History"
+    items={[
+      {
+        id: "a",
+        time: Date.now() - 2 * 3_600_000,
+        titleText: "Deployed",
+        status: "success",
+      },
+      { id: "b", time: Date.now() - 26 * 3_600_000, titleText: "Started" },
+    ]}
+  />
 </div>

@@ -2,8 +2,11 @@ export type TimelineStatus =
   "success" | "warning" | "error" | "info" | "pending";
 
 export type TimelineGroupContext = {
-  /** The reference instant, in milliseconds. */
-  now: number;
+  /**
+   * The reference instant, in milliseconds. Unset until the browser's clock
+   * is read, when a heading is a date and never "Today".
+   */
+  now?: number;
   locale?: string;
   timeZone?: string;
 };
@@ -34,9 +37,10 @@ export function dayNumber(time: number, timeZone: string | undefined): number;
 
 /**
  * The default group heading: "Today", "Yesterday" and "Tomorrow" in the
- * locale, then a short date, with the year when it is not this one.
+ * locale, then a short date, with the year when it is not this one. With no
+ * `now`, it is always a date with its year.
  */
-export function defaultGroupLabel(
+export function defaultGroupText(
   time: number,
   context: TimelineGroupContext,
 ): string;
@@ -58,7 +62,7 @@ export function buildTimeline<
     now?: number;
     locale?: string;
     timeZone?: string;
-    groupLabel?: (time: number, context: TimelineGroupContext) => string;
+    groupText?: (time: number, context: TimelineGroupContext) => string;
   },
 ): {
   groups: TimelineGroup<Item>[];
@@ -70,7 +74,9 @@ export function buildTimeline<
 };
 
 /** The words that stand for a marker; `""` for no status. */
-export function defaultStatusText(status: TimelineStatus | undefined): string;
+export function defaultStatusDescription(
+  status: TimelineStatus | undefined,
+): string;
 
 /**
  * Whether a relative time is worth showing beside an event's time: it has a

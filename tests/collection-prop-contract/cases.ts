@@ -5,6 +5,7 @@ import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.sve
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import PromptInput from "carbon-components-svelte/PromptInput/PromptInput.svelte";
 import TileGrid from "carbon-components-svelte/TileGrid/TileGrid.svelte";
+import Timeline from "carbon-components-svelte/Timeline/Timeline.svelte";
 import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
 import DatePicker from "../DatePicker/DatePicker.test.svelte";
 import DatePickerSelectedDates from "../DatePicker/DatePickerSelectedDates.test.svelte";
@@ -375,6 +376,25 @@ export const cases: CollectionCase[] = [
       await user.click(screen.getByRole("button", { name: "Charlie" }));
       await user.keyboard("{ArrowRight}");
       expect(screen.getByRole("button", { name: "Delta" })).toHaveFocus();
+    },
+  },
+  {
+    name: "Timeline",
+    component: Timeline,
+    prop: "items",
+    props: { "aria-label": "History" },
+    initial: () => [
+      { id: "a", titleText: "Alpha" },
+      { id: "b", titleText: "Bravo" },
+    ],
+    replacement: () => [
+      { id: "c", titleText: "Charlie" },
+      { id: "d", titleText: "Delta" },
+    ],
+    check: () => {
+      expect(screen.queryByText("Alpha")).toBeNull();
+      expect(screen.getByText("Charlie")).toBeInTheDocument();
+      expect(screen.getAllByRole("listitem")).toHaveLength(2);
     },
   },
   {

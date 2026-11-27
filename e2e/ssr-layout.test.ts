@@ -146,3 +146,20 @@ test("an open Coachmark sits where the server printed it, before it fits", async
   });
   expect(await rect(page, selector)).toEqual(mounted);
 });
+
+test("a Timeline row keeps its height when the relative time arrives", async ({
+  page,
+}) => {
+  // The server prints dates only; the browser adds "· 2 hours ago" after
+  // mount. The rows must not grow when it does.
+  const selector = "[data-testid=timeline] .bx--timeline__list";
+  const mounted = await rect(page, selector);
+  await page
+    .locator("[data-testid=timeline] .bx--timeline__time")
+    .evaluateAll((nodes) => {
+      for (const node of nodes) {
+        node.textContent = (node.textContent ?? "").split(" · ")[0];
+      }
+    });
+  expect(await rect(page, selector)).toEqual(mounted);
+});

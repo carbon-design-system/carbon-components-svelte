@@ -897,14 +897,14 @@ export const interactive: AriaEntry[] = [
     name: "Timeline",
     render: (attrs) =>
       render(Timeline, {
-        props: { items: [{ id: "a", title: "Ordered" }], ...attrs },
+        props: { items: [{ id: "a", titleText: "Ordered" }], ...attrs },
       }),
     target: () => screen.getByRole("list"),
   },
   {
     name: "TimelineItem",
     render: (attrs) =>
-      render(TimelineItem, { props: { title: "Ordered", ...attrs } }),
+      render(TimelineItem, { props: { titleText: "Ordered", ...attrs } }),
     target: () => screen.getByRole("listitem"),
   },
 ];

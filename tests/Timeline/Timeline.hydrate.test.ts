@@ -8,9 +8,27 @@ const fixture = fileURLToPath(
 );
 
 let result: HydrateResult;
+let unpinned: HydrateResult;
+
+const items = [
+  {
+    id: "a",
+    time: "2026-11-06T14:20:00Z",
+    titleText: "Deployed",
+    status: "success",
+  },
+  {
+    id: "b",
+    time: "2026-11-05T09:00:00Z",
+    titleText: "Failed",
+    status: "error",
+  },
+  { id: "c", time: "2026-11-04T09:00:00Z", titleText: "Started" },
+  { id: "d", titleText: "Next", status: "pending" },
+];
 
 beforeAll(async () => {
-  [result] = await hydrateFixtures([
+  [result, unpinned] = await hydrateFixtures([
     {
       fixture,
       props: {
@@ -25,20 +43,23 @@ beforeAll(async () => {
           {
             id: "a",
             time: "2026-11-06T14:20:00Z",
-            title: "Deployed",
+            titleText: "Deployed",
             status: "success",
           },
           {
             id: "b",
             time: "2026-11-05T09:00:00Z",
-            title: "Failed",
+            titleText: "Failed",
             status: "error",
           },
-          { id: "c", time: "2026-11-04T09:00:00Z", title: "Started" },
-          { id: "d", title: "Next", status: "pending" },
+          { id: "c", time: "2026-11-04T09:00:00Z", titleText: "Started" },
+          { id: "d", titleText: "Next", status: "pending" },
         ],
       },
     },
+    // No clock, locale or zone: the server prints "en" and UTC with dates for
+    // headings, and the browser's values take over after mount.
+    { fixture, props: { "aria-label": "Deploys", groupBy: "day", items } },
   ]);
 }, 120_000);
 
@@ -51,4 +72,15 @@ it("keeps the server's markup and adds nothing after mount", () => {
   expect(result.diffIgnoringIds).toEqual([]);
   expect(result.settledDiff).toEqual([]);
   expect(result.brokenRefs.settled).toEqual([]);
+});
+
+it("hydrates the unpinned markup unchanged, then reads the browser's clock", () => {
+  expect(unpinned.hydrateError).toBeUndefined();
+  expect(unpinned.identity.pct).toBe(100);
+  // Only the text of the headings and times changes: no node is replaced.
+  expect(unpinned.diffIgnoringIds.every(({ kind }) => kind === "text")).toBe(
+    true,
+  );
+  expect(unpinned.brokenRefs.settled).toEqual([]);
+  expect(unpinned.serverHtml).not.toContain(" ago");
 });

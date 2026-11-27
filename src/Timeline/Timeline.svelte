@@ -4,12 +4,12 @@
    * @typedef {object} TimelineEvent
    * @property {string | number} id - Unique in the list. Keys the row.
    * @property {Date | number | string} [time] - When it happened. Leave it out for a step with no time yet.
-   * @property {string} [title]
-   * @property {string} [description]
+   * @property {string} [titleText]
+   * @property {string} [descriptionText]
    * @property {TimelineStatus} [status] - `"pending"` marks the step in progress.
    * @property {import("../utils/icon-component.js").IconComponent} [icon] - Replaces the status icon.
    * @typedef {object} TimelineGroupContext
-   * @property {number} now - The reference instant, in milliseconds.
+   * @property {number} [now] - The reference instant, in milliseconds. Unset until the browser's clock is read.
    * @property {string} [locale]
    * @property {string} [timeZone]
    * @restProps {div}
@@ -43,16 +43,18 @@
   export let groupBy = "none";
 
   /**
-   * Specify the heading text of a day.
+   * Specify the heading text of a day. It receives the day's first time and
+   * the reference instant, locale and time zone in use.
    * @type {(time: number, context: TimelineGroupContext) => string}
    */
-  export let groupLabel = defaultGroupLabel;
+  export let groupText = defaultGroupText;
 
   /**
    * Specify the level of the day headings, so they fit the page's outline.
-   * @type {2 | 3 | 4 | 5 | 6}
+   * Unset, it is one level below the enclosing `Section`'s, or 3 outside one.
+   * @type {2 | 3 | 4 | 5 | 6 | undefined}
    */
-  export let headingLevel = 3;
+  export let headingLevel = undefined;
 
   /**
    * Set to `false` to let the day headings scroll away. They otherwise stay
@@ -106,23 +108,26 @@
 
   /**
    * Fix the reference instant for "Today", the relative times and
-   * `relativeWithin`. This stops the live update, so the server and the
-   * browser print the same text.
+   * `relativeWithin`. This stops the live update. Unset, the clock is read
+   * once the page is in the browser, and until then the headings are dates
+   * and no time is relative, so the server's text does not depend on its
+   * clock.
    * @type {Date | number | undefined}
    */
   export let now = undefined;
 
   /**
-   * Specify the locale of the times and headings. The runtime locale when
-   * unset, which prints differently on a server; set it with `timeZone` for
-   * server rendering.
+   * Specify the locale of the times and headings. Unset, it is `"en"` on the
+   * server and until the page mounts, then the browser's locale. Set it,
+   * with `timeZone`, to print the same text throughout.
    * @type {string | undefined}
    */
   export let locale = undefined;
 
   /**
    * Specify the IANA time zone of the times, and of where each day begins.
-   * The runtime zone when unset.
+   * Unset, it is `"UTC"` on the server and until the page mounts, then the
+   * browser's zone.
    * @type {string | undefined}
    */
   export let timeZone = undefined;
@@ -139,13 +144,13 @@
    * title. Return `""` for none.
    * @type {(status: TimelineStatus | undefined) => string}
    */
-  export let statusText = defaultStatusText;
+  export let statusDescription = defaultStatusDescription;
 
   /**
    * Specify the announcement for events added while `live`.
    * @type {(added: ReadonlyArray<TimelineEvent>) => string}
    */
-  export let liveText = defaultLiveText;
+  export let liveDescription = defaultLiveDescription;
 
   /**
    * Specify the text of the button that shows the collapsed events.
@@ -159,14 +164,15 @@
    */
   export let showLessText = defaultShowLessText;
 
-  import { onMount } from "svelte";
+  import { getContext, onMount } from "svelte";
   import Button from "../Button/Button.svelte";
+  import { createAnnouncerChannel } from "../utils/announcer.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { toTimestamp } from "../utils/relative-time.js";
   import {
     buildTimeline,
-    defaultGroupLabel,
-    defaultStatusText,
+    defaultGroupText,
+    defaultStatusDescription,
   } from "../utils/timeline.js";
   import TimelineItem from "./TimelineItem.svelte";
 
@@ -185,17 +191,30 @@
   }
 
   /** @param {ReadonlyArray<TimelineEvent>} added */
-  function defaultLiveText(added) {
+  function defaultLiveDescription(added) {
     if (added.length === 1) {
-      return added[0].title ? `New event: ${added[0].title}` : "New event";
+      return added[0].titleText
+        ? `New event: ${added[0].titleText}`
+        : "New event";
     }
     return `${added.length} new events`;
   }
 
+  // Undefined outside a `Section`; `$sectionLevel` is read only when it is set.
+  /** @type {import("svelte/store").Readable<1 | 2 | 3 | 4 | 5 | 6>} */
+  const sectionLevel = getContext("carbon:Section");
+
+  /** @type {null | HTMLDivElement} */
+  let root = null;
+  // New events are spoken through the shared announcer, which also reaches a
+  // timeline inside an open modal dialog.
+  const liveChannel = createAnnouncerChannel(() => root);
+
   /** @type {Set<TimelineEvent["id"]> | undefined} */
   let seen;
-  let announcement = "";
   let mounted = false;
+  /** @type {number | undefined} */
+  let clock;
 
   /** @param {ReadonlyArray<TimelineEvent>} events */
   function announceAdded(events) {
@@ -203,27 +222,34 @@
     seen = new Set(events.map((event) => event.id));
     if (!known) return;
     const added = events.filter((event) => !known.has(event.id));
-    if (added.length > 0) announcement = liveText(added);
+    if (added.length > 0) liveChannel.announce(liveDescription(added));
   }
 
   function toggle() {
     expanded = !expanded;
   }
 
-  $: referenceNow = now == null ? Date.now() : toTimestamp(now);
+  // The server and the first client render know no clock, locale or zone of
+  // the browser: they print "en" and UTC, with dates for headings and no
+  // relative time. Once mounted, the browser's values take over.
+  $: language = locale ?? (mounted ? undefined : "en");
+  $: zone = timeZone ?? (mounted ? undefined : "UTC");
+  $: referenceNow = now == null ? clock : toTimestamp(now);
   $: timeline = buildTimeline(items, {
     order,
     groupBy,
     limit,
     expanded,
     now: referenceNow,
-    locale,
-    timeZone,
-    groupLabel,
+    locale: language,
+    timeZone: zone,
+    groupText,
   });
   $: grouped = groupBy === "day";
   $: itemTimeFormat = timeFormat ?? (grouped ? TIME_OF_DAY : DATE_AND_TIME);
-  $: headingTag = `h${headingLevel}`;
+  $: headingTag = `h${
+    headingLevel ?? (sectionLevel ? Math.min($sectionLevel + 1, 6) : 3)
+  }`;
   // The button sits at the earlier end of the list, where the hidden events
   // are: above it for oldest first, below for newest first.
   $: collapsible = timeline.earlier > 0;
@@ -236,11 +262,14 @@
 
   onMount(() => {
     seen = new Set(items.map((event) => event.id));
+    clock = Date.now();
     mounted = true;
+    return liveChannel.connect();
   });
 </script>
 
 <div
+  bind:this={root}
   class:bx--timeline={true}
   class:bx--timeline--sm={size === "sm"}
   class:bx--timeline--alternate={layout === "alternate"}
@@ -274,16 +303,16 @@
               {@const event = row.item}
               <TimelineItem
                 time={event.time}
-                title={event.title}
-                description={event.description}
+                titleText={event.titleText}
+                descriptionText={event.descriptionText}
                 status={event.status}
                 icon={event.icon}
                 timeFormat={itemTimeFormat}
                 {relativeWithin}
                 {now}
-                {locale}
-                {timeZone}
-                {statusText}
+                locale={language}
+                timeZone={zone}
+                {statusDescription}
               >
                 <slot name="content" item={event} index={row.index} />
               </TimelineItem>
@@ -295,16 +324,16 @@
           {@const event = row.item}
           <TimelineItem
             time={event.time}
-            title={event.title}
-            description={event.description}
+            titleText={event.titleText}
+            descriptionText={event.descriptionText}
             status={event.status}
             icon={event.icon}
             timeFormat={itemTimeFormat}
             {relativeWithin}
             {now}
-            {locale}
-            {timeZone}
-            {statusText}
+            locale={language}
+            timeZone={zone}
+            {statusDescription}
           >
             <slot name="content" item={event} index={row.index} />
           </TimelineItem>
@@ -316,16 +345,6 @@
   {#if collapsible && order === "desc"}
     <div class:bx--timeline__more={true}>
       <Button kind="ghost" size="sm" on:click={toggle}>{toggleText}</Button>
-    </div>
-  {/if}
-  {#if live}
-    <div
-      class:bx--visually-hidden={true}
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
-    >
-      {announcement}
     </div>
   {/if}
 </div>

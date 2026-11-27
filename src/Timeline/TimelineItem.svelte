@@ -15,10 +15,10 @@
   export let time = undefined;
 
   /** Specify the event's title */
-  export let title = "";
+  export let titleText = "";
 
   /** Specify the text under the title */
-  export let description = "";
+  export let descriptionText = "";
 
   /**
    * Specify the marker. A status picks an icon with its own shape, so it
@@ -53,22 +53,23 @@
 
   /**
    * Fix the reference instant for the relative time and the cutoff. This
-   * stops the live update, so the server and the browser print the same
-   * text.
+   * stops the live update. Unset, the relative time appears once the page is
+   * in the browser, so the server's text does not depend on its clock.
    * @type {Date | number | undefined}
    */
   export let now = undefined;
 
   /**
-   * Specify the locale of the times. The runtime locale when unset, which
-   * prints differently on a server; set it with `timeZone` for server
-   * rendering.
+   * Specify the locale of the times. Unset, it is `"en"` on the server and
+   * until the page mounts, then the browser's locale; set it, with
+   * `timeZone`, to print the same text throughout.
    * @type {string | undefined}
    */
   export let locale = undefined;
 
   /**
-   * Specify the IANA time zone of the times. The runtime zone when unset.
+   * Specify the IANA time zone of the times. Unset, it is `"UTC"` on the
+   * server and until the page mounts, then the browser's zone.
    * @type {string | undefined}
    */
   export let timeZone = undefined;
@@ -78,14 +79,18 @@
    * title. Return `""` for none.
    * @type {(status: TimelineStatus | undefined) => string}
    */
-  export let statusText = defaultStatusText;
+  export let statusDescription = defaultStatusDescription;
 
+  import { onMount } from "svelte";
   import IconIndicator from "../IconIndicator/IconIndicator.svelte";
   import RelativeTime from "../RelativeTime/RelativeTime.svelte";
   import { getDateTimeFormatter } from "../utils/intl-formatter-cache.js";
   import { localeDirection } from "../utils/locale-direction.js";
   import { toTimestamp } from "../utils/relative-time.js";
-  import { defaultStatusText, isWithinRelative } from "../utils/timeline.js";
+  import {
+    defaultStatusDescription,
+    isWithinRelative,
+  } from "../utils/timeline.js";
 
   /** @type {Record<TimelineStatus, "succeeded" | "caution-minor" | "failed" | "informative" | "in-progress">} */
   const KINDS = {
@@ -111,17 +116,29 @@
     ).format(stamp);
   }
 
+  // The server and the first client render know no clock, locale or zone of
+  // the browser, so they print "en" and UTC with no relative time. Once
+  // mounted, the browser's values take over.
+  let mounted = false;
+  /** @type {number | undefined} */
+  let clock;
+  onMount(() => {
+    clock = Date.now();
+    mounted = true;
+  });
+
+  $: language = locale ?? (mounted ? undefined : "en");
+  $: zone = timeZone ?? (mounted ? undefined : "UTC");
+  $: reference = now == null ? clock : toTimestamp(now);
   $: timestamp = toTimestamp(time);
   $: valid = !Number.isNaN(timestamp);
   $: iso = valid ? new Date(timestamp).toISOString() : undefined;
-  $: absolute = formatAbsolute(time, timeFormat, timeZone, locale);
-  $: relative = isWithinRelative(
-    timestamp,
-    now == null ? Date.now() : toTimestamp(now),
-    relativeWithin,
-  );
+  $: absolute = formatAbsolute(time, timeFormat, zone, language);
+  $: relative =
+    reference !== undefined &&
+    isWithinRelative(timestamp, reference, relativeWithin);
   $: kind = status ? KINDS[status] : undefined;
-  $: label = statusText(status);
+  $: label = statusDescription(status);
 </script>
 
 <li
@@ -144,9 +161,9 @@
       <span class:bx--timeline__dot={true}></span>
     {/if}
   </div>
-  {#if title || $$slots.titleChildren}
+  {#if titleText || $$slots.titleChildren}
     <div class:bx--timeline__title={true}>
-      <slot name="titleChildren">{title}</slot>
+      <slot name="titleChildren">{titleText}</slot>
     </div>
   {/if}
   {#if valid}
@@ -155,8 +172,8 @@
         class="bx--timeline__time"
         date={time}
         {now}
-        {locale}
-        {timeZone}
+        locale={language}
+        timeZone={zone}
         let:formatted
       >
         {absolute} · <bdi>{formatted}</bdi>
@@ -165,13 +182,13 @@
       <time
         class:bx--timeline__time={true}
         datetime={iso}
-        dir={localeDirection(locale)}>{absolute}</time
+        dir={localeDirection(language)}>{absolute}</time
       >
     {/if}
   {/if}
-  {#if description || $$slots.descriptionChildren}
+  {#if descriptionText || $$slots.descriptionChildren}
     <div class:bx--timeline__description={true}>
-      <slot name="descriptionChildren">{description}</slot>
+      <slot name="descriptionChildren">{descriptionText}</slot>
     </div>
   {/if}
   {#if $$slots.default}

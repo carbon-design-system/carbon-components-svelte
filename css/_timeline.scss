@@ -273,9 +273,8 @@
   }
 
   // Forced colors repaint borders and text but leave an SVG fill alone, so
-  // the rail and the markers are set to the system text color. The shapes
-  // still tell the statuses apart. The glyph cut into a filled warning
-  // icon takes the page color, as it does in every theme.
+  // the rail, the dot and a custom marker icon are set to the system text
+  // color. A status marker is an IconIndicator, which has its own rule.
   @media (forced-colors: active) {
     .#{$prefix}--timeline__item::before {
       border-inline-start-color: CanvasText;
@@ -285,15 +284,8 @@
       border-color: CanvasText;
     }
 
-    .#{$prefix}--timeline__icon,
-    .#{$prefix}--timeline__item .#{$prefix}--icon-indicator svg {
+    .#{$prefix}--timeline__icon {
       fill: CanvasText;
-    }
-
-    .#{$prefix}--timeline__item
-      .#{$prefix}--icon-indicator--caution-minor
-      path:first-of-type {
-      fill: Canvas;
     }
   }
 }
