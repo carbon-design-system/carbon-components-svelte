@@ -18,10 +18,20 @@
   export let disabled = false;
 
   /**
-   * Set to `true` to require the selection of a radio button.
+   * Set to `true` to require the selection of a radio button. A wrapping
+   * `<form>` blocks submission while none is selected, and the group shows
+   * its invalid state with `requiredInvalidText` instead of the browser's
+   * error bubble.
    * @type {boolean | undefined}
    */
   export let required = undefined;
+
+  /**
+   * Specify the invalid state text shown when a required group blocks
+   * submission. Cleared once a radio button is selected. `invalid` and
+   * `invalidText` take precedence.
+   */
+  export let requiredInvalidText = "Select an option";
 
   /**
    * Specify a name attribute for the radio button inputs.
@@ -120,6 +130,7 @@
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { createIdScope } from "../utils/id-scope.js";
+  import { requiredInvalid } from "../utils/required-invalid.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;
@@ -255,8 +266,13 @@
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
   $: $groupAllowDeselect = allowDeselect;
+  /** Set when the group, required and empty, blocked form submission. */
+  let requiredError = false;
+  $: if (!required || $selectedValue != null) requiredError = false;
+  $: shownInvalidText =
+    requiredError && !invalid ? requiredInvalidText : invalidText;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
-    invalid,
+    invalid: invalid || requiredError,
     warn,
     disabled: effectiveDisabled,
     readonly,
@@ -273,7 +289,7 @@
   $: $helperId = resolveStatusDescribedBy({
     showInvalid,
     showWarn,
-    invalidText,
+    invalidText: shownInvalidText,
     warnText,
     helperText,
     errorId,
@@ -299,6 +315,10 @@
     bind:this={fieldsetRef}
     use:formReset={handleFormReset}
     {form}
+    use:requiredInvalid={{
+      enabled: !!required,
+      onChange: (missing) => (requiredError = missing),
+    }}
     role="radiogroup"
     aria-orientation={orientation}
     aria-readonly={readonly || undefined}
@@ -339,9 +359,9 @@
     <div class:bx--radio-button-group__validation-msg={true}>
       {#if showInvalid}
         <WarningFilled class="bx--radio-button-group__invalid-icon" />
-        {#if invalidText}
+        {#if shownInvalidText}
           <div id={errorId} role="alert" class:bx--form-requirement={true}>
-            {invalidText}
+            {shownInvalidText}
           </div>
         {/if}
       {:else if showWarn}

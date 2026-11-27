@@ -7,6 +7,7 @@
   export let readonly: ComponentProps<RadioButtonGroup>["readonly"] = false;
   export let allowDeselect = false;
   export let values: [string | number, string | number] = ["a", "b"];
+  export let required: ComponentProps<RadioButtonGroup>["required"] = false;
   export let onChange: (event: CustomEvent) => void = () => {};
 </script>
 
@@ -15,6 +16,7 @@
     bind:selected
     {readonly}
     {allowDeselect}
+    {required}
     legendText="Pick one"
     on:change={onChange}
   >
