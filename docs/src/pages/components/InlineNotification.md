@@ -17,6 +17,11 @@ Display a basic error notification with title and subtitle by default. See [deta
 
 Control notification visibility by binding to `open` to show, hide, and reuse the same component with different messages. Open defaults to true.
 
+<DocKbd label="Escape" /> closes a notification while focus is inside it, as the
+close button does, and focus returns to where it was before. Set
+`closeOnEscape` to `false` to keep it open. Escape does nothing when
+`hideCloseButton` is set, unless the notification is [actionable](#actionable).
+
 <FileSource src="/framed/InlineNotification/InlineNotificationReusable" />
 
 ## Autoclose
