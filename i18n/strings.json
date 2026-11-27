@@ -1535,6 +1535,48 @@
       "defaultKind": "text"
     },
     {
+      "component": "NumberRangeInput",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "NumberRangeInput",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "NumberRangeInput",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "NumberRangeInput",
+      "prop": "maxLabelText",
+      "type": "string",
+      "default": "Maximum",
+      "defaultKind": "text"
+    },
+    {
+      "component": "NumberRangeInput",
+      "prop": "minLabelText",
+      "type": "string",
+      "default": "Minimum",
+      "defaultKind": "text"
+    },
+    {
+      "component": "NumberRangeInput",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
       "component": "OutboundLink",
       "prop": "assistiveText",
       "type": "string",
@@ -3135,6 +3177,20 @@
       }
     },
     {
+      "component": "NumberRangeInput",
+      "prop": "translateWithId",
+      "type": "(id: NumberRangeInputTranslationId, params: { limit: string }) => string",
+      "ids": {
+        "belowMin": "Enter {limit} or more.",
+        "aboveMax": "Enter {limit} or less.",
+        "step": "Use whole steps, such as {limit}.",
+        "crossedMin": "Must not be above the maximum, {limit}.",
+        "crossedMax": "Must not be below the minimum, {limit}.",
+        "requiredMin": "Enter a minimum.",
+        "requiredMax": "Enter a maximum."
+      }
+    },
+    {
       "component": "StructuredListCell",
       "prop": "translateWithId",
       "type": "(id: StructuredListCellTranslationId) => string",
@@ -3175,6 +3231,7 @@
     }
   ],
   "ids": {
+    "aboveMax": "Enter {limit} or less.",
     "agree": "Agree",
     "alt": "Alt",
     "arrowDown": "Down Arrow",
@@ -3182,6 +3239,7 @@
     "arrowRight": "Right Arrow",
     "arrowUp": "Up Arrow",
     "backspace": "Backspace",
+    "belowMin": "Enter {limit} or more.",
     "clearAll": "Clear all selected items",
     "clearSelection": "Clear selected item",
     "close": "Close menu",
@@ -3191,6 +3249,8 @@
     "columnSortDescending": "Sort rows by this header in descending order",
     "command": "Command",
     "control": "Control",
+    "crossedMax": "Must not be below the minimum, {limit}.",
+    "crossedMin": "Must not be above the maximum, {limit}.",
     "ctrl": "Ctrl",
     "decrement": "Decrement number",
     "del": "Del",
@@ -3217,6 +3277,8 @@
     "option": "Option",
     "pageDown": "Page Down",
     "pageUp": "Page Up",
+    "requiredMax": "Enter a maximum.",
+    "requiredMin": "Enter a minimum.",
     "return": "Return",
     "satisfied": "Satisfied",
     "selectAll": "Select all rows",
@@ -3225,6 +3287,7 @@
     "somewhatAgree": "Somewhat agree",
     "somewhatDisagree": "Somewhat disagree",
     "space": "Space",
+    "step": "Use whole steps, such as {limit}.",
     "stronglyAgree": "Strongly agree",
     "stronglyDisagree": "Strongly disagree",
     "tab": "Tab",
