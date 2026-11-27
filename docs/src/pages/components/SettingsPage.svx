@@ -1,0 +1,133 @@
+---
+components: ["SettingsPage", "SettingsSection", "SettingRow", "SettingsNav", "SettingsSaveBar"]
+description: A settings page groups an account's options into sections, with a section list, search, and a save bar for unsaved changes.
+---
+
+## Basic
+
+A settings page is a `SettingsPage` around `SettingsSection`s of `SettingRow`s. Create its state with `createSettings`, which holds the working values, the last saved values, and each setting's default. Pass it to `SettingsPage` and bind a control to `$values.name`. A row puts a label and a description beside the control, and stacks them when its section is narrow.
+
+Edit a field and `SettingsSaveBar` slides in at the bottom of the window with "Discard" and "Save". The bar always holds its place, so it appearing moves nothing, and it is inert, out of the tab order and the accessibility tree, while there is nothing to save. Press <DocKbd label="Ctrl" />+<DocKbd label="S" /> (<DocKbd label="⌘" />+<DocKbd label="S" /> on a Mac) to save from a field.
+
+<FileSource src="/framed/SettingsPage/SettingsPageAccount" />
+
+## Sections
+
+### Section list
+
+`SettingsNav` lists the sections as links and marks the one the reader is in as they scroll. Pass the same ids as the `SettingsSection`s. Each link is a deep link such as `#notifications`, and following one, or opening the page with the hash, moves focus to the section's heading, so a screen reader reads the section and the next <DocKbd label="Tab" /> continues inside it.
+
+Below the large breakpoint the list becomes a "Jump to section" menu, which scrolls and moves focus the same way. A section with fields the server rejected shows an error count on its link, and one with unsaved changes shows a dot.
+
+The list takes its sections from a prop rather than from the section components. Components that register after mount leave the list empty in the server's markup, and the page shifts once it hydrates.
+
+### Section headings
+
+`SettingsPage` starts the page's heading level, so a `Heading` directly inside it is the `h1` and each section's title is an `h2`. Don't wrap each section in its own `Section`: every one of them would start again at `h1`.
+
+## Search
+
+Bind `query` to a `Search` field. Rows, sections and the section list that don't match hide, the match is highlighted in the label, and `resultCount` reports how many settings are left. Show your own empty state when a query matches nothing. A polite live region announces the result once typing pauses.
+
+A match needs every word of the query in a row's label, its description, its `keywords`, or its section's title. Add `keywords` for words people search that the label doesn't say, such as "timezone" for "Time zone".
+
+Hidden rows stay mounted, so their controls keep their values and stay in the form. For a search outside the page, call `filterSettings` yourself.
+
+```svelte
+<script>
+  import { filterSettings } from "carbon-components-svelte";
+
+  const result = filterSettings(
+    [
+      {
+        id: "profile",
+        title: "Profile",
+        items: [{ id: "tz", label: "Time zone", keywords: ["timezone"] }],
+      },
+    ],
+    "timezone",
+  );
+  // result.count is 1; result.sections[0].items[0].matched is true
+</script>
+```
+
+## Saving
+
+### Save bar
+
+A single bar saves the whole page, as GitHub and Vercel do, instead of a button in each section. Pass `save` to `SettingsPage`. It receives a copy of the values. Resolve nothing to save, resolve `{ errors }` to reject fields, or throw to fail the whole save. While it runs the Save button loads and the page ignores a second save.
+
+When the save settles, focus returns to the field the reader came from, so the bar leaving doesn't drop focus on the page. "Discard" puts every field back to its last saved value and returns focus the same way. The `save` and `discard` events fire when each finishes, for a toast.
+
+### Server errors
+
+A resolved `errors` object maps a field's `name` to its message. The row shows it through the control's `invalid` and `invalidText`, the section's heading and its link in the list show an error count, the bar reads "N settings could not be saved", and focus moves to the first field with an error. Editing a field withdraws its message. To show messages from somewhere else, call `settings.setErrors`.
+
+<FileSource src="/framed/SettingsPage/SettingsPageRows" />
+
+### Optimistic save
+
+Create the settings with `optimistic` to update the saved values when the save starts and roll them back if it fails. The bar clears at once, and returns, with the edits kept, when the server doesn't answer.
+
+<FileSource src="/framed/SettingsPage/SettingsPageOptimistic" />
+
+### Leaving the page
+
+While the page is dirty, the browser asks before the tab closes. For links inside the app, `settings.unsaved` answers a router. Call `guard()` to ask with the discard prompt, or `interrupt(cancel, retry)` from a navigation hook, which cancels, asks, and runs `retry` when the reader discards. A clean page returns `false` without asking.
+
+<FileSource src="/framed/SettingsPage/SettingsPageLeaveGuard" />
+
+With SvelteKit, cancel in `beforeNavigate` and navigate again once the reader agrees. Awaiting the prompt before calling `cancel()` is too late, because the router has committed by then.
+
+```js
+import { beforeNavigate, goto } from "$app/navigation";
+
+beforeNavigate(({ willUnload, cancel, to }) => {
+  if (!willUnload && to) {
+    settings.unsaved.interrupt(cancel, () => goto(to.url));
+  }
+});
+```
+
+## Rows
+
+### Controls
+
+A row's slot gives the control what it needs through `controlProps`: an `id`, the label as `labelText` with `hideLabel`, `disabled` for a locked row, and `aria-describedby` for the description. The label shows once, in the row, and the control keeps its accessible name. Spread `controlProps` on a control that takes those props. For a control with other names, such as `RadioButtonGroup`, set its legend and hide it.
+
+`invalid` and `invalidText` come from the server's message for the row's `name`, and `modified` is `true` while the value is unsaved. A modified row gets a line at its start.
+
+### Locked
+
+Set `locked` for a setting a policy or an administrator manages. The control is disabled, and a lock icon beside the label explains why in a tooltip. The icon is a button, so keyboard and screen reader users reach the explanation even though the control is out of the tab order. Change the text with `lockedText`.
+
+### Reset to default
+
+Pass each field's factory default to `createSettings` as `defaults`. A row whose value differs from its default shows "Reset to default". It restores the default, which makes the field modified until saved, and moves focus to the control, because the button leaves with the difference. A field with no default has no button.
+
+### Danger zone
+
+Set `kind="danger"` on a section for actions that can't be undone. It draws a red border and leaves the section out of the page's changes, because its buttons act at once. Confirm with a `ConfirmModal` and a `confirmationPhrase`, so the reader types the name of what they delete. The first example on this page ends with one.
+
+## Layout
+
+Compose the page with `Grid`, `Stack` and `Box`, with the section list in 4 of 16 columns on large screens and the sections in 10. A row sits beside its control once its section is 36rem wide and stacks them below that, so the same page fits a side panel.
+
+| Do | Why |
+| --- | --- |
+| Put `SettingsSaveBar` last in the column that holds the sections. | It sticks to the bottom of the window while the column is on screen, and ends in place under the last section. |
+| Give a long page a sticky offset with `--ccs-settings-sticky-offset` on `SettingsPage`. | The section list and a section scrolled to by a link stay clear of a fixed header. |
+| Pass `scrollContainer` to `SettingsNav` when a panel scrolls instead of the window. | The section list follows the panel's scroll position. |
+| Give every `SettingRow` a `name` that matches a key in the values. | The name ties the row to its modified line, its reset button and its server message. |
+| Keep a label short and put the explanation in `description`. | The label is also the control's accessible name, and a search matches it first. |
+| Use `Heading` inside `SettingsPage` for the title, not an `h1` of your own. | The sections' headings count down from it, and the page keeps one `h1`. |
+| Leave the whole page in one `SettingsPage` rather than one for each section. | A single save bar and a single leave guard cover every section. |
+
+## Accessibility
+
+| Do | Why |
+| --- | --- |
+| Give `SettingsPage` the page's only `h1` through `Heading`. | A screen reader user navigating by heading finds the title, then each section as an `h2`. |
+| Let focus follow a section link. | The link scrolls, but a screen reader user only learns where they are once focus is on the heading. |
+| Leave the save bar without a landmark of your own around it. | While changes are unsaved the bar is a region named "Unsaved changes", and while the page is clean it is out of the accessibility tree. |
+| Leave the live region in `SettingsPage`. | It announces the first unsaved change, a saved result, a failed save and the number of search results, so a reader isn't told on every keystroke. |
