@@ -24,6 +24,8 @@ When the panel opens, focus moves to the first match:
 
 When the panel closes, focus goes back to the element that opened it. A panel already open when the page loads leaves focus where it is, unless it's modal. Set `selectorPrimaryFocus` to `null` to move focus yourself.
 
+Set `returnFocusTo` to an element, or a function returning one, to return focus there instead, for example when the panel has browsed away from the item that opened it. See [Header actions](#header-actions).
+
 ## Closing
 
 The panel dispatches a cancelable `close` event. Call `e.preventDefault()` to keep it open, for example while a form has unsaved changes. `e.detail.trigger` tells you what closed it: `"escape-key"`, `"outside-click"`, `"close-button"` or `"programmatic"`. The last one means your code set `open` to `false`.
@@ -85,6 +87,14 @@ Set `currentStep` to show a back button from the second step on. Listen for `bac
 Put buttons for the panel's content in the `toolbar` slot, below the title.
 
 <FileSource src="/framed/SidePanel/SidePanelToolbar" />
+
+## Header actions
+
+Put icon buttons that act on the whole panel, such as previous and next, in the `headerActions` slot. They sit before the close button, in the same order for the keyboard. Size them with `let:buttonSize` to match the close button.
+
+This example browses services without closing the panel. On close, `returnFocusTo` returns focus to the tile of the service on screen, not the one that opened the panel.
+
+<FileSource src="/framed/SidePanel/SidePanelHeaderActions" />
 
 ## AI label
 
