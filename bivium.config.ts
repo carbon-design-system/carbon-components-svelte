@@ -81,10 +81,11 @@ export default {
     "docs/scripts/markdown.ts",
     "docs/scripts/page.ts",
     "docs/scripts/format.ts",
-    "docs/scripts/compile-cache.ts",
+    "docs/scripts/bun-plugins.ts",
+    "docs/scripts/self-host-plex.ts",
+    "docs/index.html",
     "docs/src/idle-mount.ts",
     "docs/src/ibm-scripts.ts",
-    "docs/scripts/page-html.ts",
     "docs/scripts/example-source.ts",
   ],
   ignore: [
@@ -133,12 +134,13 @@ export default {
   hermetic: [
     // Writes the code it formats to a temporary directory, not the repository.
     "docs/scripts/format.ts",
-    // Caches to a temporary directory.
-    "tests/docs/compile-cache.test.ts",
-    "docs/scripts/compile-cache.ts",
-    // Reads the build's output and lists the pages, only in a docs build;
-    // its test calls neither.
-    "docs/scripts/page-html.ts",
+    // Write and read only a temporary directory.
+    "tests/docs/bun-plugins.test.ts",
+    "tests/docs/self-host-plex.test.ts",
+    // Read the site's generated JSON and the build's output, only in a docs
+    // build; their tests call the pure helpers, on a temporary directory.
+    "docs/scripts/bun-plugins.ts",
+    "docs/scripts/self-host-plex.ts",
     // The e2e host reads only the fixture entry of the URL each test opens,
     // which the test's own navigation already reaches. A blanket `@reads` on
     // every entry made any fixture change select every e2e test.

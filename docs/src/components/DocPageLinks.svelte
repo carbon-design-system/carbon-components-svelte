@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Box, Link, Stack } from "carbon-components-svelte";
   import ArrowUpRight from "carbon-icons-svelte/lib/ArrowUpRight.svelte";
+  import { REPO } from "virtual:site";
   import { route } from "../current-route";
   import { editPageUrl, openIssuesUrl, reportIssueUrl } from "../page-links";
 
@@ -23,16 +24,12 @@
     borderSide="top"
   >
     <Stack orientation="horizontal" gap={6} wrap="wrap">
-      <Link
-        icon={ArrowUpRight}
-        href={editPageUrl(__PKG_REPO, file)}
-        target="_blank"
-      >
+      <Link icon={ArrowUpRight} href={editPageUrl(REPO, file)} target="_blank">
         Edit this page
       </Link>
       <Link
         icon={ArrowUpRight}
-        href={reportIssueUrl(__PKG_REPO, name, pageUrl)}
+        href={reportIssueUrl(REPO, name, pageUrl)}
         target="_blank"
       >
         Report an issue
@@ -40,7 +37,7 @@
       {#if component}
         <Link
           icon={ArrowUpRight}
-          href={openIssuesUrl(__PKG_REPO, name)}
+          href={openIssuesUrl(REPO, name)}
           target="_blank"
         >
           Open issues

@@ -1,5 +1,3 @@
-/// <reference types="vite/client" />
-
 import type { Component } from "svelte";
 import { derived, get, writable } from "svelte/store";
 import { route } from "./current-route";

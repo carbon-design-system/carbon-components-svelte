@@ -1,4 +1,5 @@
 import FILE_PATHS from "virtual:component-api/file-paths";
+import { REPO } from "virtual:site";
 import pkg from "../../package.json" with { type: "json" };
 import {
   CATEGORY_BY_COMPONENT,
@@ -51,7 +52,7 @@ function sourcePathFor(name: string): string {
 }
 
 export function sourceRepoUrl(sourcePath: string): string {
-  return `${__PKG_REPO}/tree/master/${sourcePath}`;
+  return `${REPO}/tree/master/${sourcePath}`;
 }
 
 export function sourceRepoUrlForFilePath(
