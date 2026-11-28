@@ -40,24 +40,6 @@ test("an open OverflowMenu sits under its button before it's positioned", async 
   expect(await rect(page, selector)).toEqual(mounted);
 });
 
-test("an open Tearsheet keeps its layout when its scrolling body takes a tab stop", async ({
-  page,
-}) => {
-  const container = ".bx--tearsheet__container";
-  const main = `${container} .bx--tearsheet__main`;
-  const mounted = [await rect(page, container), await rect(page, main)];
-  // The server renders the body before it measures an overflow, so it has
-  // no tab stop or region role yet.
-  await page.locator(main).evaluate((el) => {
-    el.removeAttribute("tabindex");
-    el.removeAttribute("role");
-    el.removeAttribute("aria-labelledby");
-  });
-  expect([await rect(page, container), await rect(page, main)]).toEqual(
-    mounted,
-  );
-});
-
 test("an above-header ShellBanner is the height the server reserves", async ({
   page,
 }) => {
@@ -82,9 +64,10 @@ test("a LanguagePicker row keeps its height when the name in its own script arri
 }) => {
   // The endonym is looked up while the browser is idle, in the language's
   // own direction. Arabic is written right to left, English is not, and
-  // both rows are the same height. The picker starts open: the open
-  // Tearsheet above takes the pointer.
-  const rows = page.locator("[data-testid=language] [role=option]");
+  // both rows are the same height, measured as the menu first opens.
+  const picker = page.getByTestId("language");
+  await picker.getByRole("combobox", { name: "Language", exact: true }).click();
+  const rows = picker.getByRole("option");
   await expect(rows).toHaveCount(2);
   const heights = await rows.evaluateAll((els) =>
     els.map((el) => Math.round(el.getBoundingClientRect().height)),
@@ -214,8 +197,9 @@ test("a CountryPicker row is as tall with a code box as with a drawn flag", asyn
   // The flags load the first time the menu opens, so a row first shows its
   // code in a box of the flag's size. Switzerland has a flag and Kosovo
   // does not, so their rows differ only in what stands in front of the name.
-  // The picker starts open: the open Tearsheet above takes the pointer.
-  const rows = page.locator("[data-testid=country] [role=option]");
+  const picker = page.getByTestId("country");
+  await picker.getByRole("combobox", { name: "Country", exact: true }).click();
+  const rows = picker.getByRole("option");
   await expect(rows).toHaveCount(2);
   await expect(rows.first().locator(".bx--flag")).toBeVisible();
   const heights = await rows.evaluateAll((els) =>

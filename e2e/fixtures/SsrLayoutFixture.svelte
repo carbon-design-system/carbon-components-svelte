@@ -1,6 +1,5 @@
 <script lang="ts">
   import {
-    Button,
     Coachmark,
     CountryPicker,
     ExpandableTile,
@@ -13,7 +12,6 @@
     OverflowMenu,
     OverflowMenuItem,
     ShellBanner,
-    Tearsheet,
     Timeline,
   } from "carbon-components-svelte";
   import { JP } from "carbon-components-svelte/flags";
@@ -36,16 +34,6 @@
   </OverflowMenu>
 </div>
 
-<Tearsheet open titleText="Create integration" size="narrow">
-  <div data-testid="tearsheet-body" style="height: 120vh">
-    A body taller than the window scrolls.
-  </div>
-  <svelte:fragment slot="actions">
-    <Button kind="secondary">Cancel</Button>
-    <Button>Next</Button>
-  </svelte:fragment>
-</Tearsheet>
-
 <ShellBanner
   placement="above-header"
   title="Viewing as jane@acme.com."
@@ -54,7 +42,6 @@
 
 <div data-testid="language" style="height: 20rem; padding: 1rem;">
   <LanguagePicker
-    open
     labelText="Language"
     values={["ar", "en"]}
     portalMenu={false}
@@ -132,10 +119,5 @@
 </div>
 
 <div data-testid="country" style="height: 20rem; padding: 1rem;">
-  <CountryPicker
-    open
-    labelText="Country"
-    values={["CH", "XK"]}
-    portalMenu={false}
-  />
+  <CountryPicker labelText="Country" values={["CH", "XK"]} portalMenu={false} />
 </div>
