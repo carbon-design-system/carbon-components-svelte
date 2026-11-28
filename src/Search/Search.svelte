@@ -123,10 +123,12 @@
 
   /**
    * Specify a keyboard shortcut that focuses the field, such as `"/"` or
-   * `"mod+k"`. `mod` is Command on Apple platforms and Ctrl elsewhere. The
-   * keys show at the end of the empty field until it's focused, and the
-   * input gets `aria-keyshortcuts`. A shortcut without a modifier, such as
-   * `"/"`, doesn't fire while typing in another field.
+   * `"mod+k"`, or several, such as `["mod+k", "/"]`. `mod` is Command on
+   * Apple platforms and Ctrl elsewhere. The first shortcut shows at the end
+   * of the empty field until it's focused, and the input gets
+   * `aria-keyshortcuts` for all of them. A shortcut without a modifier,
+   * such as `"/"`, doesn't fire while typing in another field.
+   * @type {string | ReadonlyArray<string>}
    */
   export let shortcut = "";
 
@@ -299,18 +301,21 @@
   $: ariaShortcut = shortcut
     ? ariaKeyShortcuts(shortcut, { apple: $applePlatform }) || undefined
     : undefined;
+  // The first of several shortcuts is the one the field shows.
+  $: hintShortcut =
+    typeof shortcut === "string" ? shortcut : (shortcut?.find(Boolean) ?? "");
   // The keys show in the empty field, where the clear button goes, and
   // make room for themselves: their width in `ch`, near enough for the
   // short run of keys, in the names `setKbdTranslations` gives them, and
   // known on the server. An icon is 1em, under 2ch.
   $: hasShortcutHint =
-    Boolean(shortcut) &&
+    Boolean(hintShortcut) &&
     (value === "" || value == null) &&
     !effectiveDisabled &&
     !(expandable && !expanded) &&
     !showInvalid &&
     !showWarn;
-  $: shortcutWidth = kbdKeys(shortcut, $applePlatform, translateKey).reduce(
+  $: shortcutWidth = kbdKeys(hintShortcut, $applePlatform, translateKey).reduce(
     (width, key, index) =>
       width +
       (key.icon ? 2 : key.label.length) +
@@ -671,7 +676,7 @@
     />
     {#if hasShortcutHint}
       <span class:bx--search__shortcut={true}>
-        <Kbd {shortcut} variant="muted" aria-hidden="true" />
+        <Kbd shortcut={hintShortcut} variant="muted" aria-hidden="true" />
       </span>
     {/if}
     {#if showInvalid}
@@ -747,6 +752,6 @@
 
 <!-- Only while a shortcut is set, so a field without one leaves the binding,
      and with carbon-preprocess-svelte the parser, out of the app. -->
-{#if shortcut && shortcutNode}
+{#if hintShortcut && shortcutNode}
   <ShortcutBinding node={shortcutNode} {shortcut} run={runShortcut} />
 {/if}
