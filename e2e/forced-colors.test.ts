@@ -432,6 +432,20 @@ test.describe("forced colors", () => {
           .first()
           .click(),
     },
+    {
+      name: "a chosen SurveyScale option",
+      prepare: (page) => page.goto("/survey-scale.html"),
+      target:
+        ".bx--survey-scale__input:not(:checked):not(:disabled) + .bx--survey-scale__content",
+      settled: ".bx--survey-scale__input:checked + .bx--survey-scale__content",
+      act: (page) =>
+        page
+          .locator(
+            ".bx--survey-scale__input:not(:checked):not(:disabled) + .bx--survey-scale__content",
+          )
+          .first()
+          .click(),
+    },
   ];
 
   for (const scheme of ["light", "dark"] as const) {
