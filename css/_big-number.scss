@@ -160,6 +160,13 @@
     margin-block-start: $carbon--spacing-03;
   }
 
+  // A passed slot whose content renders nothing, such as a false `{#if}`,
+  // leaves its wrapper empty, and the wrapper kept its margin.
+  .#{$prefix}--big-number__action:empty,
+  .#{$prefix}--big-number__footer:empty {
+    display: none;
+  }
+
   // BigNumberSkeleton: a bar in each row's line (70% of its height),
   // the row keeping the line of its type so each size's height holds.
   .#{$prefix}--big-number.#{$prefix}--skeleton .#{$prefix}--big-number__label,

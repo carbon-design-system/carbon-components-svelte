@@ -54,6 +54,13 @@
     margin-top: $carbon--spacing-05;
   }
 
+  // A passed slot whose content renders nothing, such as a false `{#if}`,
+  // leaves its wrapper empty, and the wrapper kept its margin.
+  .#{$prefix}--empty-state__illustration:empty,
+  .#{$prefix}--empty-state__actions:empty {
+    display: none;
+  }
+
   .#{$prefix}--empty-state--sm {
     padding: $carbon--spacing-05;
   }
