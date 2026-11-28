@@ -234,6 +234,7 @@ export { default as Select } from "./Select/Select.svelte";
 export { default as SelectItem } from "./Select/SelectItem.svelte";
 export { default as SelectItemGroup } from "./Select/SelectItemGroup.svelte";
 export { default as SelectSkeleton } from "./Select/SelectSkeleton.svelte";
+export { default as SelectionBar } from "./SelectionBar/SelectionBar.svelte";
 export { default as SessionStorage } from "./SessionStorage/SessionStorage.svelte";
 export { default as ShapeIndicator } from "./ShapeIndicator/ShapeIndicator.svelte";
 export { default as SidePanel } from "./SidePanel/SidePanel.svelte";

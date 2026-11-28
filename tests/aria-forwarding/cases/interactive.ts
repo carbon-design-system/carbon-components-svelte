@@ -35,6 +35,7 @@ import Popover from "carbon-components-svelte/Popover/Popover.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
 import QRCode from "carbon-components-svelte/QRCode/QRCode.svelte";
 import SavingStatus from "carbon-components-svelte/SavingStatus/SavingStatus.svelte";
+import SelectionBar from "carbon-components-svelte/SelectionBar/SelectionBar.svelte";
 import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
 import Tearsheet from "carbon-components-svelte/Tearsheet/Tearsheet.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
@@ -540,6 +541,11 @@ export const interactive: AriaEntry[] = [
     name: "HoverCard",
     render: (attrs) => render(HoverCard, { props: { open: true, ...attrs } }),
     target: () => screen.getByRole("dialog"),
+  },
+  {
+    name: "SelectionBar",
+    render: (attrs) => render(SelectionBar, { props: { count: 2, ...attrs } }),
+    target: () => screen.getByRole("region"),
   },
   {
     name: "Toggletip",

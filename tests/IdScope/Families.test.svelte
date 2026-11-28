@@ -30,6 +30,7 @@
   import SearchMenuItem from "carbon-components-svelte/SearchMenu/SearchMenuItem.svelte";
   import Select from "carbon-components-svelte/Select/Select.svelte";
   import SelectItem from "carbon-components-svelte/Select/SelectItem.svelte";
+  import SelectionBar from "carbon-components-svelte/SelectionBar/SelectionBar.svelte";
   import Stepper from "carbon-components-svelte/Stepper/Stepper.svelte";
   import StructuredList from "carbon-components-svelte/StructuredList/StructuredList.svelte";
   import StructuredListBody from "carbon-components-svelte/StructuredList/StructuredListBody.svelte";
@@ -255,4 +256,11 @@
     <ContextMenuOption labelText="One" />
     <ContextMenuOption labelText="Two" />
   </ContextMenu>
+{:else if family === "SelectionBar"}
+  <SelectionBar id="fixed" count={2}>
+    <svelte:fragment slot="items">
+      <Tag filter>One</Tag>
+      <Tag filter>Two</Tag>
+    </svelte:fragment>
+  </SelectionBar>
 {/if}
