@@ -47,7 +47,10 @@
    */
   export let tabindex = "0";
 
-  /** Set an id for the top-level element */
+  /**
+   * Set an id for the top-level element.
+   * The content below the fold derives its id from it as `{id}-content`.
+   */
   export let id = useId("expandable-tile");
 
   /**

@@ -371,10 +371,13 @@
   export let rowClass = undefined;
 
   /**
-   * Set an id for the table container.
-   * The title, description, header, cell and selection ids derive from it,
-   * for example `{id}-title` and `{id}-{header.key}`, and slotted
-   * components draw theirs from `{id}-slot`.
+   * Set an id for the table container. The title, description, header,
+   * cell and selection ids derive from it: `{id}-title` and
+   * `{id}-description`, each column header `{id}-{header.key}`, the
+   * select-all checkbox `{id}-select-all`, each row's checkbox or radio
+   * button `{id}-{row.id}`, the expand column header `{id}-expand`, and each
+   * expanded row `{id}-expandable-row-{row.id}`. Slotted components draw
+   * theirs from `{id}-slot`.
    */
   export let id = useId("data-table");
 

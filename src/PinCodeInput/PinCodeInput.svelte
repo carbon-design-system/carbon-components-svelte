@@ -192,7 +192,11 @@
     return `${labelText || "Pin code"} ${type === "numeric" ? "digit" : "character"} ${position} of ${count}`;
   };
 
-  /** Set an id for the input group */
+  /**
+   * Set an id for the first cell's input.
+   * Each later cell's id derives from it as `{id}-{index}`, counting from
+   * 0, so the second cell is `{id}-1`.
+   */
   export let id = useId("pin-code-input");
 
   /**

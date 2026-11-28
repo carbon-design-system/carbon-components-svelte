@@ -218,7 +218,10 @@
    */
   export let form = undefined;
 
-  /** Set an id for the range. The fields and messages derive theirs from it. */
+  /**
+   * Set an id for the range. The fields and messages derive theirs from it:
+   * the minimum field is `{id}-min` and the maximum field `{id}-max`.
+   */
   export let id = useId("number-range-input");
 
   /**
