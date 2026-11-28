@@ -105,6 +105,24 @@ describe("SidePanel", () => {
     expect(document.querySelector(".bx--side-panel")).toBeNull();
   });
 
+  it("returns focus to returnFocusTo, or to the opener when it's gone", async () => {
+    let target: HTMLElement | null = null;
+    render(SidePanel, { props: { returnFocusTo: () => target } });
+    const launcher = screen.getByRole("button", { name: "Open panel" });
+    target = screen.getByRole("button", { name: "Next item" });
+
+    await user.click(launcher);
+    await user.click(screen.getByRole("button", { name: "Close" }));
+    await tick();
+    expect(target).toHaveFocus();
+
+    target = document.createElement("button");
+    await user.click(launcher);
+    await user.click(screen.getByRole("button", { name: "Close" }));
+    await tick();
+    expect(launcher).toHaveFocus();
+  });
+
   it("leaves focus alone when it mounts open, unless it's modal", async () => {
     render(SidePanel, { props: { open: true, field: true } });
     await tick();
