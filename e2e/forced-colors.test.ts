@@ -273,6 +273,30 @@ test.describe("forced colors", () => {
     }
   });
 
+  // The cell's fill transitioned in from its unforced gray, so for a few
+  // frames a just-selected row read HighlightText on a light fill.
+  test("a DataTable row fills with Highlight as soon as it's selected", async ({
+    page,
+  }) => {
+    const firstFrame = await page.evaluate(async () => {
+      const row = document.querySelector(
+        ".bx--data-table tbody tr:not(.bx--data-table--selected)",
+      );
+      row?.querySelector<HTMLInputElement>("input[type=checkbox]")?.click();
+      await new Promise(requestAnimationFrame);
+      const cell = row?.querySelector("td:last-of-type");
+      if (!row?.classList.contains("bx--data-table--selected") || !cell) {
+        throw new Error("the row did not select");
+      }
+      const s = getComputedStyle(cell);
+      return { background: s.backgroundColor, color: s.color };
+    });
+    expect(firstFrame).toEqual({
+      background: system.Highlight,
+      color: system.HighlightText,
+    });
+  });
+
   test("the Truncate toggle reads as a link, also on hover", async ({
     page,
   }) => {

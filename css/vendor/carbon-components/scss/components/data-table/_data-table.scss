@@ -131,7 +131,9 @@
 /// told them apart. It fills with `Highlight` instead, as a selected tree
 /// node does. The row opts out of forcing so the fill and `HighlightText`
 /// hold under hover and for the zebra and highlighted-row variants, which
-/// the selector outranks. The checkbox box follows the text color.
+/// the selector outranks. The checkbox box follows the text color. The fill
+/// does not transition: it would start from the row's unforced fill, so a
+/// just-selected row flashed `HighlightText` on a light gray.
 /// @access private
 /// @group components
 @mixin data-table-selected-forced-colors {
@@ -148,6 +150,7 @@
       border-block-color: Highlight;
       background-color: Highlight;
       color: HighlightText;
+      transition: none;
     }
 
     .#{$prefix}--data-table
