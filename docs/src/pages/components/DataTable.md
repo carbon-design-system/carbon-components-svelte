@@ -1842,7 +1842,7 @@ Set `selectable` to `true` for multi-select. Bind selectedRowIds to track select
 
 ### Batch
 
-Set `batchSelection` to `true` to add a checkbox for selecting all rows. The checkbox shows an indeterminate state when some rows are selected.
+Set `batchSelection` to `true` to add a checkbox for selecting all rows. The checkbox shows an indeterminate state when some rows are selected. Its id is `{id}-select-all`, from the table's `id`, and each row's checkbox is `{id}-{row.id}`, so set `id` to move focus to one, for example after an action removes the row that had it.
 
 <FileSource src="/framed/DataTable/DataTableBatchSelection" />
 
@@ -1855,6 +1855,11 @@ Use `selectedRowIds` to specify initially selected rows.
 ### Actions toolbar
 
 Add a toolbar for batch actions when rows are selected. Override the "N items selected" label with `formatTotalSelected` on `ToolbarBatchActions`.
+
+| Do | Why |
+| :--- | :--- |
+| Use batch actions for a table with a toolbar | They take the toolbar's place while rows are selected, so the rows don't move |
+| Use a pinned [SelectionBar](/components/SelectionBar#selectionbar-or-batch-actions) for a table without a toolbar, or a selection outside a table | It shows the same count and actions without a toolbar to cover |
 
 <FileSource src="/framed/DataTable/DataTableBatchSelectionToolbar" />
 
