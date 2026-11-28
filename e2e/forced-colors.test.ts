@@ -374,6 +374,19 @@ test.describe("forced colors", () => {
           .first()
           .click(),
     },
+    {
+      name: "a selected StructuredList row",
+      target:
+        ".bx--structured-list-row:not(.bx--structured-list-row--selected)",
+      settled: ".bx--structured-list-row--selected",
+      act: (page) =>
+        page
+          .locator(
+            ".bx--structured-list-row:not(.bx--structured-list-row--selected)",
+          )
+          .first()
+          .click(),
+    },
   ];
 
   for (const scheme of ["light", "dark"] as const) {
