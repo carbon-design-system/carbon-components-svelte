@@ -123,6 +123,26 @@ describe("Tearsheet", () => {
     expect(launcher).toHaveFocus();
   });
 
+  it("returns focus to returnFocusTo, or to the opener when it's gone", async () => {
+    let target: HTMLElement | null = null;
+    render(Tearsheet, { props: { returnFocusTo: () => target } });
+    const launcher = screen.getByRole("button", { name: "Open tearsheet" });
+    target = screen.getByRole("button", { name: "Next item" });
+
+    await user.click(launcher);
+    await user.click(screen.getByRole("button", { name: "Close" }));
+    await tick();
+    await tick();
+    expect(target).toHaveFocus();
+
+    target = document.createElement("button");
+    await user.click(launcher);
+    await user.click(screen.getByRole("button", { name: "Close" }));
+    await tick();
+    await tick();
+    expect(launcher).toHaveFocus();
+  });
+
   it("focuses the close button when there is no field", async () => {
     render(Tearsheet);
     await user.click(screen.getByRole("button", { name: "Open tearsheet" }));
