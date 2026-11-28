@@ -146,11 +146,14 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
-  import User from "../icons/User.svelte";
+  import BuiltinUser from "../icons/User.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { getAvatarBackgroundColor } from "../utils/avatar-color.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { getInitials } from "../utils/initials.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  const { User = BuiltinUser } = getIconContext();
 
   const dispatch = createEventDispatcher();
 

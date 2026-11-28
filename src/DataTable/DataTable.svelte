@@ -672,12 +672,13 @@
   import Decorator from "../AILabel/Decorator.svelte";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import { createStatusAnnouncer } from "../ListBox/menu-status.js";
-  import ChevronRight from "../icons/ChevronRight.svelte";
+  import BuiltinChevronRight from "../icons/ChevronRight.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { toCssLength } from "../utils/css-length.js";
   import { focusHandoff } from "../utils/focus-handoff.js";
   import { formReset } from "../utils/form-reset.js";
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { createIdScope, useId } from "../utils/id-scope.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { rangeSlice } from "../utils/range-slice.js";
@@ -700,6 +701,8 @@
     resolvePath,
     shouldIgnoreRowClick,
   } from "./data-table-utils.js";
+
+  const { ChevronRight = BuiltinChevronRight } = getIconContext();
 
   const dispatch = createEventDispatcher();
   /**

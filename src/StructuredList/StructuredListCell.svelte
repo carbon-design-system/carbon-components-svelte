@@ -54,9 +54,13 @@
 
   import { createEventDispatcher, getContext } from "svelte";
   import { readable } from "svelte/store";
-  import ArrowUp from "../icons/ArrowUp.svelte";
-  import ArrowsVertical from "../icons/ArrowsVertical.svelte";
+  import BuiltinArrowUp from "../icons/ArrowUp.svelte";
+  import BuiltinArrowsVertical from "../icons/ArrowsVertical.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import { getTranslateContext } from "../utils/translate-context.js";
+
+  const { ArrowUp = BuiltinArrowUp, ArrowsVertical = BuiltinArrowsVertical } =
+    getIconContext();
 
   const ctx = getContext("carbon:StructuredListWrapper");
   const selection = ctx?.selection ?? readable(false);

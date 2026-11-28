@@ -71,10 +71,13 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { createIdScope } from "../utils/id-scope.js";
   import { requiredInvalid } from "../utils/required-invalid.js";
+
+  const { WarningFilled = BuiltinWarningFilled } = getIconContext();
 
   const dispatch = createEventDispatcher();
   /** @type {HTMLFieldSetElement | undefined} */

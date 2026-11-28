@@ -194,8 +194,8 @@
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { SEPARATOR_HOVER_DELAY_MS } from "../constants/timing.js";
-  import ArrowLeft from "../icons/ArrowLeft.svelte";
-  import Close from "../icons/Close.svelte";
+  import BuiltinArrowLeft from "../icons/ArrowLeft.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     acquireBodyScrollLock,
@@ -205,6 +205,7 @@
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { focusQuietly, initialFocus, restoreFocus } from "../utils/focus.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {
@@ -215,6 +216,9 @@
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { trapFocus } from "../utils/trap-focus.js";
+
+  const { ArrowLeft = BuiltinArrowLeft, Close = BuiltinClose } =
+    getIconContext();
 
   const dispatch = createEventDispatcher();
   const focusReturn = restoreFocus();

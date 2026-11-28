@@ -162,8 +162,8 @@
 
   import { createEventDispatcher, getContext, tick } from "svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     buildFieldIds,
@@ -173,6 +173,7 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { getLayoutDirection } from "../utils/layout-direction.js";
   import { clamp, parse } from "../utils/numeric-format.js";
@@ -197,6 +198,11 @@
     trackSign,
     valueFromPointer,
   } from "../utils/slider-value.js";
+
+  const {
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

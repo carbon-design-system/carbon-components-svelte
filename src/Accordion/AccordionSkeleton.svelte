@@ -25,8 +25,11 @@
   export let open = true;
 
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
-  import ChevronRight from "../icons/ChevronRight.svelte";
+  import BuiltinChevronRight from "../icons/ChevronRight.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import { normalizeFieldSize } from "../utils/size-aliases.js";
+
+  const { ChevronRight = BuiltinChevronRight } = getIconContext();
 
   $: effectiveSize = normalizeFieldSize(size);
 </script>

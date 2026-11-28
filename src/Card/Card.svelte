@@ -10,6 +10,9 @@
    * @slot {{}} decorator - An `AILabel` or other decorator, in the header's top inline-end corner. It sits below top media and clear of media at the end, and outside a clickable card's link or button.
    */
 
+  /** Read before the props, which default to these icons. */
+  const { ArrowRight = BuiltinArrowRight } = getIconContext();
+
   /**
    * Set to `true` to make the whole card interactive. It renders as a
    * button, or as a link when `href` is set, and shows `icon` at the
@@ -68,7 +71,8 @@
 
   import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
-  import ArrowRight from "../icons/ArrowRight.svelte";
+  import BuiltinArrowRight from "../icons/ArrowRight.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import CardWrapper from "./CardWrapper.svelte";

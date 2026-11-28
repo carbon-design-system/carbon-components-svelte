@@ -13,6 +13,9 @@
    * @property {"outside-click" | "toggle" | "escape-key" | "select"} trigger
    */
 
+  /** Read before the props, which default to these icons. */
+  const { Close = BuiltinClose, Switcher = BuiltinSwitcher } = getIconContext();
+
   /**
    * Set to `true` to open the panel.
    * @bindable writable
@@ -87,14 +90,15 @@
   export let id = useId("header-action");
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
-  import Close from "../icons/Close.svelte";
-  import Switcher from "../icons/Switcher.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
+  import BuiltinSwitcher from "../icons/Switcher.svelte";
   import { getMotionDefault } from "../motion/context.js";
   import { resolveTransition } from "../motion/resolve-transition.js";
   import { slide } from "../motion/transitions.js";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { dismiss } from "../utils/dismiss.js";
   import { focusQuietly, returnFocusOnClose } from "../utils/focus.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";

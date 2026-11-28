@@ -380,6 +380,7 @@ export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";
 export { createHistory } from "./utils/history.js";
 export { historyKeys } from "./utils/history-keys.js";
+export { setIconContext } from "./utils/icon-context.js";
 export { createIdScope, useId } from "./utils/id-scope.js";
 export { getInitials } from "./utils/initials.js";
 export {

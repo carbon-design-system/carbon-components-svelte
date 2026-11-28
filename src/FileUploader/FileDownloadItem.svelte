@@ -75,10 +75,13 @@
    */
   export let ref = null;
 
-  import Download from "../icons/Download.svelte";
+  import BuiltinDownload from "../icons/Download.svelte";
   import { formatFileSize } from "../utils/format-file-size.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { overflowTitle } from "../utils/overflow-title.js";
   import { normalizeFileItemSize } from "../utils/size-aliases.js";
+
+  const { Download = BuiltinDownload } = getIconContext();
 
   $: fileSizeText =
     typeof fileSize === "number" ? formatFileSize(fileSize) : (fileSize ?? "");

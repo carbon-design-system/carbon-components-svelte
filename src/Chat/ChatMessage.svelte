@@ -89,12 +89,21 @@
   export let retryText = "Retry";
 
   import { createEventDispatcher, onMount } from "svelte";
-  import Checkmark from "../icons/Checkmark.svelte";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
-  import CheckmarkOutline from "../icons/CheckmarkOutline.svelte";
-  import CircleDash from "../icons/CircleDash.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinCheckmark from "../icons/Checkmark.svelte";
+  import BuiltinCheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import BuiltinCheckmarkOutline from "../icons/CheckmarkOutline.svelte";
+  import BuiltinCircleDash from "../icons/CircleDash.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { createAnnouncerChannel } from "../utils/announcer.js";
+  import { getIconContext } from "../utils/icon-context.js";
+
+  const {
+    Checkmark = BuiltinCheckmark,
+    CheckmarkFilled = BuiltinCheckmarkFilled,
+    CheckmarkOutline = BuiltinCheckmarkOutline,
+    CircleDash = BuiltinCircleDash,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   const dispatch = createEventDispatcher();
 

@@ -5,6 +5,9 @@
    * @event {Value | Value[]} change
    */
 
+  /** Read before the props, which default to these icons. */
+  const { CheckmarkFilled = BuiltinCheckmarkFilled } = getIconContext();
+
   /**
    * Specify the selected structured list row value.
    * When `multiple` is `true`, this is an array of selected values.
@@ -51,9 +54,10 @@
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import BuiltinCheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { createIdScope } from "../utils/id-scope.js";
 
   const dispatch = createEventDispatcher();

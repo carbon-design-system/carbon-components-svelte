@@ -151,8 +151,8 @@
   export let id = useId("likert-matrix");
 
   import { createEventDispatcher } from "svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     buildFieldIds,
@@ -162,6 +162,7 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import {
     getLayoutDirection,
@@ -174,6 +175,11 @@
     resolvePoints,
   } from "../utils/survey-scale-points.js";
   import { getTranslateContext } from "../utils/translate-context.js";
+
+  const {
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

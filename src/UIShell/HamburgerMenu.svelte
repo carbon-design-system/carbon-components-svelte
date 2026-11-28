@@ -3,6 +3,9 @@
    * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
+  /** Read before the props, which default to these icons. */
+  const { Close = BuiltinClose, Menu = BuiltinMenu } = getIconContext();
+
   /**
    * Specify the ARIA label for the button.
    * @type {string | undefined}
@@ -31,8 +34,9 @@
   export let ref = null;
 
   import { onMount } from "svelte";
-  import Close from "../icons/Close.svelte";
-  import Menu from "../icons/MenuIcon.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
+  import BuiltinMenu from "../icons/MenuIcon.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import { hamburgerMenuRef } from "./nav-store.js";
 
   $: hamburgerMenuRef.set(ref);

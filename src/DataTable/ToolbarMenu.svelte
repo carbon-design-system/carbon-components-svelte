@@ -3,7 +3,10 @@
 
   import { getContext, onMount } from "svelte";
   import OverflowMenu from "../OverflowMenu/OverflowMenu.svelte";
-  import Settings from "../icons/Settings.svelte";
+  import BuiltinSettings from "../icons/Settings.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
+
+  const { Settings = BuiltinSettings } = getIconContext();
 
   const ctx = getContext("carbon:Toolbar") ?? {};
 

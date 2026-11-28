@@ -73,3 +73,9 @@ export const MENU_OPEN_CONTEXT_KEY = "carbon:MenuOpenKey";
  * `translateWithId` prop, when the prop is not passed.
  */
 export const TRANSLATE_CONTEXT_KEY = "carbon:translate";
+
+/**
+ * Set by `setIconContext`; read by every component that draws a built-in
+ * icon.
+ */
+export const ICON_CONTEXT_KEY = "carbon:icons";

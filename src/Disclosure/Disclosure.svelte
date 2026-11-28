@@ -37,9 +37,12 @@
   export let id = useId("disclosure");
 
   import { createEventDispatcher } from "svelte";
-  import ChevronRight from "../icons/ChevronRight.svelte";
+  import BuiltinChevronRight from "../icons/ChevronRight.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
+
+  const { ChevronRight = BuiltinChevronRight } = getIconContext();
 
   const dispatch = createEventDispatcher();
 

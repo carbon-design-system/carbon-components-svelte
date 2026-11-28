@@ -22,7 +22,10 @@
   export let decorative = false;
 
   import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
-  import ErrorFilled from "../icons/ErrorFilled.svelte";
+  import BuiltinErrorFilled from "../icons/ErrorFilled.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
+
+  const { ErrorFilled = BuiltinErrorFilled } = getIconContext();
 </script>
 
 <div class:bx--inline-loading__animation={true}>

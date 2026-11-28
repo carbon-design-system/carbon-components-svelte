@@ -31,7 +31,10 @@
 
   import { getContext, onMount } from "svelte";
   import Button from "../Button/Button.svelte";
-  import Close from "../icons/Close.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
+
+  const { Close = BuiltinClose } = getIconContext();
 
   const { closeModal, updateLabel, updateTitle, ids, registerHeader } =
     getContext("carbon:ComposedModal");

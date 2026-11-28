@@ -24,10 +24,13 @@
 
   import { getContext } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
-  import CaretDown from "../icons/CaretDown.svelte";
+  import BuiltinCaretDown from "../icons/CaretDown.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
+
+  const { CaretDown = BuiltinCaretDown } = getIconContext();
 
   const {
     treeId,

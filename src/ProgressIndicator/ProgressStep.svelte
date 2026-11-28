@@ -32,14 +32,22 @@
 
   import { getContext, onMount } from "svelte";
   import { writable } from "svelte/store";
-  import CheckmarkOutline from "../icons/CheckmarkOutline.svelte";
-  import CircleDash from "../icons/CircleDash.svelte";
-  import Incomplete from "../icons/Incomplete.svelte";
-  import Warning from "../icons/Warning.svelte";
+  import BuiltinCheckmarkOutline from "../icons/CheckmarkOutline.svelte";
+  import BuiltinCircleDash from "../icons/CircleDash.svelte";
+  import BuiltinIncomplete from "../icons/Incomplete.svelte";
+  import BuiltinWarning from "../icons/Warning.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { noop } from "../utils/noop.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
+
+  const {
+    CheckmarkOutline = BuiltinCheckmarkOutline,
+    CircleDash = BuiltinCircleDash,
+    Incomplete = BuiltinIncomplete,
+    Warning = BuiltinWarning,
+  } = getIconContext();
 
   let step =
     /** @type {{ complete: boolean; current: boolean; index: number }} */ ({});

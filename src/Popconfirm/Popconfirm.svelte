@@ -127,18 +127,24 @@
   import Popover from "../Popover/Popover.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import ErrorFilled from "../icons/ErrorFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinErrorFilled from "../icons/ErrorFilled.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { focusQuietly } from "../utils/focus.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { createIdScope, useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
   import { trapFocus } from "../utils/trap-focus.js";
+
+  const {
+    ErrorFilled = BuiltinErrorFilled,
+    WarningAltFilled = BuiltinWarningAltFilled,
+  } = getIconContext();
 
   // The buttons and the popover draw their ids from this one.
   createIdScope(id);

@@ -111,18 +111,21 @@
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import { observeModalClose } from "../Portal/portal-utils.js";
-  import Copy from "../icons/Copy.svelte";
+  import BuiltinCopy from "../icons/Copy.svelte";
   import {
     COPY_FEEDBACK_TIMEOUT_MS,
     createCopyFeedbackState,
   } from "../utils/copy-feedback.js";
   import { dismiss } from "../utils/dismiss.js";
   import { isPointerFocus } from "../utils/focus.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { noop } from "../utils/noop.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
+
+  const { Copy = BuiltinCopy } = getIconContext();
 
   const dispatch = createEventDispatcher();
 

@@ -59,12 +59,18 @@
    */
   export let id = useId("progress-bar");
 
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
-  import ErrorFilled from "../icons/ErrorFilled.svelte";
+  import BuiltinCheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import BuiltinErrorFilled from "../icons/ErrorFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { normalizeProgressBarSize } from "../utils/size-aliases.js";
+
+  const {
+    CheckmarkFilled = BuiltinCheckmarkFilled,
+    ErrorFilled = BuiltinErrorFilled,
+  } = getIconContext();
 
   /** @type {Record<string, import("../utils/icon-component.js").IconComponent>} */
   const statusIcons = {

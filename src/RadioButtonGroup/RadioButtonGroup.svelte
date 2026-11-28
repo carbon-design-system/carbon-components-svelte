@@ -118,8 +118,8 @@
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     buildFieldIds,
@@ -129,6 +129,7 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { createIdScope } from "../utils/id-scope.js";
   import {
     getLayoutDirection,
@@ -136,6 +137,11 @@
   } from "../utils/layout-direction.js";
   import { requiredInvalid } from "../utils/required-invalid.js";
   import { moveRadioInRtl } from "../utils/rtl-radio-keys.js";
+
+  const {
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   const layoutDirection = getLayoutDirection();
 

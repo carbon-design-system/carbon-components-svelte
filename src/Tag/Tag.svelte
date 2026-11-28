@@ -88,14 +88,17 @@
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
-  import Close from "../icons/Close.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
   import { normalizeTagSize } from "../utils/size-aliases.js";
   import TagSkeleton from "./TagSkeleton.svelte";
   import { observeTruncation } from "./tag-truncation.js";
+
+  const { Close = BuiltinClose } = getIconContext();
 
   const dispatch = createEventDispatcher();
 

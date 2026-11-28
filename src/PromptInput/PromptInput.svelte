@@ -209,18 +209,27 @@
   import { createEventDispatcher, onMount, tick } from "svelte";
   import Button from "../Button/Button.svelte";
   import TextArea from "../TextArea/TextArea.svelte";
-  import ArrowUp from "../icons/ArrowUp.svelte";
-  import Attachment from "../icons/Attachment.svelte";
-  import Close from "../icons/Close.svelte";
-  import Document from "../icons/Document.svelte";
-  import StopFilledAlt from "../icons/StopFilledAlt.svelte";
+  import BuiltinArrowUp from "../icons/ArrowUp.svelte";
+  import BuiltinAttachment from "../icons/Attachment.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
+  import BuiltinDocument from "../icons/Document.svelte";
+  import BuiltinStopFilledAlt from "../icons/StopFilledAlt.svelte";
   import { createAnnouncerChannel } from "../utils/announcer.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formatFileSize } from "../utils/format-file-size.js";
   import { graphemeCount } from "../utils/grapheme-count.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { createIdScope, useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { LIMIT_ANNOUNCEMENT_DELAY_MS } from "../utils/limit-announcement.js";
+
+  const {
+    ArrowUp = BuiltinArrowUp,
+    Attachment = BuiltinAttachment,
+    Close = BuiltinClose,
+    Document = BuiltinDocument,
+    StopFilledAlt = BuiltinStopFilledAlt,
+  } = getIconContext();
 
   const dispatch = createEventDispatcher();
   // TextArea and the buttons draw their inner ids from this scope.

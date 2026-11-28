@@ -144,11 +144,14 @@
     MENU_PLACEMENT_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { BUTTON_SIZE_BY_MENU_SIZE } from "../constants/sizes.js";
-  import ChevronDown from "../icons/ChevronDown.svelte";
+  import BuiltinChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { blurOnMouseClose } from "../utils/blur-on-mouse-close.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { listenMenuArrowOpen } from "../utils/menu-arrow-open.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
+
+  const { ChevronDown = BuiltinChevronDown } = getIconContext();
 
   const dispatch = createEventDispatcher();
 

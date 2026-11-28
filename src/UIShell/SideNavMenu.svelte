@@ -50,12 +50,15 @@
 
   import { getContext, onMount, setContext } from "svelte";
   import { readable, writable } from "svelte/store";
-  import ChevronDown from "../icons/ChevronDown.svelte";
+  import BuiltinChevronDown from "../icons/ChevronDown.svelte";
   import { collapse } from "../motion/collapse.js";
   import { getMotionDefault } from "../motion/context.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { overflowTitle } from "../utils/overflow-title.js";
   import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
+
+  const { ChevronDown = BuiltinChevronDown } = getIconContext();
 
   const motionDefault = getMotionDefault("collapse");
 

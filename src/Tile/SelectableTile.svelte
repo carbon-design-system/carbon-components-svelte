@@ -84,14 +84,20 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { readable, writable } from "svelte/store";
-  import CheckboxCheckedFilled from "../icons/CheckboxCheckedFilled.svelte";
-  import CheckboxIcon from "../icons/CheckboxIcon.svelte";
+  import BuiltinCheckboxCheckedFilled from "../icons/CheckboxCheckedFilled.svelte";
+  import BuiltinCheckboxIcon from "../icons/CheckboxIcon.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { noop } from "../utils/noop.js";
   import TileWrapper from "./TileWrapper.svelte";
+
+  const {
+    CheckboxCheckedFilled = BuiltinCheckboxCheckedFilled,
+    Checkbox: CheckboxIcon = BuiltinCheckboxIcon,
+  } = getIconContext();
 
   const dispatch = createEventDispatcher();
 

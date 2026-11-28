@@ -179,9 +179,9 @@
   }
 
   import { createEventDispatcher } from "svelte";
-  import Checkmark from "../icons/Checkmark.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinCheckmark from "../icons/Checkmark.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     buildFieldIds,
@@ -191,6 +191,7 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import {
     getLayoutDirection,
@@ -207,6 +208,12 @@
   } from "../utils/survey-scale-points.js";
   import { getTranslateContext } from "../utils/translate-context.js";
   import SurveyFace from "./SurveyFace.svelte";
+
+  const {
+    Checkmark = BuiltinCheckmark,
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

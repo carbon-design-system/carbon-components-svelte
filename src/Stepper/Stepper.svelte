@@ -81,8 +81,12 @@
   import Button from "../Button/Button.svelte";
   import ProgressIndicator from "../ProgressIndicator/ProgressIndicator.svelte";
   import ProgressStep from "../ProgressIndicator/ProgressStep.svelte";
-  import ArrowLeft from "../icons/ArrowLeft.svelte";
-  import ArrowRight from "../icons/ArrowRight.svelte";
+  import BuiltinArrowLeft from "../icons/ArrowLeft.svelte";
+  import BuiltinArrowRight from "../icons/ArrowRight.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
+
+  const { ArrowLeft = BuiltinArrowLeft, ArrowRight = BuiltinArrowRight } =
+    getIconContext();
 
   const dispatch = createEventDispatcher();
 

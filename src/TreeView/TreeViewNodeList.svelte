@@ -76,7 +76,8 @@
 
   import { getContext, tick } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";
-  import CaretDown from "../icons/CaretDown.svelte";
+  import BuiltinCaretDown from "../icons/CaretDown.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
   import TreeViewNode, {
@@ -87,6 +88,8 @@
   // a DOM wrapper) can only target a `Component`, not `<svelte:self>` — so
   // this recurses via a self-import instead.
   import Self from "./TreeViewNodeList.svelte";
+
+  const { CaretDown = BuiltinCaretDown } = getIconContext();
 
   /** @type {null | HTMLLIElement} */
   let ref = null;

@@ -87,9 +87,12 @@
   import Button from "../Button/Button.svelte";
   import Toggletip from "../Toggletip/Toggletip.svelte";
   import { AI_LABEL_HOST_CONTEXT_KEY } from "../constants/context-keys.js";
-  import Undo from "../icons/Undo.svelte";
+  import BuiltinUndo from "../icons/Undo.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
+
+  const { Undo = BuiltinUndo } = getIconContext();
 
   const dispatch = createEventDispatcher();
 

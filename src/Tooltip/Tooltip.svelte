@@ -13,6 +13,9 @@
    * @slot {{}} triggerText
    */
 
+  /** Read before the props, which default to these icons. */
+  const { Information = BuiltinInformation } = getIconContext();
+
   /**
    * Set the alignment of the tooltip relative to the icon.
    * Above and below the icon, `start` and `end` name inline sides, so they
@@ -148,7 +151,7 @@
   import { get, writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import Information from "../icons/Information.svelte";
+  import BuiltinInformation from "../icons/Information.svelte";
   import { getMotionDefault } from "../motion/context.js";
   import { resolveTransition } from "../motion/resolve-transition.js";
   import { fade } from "../motion/transitions.js";
@@ -157,6 +160,7 @@
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { clippedBy, windowShift } from "../utils/fit-align.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { physicalAlign } from "../utils/inline-align.js";

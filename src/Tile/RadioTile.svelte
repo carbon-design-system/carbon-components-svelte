@@ -81,13 +81,16 @@
     registerRadioButton,
     updateGroupSelection,
   } from "../RadioButton/radio-button-registry.js";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import BuiltinCheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { noop } from "../utils/noop.js";
   import TileWrapper from "./TileWrapper.svelte";
+
+  const { CheckmarkFilled = BuiltinCheckmarkFilled } = getIconContext();
 
   // Naming and description belong on the input, not the label.
   $: ({

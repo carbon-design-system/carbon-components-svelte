@@ -97,8 +97,8 @@
   export let ref = null;
 
   import { createEventDispatcher } from "svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     buildFieldIds,
@@ -108,7 +108,13 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
+
+  const {
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   $: labelAtEnd = labelPosition === "end";
 

@@ -54,10 +54,13 @@
   import { getContext, setContext } from "svelte";
   import { readable, writable } from "svelte/store";
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
-  import ChevronDown from "../icons/ChevronDown.svelte";
+  import BuiltinChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
+
+  const { ChevronDown = BuiltinChevronDown } = getIconContext();
 
   const formContext = getContext(FORM_CONTEXT_KEY);
   const timePickerContext = getContext("carbon:TimePicker");

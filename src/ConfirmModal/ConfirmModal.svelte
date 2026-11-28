@@ -107,8 +107,11 @@
   import { afterUpdate, createEventDispatcher, tick } from "svelte";
   import Modal from "../Modal/Modal.svelte";
   import TextInput from "../TextInput/TextInput.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
+
+  const { WarningAltFilled = BuiltinWarningAltFilled } = getIconContext();
 
   const dispatch = createEventDispatcher();
 

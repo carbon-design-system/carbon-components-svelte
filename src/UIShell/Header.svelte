@@ -4,6 +4,9 @@
    * @restProps {a}
    */
 
+  /** Read before the props, which default to these icons. */
+  const { Close = BuiltinClose, Menu = BuiltinMenu } = getIconContext();
+
   /** Set to `false` to hide the side nav by default */
   export let expandedByDefault = true;
 
@@ -97,9 +100,10 @@
 
   import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
-  import Close from "../icons/Close.svelte";
-  import Menu from "../icons/MenuIcon.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
+  import BuiltinMenu from "../icons/MenuIcon.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import HamburgerMenu from "./HamburgerMenu.svelte";
   import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";

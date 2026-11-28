@@ -1,8 +1,11 @@
 <script>
   /** @extendProps {"./Link.svelte"} LinkProps */
 
-  import Launch from "../icons/Launch.svelte";
+  import BuiltinLaunch from "../icons/Launch.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import Link from "./Link.svelte";
+
+  const { Launch = BuiltinLaunch } = getIconContext();
 
   /**
    * Specify the assistive text announced to screen readers to

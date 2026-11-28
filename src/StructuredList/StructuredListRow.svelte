@@ -30,9 +30,12 @@
   import { getContext, onMount } from "svelte";
   import { readable, writable } from "svelte/store";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import BuiltinCheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import { noop } from "../utils/noop.js";
   import StructuredListCell from "./StructuredListCell.svelte";
+
+  const { CheckmarkFilled = BuiltinCheckmarkFilled } = getIconContext();
 
   const ctx = getContext("carbon:StructuredListWrapper");
   const selection = ctx?.selection ?? readable(false);

@@ -42,10 +42,13 @@
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
   import { FORM_ITEM_CONTEXT_KEY } from "../constants/context-keys.js";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { createFormParts, partsDescribedBy } from "../utils/form-parts.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
+
+  const { WarningFilled = BuiltinWarningFilled } = getIconContext();
 
   /** @type {import("svelte/store").Writable<string>} */
   const sharedId = writable(id);

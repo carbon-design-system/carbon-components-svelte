@@ -1,5 +1,8 @@
 <script>
-  import Calendar from "../icons/Calendar.svelte";
+  import BuiltinCalendar from "../icons/Calendar.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
+
+  const { Calendar = BuiltinCalendar } = getIconContext();
 
   /** Set to `true` to use the range variant */
   export let range = false;
