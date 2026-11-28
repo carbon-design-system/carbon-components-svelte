@@ -634,7 +634,7 @@
         <span class:bx--assistive-text={true}
           >{iconDescription}{#if shortcut}<span
               class:bx--btn__tooltip-shortcut={true}
-              aria-hidden="true"><Kbd {shortcut} variant="muted" /></span
+              aria-hidden="true"><Kbd {shortcut} /></span
             >{/if}</span
         >
       {/if}
@@ -703,7 +703,7 @@
       <span class:bx--assistive-text={true}
         >{iconDescription}{#if shortcut}<span
             class:bx--btn__tooltip-shortcut={true}
-            aria-hidden="true"><Kbd {shortcut} variant="muted" /></span
+            aria-hidden="true"><Kbd {shortcut} /></span
           >{/if}</span
       >
     {/if}
@@ -770,7 +770,7 @@
     on:cover={handleTooltipCover}
     >{iconDescription}{#if shortcut}<span
         class:bx--btn__tooltip-shortcut={true}
-        aria-hidden="true"><Kbd {shortcut} variant="muted" /></span
+        aria-hidden="true"><Kbd {shortcut} /></span
       >{/if}</PortalTooltip
   >
 {/if}

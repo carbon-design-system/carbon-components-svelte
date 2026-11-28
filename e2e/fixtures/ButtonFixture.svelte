@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button } from "carbon-components-svelte";
+  import ChevronDown from "carbon-icons-svelte/lib/ChevronDown.svelte";
 
   let clickCount = 0;
 </script>
@@ -30,3 +31,11 @@
   </Button>
   <Button data-kind="disabled" shortcut="ctrl+e" disabled>Export</Button>
 </div>
+
+<Button
+  data-testid="shortcut-tooltip"
+  kind="ghost"
+  icon={ChevronDown}
+  iconDescription="Next"
+  shortcut="j"
+/>

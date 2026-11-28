@@ -564,6 +564,13 @@
     <Button id="fc-kbd-button-disabled" shortcut="ctrl+alt+d" disabled>
       Delete
     </Button>
+    <Button
+      id="fc-kbd-tooltip"
+      kind="ghost"
+      icon={Add}
+      iconDescription="Add"
+      shortcut="ctrl+alt+a"
+    />
   </div>
 
   <ul data-testid="overflow-menus" style="list-style: none; padding: 0;">

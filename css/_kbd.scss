@@ -98,6 +98,19 @@
     padding: 0 to-rem(3px);
   }
 
+  // On a tooltip, dark in light themes and light in dark ones, a key is a
+  // step off the tooltip's surface, in its text color, and as tall as its
+  // line, so the tooltip keeps its height. The edge is transparent until
+  // forced colors draw it. Before `--muted`, which keeps its own look here.
+  .#{$prefix}--assistive-text .#{$prefix}--kbd__key {
+    min-width: to-rem(18px);
+    height: to-rem(18px);
+    padding: 0 $carbon--spacing-02;
+    border: 1px solid transparent;
+    background-color: $background-inverse-hover;
+    color: inherit;
+  }
+
   // Muted: the keys as text in the surrounding type, run together on Apple
   // platforms and joined by a plus elsewhere (Ctrl+Shift+P). After
   // `--sm`, which it overrides.

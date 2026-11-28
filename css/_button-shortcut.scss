@@ -3,10 +3,10 @@
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// A Button's `shortcut`: the keys after the label, or after the
-/// description in an icon-only button's tooltip, as text in the button's or
-/// tooltip's own color, so they meet its contrast on every kind, on the
-/// inverse tooltip, and when disabled.
+/// A Button's `shortcut`: the keys after the label, as text in the
+/// button's own color, so they meet its contrast on every kind and when
+/// disabled. In an icon-only button's tooltip, they follow the description
+/// as caps on the tooltip's surface (see `_kbd.scss`).
 /// @access private
 /// @group components
 @mixin button-shortcut {

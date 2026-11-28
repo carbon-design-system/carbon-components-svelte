@@ -1196,14 +1196,23 @@ test.describe("forced colors", () => {
     }
   });
 
-  // A key cap is drawn by its border; keys inside a button take the
-  // button's text color, GrayText when it's disabled.
+  // A key cap is drawn by its border, also on a tooltip; keys inside a
+  // button take the button's text color, GrayText when it's disabled.
   test("Kbd keeps its edge, and shortcut keys follow their button", async ({
     page,
   }) => {
-    expect
-      .soft(await style(page, "#fc-kbd .bx--kbd__key"), "#fc-kbd")
-      .toMatchObject({ borderColor: system.CanvasText });
+    for (const id of ["#fc-kbd", "#fc-kbd-tooltip"]) {
+      const key = `${id} .bx--kbd__key`;
+      expect
+        .soft(await style(page, key), id)
+        .toMatchObject({ borderColor: system.CanvasText });
+      expect
+        .soft(
+          await page.$eval(key, (el) => getComputedStyle(el).borderLeftWidth),
+          `${id} border width`,
+        )
+        .not.toBe("0px");
+    }
     const ids = ["#fc-kbd-button", "#fc-kbd-button-disabled"];
     const pairs = await Promise.all(
       ids.map((id) =>
