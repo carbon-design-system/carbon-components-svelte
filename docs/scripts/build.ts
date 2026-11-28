@@ -8,9 +8,11 @@
  *   cold load of a deep link waits on the entry, then `App`, then the
  *   page's chunk, then its imports.
  * - The library's theme sheets ship as `build:css` wrote them, in one
- *   file linked ahead of the bundle's. They're minified already, and
- *   Bun's CSS minifier would merge their selectors into `:is()` and then
- *   lower each one to a `:-webkit-any()` copy, adding 240 kB.
+ *   file linked ahead of the bundle's; a framed example's iframe gets its
+ *   page's trimmed copy instead (`framed-css.ts`). They're minified
+ *   already, and Bun's CSS minifier would merge their selectors into
+ *   `:is()` and then lower each one to a `:-webkit-any()` copy, adding
+ *   240 kB.
  * - `public/` is copied as is, as the site's root.
  */
 import fs from "node:fs";
@@ -26,6 +28,7 @@ import {
   componentMdSizes,
   importMetaGlob,
 } from "./bun-plugins.ts";
+import { writeFramedSheets } from "./framed-css.ts";
 import {
   copyPlexFonts,
   PLEX_URL,
@@ -64,23 +67,42 @@ const carbonSheets: BunPlugin = {
   },
 };
 
-/** Writes the theme sheets as one hashed file, and links it first. */
-function linkCarbonSheets(indexFile: string) {
-  const css = CARBON_SHEETS.map((file) =>
+/** The theme sheets, their Plex URLs pointed at the site's copies. */
+function readCarbonSheets() {
+  return CARBON_SHEETS.map((file) =>
     rewritePlexUrls(
       fs.readFileSync(file, "utf8"),
       (family) => `${PLEX_URL}/${family}/fonts/`,
     ),
-  ).join("\n");
-  const name = `assets/carbon-${Bun.hash(css).toString(36).slice(0, 8)}.css`;
+  );
+}
+
+/**
+ * Writes the theme sheets as one hashed file, and a trimmed sheet per
+ * framed page, then links the one a path needs ahead of the bundle's
+ * sheet. `document.write` keeps the link render-blocking, as a static one
+ * is; a framed page's name must be letters and digits to reach it.
+ */
+async function linkCarbonSheets(indexFile: string) {
+  const [all, ...rest] = readCarbonSheets();
+  const css = [all, ...rest].join("\n");
+  const name = `/assets/carbon-${Bun.hash(css).toString(36).slice(0, 8)}.css`;
   fs.writeFileSync(path.join(OUTDIR, name), css);
+  const framed = await writeFramedSheets({
+    result,
+    outdir: OUTDIR,
+    repo: path.resolve(DOCS, ".."),
+    cacheDir: path.join(NODE_MODULES, ".cache/ccs-docs-framed-css"),
+    carbonCss: all,
+    shared: rest.join("\n"),
+  });
+  // The paths go in as attributes, so the script itself is constant.
+  const script = `<script data-full="${Bun.escapeHTML(name)}" data-framed="${Bun.escapeHTML(framed.dir)}">(()=>{const s=document.currentScript.dataset,m=/^\\/framed\\/([A-Za-z0-9]+)\\//.exec(location.pathname),l=h=>'<link rel="stylesheet" crossorigin href="'+h+'">';document.write(l(m?s.framed+m[1]+".css":s.full))})()</script>`;
   const html = fs.readFileSync(indexFile, "utf8");
   const link = '<link rel="stylesheet"';
   if (!html.includes(link)) throw new Error("index.html links no stylesheet");
-  fs.writeFileSync(
-    indexFile,
-    html.replace(link, `${link} crossorigin href="/${name}">${link}`),
-  );
+  fs.writeFileSync(indexFile, html.replace(link, `${script}${link}`));
+  // The framed sheets name the same Plex files as the full one.
   return path.join(OUTDIR, name);
 }
 
@@ -149,7 +171,7 @@ fs.cpSync(path.join(DOCS, "public"), OUTDIR, { recursive: true });
 const indexFile = path.join(OUTDIR, "index.html");
 const fonts = copyPlexFonts(OUTDIR, NODE_MODULES, [
   indexFile,
-  linkCarbonSheets(indexFile),
+  await linkCarbonSheets(indexFile),
   ...result.outputs.map((output) => output.path),
 ]);
 

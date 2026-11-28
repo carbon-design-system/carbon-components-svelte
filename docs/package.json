@@ -22,6 +22,7 @@
     "bun-plugin-page": "^0.3.1",
     "carbon-icons-svelte": "^13.18.2",
     "carbon-pictograms-svelte": "^13.21.1",
+    "carbon-preprocess-svelte": "^0.14.4",
     "deserved": "^0.8.0",
     "svelte-ast": "^0.15.1",
     "svelte-bun": "^0.5.0"

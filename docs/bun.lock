@@ -9,6 +9,7 @@
         "bun-plugin-page": "^0.3.1",
         "carbon-icons-svelte": "^13.18.2",
         "carbon-pictograms-svelte": "^13.21.1",
+        "carbon-preprocess-svelte": "^0.14.4",
         "deserved": "^0.8.0",
         "svelte-ast": "^0.15.1",
         "svelte-bun": "^0.5.0",
@@ -47,6 +48,8 @@
     "carbon-icons-svelte": ["carbon-icons-svelte@13.18.2", "", {}, "sha512-PrCD7TzKZNzGVBmUIy7tex/42tJ4mTRvqUpE5vpv3S1KL463dwiE6E3BnaBZVKaDMNLIp/NT4dIdAfnY7vTEGA=="],
 
     "carbon-pictograms-svelte": ["carbon-pictograms-svelte@13.21.1", "", {}, "sha512-7tAkGmhfjEDTd60XWvaBxF+I42i9NOzDT7mi33gxLYY9A8ZVjmgwIEsqPExRKjTxq5ZDERHcqqNCyI64Y1pb4w=="],
+
+    "carbon-preprocess-svelte": ["carbon-preprocess-svelte@0.14.4", "", { "bin": { "carbon-preprocess-svelte": "cli.js" } }, "sha512-lxzC/6v4sEPKTyJwsfDMeKoYsWEJnf1wQPvESwS0WxrcQAwK3rm0EHxT17fjIJtgkerrYJKlF0IZWKWN0XAuVQ=="],
 
     "clsx": ["clsx@2.1.1", "", {}, "sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA=="],
 
