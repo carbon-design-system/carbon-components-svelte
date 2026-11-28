@@ -311,7 +311,7 @@
 
   .#{$prefix}--action-list .#{$prefix}--btn .#{$prefix}--btn__icon {
     position: static;
-    margin-left: $spacing-03;
+    margin-inline: $spacing-03 0; // ccs: the gap sits before the icon, which flips in RTL
     fill: $icon-on-color;
   }
 
@@ -344,7 +344,7 @@
     position: absolute;
     //visually 16px spacing is 1px too low
     top: to-rem(15px);
-    left: 0;
+    @include ccs-inset-inline($start: 0); // ccs: the divider sits at the button's inline start
     display: block;
     width: to-rem(1px);
     height: $spacing-05;

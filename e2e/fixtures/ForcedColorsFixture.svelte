@@ -84,6 +84,8 @@
     ToggleButton,
     ToggleButtonGroup,
     Toggletip,
+    Toolbar,
+    ToolbarBatchActions,
     TreeView,
     Truncate,
     UserAvatar,
@@ -94,6 +96,7 @@
   import Grid from "carbon-icons-svelte/lib/Grid.svelte";
   import List from "carbon-icons-svelte/lib/List.svelte";
   import Search from "carbon-icons-svelte/lib/Search.svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 
   let menuAnchor = null;
   let sidePanelOpen = false;
@@ -595,6 +598,14 @@
       { id: "plain", name: "Plain row" },
     ]}
   />
+  <div data-testid="batch-actions">
+    <Toolbar>
+      <ToolbarBatchActions active>
+        <Button icon={TrashCan}>Delete</Button>
+        <Button icon={Add} disabled>Add</Button>
+      </ToolbarBatchActions>
+    </Toolbar>
+  </div>
   <div data-testid="search-variants">
     <SearchField size="sm" variant="fill" labelText="Fill search" />
     <SearchField size="sm" variant="ghost" labelText="Ghost search" />
