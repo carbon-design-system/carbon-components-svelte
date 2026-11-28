@@ -12,6 +12,8 @@
     SearchMenuItem,
     Tab,
     Tabs,
+    Timeline,
+    TimelineItem,
   } from "carbon-components-svelte";
 
   // Each slot below is passed, but its content is conditional and off, as
@@ -82,6 +84,14 @@
     {#if shown}<p>Details</p>{/if}
   </svelte:fragment>
 </DataTable>
+
+<Timeline aria-label="Activity" data-testid="timeline">
+  <TimelineItem titleText="Review requested">
+    <svelte:fragment slot="descriptionChildren">
+      {#if shown}<span>By the release lead</span>{/if}
+    </svelte:fragment>
+  </TimelineItem>
+</Timeline>
 
 <div class="search-menu" data-testid="search-menu">
   <SearchMenu portal={false} labelText="Search" placeholder="Search">

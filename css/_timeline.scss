@@ -185,6 +185,7 @@
     margin-block-start: $carbon--spacing-03;
   }
 
+  .#{$prefix}--timeline__description:empty,
   .#{$prefix}--timeline__content:empty {
     display: none;
   }

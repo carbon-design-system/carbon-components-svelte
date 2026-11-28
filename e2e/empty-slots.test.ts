@@ -15,6 +15,7 @@ const wrappers = [
   ["page-header", ".bx--page-header__tabs-row"],
   ["page-header-tabs-end", ".bx--page-header__tabs-end"],
   ["data-table", ".bx--child-row-inner-container"],
+  ["timeline", ".bx--timeline__description"],
   ["search-menu", ".bx--search-menu-group__action"],
 ] as const;
 
