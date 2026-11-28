@@ -323,6 +323,26 @@ describe("SidePanel", () => {
       document.querySelector(".bx--side-panel__header--toolbar"),
     ).not.toBeNull();
   });
+
+  it.each([
+    ["md", "bx--btn--sm"],
+    ["lg", "bx--btn--field"],
+  ] as const)(
+    "renders headerActions before the AI label and Close, sized like Close in a %s panel",
+    (size, buttonClass) => {
+      render(SidePanelSlots, { props: { size } });
+      const corner = getPanel().querySelector(".bx--side-panel__corner");
+      assert(corner);
+      expect([...corner.children].map((child) => child.className)).toEqual([
+        expect.stringContaining("bx--side-panel__header-actions"),
+        expect.stringContaining("bx--side-panel__decorator"),
+        expect.stringContaining("bx--side-panel__close"),
+      ]);
+      for (const name of ["Next deployment", "Close"]) {
+        expect(screen.getByRole("button", { name })).toHaveClass(buttonClass);
+      }
+    },
+  );
 });
 
 describe("SidePanel resize", () => {

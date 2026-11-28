@@ -22,6 +22,7 @@
    * @slot {{}} actions - Footer buttons. The panel lays them out in an `ActionSet` sized to the panel.
    * @slot {{}} toolbar - Buttons in the header's action toolbar, below the title.
    * @slot {{}} decorator - An `AILabel`, beside the close button.
+   * @slot {{ buttonSize: "small" | "field" }} headerActions - Icon buttons before the close button, such as previous and next. `buttonSize` is the close button's size, 40px (`"field"`) in large panels with `actions` and 32px (`"small"`) otherwise.
    * @slot {{}} subtitleChildren - Rich subtitle content. Overrides `subtitleText`.
    */
 
@@ -738,6 +739,7 @@
       class:bx--side-panel__header--back={currentStep > 0}
       class:bx--side-panel__header--toolbar={$$slots.toolbar}
       class:bx--side-panel__header--lg={headerButtonSize === "field"}
+      class:bx--side-panel__header--actions={$$slots.headerActions}
     >
       {#if currentStep > 0}
         <Button
@@ -769,8 +771,13 @@
           <slot name="toolbar" />
         </div>
       {/if}
-      {#if $$slots.decorator || !hideCloseButton}
+      {#if $$slots.headerActions || $$slots.decorator || !hideCloseButton}
         <div class:bx--side-panel__corner={true}>
+          {#if $$slots.headerActions}
+            <div class:bx--side-panel__header-actions={true}>
+              <slot name="headerActions" buttonSize={headerButtonSize} />
+            </div>
+          {/if}
           {#if $$slots.decorator}
             <Decorator
               class="bx--side-panel__decorator"

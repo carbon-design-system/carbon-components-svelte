@@ -168,3 +168,86 @@ test.describe("SidePanel", () => {
     expect((await edges()).top).toBe(0);
   });
 });
+
+test.describe("SidePanel header actions", () => {
+  function header(page: Page) {
+    return page.evaluate(async () => {
+      await document.fonts.ready;
+      const panel = document.querySelector(".bx--side-panel");
+      await Promise.all(panel?.getAnimations().map((a) => a.finished) ?? []);
+      const rect = (selector: string) => {
+        const r = document.querySelector(selector)?.getBoundingClientRect();
+        if (!r) throw new Error(`no ${selector}`);
+        return {
+          top: Math.round(r.top),
+          left: Math.round(r.left),
+          right: Math.round(r.right),
+        };
+      };
+      const buttons = [
+        ...document.querySelectorAll(".bx--side-panel__corner .bx--btn"),
+      ].map((button) => {
+        const r = button.getBoundingClientRect();
+        return Math.min(r.width, r.height);
+      });
+      return {
+        panel: rect(".bx--side-panel"),
+        title: rect(".bx--side-panel__title"),
+        actions: rect(".bx--side-panel__header-actions"),
+        close: rect(".bx--side-panel__close"),
+        buttons,
+      };
+    });
+  }
+
+  // The close button stays where it is without actions, 8px (4px for
+  // 40px buttons) from the top and inline end, and the title wraps before
+  // the actions. In RTL each part sits as far from the panel's left edge
+  // as it sat from its right.
+  for (const [size, offset] of [
+    ["small", 8],
+    ["large", 4],
+  ] as const) {
+    test(`sits beside Close and mirrors in RTL (${size} buttons)`, async ({
+      page,
+    }) => {
+      await page.goto(`/side-panel-header-actions.html?${size}`);
+      const ltr = await header(page);
+      expect(ltr.close.top - ltr.panel.top).toBe(offset);
+      expect(ltr.panel.right - ltr.close.right).toBe(offset);
+      expect(ltr.title.right).toBeLessThanOrEqual(ltr.actions.left - 8);
+      expect(ltr.buttons.length).toBeGreaterThanOrEqual(3);
+      for (const size of ltr.buttons) expect(size).toBeGreaterThanOrEqual(24);
+
+      await setDirection(page, "rtl");
+      const rtl = await header(page);
+      for (const name of ["title", "actions", "close"] as const) {
+        expect
+          .soft(
+            Math.abs(
+              rtl[name].left -
+                rtl.panel.left -
+                (ltr.panel.right - ltr[name].right),
+            ),
+            name,
+          )
+          .toBeLessThanOrEqual(1);
+      }
+    });
+  }
+
+  test("tabs through the actions before Close", async ({ page }) => {
+    await page.goto("/side-panel-header-actions.html");
+    await page.getByRole("button", { name: "Previous deployment" }).focus();
+    await page.keyboard.press("Tab");
+    await expect(
+      page.getByRole("button", { name: "Next deployment" }),
+    ).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(
+      page.locator(".bx--side-panel__decorator button"),
+    ).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(page.getByRole("button", { name: "Close" })).toBeFocused();
+  });
+});

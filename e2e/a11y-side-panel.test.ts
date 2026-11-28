@@ -21,4 +21,18 @@ test.describe("SidePanel a11y", () => {
     const rtlResults = await new AxeBuilder({ page }).include("#app").analyze();
     expect(rtlResults.violations).toEqual([]);
   });
+
+  test("has no violations with header actions and an AI label", async ({
+    page,
+  }) => {
+    await page.goto("/side-panel-header-actions.html");
+    await expect(page.getByRole("dialog")).toBeVisible();
+    // Contrast reads the colors mid-fade while the panel slides in.
+    await page.evaluate(() =>
+      Promise.all(document.getAnimations().map((a) => a.finished)),
+    );
+
+    const results = await new AxeBuilder({ page }).include("#app").analyze();
+    expect(results.violations).toEqual([]);
+  });
 });
