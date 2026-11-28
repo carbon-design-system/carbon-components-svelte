@@ -21,6 +21,12 @@ export const sideNavWidth = writable(undefined);
  */
 export const isHeaderRendered = writable(false);
 
+/**
+ * The fixed `Header`'s height in pixels: `.bx--header`'s `mini-units(6)`
+ * in _header.scss. `Header` has no prop to change it.
+ */
+export const UI_SHELL_HEADER_HEIGHT = 48;
+
 let mountedHeaders = 0;
 
 /**

@@ -1,5 +1,6 @@
 import { sticky } from "../../src/utils/sticky.js";
 import { stubIntersectionObserver } from "../utils/intersection-observer-mock";
+import { rect } from "./rect";
 
 function setup(parentDisplay = "block") {
   const parent = document.createElement("div");
@@ -135,5 +136,25 @@ describe("sticky", () => {
 
     expect(parent.querySelector("[data-ccs-sticky-sentinel]")).toBeNull();
     expect(instances).toHaveLength(0);
+  });
+
+  it('sets the stacked top for `offset: "stack"`, and clears it when disabled', async () => {
+    stubIntersectionObserver();
+    const above = setup().node;
+    vi.spyOn(above, "getBoundingClientRect").mockReturnValue(
+      rect({ height: 64 }),
+    );
+    const { parent, node } = setup();
+    node.style.removeProperty("top");
+    sticky(above);
+    const action = sticky(node, { offset: "stack" });
+    await vi.waitFor(() => expect(node.style.top).toBe("112px"));
+    expect(sentinelOf(parent).style.top).toBe("calc(-112px)");
+    expect(
+      document.documentElement.style.getPropertyValue("--ccs-sticky-offset"),
+    ).toBe("112px");
+
+    action.update({ enabled: false });
+    expect(node.style.top).toBe("");
   });
 });
