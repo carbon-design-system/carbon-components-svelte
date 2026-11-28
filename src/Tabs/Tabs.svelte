@@ -48,6 +48,19 @@
    */
   export let navigation = false;
 
+  /**
+   * Set to `true` to link the selected tab to the URL hash. After mount, a
+   * hash that matches a `Tab` `id` selects that tab and scrolls it into
+   * view, and each later `hashchange` selects the matching tab. Selecting
+   * a tab writes its `id` to the hash with `history.replaceState`, so tab
+   * switches add no history entries and the rest of the URL stays. A hash
+   * that matches no enabled tab is ignored. The server can't read the
+   * hash, so it renders `selected` or `selectedId`, and the hash takes
+   * over after mount. Give each `Tab` a stable `id`.
+   * Ignored when `navigation` is set.
+   */
+  export let hashLinked = false;
+
   /** Set to `true` to render a dismiss button for each tab */
   export let dismissible = false;
 
@@ -122,6 +135,7 @@
   import { createTabsInitClaims } from "../utils/tabs-init-claims.js";
   import { createTabsRegistration } from "../utils/tabs-registration.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
+  import { addPooledListener } from "../utils/window-listener-pool.js";
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();
@@ -452,6 +466,95 @@
     scrollTabIntoView(activeTab);
   }
 
+  /**
+   * The enabled tab in this list whose `id` the URL hash names.
+   * @type {() => HTMLElement | undefined}
+   */
+  function hashTab() {
+    let id;
+    try {
+      id = decodeURIComponent(window.location.hash.slice(1));
+    } catch {
+      return undefined;
+    }
+    if (!id || !refTabList) return undefined;
+    for (const tab of refTabList.querySelectorAll(".bx--tabs__nav-link")) {
+      if (tab.id !== id) continue;
+      return tab.getAttribute("aria-disabled") === "true"
+        ? undefined
+        : /** @type {HTMLElement} */ (tab);
+    }
+    return undefined;
+  }
+
+  /**
+   * Select the tab the hash names, without moving focus. Reads the DOM, not
+   * the registry: on mount, tabs have rendered but may not have registered.
+   * @type {(scroll: boolean) => void}
+   */
+  function selectHashTab(scroll) {
+    const tab = hashTab();
+    if (!tab || !refTabList) return;
+    focusedIndex = -1;
+    if (selectedId === undefined) {
+      selectedIndex = Array.from(
+        refTabList.querySelectorAll(".bx--tabs__nav-link"),
+      ).indexOf(tab);
+    } else {
+      selectedId = tab.id;
+    }
+    if (scroll) {
+      tab.scrollIntoView?.({ block: "start", inline: "nearest" });
+      scrollTabIntoView(tab);
+    }
+  }
+
+  function handleHashChange() {
+    selectHashTab(false);
+  }
+
+  let hashLinkActive = false;
+  let stopHashLink = noop;
+  /**
+   * The selected tab last seen while linked. The selection that linking
+   * starts with isn't written, so a page with no hash keeps none.
+   * @type {string | undefined}
+   */
+  let prevLinkedTab;
+
+  /** @type {(linked: boolean) => void} */
+  function linkHash(linked) {
+    if (linked === hashLinkActive) return;
+    hashLinkActive = linked;
+    stopHashLink();
+    stopHashLink = noop;
+    prevLinkedTab = undefined;
+    if (!linked) return;
+    prevLinkedTab = get(selectedTab);
+    stopHashLink = addPooledListener("hashchange", handleHashChange);
+    // Select after the flush that turned linking on, so the `$:` blocks
+    // that read the selection see the change.
+    tick().then(() => {
+      if (hashLinkActive) selectHashTab(true);
+    });
+  }
+
+  /** @type {(id: string | undefined) => void} */
+  function writeHash(id) {
+    if (!hashLinkActive || id === undefined || id === prevLinkedTab) return;
+    const initial = prevLinkedTab === undefined;
+    prevLinkedTab = id;
+    if (initial) return;
+    const url = new URL(window.location.href);
+    url.hash = id;
+    if (url.href === window.location.href) return;
+    try {
+      history.replaceState(history.state, "", url.href);
+    } catch {
+      // Some embedding contexts (a sandboxed iframe) block history updates.
+    }
+  }
+
   const tabsContext = {
     tabs,
     tabsById,
@@ -573,6 +676,7 @@
       mounted = false;
       stopObserving();
       stopObservingOrder();
+      linkHash(false);
       pageHeader?.unregister();
     };
   });
@@ -604,6 +708,8 @@
   $: if ($tabs) {
     tick().then(remeasureOverflow);
   }
+  $: if (mounted) linkHash(hashLinked && !navigation);
+  $: if (mounted) writeHash($selectedTab);
   $: useFullWidth.set(fullWidth);
   $: useDismissible.set(dismissible);
   $: useDismissText.set(dismissText);

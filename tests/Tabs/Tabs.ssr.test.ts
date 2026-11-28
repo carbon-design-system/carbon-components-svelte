@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { render } from "svelte/server";
 import { renderSSR } from "../utils/ssr";
+import TabsHashLinked from "./TabsHashLinked.test.svelte";
 import TabsSecondaryLabel from "./TabsSecondaryLabelSsr.test.svelte";
 import TabsSsr from "./TabsSsr.test.svelte";
 import TabsOwnPanelId from "./TabsSsrOwnPanelId.test.svelte";
@@ -54,6 +55,13 @@ describe("Tabs server render", () => {
     const renderRaw = () => render(TabsSsr, { props: {} }).body;
 
     expect(renderRaw()).toBe(renderRaw());
+  });
+
+  it("renders the same markup with `hashLinked`, which applies after mount", () => {
+    const html = (hashLinked: boolean) =>
+      renderSSR(TabsHashLinked, { hashLinked, selected: 1 }).html;
+
+    expect(html(true)).toBe(html(false));
   });
 
   it("derives each panel id from its tab id", () => {
