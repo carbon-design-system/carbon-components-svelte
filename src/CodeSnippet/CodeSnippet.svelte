@@ -221,7 +221,11 @@
    */
   export let minExpandedNumberOfRows = 16;
 
-  /** Set an id for the code element */
+  /**
+   * Set an id for the code element.
+   * The header's ids derive from it: the title as `{id}-title`, and each
+   * file tab as `{id}-tab-{index}`.
+   */
   export let id = useId("code-snippet");
 
   /**

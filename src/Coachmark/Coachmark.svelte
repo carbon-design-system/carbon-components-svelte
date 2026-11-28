@@ -82,8 +82,9 @@
 
   /**
    * Set an id for the coachmark element.
-   * The dialog id derives from it as `{id}-content`, and the heading as
-   * `{id}-title`.
+   * The dialog id derives from it as `{id}-content`, the heading as
+   * `{id}-title`, and the target, which `triggerProps` passes on, as
+   * `{id}-target`.
    */
   export let id = useId("coachmark");
 
