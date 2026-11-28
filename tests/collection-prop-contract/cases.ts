@@ -1,4 +1,5 @@
 import { screen } from "@testing-library/svelte";
+import CommandPalette from "carbon-components-svelte/CommandPalette/CommandPalette.svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import ErrorSummary from "carbon-components-svelte/ErrorSummary/ErrorSummary.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
@@ -332,6 +333,25 @@ export const cases: CollectionCase[] = [
     },
   },
   {
+    name: "CommandPalette",
+    component: CommandPalette,
+    prop: "items",
+    props: { open: true },
+    initial: () => [
+      { id: "a", text: "Deploy service" },
+      { id: "b", text: "View logs" },
+    ],
+    replacement: () => [{ id: "c", text: "Restart service" }],
+    check: async () => {
+      await user.type(screen.getByRole("combobox"), "serv");
+      expect(
+        screen
+          .getAllByRole("option")
+          .map((option) => option.textContent?.trim()),
+      ).toEqual(["Restart service"]);
+    },
+  },
+  {
     name: "PromptInput",
     component: PromptInput,
     prop: "attachments",
@@ -422,6 +442,7 @@ const INTERNAL = "internal, not exported; covered through its parent";
 export const exempt: Exemptions = {
   "BreadcrumbOverflow.items": INTERNAL,
   "ComboBox.items": NO_REFERENCE_CHECK,
+  "CommandPaletteRows.runs": INTERNAL,
   "DataTable.highlightedRowIds": NO_REFERENCE_CHECK,
   "DataTable.nonExpandableRowIds": NO_REFERENCE_CHECK,
   "DataTable.nonSelectableRowIds": NO_REFERENCE_CHECK,

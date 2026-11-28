@@ -4,6 +4,7 @@
   import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
   import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
   import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+  import CommandPalette from "carbon-components-svelte/CommandPalette/CommandPalette.svelte";
   import ContentSwitcher from "carbon-components-svelte/ContentSwitcher/ContentSwitcher.svelte";
   import Switch from "carbon-components-svelte/ContentSwitcher/Switch.svelte";
   import ContextMenu from "carbon-components-svelte/ContextMenu/ContextMenu.svelte";
@@ -255,4 +256,13 @@
     <ContextMenuOption labelText="One" />
     <ContextMenuOption labelText="Two" />
   </ContextMenu>
+{:else if family === "CommandPalette"}
+  <CommandPalette
+    id="fixed"
+    open
+    items={[
+      { id: "deploy", text: "Deploy", group: "Actions" },
+      { id: "logs", text: "Logs", group: "Go to" },
+    ]}
+  />
 {/if}
