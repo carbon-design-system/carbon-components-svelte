@@ -13,6 +13,22 @@ const FONT_FACE_DIR = join(
   "../../css/vendor/carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/font-face",
 );
 
+/** The body of each `@font-face { ... }` block, its braces matched. */
+function fontFaceBlocks(scss: string): string[] {
+  const blocks: string[] = [];
+  for (const match of scss.matchAll(/@font-face\s*\{/g)) {
+    let depth = 1;
+    let i = match.index + match[0].length;
+    while (depth > 0 && i < scss.length) {
+      if (scss[i] === "{") depth++;
+      else if (scss[i] === "}") depth--;
+      i++;
+    }
+    blocks.push(scss.slice(match.index, i));
+  }
+  return blocks;
+}
+
 describe("@font-face sources", () => {
   it("only lists woff2, which every supported browser loads first", () => {
     let woff2Sources = 0;
@@ -25,6 +41,20 @@ describe("@font-face sources", () => {
     }
     // Fails if the patterns above stop matching how sources are written.
     expect(woff2Sources).toBeGreaterThan(0);
+  });
+
+  // A face without one covers every character, so text Plex has no glyph
+  // for, such as CJK, downloaded its complete file to find none.
+  it("gives every face a unicode-range", () => {
+    let faces = 0;
+    for (const file of readdirSync(FONT_FACE_DIR)) {
+      const scss = readFileSync(join(FONT_FACE_DIR, file), "utf8");
+      for (const face of fontFaceBlocks(scss)) {
+        faces++;
+        expect(face, file).toMatch(/unicode-range:/);
+      }
+    }
+    expect(faces).toBeGreaterThan(0);
   });
 
   it("declares only the weights the CSS uses", () => {

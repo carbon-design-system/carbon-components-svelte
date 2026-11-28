@@ -7,6 +7,19 @@
 
 @import 'settings';
 
+/// The characters the complete Mono files have and no split file
+/// covers. A complete face without a `unicode-range` covers every
+/// character, so text in a script Plex lacks, such as CJK or emoji,
+/// downloaded a complete file only to find no glyph in it. Read from
+/// the files' cmaps, Plex 1.1.0, the same for every weight and style,
+/// with gaps of under 768 code points closed: a character in a gap only
+/// costs the download it did before.
+/// @access private
+/// @group @carbon/type
+$carbon--font-face-mono-complete-range: unquote(
+  "U+02BB-0525, U+2000-259F, U+3000, U+F6D7-F6D8, U+FEFF-FFFD"
+);
+
 /// Mono `@font-face`'s
 /// @access public
 /// @group @carbon/type
@@ -19,6 +32,7 @@
     src: local('IBM Plex Mono Italic'), local('IBMPlexMono-Italic'),
       url('https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Mono/fonts/complete/woff2/IBMPlexMono-Italic.woff2')
         format('woff2');
+    unicode-range: $carbon--font-face-mono-complete-range;
   }
   @font-face {
     font-display: $carbon--font-display;
@@ -89,6 +103,7 @@
     src: local('IBM Plex Mono Light'), local('IBMPlexMono-Light'),
       url('https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Mono/fonts/complete/woff2/IBMPlexMono-Light.woff2')
         format('woff2');
+    unicode-range: $carbon--font-face-mono-complete-range;
   }
   @font-face {
     font-display: $carbon--font-display;
@@ -159,6 +174,7 @@
     src: local('IBM Plex Mono Light Italic'), local('IBMPlexMono-LightItalic'),
       url('https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Mono/fonts/complete/woff2/IBMPlexMono-LightItalic.woff2')
         format('woff2');
+    unicode-range: $carbon--font-face-mono-complete-range;
   }
   @font-face {
     font-display: $carbon--font-display;
@@ -229,6 +245,7 @@
     src: local('IBM Plex Mono'), local('IBMPlexMono'),
       url('https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Mono/fonts/complete/woff2/IBMPlexMono-Regular.woff2')
         format('woff2');
+    unicode-range: $carbon--font-face-mono-complete-range;
   }
   @font-face {
     font-display: $carbon--font-display;
@@ -299,6 +316,7 @@
     src: local('IBM Plex Mono SmBld'), local('IBMPlexMono-SmBld'),
       url('https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Mono/fonts/complete/woff2/IBMPlexMono-SemiBold.woff2')
         format('woff2');
+    unicode-range: $carbon--font-face-mono-complete-range;
   }
   @font-face {
     font-display: $carbon--font-display;
@@ -369,6 +387,7 @@
     src: local('IBM Plex Mono SmBld Italic'), local('IBMPlexMono-SmBldItalic'),
       url('https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Mono/fonts/complete/woff2/IBMPlexMono-SemiBoldItalic.woff2')
         format('woff2');
+    unicode-range: $carbon--font-face-mono-complete-range;
   }
   @font-face {
     font-display: $carbon--font-display;
