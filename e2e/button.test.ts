@@ -75,6 +75,52 @@ test.describe("Button", () => {
       }
     }
   });
+
+  // The tooltip is inverse: dark in light themes, light in dark ones. Its
+  // key is a cap a step off that surface, in its text color, and as tall
+  // as its line, so the tooltip keeps its 24px height.
+  test("draws a tooltip's shortcut key as a cap on its surface", async ({
+    page,
+  }) => {
+    await page.getByTestId("shortcut-tooltip").hover();
+    for (const theme of ["white", "g100"]) {
+      const row = await page.evaluate((theme) => {
+        document.documentElement.setAttribute("theme", theme);
+        const tooltip = document.querySelector<HTMLElement>(
+          "[data-testid=shortcut-tooltip] .bx--assistive-text",
+        );
+        const key = tooltip?.querySelector(".bx--kbd__key");
+        if (!tooltip || !key) throw new Error("no tooltip key");
+        const probe = document.createElement("div");
+        probe.style.backgroundColor = "var(--cds-background-inverse-hover)";
+        document.body.append(probe);
+        const step = getComputedStyle(probe).backgroundColor;
+        probe.remove();
+        const tip = getComputedStyle(tooltip);
+        const cap = getComputedStyle(key);
+        return {
+          step,
+          surface: tip.backgroundColor,
+          text: tip.color,
+          key: cap.backgroundColor,
+          keyColor: cap.color,
+          keyHeight: key.getBoundingClientRect().height,
+          lineHeight: Number.parseFloat(tip.lineHeight),
+        };
+      }, theme);
+
+      expect.soft(row.key, `${theme} key background`).toBe(row.step);
+      expect.soft(row.key, `${theme} key on surface`).not.toBe(row.surface);
+      expect.soft(row.keyColor, `${theme} key color`).toBe(row.text);
+      expect
+        .soft(contrast(row.keyColor, row.key, 1), `${theme} key contrast`)
+        .toBeGreaterThanOrEqual(4.5);
+      expect.soft(row.keyHeight, `${theme} key height`).toBeGreaterThan(0);
+      expect
+        .soft(row.keyHeight, `${theme} key height`)
+        .toBeLessThanOrEqual(Math.ceil(row.lineHeight));
+    }
+  });
 });
 
 // A disabled ghost button draws its icon in `$icon-disabled` and its text

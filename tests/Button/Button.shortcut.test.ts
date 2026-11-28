@@ -41,6 +41,10 @@ describe("Button shortcut", () => {
     expect(
       button.querySelector(".bx--assistive-text .bx--btn__tooltip-shortcut"),
     ).toHaveTextContent("CtrlShiftA");
+    // Caps on the tooltip, not text run into the description
+    expect(
+      button.querySelector(".bx--btn__tooltip-shortcut .bx--kbd"),
+    ).not.toHaveClass("bx--kbd--muted");
   });
 
   it("clicks the button when the shortcut is pressed", async () => {
