@@ -538,6 +538,12 @@ Set `stickyOffset` to stick the header below other fixed chrome, such as `"3rem"
 
 <FileSource src="/framed/PageHeader/StickyUIShell" />
 
+### Stuck state
+
+Bind `stuck` to know when the header is pinned with content scrolling under it, for example to raise it onto a layer only then. A header that starts where it sticks counts as stuck once the page scrolls. While stuck, the header also has the `bx--page-header--stuck` class. `stuck` is `false` on the server.
+
+<FileSource src="/framed/PageHeader/StickyStuck" />
+
 ## Page layouts
 
 Full pages built from `PageHeader` with `grid`, so the header lines up with the `Row`s in its body.
