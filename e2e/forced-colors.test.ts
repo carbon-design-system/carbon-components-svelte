@@ -465,6 +465,12 @@ test.describe("forced colors", () => {
             ?.classList.add("bx--contained-list-item--selected"),
         ),
     },
+    {
+      name: "a focused OverflowMenu option",
+      target: ".bx--overflow-menu-options__btn",
+      settled: ".bx--overflow-menu-options__btn:focus",
+      act: (page) => page.focus(".bx--overflow-menu-options__btn"),
+    },
     ...(
       [
         ["Dropdown", "dropdown", ".bx--list-box__field"],
@@ -1508,13 +1514,10 @@ test.describe("forced colors", () => {
     // stood out less than its neighbors.
     const option = ".bx--overflow-menu-options__btn";
     await page.focus(option);
-    // Polled: the fill transitions in.
-    await expect
-      .poll(() => style(page, option), { message: option })
-      .toMatchObject({
-        background: system.Highlight,
-        color: system.HighlightText,
-      });
+    expect.soft(await style(page, option), option).toMatchObject({
+      background: system.Highlight,
+      color: system.HighlightText,
+    });
     expect.soft(await flatness(page, option), option).toBeLessThan(0.95);
 
     await page.click(".bx--header__search .bx--header-search-button");

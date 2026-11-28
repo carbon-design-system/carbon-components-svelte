@@ -525,6 +525,8 @@
 // thinner `Highlight` ring stood out less than its neighbors. It fills with
 // `Highlight` and opts out of forcing, as a highlighted SearchMenu row does;
 // a danger option's red fill would come back without the doubled class.
+// The focused option does not transition: its fill and text would start from
+// the unforced values, so it flashed `HighlightText` on the menu's fill.
 //
 // The trigger's resting outline is repainted the same way, so a list with a
 // menu per row drew a box on every row. Only the focused or open trigger
@@ -559,6 +561,7 @@
       outline: none;
       background-color: Highlight;
       color: HighlightText;
+      transition: none;
     }
 
     .#{$prefix}--overflow-menu-options__btn:focus svg {
