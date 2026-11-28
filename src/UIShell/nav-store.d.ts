@@ -14,6 +14,9 @@ export declare const sideNavWidth: Writable<number | undefined>;
 /** Whether a `Header` is currently mounted. */
 export declare const isHeaderRendered: Writable<boolean>;
 
+/** The fixed `Header`'s height in pixels. */
+export declare const UI_SHELL_HEADER_HEIGHT: 48;
+
 /** The most recently mounted `HamburgerMenu` trigger button. */
 export declare const hamburgerMenuRef: Writable<HTMLButtonElement | null>;
 

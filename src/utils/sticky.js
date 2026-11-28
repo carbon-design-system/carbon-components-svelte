@@ -1,6 +1,7 @@
 // @ts-check
 import { toCssLength } from "./css-length.js";
 import { observeIntersection } from "./shared-observer.js";
+import { joinStack } from "./sticky-stack.js";
 
 const SENTINEL_STYLE =
   "display:block;width:0;height:0;margin:0;padding:0;border:0;visibility:hidden;pointer-events:none";
@@ -30,6 +31,11 @@ function isFlowParent(parent) {
  * one `IntersectionObserver`. Does nothing on the server or without
  * `IntersectionObserver`.
  *
+ * Top-edge elements also join the stack of their scroll container (see
+ * `joinStack`): with `offset: "stack"`, the element sticks below the UI
+ * Shell `Header` and the sticky elements before it, and the container
+ * publishes the total as `--ccs-sticky-offset`.
+ *
  * @param {HTMLElement} node
  * @param {import("./sticky.js").StickyOptions} [options]
  * @returns {{ update: (options?: import("./sticky.js").StickyOptions) => void, destroy: () => void }}
@@ -48,6 +54,13 @@ export function sticky(node, options = {}) {
   let stuck = false;
   /** @type {Array<() => void>} */
   let stops = [];
+  /** @type {null | ReturnType<typeof joinStack>} */
+  let stack = null;
+  /**
+   * The `top` the stack last set, so it's cleared only while it's ours.
+   * @type {string | undefined}
+   */
+  let stackTop;
 
   function report() {
     const next = nodeVisible && !sentinelVisible;
@@ -60,7 +73,7 @@ export function sticky(node, options = {}) {
     if (!sentinel) return;
     const computed = getComputedStyle(node)[edge];
     const length =
-      offset === undefined
+      offset === undefined || offset === "stack"
         ? computed === "auto"
           ? "0px"
           : computed
@@ -78,8 +91,25 @@ export function sticky(node, options = {}) {
     }
   }
 
+  /** @param {number} top */
+  function handleStackTop(top) {
+    stackTop = `${top}px`;
+    node.style.top = stackTop;
+    place();
+  }
+
+  function clearStackTop() {
+    if (stackTop !== undefined && node.style.top === stackTop) {
+      node.style.removeProperty("top");
+    }
+    stackTop = undefined;
+  }
+
   function attach() {
     if (!enabled || typeof document === "undefined") return;
+    if (edge === "top") {
+      stack = joinStack(node, offset === "stack", handleStackTop);
+    }
     sentinel = document.createElement("div");
     sentinel.setAttribute("aria-hidden", "true");
     sentinel.setAttribute("data-ccs-sticky-sentinel", "");
@@ -114,6 +144,9 @@ export function sticky(node, options = {}) {
   function detach(notify) {
     for (const stop of stops) stop();
     stops = [];
+    stack?.leave();
+    stack = null;
+    clearStackTop();
     sentinel?.remove();
     sentinel = null;
     nodeVisible = false;
@@ -128,6 +161,8 @@ export function sticky(node, options = {}) {
       const nextEdge = next.edge ?? "top";
       onChange = next.onChange;
       offset = next.offset;
+      if (offset !== "stack") clearStackTop();
+      stack?.update(offset === "stack");
       if (nextEnabled !== enabled || nextEdge !== edge) {
         detach(true);
         enabled = nextEnabled;
