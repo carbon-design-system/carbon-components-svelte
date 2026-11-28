@@ -13,7 +13,7 @@
     "typecheck:examples": "bun scripts/typecheck-examples.ts",
     "render:examples": "bun scripts/render-examples.ts",
     "eval:search": "bun scripts/index-docs.ts && bun scripts/search-eval.ts",
-    "preview": "deserved dist --spa",
+    "preview": "deserved dist --spa --no-dir",
     "test:e2e": "playwright test"
   },
   "devDependencies": {
@@ -22,8 +22,8 @@
     "bun-plugin-page": "^0.3.1",
     "carbon-icons-svelte": "^13.18.2",
     "carbon-pictograms-svelte": "^13.21.1",
-    "deserved": "^0.6.1",
-    "svelte-ast": "^0.12.0",
+    "deserved": "^0.8.0",
+    "svelte-ast": "^0.15.1",
     "svelte-bun": "^0.5.0"
   },
   "type": "module"
