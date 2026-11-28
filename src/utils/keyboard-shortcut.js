@@ -351,13 +351,15 @@ function isEditable(target) {
 }
 
 /**
+ * The shortcuts in a list that fire from a field too: those with Command,
+ * Control, Alt or `mod`. The others type a character there.
  * @param {ReadonlyArray<string>} list
- * @returns {boolean}
+ * @returns {string[]}
  */
-function isTyped(list) {
-  return list.every((entry) => {
+function commandsOf(list) {
+  return list.filter((entry) => {
     const parsed = parseShortcut(entry);
-    return !parsed || !(parsed.mod || parsed.meta || parsed.ctrl || parsed.alt);
+    return parsed && (parsed.mod || parsed.meta || parsed.ctrl || parsed.alt);
   });
 }
 
@@ -378,7 +380,7 @@ export const applePlatform = /* @__PURE__ */ readable(false, (set) => {
 /**
  * @typedef {{
  *   list: string[];
- *   typed: boolean;
+ *   commands: string[];
  *   run: (event: KeyboardEvent) => void;
  *   node?: HTMLElement;
  * }} Binding
@@ -467,8 +469,9 @@ function handleKeydown(event) {
   const editable = isEditable(target);
   /** @param {Binding} binding */
   const matches = (binding) =>
-    !(binding.typed && editable) &&
-    matchesShortcut(event, binding.list, { apple });
+    matchesShortcut(event, editable ? binding.commands : binding.list, {
+      apple,
+    });
 
   // The app's own bindings first: a component never takes a shortcut the
   // app handles itself.
@@ -513,7 +516,7 @@ function handleKeydown(event) {
 export function onShortcut(shortcut, callback) {
   if (typeof window === "undefined") return noop;
   const list = toList(shortcut);
-  return listen(explicit, { list, typed: isTyped(list), run: callback });
+  return listen(explicit, { list, commands: commandsOf(list), run: callback });
 }
 
 /**
@@ -544,7 +547,7 @@ export function keyboardShortcut(node, params) {
     release();
     current = key;
     binding = list.length
-      ? { list, typed: isTyped(list), run: next.run, node }
+      ? { list, commands: commandsOf(list), run: next.run, node }
       : undefined;
     release = binding ? listen(bound, binding) : noop;
   }

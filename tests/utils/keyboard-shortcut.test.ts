@@ -293,6 +293,22 @@ describe("onShortcut", () => {
     off();
   });
 
+  it("skips only the typed shortcut in a list while typing in a field", () => {
+    const callback = vi.fn();
+    const off = onShortcut(["mod+k", "/"], callback);
+    const input = document.createElement("input");
+    document.body.append(input);
+
+    input.dispatchEvent(key({ key: "/" }));
+    expect(callback).not.toHaveBeenCalled();
+
+    input.dispatchEvent(key({ key: "k", ctrlKey: true }));
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    input.remove();
+    off();
+  });
+
   it("fires a command shortcut from a field", () => {
     const callback = vi.fn();
     const off = onShortcut("ctrl+k", callback);

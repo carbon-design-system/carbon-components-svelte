@@ -60,6 +60,8 @@ describe("Search shortcut", () => {
       "J",
     ]);
 
+    press({ key: "j" }, screen.getByTestId("other"));
+    expect(input("several")).not.toHaveFocus();
     press({ key: "j", ctrlKey: true }, screen.getByTestId("other"));
     expect(input("several")).toHaveFocus();
 
