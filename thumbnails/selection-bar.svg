@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>selection-bar</title>
+    <g id="selection-bar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="check-1" fill="var(--cds-icon-primary, #161616)" x="64" y="36" width="12" height="12"></rect>
+        <rect id="row-1" fill="var(--cds-text-secondary, #525252)" x="88" y="39" width="96" height="6"></rect>
+        <rect id="check-2" fill="var(--cds-icon-primary, #161616)" x="64" y="60" width="12" height="12"></rect>
+        <rect id="row-2" fill="var(--cds-text-secondary, #525252)" x="88" y="63" width="72" height="6"></rect>
+        <rect id="check-3" stroke="var(--cds-icon-primary, #161616)" stroke-width="1.5" x="64.75" y="84.75" width="10.5" height="10.5"></rect>
+        <rect id="row-3" fill="var(--cds-text-secondary, #525252)" x="88" y="87" width="84" height="6"></rect>
+        <rect id="bar" fill="var(--cds-background-brand, #0f62fe)" x="48" y="116" width="224" height="32"></rect>
+        <rect id="count" fill="var(--cds-text-on-color, #ffffff)" x="60" y="129" width="48" height="6"></rect>
+        <rect id="action" fill="var(--cds-text-on-color, #ffffff)" x="176" y="129" width="36" height="6"></rect>
+        <rect id="divider" fill="var(--cds-text-on-color, #ffffff)" x="222" y="124" width="1" height="16"></rect>
+        <rect id="clear" fill="var(--cds-text-on-color, #ffffff)" x="232" y="129" width="28" height="6"></rect>
+    </g>
+</svg>

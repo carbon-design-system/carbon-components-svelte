@@ -109,6 +109,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   SearchMenu: "0.110.0",
   Select: "0.2.0",
   SelectableTile: "0.2.0",
+  SelectionBar: "0.115.0",
   SessionStorage: "0.102.0",
   ShapeIndicator: "0.110.0",
   ShellBanner: "0.115.0",

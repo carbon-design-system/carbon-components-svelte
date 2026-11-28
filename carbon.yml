@@ -1342,6 +1342,19 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/SelectableTile
     tags:
       - input-control
+  selection-bar:
+    name: Selection bar
+    description: A bar with the number of selected items and the actions on them, for a selection outside a data table, in the content or pinned to the bottom of the page.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/selection-bar.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SelectionBar
   session-storage:
     name: Session storage
     status: stable
