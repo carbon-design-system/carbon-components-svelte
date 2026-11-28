@@ -55,7 +55,12 @@
    * Set how far from the top of the scroll container a `sticky` header
    * sticks, such as `"3rem"` to clear a UI Shell `Header`. Numbers `0`–`13`
    * use the shared layout scale; strings accept any CSS length.
-   * @type {0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | string}
+   *
+   * Set to `"stack"` to stick below the UI Shell `Header` (when the page
+   * scrolls) and every sticky `PageHeader`, `Toolbar` or `sticky` action
+   * element above it in the same scroll container. The offset is measured
+   * after mount, so the server renders none.
+   * @type {"stack" | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | string}
    */
   export let stickyOffset = 0;
 
@@ -164,16 +169,18 @@
   onMount(() => {
     stickyHandle = stickyAction(/** @type {HTMLElement} */ (ref), {
       enabled: sticky,
+      offset: stickyOffset === "stack" ? "stack" : undefined,
       onChange: handleStuck,
     });
     return () => stickyHandle?.destroy();
   });
 
-  $: {
-    // The action reads a new `stickyOffset` once it has rendered.
-    stickyOffset;
-    stickyHandle?.update({ enabled: sticky, onChange: handleStuck });
-  }
+  // The action reads a new `stickyOffset` once it has rendered.
+  $: stickyHandle?.update({
+    enabled: sticky,
+    offset: stickyOffset === "stack" ? "stack" : undefined,
+    onChange: handleStuck,
+  });
 
   $: containerTabs = tabsType === "container";
 
@@ -199,7 +206,7 @@
   tag="header"
   {fill}
   position={sticky ? "sticky" : undefined}
-  top={sticky ? stickyOffset : undefined}
+  top={sticky && stickyOffset !== "stack" ? stickyOffset : undefined}
   class={pageHeaderClass}
 >
   <div class:bx--page-header__content={true}>
