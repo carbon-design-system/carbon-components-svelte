@@ -21,12 +21,22 @@
    */
   export let iconDescription = undefined;
 
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
-  import ErrorFilled from "../icons/ErrorFilled.svelte";
-  import InformationFilled from "../icons/InformationFilled.svelte";
-  import InformationSquareFilled from "../icons/InformationSquareFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinCheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import BuiltinErrorFilled from "../icons/ErrorFilled.svelte";
+  import BuiltinInformationFilled from "../icons/InformationFilled.svelte";
+  import BuiltinInformationSquareFilled from "../icons/InformationSquareFilled.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
+
+  const {
+    CheckmarkFilled = BuiltinCheckmarkFilled,
+    ErrorFilled = BuiltinErrorFilled,
+    InformationFilled = BuiltinInformationFilled,
+    InformationSquareFilled = BuiltinInformationSquareFilled,
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   const icons = {
     error: ErrorFilled,

@@ -100,8 +100,8 @@
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { sameArrayItems } from "../utils/array-set-ops.js";
   import {
@@ -111,8 +111,14 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { createIdScope } from "../utils/id-scope.js";
   import { requiredInvalid } from "../utils/required-invalid.js";
+
+  const {
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

@@ -50,8 +50,11 @@
   import { getContext } from "svelte";
   import Button from "../Button/Button.svelte";
   import ModalHeader from "../ComposedModal/ModalHeader.svelte";
-  import Close from "../icons/Close.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import InterstitialScreenHeaderContent from "./InterstitialScreenHeaderContent.svelte";
+
+  const { Close = BuiltinClose } = getIconContext();
 
   const { isFullScreen, handleClose } = getContext("carbon:InterstitialScreen");
 

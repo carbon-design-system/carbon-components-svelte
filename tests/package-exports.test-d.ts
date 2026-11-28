@@ -21,6 +21,7 @@ import type {
   preserveFocusSelection,
   queryParam,
   rovingFocus,
+  setIconContext,
   setTranslateContext,
   sticky,
   themeScript,
@@ -81,6 +82,7 @@ import type {
   FloatingPositionOptions,
   FloatingPositionResult,
 } from "carbon-components-svelte/src/utils/floating-position.js";
+import type { IconContext } from "carbon-components-svelte/src/utils/icon-context.js";
 import type { RovingFocusOptions } from "carbon-components-svelte/src/utils/roving-focus.js";
 import type { StickyOptions } from "carbon-components-svelte/src/utils/sticky.js";
 import {
@@ -134,6 +136,8 @@ type _GetAvatarBackgroundColor = ReturnType<typeof getAvatarBackgroundColor>;
 type _GetInitials = ReturnType<typeof getInitials>;
 type _GetLayoutDirection = ReturnType<typeof getLayoutDirection>;
 type _SetTranslateContext = Parameters<typeof setTranslateContext>[0];
+type _SetIconContext = Parameters<typeof setIconContext>[0];
+const _icons: IconContext = { ChevronDown: undefined };
 type _LayoutDirection = LayoutDirection;
 type _LayoutDirectionProps = LayoutDirectionProps<"section">["dir"];
 type _MultiSelectSkeleton = MultiSelectSkeleton;

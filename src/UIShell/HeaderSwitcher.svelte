@@ -71,7 +71,7 @@
   import { createEventDispatcher, setContext, tick } from "svelte";
   import { get } from "svelte/store";
   import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
-  import ChevronDown from "../icons/ChevronDown.svelte";
+  import BuiltinChevronDown from "../icons/ChevronDown.svelte";
   import { getMotionDefault } from "../motion/context.js";
   import { resolveTransition } from "../motion/resolve-transition.js";
   import { slide } from "../motion/transitions.js";
@@ -79,11 +79,14 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { returnFocusOnClose } from "../utils/focus.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
   import { verticalListFocus } from "../utils/vertical-list-focus.js";
+
+  const { ChevronDown = BuiltinChevronDown } = getIconContext();
 
   const dispatch = createEventDispatcher();
 

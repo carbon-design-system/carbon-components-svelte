@@ -9,6 +9,14 @@
    * @restProps {input}
    */
 
+  /** Read before the props, which default to these icons. */
+  const {
+    Close = BuiltinClose,
+    Search: IconSearch = BuiltinIconSearch,
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
+
   /**
    * Specify the value of the search input.
    * Follows the field when the owning form resets.
@@ -209,10 +217,10 @@
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { RESULTS_ANNOUNCE_DELAY_MS } from "../constants/timing.js";
-  import Close from "../icons/Close.svelte";
-  import IconSearch from "../icons/IconSearch.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
+  import BuiltinIconSearch from "../icons/IconSearch.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { createAnnouncerChannel } from "../utils/announcer.js";
   import { debounce as debounceFn } from "../utils/debounce.js";
@@ -227,6 +235,7 @@
   import { clippedBy, pastWindow } from "../utils/fit-align.js";
   import { returnFocus } from "../utils/focus.js";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {

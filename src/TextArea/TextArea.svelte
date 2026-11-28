@@ -121,8 +121,8 @@
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -133,6 +133,7 @@
   import { formReset } from "../utils/form-reset.js";
   import { createFrameJob } from "../utils/frame-batch.js";
   import { graphemeCount, truncateGraphemes } from "../utils/grapheme-count.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { createLimitAnnouncement } from "../utils/limit-announcement.js";
   import { noop } from "../utils/noop.js";
@@ -140,6 +141,11 @@
   import { observeResize } from "../utils/shared-observer.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { wordCount, wordLimitAction } from "../utils/word-count.js";
+
+  const {
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

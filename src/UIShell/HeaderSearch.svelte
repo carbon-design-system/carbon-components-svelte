@@ -34,6 +34,10 @@
    * @slot {{}} loading
    */
 
+  /** Read before the props, which default to these icons. */
+  const { Close = BuiltinClose, Search: IconSearch = BuiltinIconSearch } =
+    getIconContext();
+
   /**
    * Specify the search input value.
    * @bindable writable
@@ -154,8 +158,8 @@
   import { writable } from "svelte/store";
   import Kbd from "../Kbd/Kbd.svelte";
   import ShortcutBinding from "../Kbd/ShortcutBinding.svelte";
-  import Close from "../icons/Close.svelte";
-  import IconSearch from "../icons/IconSearch.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
+  import BuiltinIconSearch from "../icons/IconSearch.svelte";
   import { getMotionDefault } from "../motion/context.js";
   import { resolveTransition } from "../motion/resolve-transition.js";
   import { slide } from "../motion/transitions.js";
@@ -163,6 +167,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocus } from "../utils/focus.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { createIdScope, useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";

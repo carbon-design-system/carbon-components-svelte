@@ -19,14 +19,25 @@
    */
   export let textSize = 12;
 
-  import Caution from "../icons/Caution.svelte";
-  import CircleFill from "../icons/CircleFill.svelte";
-  import CircleStroke from "../icons/CircleStroke.svelte";
-  import Critical from "../icons/Critical.svelte";
-  import CriticalSeverity from "../icons/CriticalSeverity.svelte";
-  import DiamondFill from "../icons/DiamondFill.svelte";
-  import LowSeverity from "../icons/LowSeverity.svelte";
+  import BuiltinCaution from "../icons/Caution.svelte";
+  import BuiltinCircleFill from "../icons/CircleFill.svelte";
+  import BuiltinCircleStroke from "../icons/CircleStroke.svelte";
+  import BuiltinCritical from "../icons/Critical.svelte";
+  import BuiltinCriticalSeverity from "../icons/CriticalSeverity.svelte";
+  import BuiltinDiamondFill from "../icons/DiamondFill.svelte";
+  import BuiltinLowSeverity from "../icons/LowSeverity.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import ShapeIndicatorIncomplete from "./ShapeIndicatorIncomplete.svelte";
+
+  const {
+    Caution = BuiltinCaution,
+    CircleFill = BuiltinCircleFill,
+    CircleStroke = BuiltinCircleStroke,
+    Critical = BuiltinCritical,
+    CriticalSeverity = BuiltinCriticalSeverity,
+    DiamondFill = BuiltinDiamondFill,
+    LowSeverity = BuiltinLowSeverity,
+  } = getIconContext();
 
   const shapes = {
     failed: Critical,

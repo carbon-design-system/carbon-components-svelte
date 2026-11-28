@@ -91,11 +91,12 @@
   import Menu from "../Menu/Menu.svelte";
   import MenuDivider from "../Menu/MenuDivider.svelte";
   import MenuItem from "../Menu/MenuItem.svelte";
-  import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
-  import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
+  import BuiltinOverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
+  import BuiltinOverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { createIdScope } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { getLayoutDirection, inlineKey } from "../utils/layout-direction.js";
@@ -109,6 +110,11 @@
     ACTION_BAR_SIZE_PX,
     BUTTON_SIZE_BY_ACTION_BAR_SIZE,
   } from "./action-bar-sizes.js";
+
+  const {
+    OverflowMenuHorizontal = BuiltinOverflowMenuHorizontal,
+    OverflowMenuVertical = BuiltinOverflowMenuVertical,
+  } = getIconContext();
 
   const MORE = "more";
   // `Button` marks an icon-only ghost button pressed or not. A trigger is not

@@ -257,11 +257,15 @@
   import NumberInput from "../NumberInput/NumberInput.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
-  import CaretLeft from "../icons/CaretLeft.svelte";
-  import CaretRight from "../icons/CaretRight.svelte";
+  import BuiltinCaretLeft from "../icons/CaretLeft.svelte";
+  import BuiltinCaretRight from "../icons/CaretRight.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { clamp } from "../utils/numeric-format.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
+
+  const { CaretLeft = BuiltinCaretLeft, CaretRight = BuiltinCaretRight } =
+    getIconContext();
 
   const dispatch = createEventDispatcher();
 

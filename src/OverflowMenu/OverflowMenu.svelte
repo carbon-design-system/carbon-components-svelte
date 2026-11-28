@@ -18,6 +18,12 @@
    * @event {CustomEvent<null>} outroend
    */
 
+  /** Read before the props, which default to these icons. */
+  const {
+    OverflowMenuHorizontal = BuiltinOverflowMenuHorizontal,
+    OverflowMenuVertical = BuiltinOverflowMenuVertical,
+  } = getIconContext();
+
   /**
    * Specify the size of the overflow menu.
    * Inherits the parent `InputGroup` size when unset. Also accepts Carbon
@@ -158,8 +164,8 @@
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
-  import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
+  import BuiltinOverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
+  import BuiltinOverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import { getMotionDefault } from "../motion/context.js";
   import { resolveTransition } from "../motion/resolve-transition.js";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
@@ -172,6 +178,7 @@
   } from "../utils/fit-align.js";
   import { focusQuietly, returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { createIdScope, useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";

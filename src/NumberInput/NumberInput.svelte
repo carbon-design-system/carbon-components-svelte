@@ -219,11 +219,11 @@
     STEPPER_REPEAT_DELAY_MS,
     STEPPER_REPEAT_INTERVAL_MS,
   } from "../constants/timing.js";
-  import Add from "../icons/Add.svelte";
-  import EditOff from "../icons/EditOff.svelte";
-  import Subtract from "../icons/Subtract.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinAdd from "../icons/Add.svelte";
+  import BuiltinEditOff from "../icons/EditOff.svelte";
+  import BuiltinSubtract from "../icons/Subtract.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -232,6 +232,7 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
   import {
@@ -252,6 +253,14 @@
   import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { getTranslateContext } from "../utils/translate-context.js";
+
+  const {
+    Add = BuiltinAdd,
+    EditOff = BuiltinEditOff,
+    Subtract = BuiltinSubtract,
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

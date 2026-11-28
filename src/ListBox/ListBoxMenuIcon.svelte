@@ -21,8 +21,11 @@
     return translate?.(id) ?? defaultTranslations[id];
   };
 
-  import ChevronDown from "../icons/ChevronDown.svelte";
+  import BuiltinChevronDown from "../icons/ChevronDown.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import { getTranslateContext } from "../utils/translate-context.js";
+
+  const { ChevronDown = BuiltinChevronDown } = getIconContext();
 
   const translate = getTranslateContext();
 

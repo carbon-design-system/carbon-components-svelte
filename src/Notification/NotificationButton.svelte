@@ -3,6 +3,9 @@
    * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
+  /** Read before the props, which default to these icons. */
+  const { Close = BuiltinClose } = getIconContext();
+
   /**
    * Set the type of notification.
    * @type {"toast" | "inline"}
@@ -27,7 +30,8 @@
   /** Specify the ARIA label for the icon */
   export let iconDescription = "Close icon";
 
-  import Close from "../icons/Close.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
 
   $: iconClass = [
     notificationType === "toast" && "bx--toast-notification__close-icon",

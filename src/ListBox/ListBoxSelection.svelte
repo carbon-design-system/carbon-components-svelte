@@ -42,9 +42,12 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
-  import Close from "../icons/Close.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { getTranslateContext } from "../utils/translate-context.js";
+
+  const { Close = BuiltinClose } = getIconContext();
 
   const defaultTranslations = {
     [translationIds.clearAll]: "Clear all selected items",

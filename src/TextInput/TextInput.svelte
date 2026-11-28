@@ -128,9 +128,9 @@
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import EditOff from "../icons/EditOff.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinEditOff from "../icons/EditOff.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -140,12 +140,19 @@
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { graphemeCount } from "../utils/grapheme-count.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { createLimitAnnouncement } from "../utils/limit-announcement.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { requiredInvalid } from "../utils/required-invalid.js";
   import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
+
+  const {
+    EditOff = BuiltinEditOff,
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

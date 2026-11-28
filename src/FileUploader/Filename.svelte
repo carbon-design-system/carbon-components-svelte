@@ -98,9 +98,16 @@
   }
 
   import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
-  import Close from "../icons/Close.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinCheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
+
+  const {
+    CheckmarkFilled = BuiltinCheckmarkFilled,
+    Close = BuiltinClose,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 </script>
 
 <span role="status" class:bx--visually-hidden={true}>{statusAnnouncement}</span>

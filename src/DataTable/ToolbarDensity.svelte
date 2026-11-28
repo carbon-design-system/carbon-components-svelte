@@ -11,6 +11,9 @@
    * @event {null} close
    */
 
+  /** Read before the props, which default to these icons. */
+  const { RowExpand = BuiltinRowExpand } = getIconContext();
+
   /**
    * Specify the row height.
    * Pass this value to the `DataTable`'s `size` prop.
@@ -62,7 +65,8 @@
   import MenuItemRadioGroup from "../Menu/MenuItemRadioGroup.svelte";
   import MenuButton from "../MenuButton/MenuButton.svelte";
   import { MENU_SIZE_BY_TOOLBAR_SIZE } from "../constants/sizes.js";
-  import RowExpand from "../icons/RowExpand.svelte";
+  import BuiltinRowExpand from "../icons/RowExpand.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import { normalizeDataTableSize } from "../utils/size-aliases.js";
 
   const dispatch = createEventDispatcher();

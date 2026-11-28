@@ -164,9 +164,9 @@
   import Tag from "../Tag/Tag.svelte";
   import TagSet from "../TagSet/TagSet.svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
-  import EditOff from "../icons/EditOff.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinEditOff from "../icons/EditOff.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { createAnnouncerChannel } from "../utils/announcer.js";
   import {
     buildFieldIds,
@@ -176,6 +176,7 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {
@@ -183,6 +184,12 @@
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
   import { normalizeFieldSize } from "../utils/size-aliases.js";
+
+  const {
+    EditOff = BuiltinEditOff,
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

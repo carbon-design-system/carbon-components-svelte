@@ -59,11 +59,14 @@
   import MenuItem from "../Menu/MenuItem.svelte";
   import MenuButton from "../MenuButton/MenuButton.svelte";
   import { MENU_SIZE_BY_TOOLBAR_SIZE } from "../constants/sizes.js";
-  import ColumnIcon from "../icons/ColumnIcon.svelte";
+  import BuiltinColumnIcon from "../icons/ColumnIcon.svelte";
   import {
     setColumnHidden,
     toColumnSettings,
   } from "../utils/column-settings.js";
+  import { getIconContext } from "../utils/icon-context.js";
+
+  const { Column: ColumnIcon = BuiltinColumnIcon } = getIconContext();
 
   const dispatch = createEventDispatcher();
   const toolbarCtx = getContext("carbon:Toolbar") ?? {};

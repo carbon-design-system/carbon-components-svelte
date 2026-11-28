@@ -54,10 +54,11 @@
     tick,
   } from "svelte";
   import { get, readable, writable } from "svelte/store";
-  import ChevronDown from "../icons/ChevronDown.svelte";
+  import BuiltinChevronDown from "../icons/ChevronDown.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { returnFocus } from "../utils/focus.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import {
@@ -72,6 +73,8 @@
     typeaheadIndex,
   } from "../utils/typeahead.js";
   import { verticalListFocus } from "../utils/vertical-list-focus.js";
+
+  const { ChevronDown = BuiltinChevronDown } = getIconContext();
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();

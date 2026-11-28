@@ -17,6 +17,9 @@
    * @slot {{}} icon - Override the button icon.
    */
 
+  /** Read before the props, which default to these icons. */
+  const { Information = BuiltinInformation } = getIconContext();
+
   /**
    * Set the alignment of the content relative to the button.
    * Above and below the button, `start` and `end` name inline sides, so
@@ -102,11 +105,12 @@
   import Popover from "../Popover/Popover.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import Information from "../icons/Information.svelte";
+  import BuiltinInformation from "../icons/Information.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";

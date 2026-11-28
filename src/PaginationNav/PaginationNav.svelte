@@ -103,10 +103,14 @@
 
   import { createEventDispatcher } from "svelte";
   import Button from "../Button/Button.svelte";
-  import CaretLeft from "../icons/CaretLeft.svelte";
-  import CaretRight from "../icons/CaretRight.svelte";
+  import BuiltinCaretLeft from "../icons/CaretLeft.svelte";
+  import BuiltinCaretRight from "../icons/CaretRight.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import PaginationItem from "./PaginationItem.svelte";
   import PaginationOverflow from "./PaginationOverflow.svelte";
+
+  const { CaretLeft = BuiltinCaretLeft, CaretRight = BuiltinCaretRight } =
+    getIconContext();
 
   const dispatch = createEventDispatcher();
   const MIN = 4;

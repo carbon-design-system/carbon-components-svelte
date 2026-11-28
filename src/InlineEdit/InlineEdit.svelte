@@ -108,17 +108,26 @@
   import { createEventDispatcher } from "svelte";
   import Button from "../Button/Button.svelte";
   import Toggletip from "../Toggletip/Toggletip.svelte";
-  import Checkmark from "../icons/Checkmark.svelte";
-  import Close from "../icons/Close.svelte";
-  import Edit from "../icons/Edit.svelte";
-  import EditOff from "../icons/EditOff.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinCheckmark from "../icons/Checkmark.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
+  import BuiltinEdit from "../icons/Edit.svelte";
+  import BuiltinEditOff from "../icons/EditOff.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
+
+  const {
+    Checkmark = BuiltinCheckmark,
+    Close = BuiltinClose,
+    Edit = BuiltinEdit,
+    EditOff = BuiltinEditOff,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

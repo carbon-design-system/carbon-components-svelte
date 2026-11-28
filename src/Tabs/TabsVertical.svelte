@@ -67,8 +67,8 @@
   } from "svelte";
   import { derived, get, readable, writable } from "svelte/store";
   import { breakpoints } from "../Breakpoint/breakpoints.js";
-  import ChevronLeft from "../icons/ChevronLeft.svelte";
-  import ChevronRight from "../icons/ChevronRight.svelte";
+  import BuiltinChevronLeft from "../icons/ChevronLeft.svelte";
+  import BuiltinChevronRight from "../icons/ChevronRight.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import {
@@ -76,6 +76,7 @@
     scrollByViewport,
     scrollIntoViewX,
   } from "../utils/horizontal-scroll.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { createIdScope } from "../utils/id-scope.js";
   import { keyBy } from "../utils/key-by.js";
   import {
@@ -91,6 +92,11 @@
   import { createTabsInitClaims } from "../utils/tabs-init-claims.js";
   import { createTabsRegistration } from "../utils/tabs-registration.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
+
+  const {
+    ChevronLeft = BuiltinChevronLeft,
+    ChevronRight = BuiltinChevronRight,
+  } = getIconContext();
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();

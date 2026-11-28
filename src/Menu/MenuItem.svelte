@@ -100,9 +100,10 @@
     SUBMENU_AIM_PAUSE_MS,
     SUBMENU_HOVER_DELAY_MS,
   } from "../constants/timing.js";
-  import CaretRight from "../icons/CaretRight.svelte";
-  import Checkmark from "../icons/Checkmark.svelte";
+  import BuiltinCaretRight from "../icons/CaretRight.svelte";
+  import BuiltinCheckmark from "../icons/Checkmark.svelte";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import {
     applePlatform,
@@ -117,6 +118,9 @@
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import { uniqueId } from "../utils/unique-id.js";
   import Menu from "./Menu.svelte";
+
+  const { CaretRight = BuiltinCaretRight, Checkmark = BuiltinCheckmark } =
+    getIconContext();
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();

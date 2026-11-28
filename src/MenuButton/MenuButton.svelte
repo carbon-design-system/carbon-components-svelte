@@ -23,6 +23,12 @@
    * @event {CustomEvent<null>} outroend
    */
 
+  /** Read before the props, which default to these icons. */
+  const {
+    ChevronDown = BuiltinChevronDown,
+    OverflowMenuVertical = BuiltinOverflowMenuVertical,
+  } = getIconContext();
+
   /**
    * Required. Specify the trigger button text.
    * Alternatively, use the "labelChildren" slot for custom trigger content;
@@ -121,9 +127,10 @@
   import Menu from "../Menu/Menu.svelte";
   import { MENU_OPEN_CONTEXT_KEY } from "../constants/context-keys.js";
   import { BUTTON_SIZE_BY_MENU_SIZE } from "../constants/sizes.js";
-  import ChevronDown from "../icons/ChevronDown.svelte";
-  import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
+  import BuiltinChevronDown from "../icons/ChevronDown.svelte";
+  import BuiltinOverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import { blurOnMouseClose } from "../utils/blur-on-mouse-close.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { listenMenuArrowOpen } from "../utils/menu-arrow-open.js";
 
   /**

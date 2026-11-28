@@ -232,7 +232,7 @@
     LAYER_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import Close from "../icons/Close.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
   import { splitAria, splitAriaNaming } from "../utils/aria-naming.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";
@@ -241,11 +241,14 @@
     initialFocus,
     restoreFocus,
   } from "../utils/focus.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
   import { trackModal } from "./modal-store.js";
+
+  const { Close = BuiltinClose } = getIconContext();
 
   const dispatch = createEventDispatcher();
   const focusReturn = restoreFocus();

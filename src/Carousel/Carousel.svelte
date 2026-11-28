@@ -60,15 +60,21 @@
     tick,
   } from "svelte";
   import { writable } from "svelte/store";
-  import ChevronLeft from "../icons/ChevronLeft.svelte";
-  import ChevronRight from "../icons/ChevronRight.svelte";
+  import BuiltinChevronLeft from "../icons/ChevronLeft.svelte";
+  import BuiltinChevronRight from "../icons/ChevronRight.svelte";
   import { initCarousel } from "../utils/carousel.js";
   import { returnFocus } from "../utils/focus.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+
+  const {
+    ChevronLeft = BuiltinChevronLeft,
+    ChevronRight = BuiltinChevronRight,
+  } = getIconContext();
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();

@@ -25,8 +25,12 @@
   export let pageSelectLabelText;
 
   import { createEventDispatcher } from "svelte";
-  import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
+  import BuiltinOverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import PaginationItem from "./PaginationItem.svelte";
+
+  const { OverflowMenuHorizontal = BuiltinOverflowMenuHorizontal } =
+    getIconContext();
 
   const dispatch = createEventDispatcher();
 

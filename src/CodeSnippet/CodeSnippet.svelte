@@ -265,7 +265,7 @@
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import { observeModalClose } from "../Portal/portal-utils.js";
-  import ChevronDown from "../icons/ChevronDown.svelte";
+  import BuiltinChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     COPY_FEEDBACK_TIMEOUT_MS,
@@ -274,6 +274,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isScrollNearEnd } from "../utils/is-scroll-near-end.js";
@@ -286,6 +287,8 @@
   import { observeResize } from "../utils/shared-observer.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
+
+  const { ChevronDown = BuiltinChevronDown } = getIconContext();
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();

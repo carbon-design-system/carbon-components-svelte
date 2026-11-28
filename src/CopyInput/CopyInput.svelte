@@ -202,10 +202,11 @@
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import View from "../icons/View.svelte";
-  import ViewOff from "../icons/ViewOff.svelte";
+  import BuiltinView from "../icons/View.svelte";
+  import BuiltinViewOff from "../icons/ViewOff.svelte";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
@@ -213,6 +214,8 @@
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
+
+  const { View = BuiltinView, ViewOff = BuiltinViewOff } = getIconContext();
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

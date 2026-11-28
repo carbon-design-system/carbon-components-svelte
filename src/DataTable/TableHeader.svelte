@@ -42,10 +42,14 @@
   import { getContext, onMount } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import ArrowUp from "../icons/ArrowUp.svelte";
-  import ArrowsVertical from "../icons/ArrowsVertical.svelte";
+  import BuiltinArrowUp from "../icons/ArrowUp.svelte";
+  import BuiltinArrowsVertical from "../icons/ArrowsVertical.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { getTranslateContext } from "../utils/translate-context.js";
+
+  const { ArrowUp = BuiltinArrowUp, ArrowsVertical = BuiltinArrowsVertical } =
+    getIconContext();
 
   const translate = getTranslateContext();
 

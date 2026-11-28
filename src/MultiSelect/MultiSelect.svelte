@@ -562,8 +562,8 @@
     FORM_SIZE_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { createAnnouncerChannel } from "../utils/announcer.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { resolveCssLength, toCssLength } from "../utils/css-length.js";
@@ -580,6 +580,7 @@
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -596,6 +597,11 @@
     typeaheadIndex,
   } from "../utils/typeahead.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
+
+  const {
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

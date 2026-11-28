@@ -25,18 +25,34 @@
    */
   export let hideLabel = false;
 
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
-  import CheckmarkOutline from "../icons/CheckmarkOutline.svelte";
-  import CircleDash from "../icons/CircleDash.svelte";
-  import ErrorFilled from "../icons/ErrorFilled.svelte";
-  import InProgress from "../icons/InProgress.svelte";
-  import Incomplete from "../icons/Incomplete.svelte";
-  import PendingFilled from "../icons/PendingFilled.svelte";
-  import UndefinedFilled from "../icons/UndefinedFilled.svelte";
-  import UnknownFilled from "../icons/UnknownFilled.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningAltInvertedFilled from "../icons/WarningAltInvertedFilled.svelte";
-  import WarningSquareFilled from "../icons/WarningSquareFilled.svelte";
+  import BuiltinCheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import BuiltinCheckmarkOutline from "../icons/CheckmarkOutline.svelte";
+  import BuiltinCircleDash from "../icons/CircleDash.svelte";
+  import BuiltinErrorFilled from "../icons/ErrorFilled.svelte";
+  import BuiltinInProgress from "../icons/InProgress.svelte";
+  import BuiltinIncomplete from "../icons/Incomplete.svelte";
+  import BuiltinPendingFilled from "../icons/PendingFilled.svelte";
+  import BuiltinUndefinedFilled from "../icons/UndefinedFilled.svelte";
+  import BuiltinUnknownFilled from "../icons/UnknownFilled.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningAltInvertedFilled from "../icons/WarningAltInvertedFilled.svelte";
+  import BuiltinWarningSquareFilled from "../icons/WarningSquareFilled.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
+
+  const {
+    CheckmarkFilled = BuiltinCheckmarkFilled,
+    CheckmarkOutline = BuiltinCheckmarkOutline,
+    CircleDash = BuiltinCircleDash,
+    ErrorFilled = BuiltinErrorFilled,
+    InProgress = BuiltinInProgress,
+    Incomplete = BuiltinIncomplete,
+    PendingFilled = BuiltinPendingFilled,
+    UndefinedFilled = BuiltinUndefinedFilled,
+    UnknownFilled = BuiltinUnknownFilled,
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningAltInvertedFilled = BuiltinWarningAltInvertedFilled,
+    WarningSquareFilled = BuiltinWarningSquareFilled,
+  } = getIconContext();
 
   const icons = {
     failed: ErrorFilled,

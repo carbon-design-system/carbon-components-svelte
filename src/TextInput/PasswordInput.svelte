@@ -136,11 +136,11 @@
     FORM_SIZE_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import EditOff from "../icons/EditOff.svelte";
-  import View from "../icons/View.svelte";
-  import ViewOff from "../icons/ViewOff.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
+  import BuiltinEditOff from "../icons/EditOff.svelte";
+  import BuiltinView from "../icons/View.svelte";
+  import BuiltinViewOff from "../icons/ViewOff.svelte";
+  import BuiltinWarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import BuiltinWarningFilled from "../icons/WarningFilled.svelte";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import {
     buildFieldIds,
@@ -151,12 +151,21 @@
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { clippedBy, pastWindow } from "../utils/fit-align.js";
   import { formReset } from "../utils/form-reset.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { noop } from "../utils/noop.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
+
+  const {
+    EditOff = BuiltinEditOff,
+    View = BuiltinView,
+    ViewOff = BuiltinViewOff,
+    WarningAltFilled = BuiltinWarningAltFilled,
+    WarningFilled = BuiltinWarningFilled,
+  } = getIconContext();
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

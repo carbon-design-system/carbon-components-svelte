@@ -28,7 +28,10 @@
   import Button from "../Button/Button.svelte";
   import ModalFooter from "../ComposedModal/ModalFooter.svelte";
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
-  import ArrowRight from "../icons/ArrowRight.svelte";
+  import BuiltinArrowRight from "../icons/ArrowRight.svelte";
+  import { getIconContext } from "../utils/icon-context.js";
+
+  const { ArrowRight = BuiltinArrowRight } = getIconContext();
 
   const dispatch = createEventDispatcher();
   const { isFullScreen, progStep, views, handleGotoStep, handleClose } =

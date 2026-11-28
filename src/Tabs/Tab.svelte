@@ -92,11 +92,14 @@
 
   import { getContext, onMount } from "svelte";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
-  import Close from "../icons/Close.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { tabindexAttribute } from "../utils/tabindex.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
+
+  const { Close = BuiltinClose } = getIconContext();
 
   const {
     selectedTab,

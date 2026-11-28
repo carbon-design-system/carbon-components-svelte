@@ -98,7 +98,7 @@
   import Popover from "../Popover/Popover.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import Close from "../icons/Close.svelte";
+  import BuiltinClose from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
@@ -106,11 +106,14 @@
     returnFocus,
     returnFocusOnClose,
   } from "../utils/focus.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
   import CoachmarkBeacon from "./CoachmarkBeacon.svelte";
+
+  const { Close = BuiltinClose } = getIconContext();
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext(MODAL_CONTEXT_KEY);

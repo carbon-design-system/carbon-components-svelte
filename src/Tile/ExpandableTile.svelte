@@ -70,13 +70,16 @@
 
   import { createEventDispatcher, onMount, tick } from "svelte";
   import { writable } from "svelte/store";
-  import ChevronDown from "../icons/ChevronDown.svelte";
+  import BuiltinChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { getIconContext } from "../utils/icon-context.js";
   import { useId } from "../utils/id-scope.js";
   import { noop } from "../utils/noop.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { tabindexAttribute } from "../utils/tabindex.js";
   import TileWrapper from "./TileWrapper.svelte";
+
+  const { ChevronDown = BuiltinChevronDown } = getIconContext();
 
   const dispatch = createEventDispatcher();
 
