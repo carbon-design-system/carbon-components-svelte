@@ -175,6 +175,7 @@
     { name: "Internationalization", path: "/internationalization" },
     { name: "Right-to-left", path: "/right-to-left" },
     { name: "Server-side rendering", path: "/server-rendering" },
+    { name: "Sticky bars", path: "/sticky" },
     { name: "Performance", path: "/performance" },
   ];
 </script>
