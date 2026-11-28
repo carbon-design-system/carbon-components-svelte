@@ -1,6 +1,7 @@
 /**
  * The id of the last section whose top has crossed the activation line:
- * `offset` pixels (default: the container's `scroll-padding-top`) from the
+ * `offset` pixels (default: the larger of the container's
+ * `scroll-padding-top` and its sticky bars' `--ccs-sticky-offset`) from the
  * top of the scroll container, then `line` (0–1, default 0) of the way down
  * the rest of its visible height. The first before any cross, the last once
  * the container is scrolled to its end.
@@ -13,7 +14,8 @@ export function getActiveSectionId(
 /**
  * Scroll only `container` (or the window) so `target`'s top sits below the
  * scroller's `scroll-padding-top` plus its own `scroll-margin-top`, as a
- * native hash jump does, or `offset` pixels below the top if larger.
+ * native hash jump does, or `offset` pixels below the top if larger
+ * (default: its sticky bars' `--ccs-sticky-offset`).
  */
 export function scrollToSection(
   target: HTMLElement,

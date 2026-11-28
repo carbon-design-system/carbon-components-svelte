@@ -21,8 +21,10 @@
   /**
    * Specify the distance in pixels from the top of the scroll container at
    * which a section becomes active. Match the height of a sticky header.
-   * Defaults to the scroll container's `scroll-padding-top`, where a native
-   * hash jump lands a section.
+   * Defaults to the larger of the scroll container's `scroll-padding-top`,
+   * where a native hash jump lands a section, and the `--ccs-sticky-offset`
+   * that sticky `PageHeader`s, `Toolbar`s and `sticky` action elements
+   * publish on it.
    * @type {number | undefined}
    */
   export let scrollOffset = undefined;

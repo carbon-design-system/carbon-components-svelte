@@ -40,6 +40,30 @@ function getScrollPaddingTop(container) {
 }
 
 /**
+ * The height sticky bars cover at the top of `container`, or of the
+ * document when `null`: the larger of its `scroll-padding-top` and the
+ * `--ccs-sticky-offset` the `sticky` action publishes on it. Only the
+ * scroller's own value counts; one inherited from the page's root belongs
+ * to the page's bars.
+ *
+ * @param {HTMLElement | null} container
+ * @returns {number}
+ */
+function getStickyInset(container) {
+  const scroller = getScroller(container);
+  const published =
+    scroller instanceof HTMLElement
+      ? Number.parseFloat(
+          scroller.style.getPropertyValue("--ccs-sticky-offset"),
+        )
+      : Number.NaN;
+  return Math.max(
+    getScrollPaddingTop(container),
+    Number.isNaN(published) ? 0 : published,
+  );
+}
+
+/**
  * Whether `container` (or the document, when `null`) is scrolled to its end.
  * A container that cannot scroll is never at its end, so a short page keeps
  * the first section active instead of jumping to the last.
@@ -59,8 +83,9 @@ function isScrolledToEnd(container) {
  * `offset` pixels from the top of the scroll container, then `line` of the
  * way down the rest of its visible height: `0` (the default) at the offset,
  * `0.5` halfway down, `1` at the bottom edge, so a section counts as soon as
- * it scrolls into view. `offset` defaults to the container's
- * `scroll-padding-top`, where a native hash jump lands a section. Before the
+ * it scrolls into view. `offset` defaults to the larger of the container's
+ * `scroll-padding-top`, where a native hash jump lands a section, and the
+ * `--ccs-sticky-offset` its sticky bars publish. Before the
  * first target crosses, the first is active; once the container is scrolled
  * to its end, the last is, since short trailing sections can never reach the
  * line. Ids with no element are skipped.
@@ -71,7 +96,7 @@ function isScrolledToEnd(container) {
  */
 export function getActiveSectionId(
   ids,
-  { container = null, offset = getScrollPaddingTop(container), line = 0 } = {},
+  { container = null, offset = getStickyInset(container), line = 0 } = {},
 ) {
   /** @type {Array<{ id: string; element: HTMLElement }>} */
   const targets = [];
@@ -99,14 +124,18 @@ export function getActiveSectionId(
  * Scroll `container` (or the window, when `null`) so `target`'s top sits
  * where a native hash jump would put it: below the scroller's
  * `scroll-padding-top` plus the target's `scroll-margin-top`, or `offset`
- * pixels below the container's top when that is larger. Only that one
+ * pixels below the container's top when that is larger. `offset` defaults
+ * to the `--ccs-sticky-offset` the container's sticky bars publish. Only that one
  * scroller moves; the smoothness follows its CSS `scroll-behavior`, as a
  * native hash jump does.
  *
  * @param {HTMLElement} target
  * @param {{ container?: HTMLElement | null; offset?: number }} [options]
  */
-export function scrollToSection(target, { container = null, offset = 0 } = {}) {
+export function scrollToSection(
+  target,
+  { container = null, offset = getStickyInset(container) } = {},
+) {
   const padding = getScrollPaddingTop(container);
   const margin = toPixels(
     getComputedStyle(target).scrollMarginTop,
