@@ -53,7 +53,7 @@ Set `size` to control key height. The default is `"default"`, 24px tall. Use `"s
 
 ## Muted
 
-Set `variant` to `"muted"` to run the keys together as secondary text, as a menu shows shortcuts. Here, `"mod+shift+s"` shows <DocKbd shortcut="mod+shift+s" variant="muted" />. Buttons show their `shortcut` this way.
+Set `variant` to `"muted"` to run the keys together as secondary text, as a menu shows shortcuts. Here, `"mod+shift+s"` shows <DocKbd shortcut="mod+shift+s" variant="muted" />. A button shows its `shortcut` this way after its label.
 
 <Stack orientation="horizontal" gap={5} align="center">
   <Kbd shortcut="mod+shift+s" variant="muted" apple />
@@ -79,6 +79,10 @@ To translate every key on the page, including the keys a Button, Search or menu 
   setKbdTranslations({ ctrl: "Strg", shift: "Umschalt" });
 </script>
 ```
+
+## On a tooltip
+
+On a tooltip, dark in light themes and light in dark ones, keycaps take a shade a step off the tooltip's surface and its text color, and fit its line height. An icon-only [Button](/components/Button#keyboard-shortcut) shows its `shortcut` this way.
 
 ## In a button
 
