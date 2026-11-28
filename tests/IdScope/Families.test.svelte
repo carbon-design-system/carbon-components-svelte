@@ -109,7 +109,7 @@
     <AccordionItem title="Two" open>Second</AccordionItem>
   </Accordion>
 {:else if family === "ContentSwitcher"}
-  <ContentSwitcher id="fixed">
+  <ContentSwitcher id="fixed" labelText="View">
     <Switch text="One" />
     <Switch text="Two" />
   </ContentSwitcher>
