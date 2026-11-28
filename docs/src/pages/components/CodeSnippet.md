@@ -4,7 +4,7 @@ description: Code snippets display and copy code examples, with single-line, mul
 ---
 
 <script>
-  import { Box, CodeSnippet, CodeSnippetSkeleton, Layer } from "carbon-components-svelte";
+  import { Box, Button, CodeSnippet, CodeSnippetSkeleton, Layer } from "carbon-components-svelte";
   import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
 </script>
 
@@ -243,6 +243,22 @@ Set `files`, an array of `{ id?, title, code }`, to show one file at a time. Eac
 `highlightCode` re-highlights when the selected file's text changes. Pass it the language of the selected file, looked up by `selectedId`. These files set an `id`, so `selectedId` holds it rather than the title.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetFilesSyntax" />
+
+## Preview
+
+Use the `preview` slot to render a live example above the code, inside the snippet's border. The example sits on the surface around the snippet, in a [`Layer`](/components/Layer) too, and follows the page's direction; the copy and expand buttons stay with the code. Only `type="multi"` renders a preview: single-line and inline snippets ignore the slot, so use a multi-line snippet for short code with an example. The preview does not clip its content, so a menu opened in the example can overlap the code. A disabled snippet makes its example inert.
+
+<CodeSnippet type="multi" code={`<Button kind="primary">Save changes</Button>`}>
+  <svelte:fragment slot="preview">
+    <Button>Save changes</Button>
+  </svelte:fragment>
+</CodeSnippet>
+
+### Preview actions
+
+Put controls that drive the example, such as "Play" or "Simulate loading", in the `previewActions` slot. They render in a bar above the example, apart from it, beside a "Preview" label that also names the example for screen readers. Set `previewLabelText` to change or translate the label. The bar renders only when the slot is used.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetPreviewActions" />
 
 ## Syntax highlighting
 
