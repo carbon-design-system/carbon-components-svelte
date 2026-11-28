@@ -100,11 +100,27 @@ tabs does not add history entries. Bind `selectedId` to the store. Use `parse`
 to reject unknown ids so they fall back to `defaultValue`; selecting
 `defaultValue` removes the parameter.
 
-Use the query string rather than the hash: a hash that matches a tab `id`
-scrolls the page to that tab. In an app with a router, pass the router's
-navigation API as `replace`.
+Use the query string when the page's hash is taken, or when a link should
+keep the scroll position: a hash that matches a tab `id` scrolls the page to
+that tab. In an app with a router, pass the router's navigation API as
+`replace`.
 
 <FileSource src="/framed/Tabs/TabsQueryString" />
+
+### URL hash
+
+Set `hashLinked` to link each tab to the URL hash, so a link such as
+`/settings#activity` opens that tab. Give each `Tab` a stable `id`. After
+mount, a hash that matches a tab `id` selects that tab and scrolls it into
+view. Selecting a tab writes its `id` to the hash with `history.replaceState`,
+so switching tabs does not add history entries, and back and forward
+between hashes select the matching tab. A hash that matches no enabled tab
+is ignored.
+
+The server can't read the hash, so the server render shows `selected` or
+`selectedId`, and selection follows the hash after mount.
+
+<FileSource src="/framed/Tabs/TabsHashLinked" />
 
 ### Manual activation
 
