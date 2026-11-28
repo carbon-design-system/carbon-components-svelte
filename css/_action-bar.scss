@@ -168,7 +168,8 @@
 
   // Forced colors repaint a fill and drop the bar, so a pressed button
   // fills with `Highlight` and opts out of forcing, as a selected
-  // icon-only `Button` does. A disabled one reads as `GrayText`.
+  // icon-only `Button` does, without a transition: the fill would start
+  // from the unforced one. A disabled one reads as `GrayText`.
   @media (forced-colors: active) {
     .#{$prefix}--action-bar__button--pressed,
     .#{$prefix}--action-bar__button--pressed:hover,
@@ -176,6 +177,7 @@
       forced-color-adjust: none;
       background-color: Highlight;
       color: HighlightText;
+      transition: none;
     }
 
     .#{$prefix}--action-bar__button--pressed .#{$prefix}--btn__icon,

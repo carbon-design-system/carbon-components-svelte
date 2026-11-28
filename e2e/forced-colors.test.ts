@@ -421,6 +421,17 @@ test.describe("forced colors", () => {
             ?.classList.add("bx--btn--selected"),
         ),
     },
+    {
+      name: "a pressed ActionBar button",
+      prepare: (page) => page.goto("/action-bar.html"),
+      target: ".bx--action-bar__button[aria-pressed=false]",
+      settled: ".bx--action-bar__button--pressed",
+      act: (page) =>
+        page
+          .locator(".bx--action-bar__button[aria-pressed=false]")
+          .first()
+          .click(),
+    },
   ];
 
   for (const scheme of ["light", "dark"] as const) {
