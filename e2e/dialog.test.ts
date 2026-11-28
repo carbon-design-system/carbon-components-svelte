@@ -34,6 +34,22 @@ test.describe("Dialog", () => {
     await expect(opener).toBeFocused();
   });
 
+  test("focuses returnFocusTo on close, over the opener the browser restores", async ({
+    page,
+  }) => {
+    await page.getByTestId("open-return").click();
+    await expect(page.getByTestId("return-dialog")).toBeVisible();
+
+    await page.keyboard.press("Escape");
+    await expect(page.getByTestId("return-dialog")).toBeHidden();
+    await expect(page.getByTestId("return-target")).toBeFocused();
+
+    await page.getByTestId("open-return").click();
+    await page.getByTestId("return-close-button").click();
+    await expect(page.getByTestId("return-dialog")).toBeHidden();
+    await expect(page.getByTestId("return-target")).toBeFocused();
+  });
+
   test("closes with close-button trigger via form method=dialog", async ({
     page,
   }) => {

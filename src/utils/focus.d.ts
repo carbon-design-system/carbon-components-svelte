@@ -35,12 +35,12 @@ export function isQuietFocus(node: Element | null | undefined): boolean;
  */
 export function isPointerFocus(node: Element | null | undefined): boolean;
 
-export type FocusFallback =
+export type FocusReturnTarget =
   HTMLElement | null | undefined | (() => HTMLElement | null | undefined);
 
 export function restoreFocus(): {
   save(): void;
-  restore(region?: Element | null, fallback?: FocusFallback): void;
+  restore(region?: Element | null, returnTo?: FocusReturnTarget): void;
 };
 
 export function returnFocus(

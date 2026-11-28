@@ -7,6 +7,9 @@
   let modalCloseTrigger: string | null = null;
 
   let nonModalOpen = false;
+
+  let returnOpen = false;
+  let returnTarget: HTMLElement;
 </script>
 
 <button
@@ -53,4 +56,27 @@
   data-testid="non-modal-dialog"
 >
   <p>Non-modal content</p>
+</Dialog>
+
+<button
+  type="button"
+  data-testid="open-return"
+  on:click={() => (returnOpen = true)}
+>
+  Open dialog with returnFocusTo
+</button>
+<h2 bind:this={returnTarget} tabindex="-1" data-testid="return-target">
+  Return target
+</h2>
+
+<Dialog
+  bind:open={returnOpen}
+  modal
+  aria-label="Dialog with returnFocusTo"
+  data-testid="return-dialog"
+  returnFocusTo={() => returnTarget}
+>
+  <form method="dialog">
+    <button type="submit" data-testid="return-close-button">Close</button>
+  </form>
 </Dialog>

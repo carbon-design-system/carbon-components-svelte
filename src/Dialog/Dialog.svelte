@@ -28,8 +28,10 @@
 
   /**
    * Specify an element, or a function returning one, to focus when the dialog
-   * closes and the element that opened it has unmounted, for example a
-   * deleted row.
+   * closes, instead of the element that opened it. A function runs once per
+   * close. Focus returns to the opener when it resolves to no element in the
+   * page. To keep the opener and only cover a deleted one, return the opener
+   * while it's connected: `() => (opener.isConnected ? opener : list)`.
    * @type {HTMLElement | (() => HTMLElement | null) | null}
    */
   export let returnFocusTo = null;
