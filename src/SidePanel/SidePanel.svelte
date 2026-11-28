@@ -152,6 +152,16 @@
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
   /**
+   * Specify an element, or a function returning one, to focus when the
+   * panel closes, instead of the element that opened it. Use it when the
+   * panel has moved on from its opener, for example after browsing to
+   * another item. A function runs once per close. Focus returns to the
+   * opener when it resolves to no element in the page.
+   * @type {HTMLElement | (() => HTMLElement | null) | null}
+   */
+  export let returnFocusTo = null;
+
+  /**
    * Set an id for the panel.
    * The title and subtitle ids derive from it as `{id}-title` and
    * `{id}-subtitle`.
@@ -227,8 +237,10 @@
     passive: () => !$$slots.actions,
     saveFocusReturn: focusReturn.save,
     // The closing panel is inert, so focus goes back at once rather than
-    // after the exit animation.
-    restoreFocusReturn: () => focusReturn.restore(ref),
+    // after the exit animation. `returnFocusTo` wins over the opener, as
+    // Carbon React's `launcherButtonRef` does: a panel browses between
+    // items, so what opened it is often not where the reader is.
+    restoreFocusReturn: () => focusReturn.restore(ref, returnFocusTo),
     getContainer: () => null,
     focus: () => focusPanel(),
     getOpen: () => open,

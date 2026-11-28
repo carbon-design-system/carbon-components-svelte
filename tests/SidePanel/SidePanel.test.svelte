@@ -24,6 +24,7 @@
   export let resizable = false;
   export let width: number | undefined = undefined;
   export let selectorPrimaryFocus: Props["selectorPrimaryFocus"] = undefined;
+  export let returnFocusTo: Props["returnFocusTo"] = null;
   export let field = false;
   export let dir: "ltr" | "rtl" = "ltr";
   export let header = false;
@@ -39,6 +40,7 @@
     <Header platformName="Cloud" />
   {/if}
   <button type="button" on:click={() => (open = true)}>Open panel</button>
+  <button type="button">Next item</button>
   <div data-testid="page">Page</div>
   <span data-testid="width">{width ?? ""}</span>
   <SidePanel
@@ -55,6 +57,7 @@
     {currentStep}
     {resizable}
     {selectorPrimaryFocus}
+    {returnFocusTo}
     selectorPageContent="[data-testid=page]"
     on:close={(event) => {
       if (onClose?.(event.detail.trigger) === false) event.preventDefault();
