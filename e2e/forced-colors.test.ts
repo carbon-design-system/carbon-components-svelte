@@ -1788,3 +1788,35 @@ test("forced colors: a picked week boxes only its ends", async ({
   expect(middle.color).toBe(system.Highlight);
   expect(middle.outline).toMatch(/^none /);
 });
+
+// A CountryPicker code box fills with the menu's surface on a selected or
+// hovered row. Forced colors repaint it like any text, also on the
+// `Highlight` row, which opts out of forcing.
+test("forced colors: a flag's code box reads CanvasText on Canvas in every row", async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName === "webkit", "WebKit does not force colors");
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto("/country-picker.html");
+  const system = await systemColors(page);
+  const field = page.getByRole("combobox", { name: "Badge", exact: true });
+  await field.click();
+  const box = {
+    background: system.Canvas,
+    color: system.CanvasText,
+    outlineColor: system.CanvasText,
+  };
+  const selected = ".bx--list-box__menu-item--active .bx--flag--badge";
+  await page.locator(selected).hover();
+  expect
+    .soft(await style(page, selected), "selected, hovered")
+    .toMatchObject(box);
+
+  const highlighted = ".bx--list-box__menu-item--highlighted .bx--flag--badge";
+  await expect(async () => {
+    await field.press("ArrowDown");
+    await expect(page.locator(highlighted)).toBeVisible({ timeout: 500 });
+  }).toPass();
+  expect.soft(await style(page, highlighted), "highlighted").toMatchObject(box);
+});
