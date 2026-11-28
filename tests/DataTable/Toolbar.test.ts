@@ -153,6 +153,20 @@ describe("DataTable Toolbar", () => {
       expectInlineStyle(toolbar, { top: "3rem" });
     });
 
+    it('stacks below the Header for stickyOffset="stack"', async () => {
+      const { container } = render(Toolbar, {
+        props: {
+          testComponent: "Toolbar",
+          sticky: true,
+          stickyOffset: "stack",
+          withHeader: true,
+        },
+      });
+
+      const toolbar = container.querySelector(".bx--table-toolbar");
+      await vi.waitFor(() => expectInlineStyle(toolbar, { top: "48px" }));
+    });
+
     it("should default stickyOffset to 0 without a Header on the page", () => {
       const { container } = render(Toolbar, {
         props: { testComponent: "Toolbar", sticky: true },
