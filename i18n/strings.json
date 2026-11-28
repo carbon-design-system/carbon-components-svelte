@@ -2697,6 +2697,13 @@
       "defaultKind": "text"
     },
     {
+      "component": "ThemeContentSwitcher",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Themes",
+      "defaultKind": "text"
+    },
+    {
       "component": "ThemeDropdown",
       "prop": "labelText",
       "type": "string",
