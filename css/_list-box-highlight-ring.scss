@@ -45,12 +45,16 @@
   // forcing: forced text sits on a `Canvas` backplate. Everything the row
   // holds then needs a system color: the option text (also on hover), a
   // checked MultiSelect label, the checkbox and the selected icon.
+  // None of it transitions: the fill and the text would start from their
+  // unforced values, so a just-highlighted row flashed `HighlightText` on the
+  // page background.
   @media (forced-colors: active) {
     .#{$prefix}--list-box__menu-item.#{$prefix}--list-box__menu-item--highlighted {
       forced-color-adjust: none;
       outline: none;
       background-color: Highlight;
       color: HighlightText;
+      transition: none;
     }
 
     .#{$prefix}--list-box--option-highlighted
@@ -68,6 +72,7 @@
       .#{$prefix}--checkbox:checked
       ~ .#{$prefix}--checkbox-label-text {
       color: HighlightText;
+      transition: none;
     }
 
     .#{$prefix}--list-box__menu-item--highlighted
