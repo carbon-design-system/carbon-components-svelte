@@ -125,6 +125,25 @@ Portalled tooltips use the same alignment options as the default path: horizonta
 <TooltipIcon portalTooltip direction="bottom" align="center" tooltipText="Center" icon={Carbon} />
 <TooltipIcon portalTooltip direction="bottom" align="end" tooltipText="End" icon={Carbon} />
 
+### Tooltip class
+
+Set `tooltipClass` to style one icon's tooltip. The class stays on the tooltip when it opens in a portal, where a rule that targets it inside the icon's container no longer matches. [TooltipDefinition](/components/TooltipDefinition), [Tooltip](/components/Tooltip), [CopyButton](/components/CopyButton), [Button](/components/Button#tooltip-class), [ComboButton](/components/ComboButton), [ToggleButtonGroup](/components/ToggleButtonGroup)'s `ToggleButton` and the UI Shell's `HeaderAction` take the same prop.
+
+```svelte
+<TooltipIcon
+  portalTooltip
+  tooltipText="Aggregated across every workspace"
+  tooltipClass="metrics-tooltip"
+  icon={Carbon}
+/>
+
+<style>
+  :global(.metrics-tooltip) {
+    white-space: nowrap;
+  }
+</style>
+```
+
 ## Inside a modal
 
 When a tooltip icon is used inside a [Modal](/components/Modal), it is automatically portalled so it is not clipped by the modal overflow or z-index stacking. Set `portalTooltip` to override this behavior.
