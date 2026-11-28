@@ -172,6 +172,7 @@
 
   const guides = [
     { name: "Fonts", path: "/fonts" },
+    { name: "Icons", path: "/icons" },
     { name: "Internationalization", path: "/internationalization" },
     { name: "Right-to-left", path: "/right-to-left" },
     { name: "Server-side rendering", path: "/server-rendering" },
