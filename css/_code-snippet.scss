@@ -60,6 +60,17 @@
     .#{$prefix}--copy-btn {
       top: calc((#{$carbon--spacing-08} - #{$carbon--spacing-07}) / 2);
     }
+
+    // The copy button sits in the header, so the code needs no room for it.
+    // The room would be unseen trailing space in LTR and a leading indent in
+    // RTL, where the code area is still LTR: physical sides, as `--no-copy`.
+    .#{$prefix}--snippet-container pre {
+      padding-right: 0;
+
+      [dir="rtl"] & {
+        padding-left: 0;
+      }
+    }
   }
 
   // The tab panel takes focus so the keyboard can scroll the code. Ring it

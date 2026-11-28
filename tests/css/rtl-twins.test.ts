@@ -12,6 +12,7 @@ const NEAREST_DIR = /var\(--ccs-(ltr|mirror-rtl),/;
 // Twins whose value is the same in both directions.
 const SAME_BOTH_WAYS = new Set([
   "[dir=rtl] .bx--snippet--multi.bx--snippet--no-copy .bx--snippet-container pre padding-left",
+  "[dir=rtl] .bx--snippet--multi.bx--snippet--has-header .bx--snippet-container pre padding-left",
   // A number runs left to right in an LTR region too (#5740).
   "[dir=rtl] .bx--number input[type=number] direction",
   // Pagination's page number puts back the padding and alignment the
