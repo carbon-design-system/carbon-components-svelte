@@ -27,6 +27,15 @@ Helper text sits under the whole group. Pass the `describedBy` slot prop to the 
   <Button kind="tertiary">Check</Button>
 </InputGroup>
 
+## Email signup
+
+Attach a primary button to a field, as a newsletter signup does. The button sits 1px from the field at its height, the label stays above the field alone, and the helper or error text runs under both. Use this rather than spacing a field and a button with your own CSS.
+
+<InputGroup helperText="One email a month. Unsubscribe anytime." let:describedBy>
+  <TextInput type="email" labelText="Email" placeholder="name@example.com" aria-describedby={describedBy} />
+  <Button>Subscribe</Button>
+</InputGroup>
+
 ## Icon button
 
 An icon-only button is square at the field's height.
