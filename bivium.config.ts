@@ -69,23 +69,6 @@ export default {
     "docs/src/pages/framed/TwoFactorSetup",
     "crassus.config.ts",
     "codemods",
-    "docs/src/token-reference.ts",
-    "docs/src/theme-builder.ts",
-    "docs/src/search.ts",
-    "docs/src/routes.ts",
-    "docs/src/page-links.ts",
-    "docs/src/search-index.ts",
-    "docs/scripts/slug.ts",
-    "docs/scripts/visit.ts",
-    "docs/scripts/frontmatter.ts",
-    "docs/scripts/markdown.ts",
-    "docs/scripts/page.ts",
-    "docs/scripts/format.ts",
-    "docs/scripts/bun-plugins.ts",
-    "docs/scripts/self-host-plex.ts",
-    "docs/index.html",
-    "docs/src/idle-mount.ts",
-    "docs/src/ibm-scripts.ts",
     "docs/scripts/example-source.ts",
   ],
   ignore: [
@@ -132,15 +115,6 @@ export default {
   // already runs as unknown.
   importOnly: ["**/*.svelte"],
   hermetic: [
-    // Writes the code it formats to a temporary directory, not the repository.
-    "docs/scripts/format.ts",
-    // Write and read only a temporary directory.
-    "tests/docs/bun-plugins.test.ts",
-    "tests/docs/self-host-plex.test.ts",
-    // Read the site's generated JSON and the build's output, only in a docs
-    // build; their tests call the pure helpers, on a temporary directory.
-    "docs/scripts/bun-plugins.ts",
-    "docs/scripts/self-host-plex.ts",
     // The e2e host reads only the fixture entry of the URL each test opens,
     // which the test's own navigation already reaches. A blanket `@reads` on
     // every entry made any fixture change select every e2e test.
