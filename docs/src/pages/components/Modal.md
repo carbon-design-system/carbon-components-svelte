@@ -31,7 +31,7 @@ When the modal opens, focus is set using the following priority:
 3. The primary action button (for confirmation modals), or the cancel button (for destructive modals with `danger={true}`)
 4. The close button (for passive modals or modals without a primary button)
 
-After closing the modal, focus is returned to the element that triggered the modal.
+After closing the modal, focus is returned to the element that triggered the modal, or to `returnFocusTo` when it is set. See [return focus to another element](#return-focus-to-another-element).
 
 The close button shows `iconDescription` in a tooltip on hover and focus. When the modal opens with focus on the close button, the tooltip stays closed until the next hover or focus. While the tooltip shows, <DocKbd label="Escape" /> hides it first. The next <DocKbd label="Escape" /> closes the modal.
 
@@ -41,9 +41,17 @@ Use `selectorPrimaryFocus` to override the default and target a specific element
 
 <FileSource src="/framed/Modal/ModalCustomFocus" />
 
-### Return focus to a fallback element
+### Return focus to another element
 
-The element that triggered the modal is not always still around when it closes, for example a row deleted from a list. Set `returnFocusTo` to an element, or a function returning one, to focus instead when the trigger has unmounted. This example returns focus to the list's heading after deleting a row.
+When the modal closes, focus returns to the element that opened it. Set `returnFocusTo` to an element, or a function returning one, to focus that element instead. A function runs once each time the modal closes. When it returns nothing in the page, focus goes back to the opener.
+
+To keep the opener and cover only the case where it is gone, such as a row deleted from a list, return the opener while it is still connected:
+
+```svelte
+<Modal returnFocusTo={() => (opener.isConnected ? opener : heading)} />
+```
+
+In this example, Cancel returns focus to the row's delete button. Delete removes the row, so focus goes to the list's heading.
 
 <FileSource src="/framed/Modal/ModalReturnFocusTo" />
 

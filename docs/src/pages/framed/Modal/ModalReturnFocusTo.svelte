@@ -15,10 +15,12 @@
 
   let open = false;
   let pendingId = null;
+  let opener = null;
   let headingRef;
 
-  function confirmDelete(id) {
+  function confirmDelete(id, button) {
     pendingId = id;
+    opener = button;
     open = true;
   }
 
@@ -41,7 +43,7 @@
           size="small"
           icon={TrashCan}
           iconDescription="Delete {item.name}"
-          on:click={() => confirmDelete(item.id)}
+          on:click={(event) => confirmDelete(item.id, event.currentTarget)}
         />
       </svelte:fragment>
     </ContainedListItem>
@@ -54,7 +56,7 @@
   modalHeading="Delete API key"
   primaryButtonText="Delete"
   secondaryButtonText="Cancel"
-  returnFocusTo={() => headingRef}
+  returnFocusTo={() => (opener?.isConnected ? opener : headingRef)}
   on:click:button--secondary={() => (open = false)}
   on:submit={deleteItem}
 >
