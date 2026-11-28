@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import source from "../../src/Grid/CssColumn.svelte?raw";
 import CssColumn from "./CssColumn.test.svelte";
 
 function placement() {
@@ -83,4 +84,15 @@ describe("CssColumn", () => {
       "bx--sm:col-span-2",
     );
   });
+
+  // carbon-preprocess-svelte keeps the rules of the classes a component
+  // spells: a bare `bx--` before an interpolation keeps none of them.
+  it.each(["", "sm:", "md:", "lg:", "xlg:", "max:"])(
+    "spells the bx--%scol- class prefixes in full",
+    (breakpoint) => {
+      for (const part of ["span", "start", "end"]) {
+        expect(source).toContain(`"bx--${breakpoint}col-${part}-"`);
+      }
+    },
+  );
 });

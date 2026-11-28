@@ -71,34 +71,35 @@
    * the column automatically, one column wide. A percent strips its `%`,
    * and an offset of N starts the column at grid line N + 1. An offset or
    * start of 0 is auto.
-   * @param {string} prefix
+   *
+   * Each breakpoint spells its class prefixes in full, so a build that
+   * prunes Carbon's CSS by the classes source spells keeps their rules.
    * @param {CssColumnBreakpoint | undefined} value
+   * @param {[span: string, start: string, end: string]} prefixes
    * @returns {string[]}
    */
-  function classesFor(prefix, value) {
-    if (value === true) return [`${prefix}col-span-auto`];
-    if (typeof value === "number") return [`${prefix}col-span-${value}`];
+  function classesFor(value, [span, start, end]) {
+    if (value === true) return [`${span}auto`];
+    if (typeof value === "number") return [`${span}${value}`];
     if (typeof value === "string") {
-      return [`${prefix}col-span-${value.slice(0, -1)}`];
+      return [`${span}${value.slice(0, -1)}`];
     }
     if (!value || typeof value !== "object") return [];
 
     const classes = [];
     if (typeof value.offset === "number") {
-      classes.push(
-        `${prefix}col-start-${value.offset > 0 ? value.offset + 1 : "auto"}`,
-      );
+      classes.push(`${start}${value.offset > 0 ? value.offset + 1 : "auto"}`);
     }
     if (typeof value.start === "number") {
-      classes.push(`${prefix}col-start-${value.start || "auto"}`);
+      classes.push(`${start}${value.start || "auto"}`);
     }
     if (typeof value.end === "number") {
-      classes.push(`${prefix}col-end-${value.end}`);
+      classes.push(`${end}${value.end}`);
     }
     if (typeof value.span === "number") {
-      classes.push(`${prefix}col-span-${value.span}`);
+      classes.push(`${span}${value.span}`);
     } else if (typeof value.span === "string") {
-      classes.push(`${prefix}col-span-${value.span.slice(0, -1)}`);
+      classes.push(`${span}${value.span.slice(0, -1)}`);
     }
     return classes;
   }
@@ -108,12 +109,32 @@
     class: [
       $$restProps.class,
       "bx--css-grid-column",
-      ...classesFor("bx--", span),
-      ...classesFor("bx--sm:", sm),
-      ...classesFor("bx--md:", md),
-      ...classesFor("bx--lg:", lg),
-      ...classesFor("bx--xlg:", xlg),
-      ...classesFor("bx--max:", max),
+      ...classesFor(span, ["bx--col-span-", "bx--col-start-", "bx--col-end-"]),
+      ...classesFor(sm, [
+        "bx--sm:col-span-",
+        "bx--sm:col-start-",
+        "bx--sm:col-end-",
+      ]),
+      ...classesFor(md, [
+        "bx--md:col-span-",
+        "bx--md:col-start-",
+        "bx--md:col-end-",
+      ]),
+      ...classesFor(lg, [
+        "bx--lg:col-span-",
+        "bx--lg:col-start-",
+        "bx--lg:col-end-",
+      ]),
+      ...classesFor(xlg, [
+        "bx--xlg:col-span-",
+        "bx--xlg:col-start-",
+        "bx--xlg:col-end-",
+      ]),
+      ...classesFor(max, [
+        "bx--max:col-span-",
+        "bx--max:col-start-",
+        "bx--max:col-end-",
+      ]),
       // Shared with Column. In a grid, flex-start and flex-end act as start
       // and end, so the column lines up with the block start or end.
       align && `bx--col--align-${align}`,
