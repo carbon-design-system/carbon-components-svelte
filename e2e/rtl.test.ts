@@ -1108,12 +1108,19 @@ const MIRRORED_ICONS = {
   stepperNext: "[data-testid=stepper] .bx--btn--primary .bx--btn__icon",
   aiLabelRevert: "[data-testid=ai-label] .bx--ai-label__revert svg",
   ownIcon: "[data-testid=own-icon] .bx--icon--mirror-rtl",
+  ownButtonIcon:
+    "[data-testid=own-button-icon] .bx--btn--icon-only .bx--icon--mirror-rtl",
+  ownButtonSlotIcon:
+    "[data-testid=own-button-icon] .bx--btn__icon-slot .bx--icon--mirror-rtl",
 };
 
 const UNMIRRORED_ICONS = {
   launch: "[data-testid=own-icon] svg:not(.bx--icon--mirror-rtl)",
-  islandOwnIcon: "[data-testid=ltr-island] .bx--icon--mirror-rtl",
-  islandPaginationNav: "[data-testid=ltr-island] .bx--btn__icon",
+  islandOwnIcon: "[data-testid=ltr-island] > .bx--icon--mirror-rtl",
+  islandOwnButtonIcon:
+    "[data-testid=ltr-island] .bx--btn--icon-only .bx--icon--mirror-rtl",
+  islandPaginationNav:
+    "[data-testid=ltr-island] .bx--pagination-nav .bx--btn__icon",
 };
 
 /** Each icon's horizontal scale: -1 when mirrored, 1 when not. */
