@@ -206,7 +206,7 @@ The table below lists every theme color. The [token reference](/tokens) shows ev
 
 ## Controls
 
-Bind `ThemeToggle`, `ThemeSelect`, or `ThemeDropdown` to `theme` to let people pick it. Each is a separate component, so a page loads only the control it shows.
+Bind `ThemeToggle`, `ThemeSelect`, `ThemeDropdown`, or `ThemeContentSwitcher` to `theme` to let people pick it. Each is a separate component, so a page loads only the control it shows.
 
 ### Toggle
 
@@ -237,6 +237,16 @@ Bind `ThemeToggle`, `ThemeSelect`, or `ThemeDropdown` to `theme` to let people p
 #### Custom
 
 <FileSource src="/framed/Theme/ThemeDropdownCustom" />
+
+### Content switcher
+
+`ThemeContentSwitcher` shows every theme side by side in a `ContentSwitcher`, so each is one click away. Set `themes` to choose which ones and their order; other props go to the `ContentSwitcher`.
+
+<FileSource src="/framed/Theme/ThemeContentSwitcher" />
+
+#### Custom
+
+<FileSource src="/framed/Theme/ThemeContentSwitcherCustom" />
 
 ## Events
 
