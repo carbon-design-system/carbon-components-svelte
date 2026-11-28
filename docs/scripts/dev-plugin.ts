@@ -5,6 +5,7 @@ import {
   combine,
   componentApi,
   componentMdSizes,
+  framedStart,
   importMetaGlob,
 } from "./bun-plugins.ts";
 import { selfHostPlex } from "./self-host-plex.ts";
@@ -16,6 +17,7 @@ export default combine("docs", [
   componentApi,
   componentMdSizes,
   siteModule({ dev: true }),
+  framedStart({ dev: true }),
   selfHostPlex({
     nodeModules: path.resolve(import.meta.dirname, "../node_modules"),
     build: false,

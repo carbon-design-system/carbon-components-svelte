@@ -10,6 +10,11 @@ interface ImportMeta {
 /** Bun bundles a stylesheet a module imports. */
 declare module "*.css";
 
+/** `src/start-framed.ts`, or a stub in the dev server's `index.html`. */
+declare module "virtual:framed-start" {
+  export const startFramed: (path: string) => Promise<boolean>;
+}
+
 declare module "virtual:site" {
   /** The package's version. */
   export const VERSION: string;

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" theme="white">
+  <head>
+    <!-- The dev server's page for framed examples; see src/framed.ts. -->
+    <script>
+      (() => {
+        const n = navigator,
+          p =
+            (n.userAgentData && n.userAgentData.platform) ||
+            n.platform ||
+            n.userAgent;
+        document.documentElement.setAttribute(
+          "data-ccs-platform",
+          /mac|iphone|ipad|ipod/i.test(p) ? "apple" : "other",
+        );
+      })();
+    </script>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="font-src 'self' data:"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carbon Components Svelte</title>
+  </head>
+  <body>
+    <script type="module" src="./src/framed.ts"></script>
+  </body>
+</html>
