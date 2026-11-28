@@ -151,13 +151,16 @@
   // pressed segment fills with `Highlight` and opts out of forcing: forced
   // text gets a `Canvas` backplate, which hid `HighlightText` labels. So it
   // drops the inset bar and divider that unforcing brings back. The doubled
-  // `.bx--toggle-button` outranks the hover/active fills.
+  // `.bx--toggle-button` outranks the hover/active fills. It does not
+  // transition: the fill would start from the unforced one, so a
+  // just-pressed segment flashed `HighlightText` on a light fill.
   @media (forced-colors: active) {
     .#{$prefix}--toggle-button.#{$prefix}--toggle-button--pressed:not(:disabled) {
       forced-color-adjust: none;
       background-color: Highlight;
       box-shadow: none;
       color: HighlightText;
+      transition: none;
     }
 
     .#{$prefix}--toggle-button.#{$prefix}--toggle-button--pressed:not(:disabled)::before {

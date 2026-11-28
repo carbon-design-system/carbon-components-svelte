@@ -322,6 +322,81 @@ test.describe("forced colors", () => {
     }
   });
 
+  // An item that opts out of forcing to fill with Highlight must not
+  // transition its colors: the fill and the text would start from their
+  // unforced values, so for a few frames the item read HighlightText on a
+  // light fill. `target` is the item before the change, or a late-mounted
+  // one (a menu option); `settled` matches it once the state applies.
+  const firstFrames: {
+    name: string;
+    open?: string;
+    target: string;
+    settled: string;
+    act: (page: Page) => Promise<unknown>;
+  }[] = [
+    {
+      name: "a pressed ToggleButtonGroup segment",
+      target:
+        ".bx--toggle-button:not(.bx--toggle-button--pressed):not(:disabled)",
+      settled: ".bx--toggle-button--pressed",
+      act: (page) =>
+        page
+          .locator(
+            ".bx--toggle-button:not(.bx--toggle-button--pressed):not(:disabled)",
+          )
+          .first()
+          .click(),
+    },
+  ];
+
+  for (const scheme of ["light", "dark"] as const) {
+    test.describe(`first frame, ${scheme}`, () => {
+      test.beforeEach(async ({ page }) => {
+        await page.emulateMedia({ colorScheme: scheme });
+        system = await systemColors(page);
+      });
+
+      test.afterEach(async ({ page }) => {
+        await page.emulateMedia({ colorScheme: null });
+      });
+
+      for (const { name, open, target, settled, act } of firstFrames) {
+        test(`${name} fills with Highlight on the first frame`, async ({
+          page,
+        }) => {
+          if (open) await page.goto(open);
+          await page.evaluate(
+            ([target, settled]) => {
+              const marked = document.querySelector(target);
+              marked?.scrollIntoView({ block: "center" });
+              const sample = new Promise((resolve) => {
+                const tick = () => {
+                  const el = marked ?? document.querySelector(target);
+                  if (!el?.matches(settled)) return requestAnimationFrame(tick);
+                  const s = getComputedStyle(el);
+                  resolve({ background: s.backgroundColor, color: s.color });
+                };
+                requestAnimationFrame(tick);
+              });
+              Object.assign(window, { __firstFrame: sample });
+            },
+            [target, settled] as const,
+          );
+          await act(page);
+          const frame = await page.evaluate(
+            () =>
+              (window as unknown as { __firstFrame: Promise<unknown> })
+                .__firstFrame,
+          );
+          expect(frame).toEqual({
+            background: system.Highlight,
+            color: system.HighlightText,
+          });
+        });
+      }
+    });
+  }
+
   test("disabled items read GrayText, also on hover", async ({ page }) => {
     for (const selector of [
       ".bx--tree-node--disabled > .bx--tree-node__label",
