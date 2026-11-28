@@ -387,6 +387,16 @@ test.describe("forced colors", () => {
           .first()
           .click(),
     },
+    {
+      name: "a selected Tab",
+      target: ".bx--tabs__nav-item--default .bx--tabs__nav-link",
+      settled: ".bx--tabs__nav-link--selected",
+      act: (page) =>
+        page
+          .locator(".bx--tabs__nav-item--default .bx--tabs__nav-link")
+          .first()
+          .click(),
+    },
   ];
 
   for (const scheme of ["light", "dark"] as const) {

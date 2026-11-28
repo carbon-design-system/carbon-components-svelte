@@ -1675,7 +1675,9 @@ $tabs-sizes: (
     }
 
     // The vertical variant ties TabsVertical's selected link rule, which
-    // sets `color`, and wins on order.
+    // sets `color`, and wins on order. The selected tab does not transition:
+    // its text would fade in from the unforced color, so a just-selected tab
+    // showed gray text on the `Highlight` fill.
     .#{$prefix}--tabs__nav-item--selected .#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--selected,
     .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item--selected .#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--selected {
       forced-color-adjust: none;
@@ -1683,6 +1685,7 @@ $tabs-sizes: (
       background-color: Highlight;
       color: HighlightText;
       outline-color: HighlightText;
+      transition: none;
     }
 
     .#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--selected svg {
@@ -1692,6 +1695,7 @@ $tabs-sizes: (
     .#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--selected
       .#{$prefix}--tabs__nav-item-secondary-label {
       color: HighlightText;
+      transition: none;
     }
 
     // The container variant ties the contained disabled link rule, which
