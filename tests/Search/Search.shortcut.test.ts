@@ -47,6 +47,27 @@ describe("Search shortcut", () => {
     expect(input("search")).toHaveFocus();
   });
 
+  it("focuses the field from each of several shortcuts and shows the first", () => {
+    render(SearchShortcut);
+    const field = screen.getByTestId("several");
+
+    expect(input("several")).toHaveAttribute(
+      "aria-keyshortcuts",
+      "Control+J J",
+    );
+    expect(keys(field.querySelector(".bx--search__shortcut"))).toEqual([
+      "Ctrl",
+      "J",
+    ]);
+
+    press({ key: "j", ctrlKey: true }, screen.getByTestId("other"));
+    expect(input("several")).toHaveFocus();
+
+    screen.getByTestId("other").focus();
+    press({ key: "j" });
+    expect(input("several")).toHaveFocus();
+  });
+
   it("focuses a field on screen without scrolling the page", () => {
     render(SearchShortcut);
     const focus = vi.spyOn(input("search"), "focus");

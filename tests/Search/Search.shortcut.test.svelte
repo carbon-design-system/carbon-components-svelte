@@ -18,6 +18,9 @@
 <div data-testid="expandable">
   <Search expandable shortcut="ctrl+shift+f" />
 </div>
+<div data-testid="several">
+  <Search shortcut={["mod+j", "j"]} />
+</div>
 <div data-testid="header">
   <HeaderSearch shortcut="ctrl+k" />
 </div>
