@@ -35,7 +35,7 @@ bun setup
 
 This installs root and docs dependencies, generates TypeScript definitions and `docs/src/COMPONENT_API.json`, and builds the theme StyleSheets in `css/`. Run `bun setup` again after a pull that changes a `package.json`. A missing package can fail without an error: the docs dev server sends its HTML page for a missing font, and the site falls back to Arial.
 
-Component documentation lives in `docs/`. The site uses [Vite](https://vite.dev/) and Svelte 5, routes with `docs/src/router.ts`, and compiles its Markdown pages (`.md`) with `docs/scripts/page.ts`. The Vite config resolves `carbon-components-svelte` to the repository root, so edits under `src/` show up in the docs without a separate package link.
+Component documentation lives in `docs/`. The site builds with Bun and Svelte 5: [svelte-bun](https://github.com/metonym/svelte-bun) compiles its components and its Markdown pages (`.md`, through `docs/scripts/page.ts`), and `docs/src/router.ts` routes them. The plugins in `docs/scripts/bun-plugins.ts` resolve `carbon-components-svelte` to the repository root, so edits under `src/` show up in the docs without a separate package link.
 
 To preview the docs site locally:
 
@@ -44,9 +44,14 @@ cd docs
 bun dev
 ```
 
-The site serves at http://localhost:5173/ (or the next available port).
+The site serves at http://localhost:5173/; set `PORT` for another. An edit updates the open page without a restart.
 
-A production docs build (`cd docs && bun run build`) caches compiled components and preprocessed pages in `docs/node_modules/.cache/ccs-docs-svelte-build`, and logs how many results it reused. Delete that directory to build from scratch.
+A production build (`cd docs && bun run build`) writes `docs/dist/` in a few seconds, and `bun run preview` serves it.
+
+| Do | Why |
+| --- | --- |
+| Leave `svelte` out of `docs/package.json` | The docs use the root's copy, as `src/` does. Two copies put two runtimes on the page, which renders nothing; svelte-bun fails the build with `SB_DUPLICATE_SVELTE` instead. `docs/bunfig.toml` turns off peer installs, which would add the second copy. |
+| Import `virtual:site` for the package's version and repo, and for `DEV` | The build and the dev server both serve it, from `docs/scripts/site-module.ts`. |
 
 ## Best practices
 
