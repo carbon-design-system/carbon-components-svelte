@@ -138,6 +138,25 @@ Set `portalTooltip` to `true` to always render the tooltip in a portal, where it
 
 <Button portalTooltip iconDescription="Tooltip text" icon={Add} />
 
+### Tooltip class
+
+Set `tooltipClass` to style one button's tooltip. The class stays on the tooltip when it opens in a portal, such as from a SidePanel's header, where a rule that targets it inside the button's container no longer matches.
+
+```svelte
+<Button
+  kind="ghost"
+  icon={Close}
+  iconDescription="Close panel"
+  tooltipClass="panel-close-tooltip"
+/>
+
+<style>
+  :global(.panel-close-tooltip) {
+    white-space: nowrap;
+  }
+</style>
+```
+
 ### Hidden tooltip
 
 Set `hideTooltip` to `true` to visually hide the tooltip while maintaining accessibility for screen readers. Use this when tooltips cause layout issues, interfere with interactions, or when multiple icon buttons are densely packed, as in a toolbar. The `iconDescription` remains accessible to screen readers.
@@ -363,7 +382,7 @@ Set `loadingDelay` to wait a number of milliseconds after `loading` becomes `tru
 
 ## Keyboard shortcut
 
-Set `shortcut` to show its keys after the label, in the tooltip of an icon-only button, and to the screen reader through `aria-keyshortcuts`. Pressing the keys clicks the button, so `on:click` runs, as does a form's submit or a link's navigation. `mod` is the platform's main modifier, so `"mod+s"` shows <DocKbd shortcut="mod+s" /> on your platform. The examples run in a frame, so click in one before you press its keys.
+Set `shortcut` to show its keys after the label, as keycaps in the tooltip of an icon-only button, and to the screen reader through `aria-keyshortcuts`. Pressing the keys clicks the button, so `on:click` runs, as does a form's submit or a link's navigation. `mod` is the platform's main modifier, so `"mod+s"` shows <DocKbd shortcut="mod+s" /> on your platform. The examples run in a frame, so click in one before you press its keys.
 
 <FileSource src="/framed/Button/ButtonShortcut" />
 
