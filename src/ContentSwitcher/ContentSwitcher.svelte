@@ -81,7 +81,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
-  import { createIdScope, useId } from "../utils/id-scope.js";
+  import { createIdScope } from "../utils/id-scope.js";
   import { createInitOrder } from "../utils/init-order.js";
   import {
     getLayoutDirection,
@@ -94,7 +94,10 @@
   import { syncDomOrder } from "../utils/sync-dom-order.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
 
-  const labelId = useId("content-switcher-label", "ccs-content-switcher-label");
+  // Start the scope before deriving the label id from it: a `useId` drawn
+  // before the scope falls back to a random id with no outer scope.
+  const idPrefix = createIdScope($$restProps.id, "content-switcher");
+  $: labelId = `${$$restProps.id || idPrefix}-label`;
   // A consumer `aria-label` or `aria-labelledby` replaces the visible label.
   $: labelledBy =
     labelText &&
@@ -393,8 +396,6 @@
 
     await focusSwitchElement(index);
   }
-
-  createIdScope($$restProps.id, "content-switcher");
 
   /** @type {import("../utils/roving-focus.js").RovingFocusOptions} */
   const rovingFocusOptions = {
