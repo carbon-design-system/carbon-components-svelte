@@ -333,6 +333,8 @@ test.describe("forced colors", () => {
     prepare?: (page: Page) => Promise<unknown>;
     target: string;
     settled: string;
+    // A descendant that holds the label, which reads HighlightText too.
+    text?: string;
     act: (page: Page) => Promise<unknown>;
   }[] = [
     {
@@ -463,6 +465,35 @@ test.describe("forced colors", () => {
             ?.classList.add("bx--contained-list-item--selected"),
         ),
     },
+    ...(
+      [
+        ["Dropdown", "dropdown", ".bx--list-box__field"],
+        ["ComboBox", "combobox", "input"],
+        ["MultiSelect", "multiselect", ".bx--list-box__field"],
+      ] as const
+    ).map(([name, field, trigger]) => {
+      const scope = `[data-testid=fields] [data-testid=${field}]`;
+      const highlighted = `${scope} .bx--list-box__menu-item--highlighted`;
+      return {
+        name: `a highlighted ${name} option`,
+        // A menu opens with its first option highlighted in place, so move the
+        // highlight to the next one.
+        prepare: async (page: Page) => {
+          await page.focus(`${scope} ${trigger}`);
+          // The first press opens the menu; ComboBox highlights on the second.
+          await expect(async () => {
+            await page.keyboard.press("ArrowDown");
+            await expect(page.locator(highlighted)).toBeVisible({
+              timeout: 500,
+            });
+          }).toPass();
+        },
+        target: `${highlighted} + .bx--list-box__menu-item`,
+        settled: ".bx--list-box__menu-item--highlighted",
+        text: ".bx--list-box__menu-item__option",
+        act: (page: Page) => page.keyboard.press("ArrowDown"),
+      };
+    }),
   ];
 
   for (const scheme of ["light", "dark"] as const) {
@@ -476,13 +507,13 @@ test.describe("forced colors", () => {
         await page.emulateMedia({ colorScheme: null });
       });
 
-      for (const { name, prepare, target, settled, act } of firstFrames) {
+      for (const { name, prepare, target, settled, text, act } of firstFrames) {
         test(`${name} fills with Highlight on the first frame`, async ({
           page,
         }) => {
           await prepare?.(page);
           await page.evaluate(
-            ([target, settled]) => {
+            ([target, settled, text]) => {
               const marked = document.querySelector(target);
               marked?.scrollIntoView({ block: "center" });
               const sample = new Promise((resolve) => {
@@ -490,13 +521,20 @@ test.describe("forced colors", () => {
                   const el = marked ?? document.querySelector(target);
                   if (!el?.matches(settled)) return requestAnimationFrame(tick);
                   const s = getComputedStyle(el);
-                  resolve({ background: s.backgroundColor, color: s.color });
+                  resolve({
+                    background: s.backgroundColor,
+                    color: s.color,
+                    ...(text && {
+                      text: getComputedStyle(el.querySelector(text) ?? el)
+                        .color,
+                    }),
+                  });
                 };
                 requestAnimationFrame(tick);
               });
               Object.assign(window, { __firstFrame: sample });
             },
-            [target, settled] as const,
+            [target, settled, text] as const,
           );
           await act(page);
           const frame = await page.evaluate(
@@ -507,6 +545,7 @@ test.describe("forced colors", () => {
           expect(frame).toEqual({
             background: system.Highlight,
             color: system.HighlightText,
+            ...(text && { text: system.HighlightText }),
           });
         });
       }
@@ -1407,13 +1446,10 @@ test.describe("forced colors", () => {
         await page.keyboard.press("ArrowDown");
         await expect(page.locator(highlighted)).toBeVisible({ timeout: 500 });
       }).toPass();
-      // Polled: the fill transitions in.
-      await expect
-        .poll(() => style(page, highlighted), { message: field })
-        .toMatchObject({
-          background: system.Highlight,
-          color: system.HighlightText,
-        });
+      expect.soft(await style(page, highlighted), field).toMatchObject({
+        background: system.Highlight,
+        color: system.HighlightText,
+      });
       expect
         .soft(
           (await style(page, `${highlighted} .bx--list-box__menu-item__option`))
