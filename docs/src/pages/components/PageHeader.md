@@ -534,7 +534,7 @@ Set `sticky` to `true` to pin the header to the top of its nearest scroll contai
 
 ### Sticky offset
 
-Set `stickyOffset` to stick the header below other fixed chrome, such as `"3rem"` to clear a UI Shell `Header`. Numbers `0`–`13` use the shared layout scale; strings accept any CSS length. Scroll the frame below: the page header stays under the app header. The example removes `Content`'s padding so the header spans the page.
+Set `stickyOffset` to stick the header below other fixed chrome, such as `"3rem"` to clear a UI Shell `Header`. Numbers `0`–`13` use the shared layout scale; strings accept any CSS length. Set it to `"stack"` to clear the `Header` and any sticky bar above the header without measuring them; see [Sticky bars](/sticky#offsets-that-stack). Scroll the frame below: the page header stays under the app header. The example removes `Content`'s padding so the header spans the page.
 
 <FileSource src="/framed/PageHeader/StickyUIShell" />
 
