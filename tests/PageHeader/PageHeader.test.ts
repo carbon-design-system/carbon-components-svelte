@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import PageHeader from "./PageHeader.test.svelte";
+import PageHeaderConditionalRows from "./PageHeaderConditionalRows.test.svelte";
 
 describe("PageHeader", () => {
   it("renders the title and subtitle", () => {
@@ -194,5 +195,22 @@ describe("PageHeader", () => {
     expect(row?.querySelector(".bx--page-header__tabs-end")).toHaveTextContent(
       "Range",
     );
+  });
+
+  // The stylesheet hides an `:empty` row: no elements and no text, which
+  // jsdom's `:empty` misreads for the zero-length text Svelte leaves.
+  it("leaves the breadcrumb and tabs rows empty while their slots render nothing", async () => {
+    const { rerender } = render(PageHeaderConditionalRows);
+    const header = screen.getByTestId("header");
+    const rows = [
+      header.querySelector(".bx--page-header__breadcrumb-row"),
+      header.querySelector(".bx--page-header__tabs-row"),
+    ];
+    for (const row of rows) {
+      expect(row?.children).toHaveLength(0);
+      expect(row?.textContent).toBe("");
+    }
+    await rerender({ shown: true });
+    for (const row of rows) expect(row?.children).toHaveLength(1);
   });
 });

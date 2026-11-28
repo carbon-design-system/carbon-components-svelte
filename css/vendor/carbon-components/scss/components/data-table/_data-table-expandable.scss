@@ -376,3 +376,19 @@
 @include exports('data-table-v2-expandable') {
   @include data-table-expandable;
 }
+
+// carbon-components-svelte patch (empty expanded row)
+/// An `expandedRow` slot whose content renders nothing for a row, such as
+/// a false `{#if}`, leaves the row's container empty, and the container
+/// kept its 2.5rem of block padding.
+/// @access private
+/// @group data-table
+@mixin data-table-expandable-empty-row {
+  .#{$prefix}--child-row-inner-container:empty {
+    display: none;
+  }
+}
+
+@include exports('data-table-expandable-empty-row') {
+  @include data-table-expandable-empty-row;
+}

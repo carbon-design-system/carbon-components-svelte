@@ -199,8 +199,14 @@
 
   .#{$prefix}--search-menu-group__action {
     flex: 0 0 auto;
-    margin-left: $carbon--spacing-05;
+    margin-inline-start: $carbon--spacing-05;
     @include type-style("label-01");
+  }
+
+  // A passed slot whose content renders nothing, such as a false `{#if}`,
+  // leaves the action empty, and the action kept its margin.
+  .#{$prefix}--search-menu-group__action:empty {
+    display: none;
   }
 
   .#{$prefix}--search-menu__no-results {

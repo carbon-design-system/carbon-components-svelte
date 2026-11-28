@@ -212,8 +212,7 @@
   <div class:bx--page-header__content={true}>
     {#if $$slots.breadcrumb || $$slots.breadcrumbEnd}
       <div class:bx--page-header__breadcrumb-row={true}>
-        <slot name="breadcrumb" />
-        {#if $$slots.breadcrumbEnd}
+        <slot name="breadcrumb" />{#if $$slots.breadcrumbEnd}
           <div class:bx--page-header__breadcrumb-end={true}>
             <slot name="breadcrumbEnd" />
           </div>
@@ -291,8 +290,7 @@
         class:bx--page-header__tabs-row={true}
         class:bx--page-header__tabs-row--with-end={$$slots.tabsEnd}
       >
-        <slot name="tabs" />
-        {#if $$slots.tabsEnd}
+        <slot name="tabs" />{#if $$slots.tabsEnd}
           <div class:bx--page-header__tabs-end={true}>
             <slot name="tabsEnd" />
           </div>

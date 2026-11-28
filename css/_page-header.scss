@@ -239,6 +239,20 @@
     gap: $carbon--spacing-03;
   }
 
+  // A passed slot whose content renders nothing, such as a false `{#if}`,
+  // leaves its wrapper empty. The wrapper still took a gap and kept its
+  // margin, and the tabs row's negative margin pulled the header's bottom
+  // edge up.
+  .#{$prefix}--page-header__breadcrumb-row:empty,
+  .#{$prefix}--page-header__title-start:empty,
+  .#{$prefix}--page-header__title-end:empty,
+  .#{$prefix}--page-header__description:empty,
+  .#{$prefix}--page-header__meta:empty,
+  .#{$prefix}--page-header__tabs-row:empty,
+  .#{$prefix}--page-header__tabs-end:empty {
+    display: none;
+  }
+
   // Default tabs bleed through the header's inline padding so each tab's
   // label (inset by the tab's own `$spacing-05` padding) aligns with the
   // title. Container tabs keep the header's padding.
