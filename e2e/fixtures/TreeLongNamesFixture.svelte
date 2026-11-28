@@ -19,3 +19,12 @@
 <div data-testid="tree" style="width: 14rem">
   <TreeView labelText="Files" {nodes} expandedIds={["projects"]} />
 </div>
+
+<div data-testid="tree-virtual" style="width: 14rem">
+  <TreeView
+    labelText="Virtual files"
+    {nodes}
+    expandedIds={["projects"]}
+    virtualize
+  />
+</div>

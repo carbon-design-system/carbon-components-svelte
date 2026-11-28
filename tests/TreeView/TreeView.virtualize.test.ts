@@ -1,4 +1,5 @@
-import { render, screen, waitFor } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
+import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
 import { tick } from "svelte";
 import { findRowById, treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
@@ -702,4 +703,47 @@ describe("TreeView virtualize + hasChildren lazy load", () => {
     });
     expect(treeItemById("root-a-child-1")).toHaveAttribute("aria-level", "2");
   });
+});
+
+describe("TreeView (virtualize) long labels", () => {
+  const nodes = [
+    {
+      id: "services",
+      text: "Datenschutzgrundverordnungskonformitätsprüfung",
+      badge: 2,
+      nodes: [
+        { id: "leaf", text: "payments-reconciliation-worker-eu-central" },
+        {
+          id: "link",
+          text: "https://api.example.com/v2/organizations/8f14e45fceea167a",
+          href: "/organizations",
+        },
+      ],
+    },
+  ];
+
+  it.each(["services", "leaf", "link"])(
+    "truncates the %s row's label and titles it on hover",
+    async (id) => {
+      render(TreeView, {
+        props: {
+          labelText: "Services",
+          nodes,
+          expandedIds: ["services"],
+          virtualize: true,
+        },
+      });
+
+      const label = treeItemById(id).querySelector<HTMLElement>(
+        ".bx--tree-node__label__text",
+      );
+      assert(label);
+      Object.defineProperty(label, "clientWidth", { value: 100 });
+      Object.defineProperty(label, "scrollWidth", { value: 400 });
+      await fireEvent.mouseEnter(label);
+
+      const text = nodes[0].nodes.find((node) => node.id === id)?.text;
+      expect(label).toHaveAttribute("title", text ?? nodes[0].text);
+    },
+  );
 });

@@ -26,6 +26,7 @@
   import Checkbox from "../Checkbox/Checkbox.svelte";
   import CaretDown from "../icons/CaretDown.svelte";
   import { resolveLinkRel } from "../utils/link-rel.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
   const {
@@ -142,7 +143,9 @@
         style:padding-inline-start="{indentRem}rem"
       >
         <svelte:component this={icon} class="bx--tree-node__icon" />
-        <slot node={mergedNode}>{node.text}</slot>{#if slottedBadge}<span
+        <span class:bx--tree-node__label__text={true} use:titleWhenTruncated
+          ><slot node={mergedNode}>{node.text}</slot></span
+        >{#if slottedBadge}<span
             class:bx--tree-node__badge={true}
             class:bx--tree-node__badge--slot={true}
             ><slot name="badgeChildren" node={mergedNode} /></span
@@ -246,7 +249,9 @@
               on:blur={handleEditBlur}
             />
           {:else}
-            <slot node={mergedNode}>{node.text}</slot>
+            <span class:bx--tree-node__label__text={true} use:titleWhenTruncated
+              ><slot node={mergedNode}>{node.text}</slot></span
+            >
           {/if}
         </span>{:else}
         <svelte:component this={icon} class="bx--tree-node__icon" />
@@ -262,7 +267,8 @@
             on:blur={handleEditBlur}
           />
         {:else}
-          <slot node={mergedNode}>{node.text}</slot
+          <span class:bx--tree-node__label__text={true} use:titleWhenTruncated
+            ><slot node={mergedNode}>{node.text}</slot></span
           >{/if}{/if}{#if isEditing}{:else if slottedBadge}<span
           class:bx--tree-node__badge={true}
           class:bx--tree-node__badge--slot={true}
