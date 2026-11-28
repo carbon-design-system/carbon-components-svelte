@@ -241,7 +241,7 @@ In RTL, a resizable `SideNav` has its handle on its left edge, and a horizontal 
 
 In RTL, icons that point forward or back mirror: Pagination, PaginationNav, Carousel, Tabs and DatePicker month arrows, Stepper and InterstitialScreen buttons, the AILabel undo icon, submenu carets and the Card and ClickableTile icons. Icons without a direction stay as they are, such as check marks, the search icon and the Launch icon of an outbound link.
 
-Add the `bx--icon--mirror-rtl` class to mirror your own forward or back icon, such as an arrow in a link's `icon` slot. A `dir="ltr"` region inside an RTL page turns the mirror off again.
+Add the `bx--icon--mirror-rtl` class to mirror your own forward or back icon, such as an arrow in a link's `icon` slot. For Button's `icon` prop, pass the class in `iconProps`: `iconProps={{ class: "bx--icon--mirror-rtl" }}`. A `dir="ltr"` region inside an RTL page turns the mirror off again.
 
 <LayoutDirection dir="rtl" lang="ar">
   <Stack gap={5}>
