@@ -48,6 +48,12 @@
   export let animation = undefined;
 
   /**
+   * Class for the portalled content, the tooltip's box.
+   * @type {string | undefined}
+   */
+  export let contentClass = undefined;
+
+  /**
    * Set on the portalled content when using a11y tooltips (`role="tooltip"`).
    * @type {string | undefined}
    */
@@ -154,8 +160,13 @@
     the anchor's direction. -->
     <span
       use:slideIntoWindow
-      class:bx--tooltip-portal__content={true}
-      class:bx--assistive-text={Boolean(tooltipType)}
+      class={[
+        "bx--tooltip-portal__content",
+        tooltipType && "bx--assistive-text",
+        contentClass,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       role={id ? "tooltip" : undefined}
       dir={rtl ? "rtl" : undefined}
       {id}

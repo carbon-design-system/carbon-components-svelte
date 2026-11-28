@@ -185,6 +185,14 @@
   export let portalTooltip = undefined;
 
   /**
+   * Specify a class for the icon-only tooltip, to style one button's
+   * tooltip. The class is also applied when the tooltip opens in a portal,
+   * away from the button.
+   * @type {string | undefined}
+   */
+  export let tooltipClass = undefined;
+
+  /**
    * Set to `true` to display a loading spinner in place of the icon
    * and prevent the button from being activated.
    * Unlike `disabled`, the button remains focusable; use `disabled`
@@ -631,7 +639,8 @@
       on:mouseleave={handlePortalMouseLeave}
     >
       {#if hasIconOnly && iconDescription && !showSpinner}
-        <span class:bx--assistive-text={true}
+        <span
+          class={["bx--assistive-text", tooltipClass].filter(Boolean).join(" ")}
           >{iconDescription}{#if shortcut}<span
               class:bx--btn__tooltip-shortcut={true}
               aria-hidden="true"><Kbd {shortcut} /></span
@@ -700,7 +709,8 @@
     on:mouseleave={handlePortalMouseLeave}
   >
     {#if hasIconOnly && iconDescription && !showSpinner}
-      <span class:bx--assistive-text={true}
+      <span
+        class={["bx--assistive-text", tooltipClass].filter(Boolean).join(" ")}
         >{iconDescription}{#if shortcut}<span
             class:bx--btn__tooltip-shortcut={true}
             aria-hidden="true"><Kbd {shortcut} /></span
@@ -758,6 +768,7 @@
     open={portalOpen}
     text={iconDescription}
     tooltipType="icon"
+    contentClass={tooltipClass}
     intrinsicAlign={effectiveTooltipAlignment}
     horizontalGapLeft={portalGaps.horizontalGapLeft}
     horizontalGapRight={portalGaps.horizontalGapRight}
