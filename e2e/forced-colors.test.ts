@@ -446,6 +446,23 @@ test.describe("forced colors", () => {
           .first()
           .click(),
     },
+    {
+      name: "a selected ContainedListItem",
+      prepare: (page) => page.goto("/contained-list.html"),
+      target:
+        ".bx--contained-list-item--clickable:not(.bx--contained-list-item--selected) .bx--contained-list-item__content",
+      settled:
+        ".bx--contained-list-item--selected .bx--contained-list-item__content",
+      // The fixture's items are static, so apply the state they take.
+      act: (page) =>
+        page.evaluate(() =>
+          document
+            .querySelector(
+              ".bx--contained-list-item--clickable:not(.bx--contained-list-item--selected)",
+            )
+            ?.classList.add("bx--contained-list-item--selected"),
+        ),
+    },
   ];
 
   for (const scheme of ["light", "dark"] as const) {

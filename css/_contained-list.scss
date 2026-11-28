@@ -251,6 +251,7 @@
         background-color: Highlight;
         color: HighlightText;
         forced-color-adjust: none;
+        transition: none;
       }
     }
   }
@@ -265,6 +266,8 @@
 
   // Forced colors drop the fill and the bar, so mark the item with the
   // system highlight instead, as ToggleButtonGroup does for a pressed button.
+  // It does not transition: the fill would start from the unforced one, so a
+  // just-selected item flashed `HighlightText` on a light fill.
   @media (forced-colors: active) {
     .#{$prefix}--contained-list-item--selected
       .#{$prefix}--contained-list-item__content {
@@ -273,6 +276,7 @@
       // Keep the browser from drawing its text backplate (Canvas) behind
       // HighlightText, which hides the label.
       forced-color-adjust: none;
+      transition: none;
     }
   }
 
