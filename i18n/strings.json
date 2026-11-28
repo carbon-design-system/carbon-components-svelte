@@ -457,6 +457,48 @@
       "defaultKind": "none"
     },
     {
+      "component": "CommandPalette",
+      "prop": "clearButtonDescription",
+      "type": "string",
+      "default": "Clear search input",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CommandPalette",
+      "prop": "emptyText",
+      "type": "string",
+      "default": "No commands available",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CommandPalette",
+      "prop": "filterResultsText",
+      "type": "(count: number) => string",
+      "default": "(count) => count === 0\n  ? \"No results\"\n  : `${count} result${count === 1 ? \"\" : \"s\"} available`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "CommandPalette",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Search commands",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CommandPalette",
+      "prop": "loadingText",
+      "type": "string",
+      "default": "Loading...",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CommandPalette",
+      "prop": "noResultsText",
+      "type": "string | ((value: string) => string)",
+      "default": "No results found",
+      "defaultKind": "text"
+    },
+    {
       "component": "ConfirmModal",
       "prop": "cancelText",
       "type": "string",
