@@ -46,6 +46,16 @@ describe("getActiveSectionId", () => {
     );
   });
 
+  it("defaults the offset to the sticky bars' --ccs-sticky-offset when larger", () => {
+    const container = document.createElement("div");
+    container.id = "container";
+    container.style.scrollPaddingTop = "16px";
+    container.style.setProperty("--ccs-sticky-offset", "96px");
+    document.body.append(container);
+    tops = { container: 0, a: -300, b: 80, c: 200 };
+    expect(getActiveSectionId(["a", "b", "c"], { container })).toBe("b");
+  });
+
   it("moves the activation line down the container by `line`", () => {
     const container = document.createElement("div");
     container.id = "container";
@@ -141,6 +151,16 @@ describe("scrollToSection", () => {
     scrollToSection(target, { container, offset: 48 });
 
     expect(container.scrollTo).toHaveBeenCalledWith({ top: 452 });
+  });
+
+  it("leaves room for the sticky bars' --ccs-sticky-offset by default", () => {
+    const { container, target } = setup();
+    container.style.setProperty("--ccs-sticky-offset", "96px");
+    tops = { container: 100, target: 400 };
+
+    scrollToSection(target, { container });
+
+    expect(container.scrollTo).toHaveBeenCalledWith({ top: 404 });
   });
 
   it("uses the target's scroll-margin-top when it is larger", () => {
