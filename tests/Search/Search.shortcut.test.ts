@@ -153,4 +153,20 @@ describe("Search shortcut", () => {
     expect(input("header")).toHaveFocus();
     expect(header.querySelector(".bx--header__search--active")).not.toBeNull();
   });
+
+  it("opens HeaderSearch from each of several shortcuts and shows the first", async () => {
+    render(SearchShortcut);
+    const header = screen.getByTestId("header-several");
+    const button = header.querySelector("button") as HTMLButtonElement;
+
+    expect(button).toHaveAttribute("aria-keyshortcuts", "Control+I I");
+    expect(keys(button.querySelector(".bx--header__search-shortcut"))).toEqual([
+      "Ctrl",
+      "I",
+    ]);
+
+    press({ key: "i" });
+    await tick();
+    expect(input("header-several")).toHaveFocus();
+  });
 });
