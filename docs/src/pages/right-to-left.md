@@ -21,6 +21,8 @@ description: Lay out Carbon Components Svelte from right to left for Arabic, Heb
     TextInput,
   } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
+  import ChevronLeft from "carbon-icons-svelte/lib/ChevronLeft.svelte";
+  import ChevronRight from "carbon-icons-svelte/lib/ChevronRight.svelte";
 </script>
 
 ## Set the direction
@@ -117,7 +119,12 @@ In RTL, <DocKbd label="ArrowLeft" /> moves forward along a row and <DocKbd label
 
 Icons that point forward or back mirror in RTL, such as the arrows of Pagination, PaginationNav, Carousel, and Tabs, and submenu carets. Icons with no direction stay as they are, such as check marks, the search icon, and the `Launch` icon of an outbound link. See [Icons](/components/LayoutDirection#icons) for the full list.
 
-To mirror your own forward or back icon, add the `bx--icon--mirror-rtl` class. A `dir="ltr"` region inside an RTL page turns the mirror off again.
+To mirror your own forward or back icon, add the `bx--icon--mirror-rtl` class. The mirror follows the nearest `dir`, so a `dir="ltr"` region inside an RTL page turns it off again.
+
+| Icon | Where the class goes |
+| :--- | :--- |
+| In a slot, such as Link's or Button's `icon` slot | On the icon: `<ArrowRight slot="icon" class="bx--icon--mirror-rtl" />` |
+| In Button's `icon` prop | In `iconProps`: `iconProps={{ class: "bx--icon--mirror-rtl" }}` |
 
 <LayoutDirection dir="rtl" lang="ar">
   <Stack gap={5}>
@@ -125,6 +132,20 @@ To mirror your own forward or back icon, add the `bx--icon--mirror-rtl` class. A
       عرض سجل النشر
       <ArrowRight slot="icon" class="bx--icon--mirror-rtl" />
     </Link>
+    <ButtonSet>
+      <Button
+        kind="ghost"
+        icon={ChevronLeft}
+        iconProps={{ class: "bx--icon--mirror-rtl" }}
+        iconDescription="السابق"
+      />
+      <Button
+        kind="ghost"
+        icon={ChevronRight}
+        iconProps={{ class: "bx--icon--mirror-rtl" }}
+        iconDescription="التالي"
+      />
+    </ButtonSet>
     <PaginationNav
       total={5}
       forwardText="الصفحة التالية"
