@@ -744,6 +744,14 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
       };
       const edge = (el: Element) => {
         const s = style(el);
+        // A frame around a picture (a flag, a swatch) is part of the
+        // picture, not a box of UI around content: images, and anything
+        // drawn in its own colors under forced colors, aren't edges here.
+        if (
+          el.matches("img, svg, picture, canvas, video") ||
+          s.forcedColorAdjust === "none"
+        )
+          return null;
         if (
           !el.matches(controls) &&
           sides.every(
