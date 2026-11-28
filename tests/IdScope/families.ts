@@ -31,4 +31,5 @@ export const FAMILIES = [
   "TableOfContents",
   "SearchMenu",
   "ContextMenu",
+  "SelectionBar",
 ];

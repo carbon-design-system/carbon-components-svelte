@@ -207,3 +207,17 @@ test("a CountryPicker row is as tall with a code box as with a drawn flag", asyn
   );
   expect(heights[0]).toBe(heights[1]);
 });
+
+test("a SelectionBar is as tall as the server draws it", async ({ page }) => {
+  // The bar renders from `count` and its slots, and measures nothing: a
+  // 48px row like DataTable's batch actions, then the items row, one 24px
+  // tag tall with 8px of padding and a 1px rule.
+  const heights = await page
+    .locator(
+      "[data-testid=selection] .bx--selection-bar__bar, [data-testid=selection] .bx--selection-bar__items",
+    )
+    .evaluateAll((els) =>
+      els.map((el) => Math.round(el.getBoundingClientRect().height)),
+    );
+  expect(heights).toEqual([48, 41]);
+});

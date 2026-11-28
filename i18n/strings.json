@@ -2242,6 +2242,20 @@
       "defaultKind": "text"
     },
     {
+      "component": "SelectionBar",
+      "prop": "clearText",
+      "type": "string",
+      "default": "Clear selection",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SelectionBar",
+      "prop": "selectedText",
+      "type": "(count: number) => string",
+      "default": "(count) => `${count} selected`",
+      "defaultKind": "function"
+    },
+    {
       "component": "ShellBanner",
       "prop": "closeButtonDescription",
       "type": "string",

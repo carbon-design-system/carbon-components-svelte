@@ -11,7 +11,9 @@
     NumberRangeInput,
     OverflowMenu,
     OverflowMenuItem,
+    SelectionBar,
     ShellBanner,
+    Tag,
     Timeline,
   } from "carbon-components-svelte";
   import { JP } from "carbon-components-svelte/flags";
@@ -120,4 +122,13 @@
 
 <div data-testid="country" style="height: 20rem; padding: 1rem;">
   <CountryPicker labelText="Country" values={["CH", "XK"]} portalMenu={false} />
+</div>
+
+<div data-testid="selection" style="padding: 1rem;">
+  <SelectionBar count={2}>
+    <svelte:fragment slot="items">
+      <Tag filter>API gateway</Tag>
+      <Tag filter>Billing</Tag>
+    </svelte:fragment>
+  </SelectionBar>
 </div>

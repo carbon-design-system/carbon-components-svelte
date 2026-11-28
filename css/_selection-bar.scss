@@ -1,0 +1,122 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written. The bar reuses DataTable's batch action classes
+// for its summary text, its buttons and the clear button's divider, so the
+// two read the same. It adds the bar itself, which batch actions draw as an
+// absolutely positioned layer over a table toolbar.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/layout";
+
+/// SelectionBar component
+/// @access private
+/// @group components
+@mixin selection-bar {
+  // A container, so the bar can stack by its own width (see the end).
+  // Inline-size containment drops the content from the bar's intrinsic
+  // width, so the bar fills its parent (`width: 100%`) and never sizes to
+  // its actions.
+  .#{$prefix}--selection-bar {
+    container: #{$prefix}--selection-bar / inline-size;
+    width: 100%;
+  }
+
+  // Pinned to the bottom of the viewport, over the page and under modals.
+  .#{$prefix}--selection-bar--viewport-end {
+    position: fixed;
+    z-index: z("floating");
+    @include ccs-inset-inline(0, 0);
+
+    inset-block-end: 0;
+  }
+
+  // The batch actions bar's look. A row that can't fit its actions wraps
+  // them under the count instead of squeezing them.
+  .#{$prefix}--selection-bar__bar {
+    display: flex;
+    min-height: $carbon--spacing-09;
+    flex-wrap: wrap;
+    align-items: center;
+    background-color: $background-brand;
+    color: $text-on-color;
+  }
+
+  // A row of its own height, so the count keeps it when the actions wrap.
+  // The count holds the bar's inline padding, not the bar, so actions that
+  // wrap onto a row of their own start their text under the count's.
+  .#{$prefix}--selection-bar__summary {
+    display: flex;
+    min-height: $carbon--spacing-09;
+    align-items: center;
+    font-variant-numeric: tabular-nums;
+    padding-inline: $carbon--spacing-05;
+  }
+
+  // The list, and the clear button when the actions stack (see the end),
+  // keep to the end of the count's row.
+  .#{$prefix}--selection-bar .#{$prefix}--action-list,
+  .#{$prefix}--selection-bar .#{$prefix}--batch-summary__cancel {
+    margin-inline-start: auto;
+  }
+
+  .#{$prefix}--selection-bar .#{$prefix}--action-list {
+    flex-wrap: wrap;
+  }
+
+  .#{$prefix}--selection-bar__items {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border-block-end: 1px solid $border-subtle;
+    background-color: $layer;
+    gap: $carbon--spacing-03;
+  }
+
+  // A slot can't be filled conditionally, so content that shows only for
+  // some selections leaves the row empty for the rest. An empty row would
+  // still draw its padding and border.
+  .#{$prefix}--selection-bar__items:empty {
+    display: none;
+  }
+
+  // The brand fill is gone in forced colors, so the bar's row keeps an
+  // edge. The edge stays off the items row, whose tags draw their own.
+  @media (forced-colors: active) {
+    .#{$prefix}--selection-bar__bar {
+      outline: 1px solid transparent;
+      outline-offset: -1px;
+    }
+  }
+
+  // Narrower than 672px, the bar stacks: the clear button stays on the
+  // count's row and the actions wrap on the rows under it, so it never
+  // starts a row alone. One width for any number of actions keeps the
+  // layout predictable; wider, too many or too long actions wrap as a list
+  // under the count. Tab still moves through the actions before the clear
+  // button. A browser with no container queries (Safari 15.4) wraps the
+  // whole action list, clear button last, under the count.
+  @container #{$prefix}--selection-bar (width < #{to-rem(672px)}) {
+    .#{$prefix}--selection-bar__bar > .#{$prefix}--action-list {
+      display: contents;
+    }
+
+    .#{$prefix}--selection-bar__bar
+      > .#{$prefix}--action-list
+      > :not(.#{$prefix}--batch-summary__cancel) {
+      order: 1;
+    }
+
+    // Ends the count's row after the clear button.
+    .#{$prefix}--selection-bar__bar::after {
+      flex-basis: 100%;
+      content: "";
+    }
+  }
+}
+
+@include exports("selection-bar") {
+  @include selection-bar;
+}

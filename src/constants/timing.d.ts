@@ -124,3 +124,9 @@ export const HOVER_CARD_CLOSE_DELAY_MS: 300;
  * so tabbing through a list of triggers opens none of them.
  */
 export const HOVER_CARD_FOCUS_DELAY_MS: 150;
+
+/**
+ * Pause after the last change before `SelectionBar` announces its count, so
+ * a run of quick checks or a select all says the final count once.
+ */
+export const SELECTION_ANNOUNCE_DELAY_MS: 500;

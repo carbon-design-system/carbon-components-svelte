@@ -1860,3 +1860,25 @@ test("forced colors: a CodeSnippet preview keeps one edge and its divider", asyn
     );
   expect(lines).toEqual([system.CanvasText, system.CanvasText]);
 });
+
+// A SelectionBar is DataTable's batch action bar outside a table. Forced
+// colors drop its brand fill, so it keeps an edge, and the action icons,
+// which batch actions fill with the on-color token, follow their text.
+test("forced colors: a SelectionBar keeps an edge and its action icons", async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName === "webkit", "WebKit does not force colors");
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto("/selection-bar.html");
+  const system = await systemColors(page);
+  const row = "[data-testid=bar] .bx--selection-bar__bar";
+  expect.soft(await style(page, row), "bar").toMatchObject({
+    outline: "solid 1px",
+    outlineColor: system.CanvasText,
+  });
+  expect(
+    (await style(page, "[data-testid=bar] .bx--action-list .bx--btn__icon"))
+      .fill,
+  ).toBe(system.ButtonText);
+});
