@@ -5,15 +5,15 @@ import path from "node:path";
 import { svelte } from "svelte-bun";
 import { carbonAlias } from "./bun-plugins.ts";
 import { siteModule } from "./site-module.ts";
+import { options } from "./svelte.ts";
 
 const DOCS = path.resolve(import.meta.dirname, "..");
 const FRAMED = path.join(DOCS, "src/pages/framed");
 // Under docs/, so `svelte/server` resolves to the copy the examples use.
 const TMP = path.join(DOCS, "node_modules/.cache/render-examples");
 
-const examples = fs
-  .readdirSync(FRAMED, { recursive: true, encoding: "utf8" })
-  .filter((file) => file.endsWith(".svelte") && !file.startsWith("_"))
+const examples = Array.from(new Bun.Glob("**/*.svelte").scanSync(FRAMED))
+  .filter((file) => !file.startsWith("_"))
   .sort();
 
 // Bundled, not imported: Bun's runtime resolves tsconfig.json's `paths`
@@ -33,7 +33,7 @@ await Bun.build({
   plugins: [
     carbonAlias,
     siteModule({ dev: false }),
-    svelte({ root: DOCS, side: "server", production: true }),
+    svelte({ ...options, side: "server", production: true }),
   ],
 });
 /** Where the build wrote a source file, mirrored under `OUT`. */

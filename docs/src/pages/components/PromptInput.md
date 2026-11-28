@@ -1,6 +1,6 @@
 ---
 components: ["PromptInput"]
-description: PromptInput is the composer for an AI conversation: a text area that grows, files attached as chips, a send button that becomes stop, and the recall of earlier prompts.
+description: "PromptInput is the composer for an AI conversation: a text area that grows, files attached as chips, a send button that becomes stop, and the recall of earlier prompts."
 ---
 
 <script>

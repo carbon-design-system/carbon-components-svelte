@@ -48,7 +48,7 @@ type HtmlNode = {
   position?: { start: { line: number } };
 };
 
-/** Matches the remark plugin in svelte.config.ts. */
+/** Matches the remark plugin in scripts/svelte.ts. */
 function isLiveExample(node: HtmlNode) {
   return (
     node.lang !== "svelte" &&
@@ -103,18 +103,17 @@ function writePage(page: string) {
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
 
-const pages = fs
-  .readdirSync(PAGES, { recursive: true, encoding: "utf8" })
-  .filter((f) => f.endsWith(PAGE_EXTENSION))
-  .map((f) => path.join(PAGES, f));
+const pages = Array.from(
+  new Bun.Glob(`**/*${PAGE_EXTENSION}`).scanSync({
+    cwd: PAGES,
+    absolute: true,
+  }),
+);
 for (const page of pages) writePage(page);
 
-const framedFiles = fs
-  .readdirSync(path.join(PAGES, "framed"), {
-    recursive: true,
-    encoding: "utf8",
-  })
-  .filter((f) => f.endsWith(".svelte"));
+const framedFiles = Array.from(
+  new Bun.Glob("**/*.svelte").scanSync(path.join(PAGES, "framed")),
+);
 
 const relative = (p: string) => path.relative(OUT, path.join(DOCS, p));
 fs.writeFileSync(

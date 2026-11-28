@@ -1,5 +1,5 @@
 // @vitest-environment node
-// @depends-on src/** docs/src/** docs/svelte.config.ts
+// @depends-on src/** docs/src/** docs/scripts/svelte.ts
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parseRules } from "crassus";
@@ -171,7 +171,7 @@ describe("Carbon v11 tokens", () => {
   it("uses only type helper classes that exist", () => {
     const roots = ["src", "docs/src"];
     const files = [
-      "docs/svelte.config.ts",
+      "docs/scripts/svelte.ts",
       ...roots.flatMap((root) =>
         readdirSync(root, { recursive: true, encoding: "utf8" })
           .filter((file) => /\.(svelte|md|ts|js|css)$/.test(file))

@@ -136,7 +136,7 @@ export default {
     },
     {
       file: "tests/css/v11-tokens.test.ts",
-      glob: "docs/svelte.config.ts",
+      glob: "docs/scripts/svelte.ts",
       reason: "docs-only changes skip CI; master runs every test after one",
     },
   ],
