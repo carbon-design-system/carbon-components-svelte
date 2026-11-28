@@ -473,6 +473,9 @@
 // the `HighlightText` cells. Its border, which unforcing brings back, uses
 // a system color too. The hover rule for cell text outranks the plain
 // selected rule, so its `:hover` twin re-asserts HighlightText.
+// The row, its cells and its icon do not transition: they would start from
+// the unforced values, so a just-selected row flashed `HighlightText` on a
+// light fill.
 
 /// Selected structured list row in forced-colors mode.
 /// @access private
@@ -485,6 +488,7 @@
       border-color: Highlight;
       background-color: Highlight;
       color: HighlightText;
+      transition: none;
     }
 
     .#{$prefix}--structured-list--selection
@@ -494,12 +498,14 @@
       .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--selected:hover
       > .#{$prefix}--structured-list-td {
       color: HighlightText;
+      transition: none;
     }
 
     .#{$prefix}--structured-list--selection
       .#{$prefix}--structured-list-row--selected
       .#{$prefix}--structured-list-svg {
       fill: HighlightText;
+      transition: none;
     }
 
     // The focus ring sits inside the row, on the Highlight fill.
