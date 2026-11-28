@@ -143,3 +143,105 @@
 @include exports("code-snippet-header") {
   @include code-snippet-header;
 }
+
+/// A live example above a multi-line snippet's code, inside its border, with
+/// an optional bar for controls that drive the example. The example sits on
+/// the page background and follows the page's direction; the code under it
+/// keeps its own look. The snippet becomes a grid so its copy and expand
+/// buttons, which are positioned, place themselves in the code's rows: a
+/// wrapper around the code would change the markup of every multi snippet.
+/// @access private
+/// @group components
+@mixin code-snippet-preview {
+  // Two classes, to come after the multi snippet's flex layout and padding,
+  // and the header's.
+  .#{$prefix}--snippet--multi.#{$prefix}--snippet--has-preview {
+    display: grid;
+    padding: 0;
+    border: 1px solid $border-subtle;
+    // The gutters stand in for the snippet's padding, so the code container
+    // keeps its inline `width: 100%`.
+    grid-template-columns: $carbon--spacing-05 minmax(0, 1fr) $carbon--spacing-05;
+    grid-template-rows: auto auto 1fr;
+
+    .#{$prefix}--snippet__header {
+      margin-inline: 0;
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
+    .#{$prefix}--snippet-container {
+      margin-block: $carbon--spacing-05;
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    // The buttons stay with the code: a positioned grid child is placed in
+    // the rows it names, not the whole grid.
+    .#{$prefix}--copy-btn,
+    .#{$prefix}--snippet-btn--expand {
+      grid-column: 1 / -1;
+      grid-row: 2 / 4;
+    }
+  }
+
+  .#{$prefix}--snippet--has-preview.#{$prefix}--snippet--has-header
+    .#{$prefix}--snippet-container {
+    margin-block-start: 0;
+  }
+
+  .#{$prefix}--snippet__preview {
+    @include type-style("body-compact-01");
+    @include carbon--font-family("sans");
+
+    min-width: 0;
+    border-block-end: 1px solid $border-subtle;
+    background-color: $layer-background;
+    color: $text-primary;
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .#{$prefix}--snippet__preview-bar {
+    display: flex;
+    min-height: $carbon--spacing-07;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-inline-start: $carbon--spacing-05;
+    border-block-end: 1px solid $border-subtle;
+    background-color: $layer;
+    column-gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--snippet__preview-label {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--snippet__preview-actions {
+    display: flex;
+    flex-wrap: wrap;
+    margin-inline-start: auto;
+  }
+
+  .#{$prefix}--snippet__preview-content {
+    padding: $carbon--spacing-06 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--snippet--disabled .#{$prefix}--snippet__preview-label {
+    color: $text-disabled;
+  }
+
+  // The border is the frame's edge in forced colors. Carbon's transparent
+  // outline would draw a second line against it.
+  @media (forced-colors: active) {
+    .#{$prefix}--snippet--multi.#{$prefix}--snippet--has-preview {
+      outline: none;
+    }
+  }
+}
+
+@include exports("code-snippet-preview") {
+  @include code-snippet-preview;
+}

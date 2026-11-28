@@ -20,6 +20,8 @@
    * @event {{ error: unknown }} copy:error
    * @event {MouseEvent} mouseenter:copy-button
    * @event {MouseEvent} mouseleave:copy-button
+   * @slot {{}} preview - Render a live example above the code, on the page background, inside the snippet's border. Only `type="multi"` renders it.
+   * @slot {{}} previewActions - Render controls that drive the preview, such as a "Play" button, in a bar above it. The bar renders only with this slot and a `preview`.
    * @restProps {div | button | span} Rest props are spread to the root div (single/multi, except `aria-label`, `aria-labelledby`, and `aria-describedby`, which go on the code container), the copy button (inline), or the span (inline with `hideCopyButton`).
    */
 
@@ -107,6 +109,14 @@
 
   /** Specify the accessible name of the file tab list */
   export let filesDescription = "Files";
+
+  /**
+   * Specify the label of the preview. It shows at the start of the bar
+   * that holds the `previewActions` slot, and names the preview.
+   *
+   * NOTE: this prop only works with the `type="multi"` variant.
+   */
+  export let previewLabelText = "Preview";
 
   /** Set to `true` to display the skeleton state */
   export let skeleton = false;
@@ -307,6 +317,11 @@
   $: hasFiles = type === "multi" && !!files && files.length > 0;
   $: hasHeader = type === "multi" && (hasFiles || !!title);
   $: activeIndex = hasFiles ? findFileIndex(files, selectedId) : 0;
+
+  // A live example above the code. Read from `$$slots`, so the server
+  // renders the frame its final size.
+  $: hasPreview = type === "multi" && !!$$slots.preview;
+  $: hasPreviewActions = hasPreview && !!$$slots.previewActions;
   $: activeCode = hasFiles ? files?.[activeIndex]?.code : code;
 
   // The header names the code container, unless the consumer did.
@@ -758,6 +773,7 @@
     class:bx--snippet--multi={type === "multi"}
     class:bx--snippet--has-expand={showExpandButton}
     class:bx--snippet--has-header={hasHeader}
+    class:bx--snippet--has-preview={hasPreview}
     class:bx--snippet--disabled={disabled}
     class:bx--snippet--full-width={fullWidth}
     {...wrapperProps}
@@ -765,6 +781,32 @@
     on:mouseenter
     on:mouseleave
   >
+    {#if hasPreview}
+      <!-- A disabled snippet disables the example too, since it can't
+           reach the controls inside the slot. -->
+      <div
+        role="group"
+        aria-label={hasPreviewActions ? undefined : previewLabelText}
+        aria-labelledby={hasPreviewActions ? `${id}-preview-label` : undefined}
+        inert={disabled || undefined}
+        class:bx--snippet__preview={true}
+      >
+        {#if hasPreviewActions}
+          <div class:bx--snippet__preview-bar={true}>
+            <span
+              id="{id}-preview-label"
+              class:bx--snippet__preview-label={true}>{previewLabelText}</span
+            >
+            <div class:bx--snippet__preview-actions={true}>
+              <slot name="previewActions" />
+            </div>
+          </div>
+        {/if}
+        <div class:bx--snippet__preview-content={true}>
+          <slot name="preview" />
+        </div>
+      </div>
+    {/if}
     {#if hasHeader}
       <div class:bx--snippet__header={true}>
         {#if hasFiles}

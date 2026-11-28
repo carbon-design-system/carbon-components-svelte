@@ -26,4 +26,33 @@ test.describe("CodeSnippet a11y", () => {
       .analyze();
     expect(expandedResults.violations).toEqual([]);
   });
+
+  for (const theme of ["white", "g100"]) {
+    test(`a preview and its bar have no violations in ${theme}`, async ({
+      page,
+    }) => {
+      await page.goto("/code-snippet-preview.html");
+      await page.evaluate(
+        (theme) => document.documentElement.setAttribute("theme", theme),
+        theme,
+      );
+      await expect(page.getByTestId("snippet-actions")).toBeVisible();
+      // Disabled text is exempt from contrast (WCAG 1.4.3), and axe can't
+      // tell that a disabled snippet's code is disabled.
+      const axe = () =>
+        new AxeBuilder({ page })
+          .include("#app")
+          .exclude("[data-testid=disabled]")
+          .analyze();
+      const before = await axe();
+      expect(before.violations).toEqual([]);
+
+      await page
+        .getByTestId("snippet-actions")
+        .getByRole("button", { name: "Simulate saving" })
+        .click();
+      const running = await axe();
+      expect(running.violations).toEqual([]);
+    });
+  }
 });

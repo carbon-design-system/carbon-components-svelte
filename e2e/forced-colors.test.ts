@@ -1829,3 +1829,29 @@ test("forced colors: a flag's code box reads CanvasText on Canvas in every row",
   }).toPass();
   expect.soft(await style(page, highlighted), "highlighted").toMatchObject(box);
 });
+
+// A CodeSnippet with a preview draws its frame with a border, which forced
+// colors keep. Carbon's transparent outline on the snippet would draw a
+// second line beside it, so the frame drops it.
+test("forced colors: a CodeSnippet preview keeps one edge and its divider", async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName === "webkit", "WebKit does not force colors");
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto("/code-snippet-preview.html");
+  const system = await systemColors(page);
+  const frame = "[data-testid=snippet-actions]";
+  expect.soft(await style(page, frame), "frame").toMatchObject({
+    borderColor: system.CanvasText,
+    outline: expect.stringMatching(/^none /),
+  });
+  const lines = await page
+    .locator(
+      `${frame} .bx--snippet__preview, ${frame} .bx--snippet__preview-bar`,
+    )
+    .evaluateAll((nodes) =>
+      nodes.map((node) => getComputedStyle(node).borderBottomColor),
+    );
+  expect(lines).toEqual([system.CanvasText, system.CanvasText]);
+});
