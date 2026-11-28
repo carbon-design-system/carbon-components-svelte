@@ -343,6 +343,11 @@ $list-box-width: 100%;
     outline: none;
     transition: transform $duration--fast-01 motion(standard, productive);
     @include ccs-inset-inline($end: $carbon--spacing-04); // ccs: v11
+
+    // ccs: the chevron flips at once under reduced motion
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
   }
 
   .#{$prefix}--list-box__menu-icon > svg {

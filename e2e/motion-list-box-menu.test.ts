@@ -64,6 +64,28 @@ test.describe("Motion on list box menus", () => {
         });
       });
 
+      test("turns the chevron at once under reduced motion", async ({
+        page,
+      }) => {
+        await page.emulateMedia({ reducedMotion: "reduce" });
+        const chevron = () =>
+          field(page, name).evaluate((node) => {
+            const icon = node
+              .closest(".bx--list-box")
+              ?.querySelector(".bx--list-box__menu-icon");
+            if (!icon) throw new Error("no chevron");
+            return {
+              duration: getComputedStyle(icon).transitionDuration,
+              running: icon.getAnimations().length,
+            };
+          });
+
+        await field(page, name).click();
+        expect(await chevron()).toEqual({ duration: "0s", running: 0 });
+        await field(page, name).press("Escape");
+        expect(await chevron()).toEqual({ duration: "0s", running: 0 });
+      });
+
       test("animates only opacity, transform and size, and takes no clicks while it leaves", async ({
         page,
       }) => {
