@@ -89,7 +89,7 @@ Align what the eye sees: the ink of glyphs and icons, and text baselines. Elemen
 ### Type
 
 - Use the productive type styles in components: `body-compact-01` for UI text, `label-01` for labels and helper text, `heading-compact-01` and `-02` in panels, `code-01` and `-02` for code. Use expressive styles only on marketing-style surfaces.
-- Text is at least 12 px (`label-01`), including tags, counts and timestamps.
+- Text is at least 12 px (`label-01`), including tags, counts, timestamps and stand-in content such as Flag's code box. Where 12 px text can't fit, show no text and keep it in the accessible name and a `title`. The code box set 7 to 11 px text at 16 to 24 px wide until [#5380](https://github.com/carbon-design-system/carbon-components-svelte/pull/5380).
 - Numbers that change or stack in a column use `font-variant-numeric: tabular-nums`. Right-align numeric columns. Wrap a formatted number in `<bdi>` with the direction of the locale that formatted it.
 - Use the monospace family for values people copy or compare: ids, hashes, keys, paths, versions, log lines.
 - Each text slot either wraps or truncates, and the component documents which. Labels, menu items and error messages wrap. Single-line cells and tags may truncate. Error messages never truncate.
@@ -312,6 +312,7 @@ Follow [Carbon's content guidelines](https://carbondesignsystem.com/guidelines/c
 - Do not show status with color alone (WCAG 1.4.1). Combine color with a shape and text, as `IconIndicator` and `ShapeIndicator` do.
 - Use one icon per meaning across the library, for example `Close` to dismiss and `TrashCan` to delete.
 - Mirror icons that point forward or back in right-to-left layouts. See [Conventions](CONTRIBUTING.md#conventions).
+- Artwork the library draws, such as flags, keeps the details that identify it at every size. A count wins over a minimum shape size: the US flag had 7 stripes and 9 stars, which reads as another flag, until [#5380](https://github.com/carbon-design-system/carbon-components-svelte/pull/5380) drew 13 and 50.
 - Use pictograms from `carbon-pictograms-svelte` only for empty states and onboarding, in a slot such as `EmptyState`'s `illustration` slot. They are decorative and hidden from assistive technology. Do not use pictograms as controls or inline with text.
 
 ## Async states
@@ -444,6 +445,13 @@ Check `src/utils/` before you write a helper.
 | Child registration | `batchStoreUpdates` in `batch-store-updates.js` |
 | Keyboard shortcuts | `keyboard-shortcut.js` |
 | Screen reader announcements | `announce`, `createAnnouncerChannel` in `announcer.js` |
+| Ids that match on the server and client | `useId`, `createIdScope` in `id-scope.js` |
+| Focus after an item is removed or moved | `focusHandoff`, `captureFocusTarget` in `focus-handoff.js` (TagSet, FileUploader, DataTable) |
+| Links in user text | `safeUrl` in `safe-url.js`, `linkify` in `linkify.js` (LinkifiedText) |
+| Data that answers a query | `createAsyncSource`, `createPagedSource` in `async-source.js` (ComboBox's `source`) |
+| Undo and redo | `createHistory` in `history.js` |
+| Save as you type | `createAutosave` in `autosave.js` (SavingStatus's `autosave`) |
+| Wall-clock time in an IANA zone | `zonedParts`, `fromZoned`, `dayKey` in `zoned-time.js` |
 
 ### Known issues
 
@@ -474,7 +482,7 @@ Measure positions and sizes in the browser (`getBoundingClientRect`, computed st
 | States | One fixture shows every size with every state (`invalid`, `warn`, `disabled`, `readonly`, skeleton, active or current, and hidden label, inline and fluid where the component has them), with one field invalid beside valid ones in the same row, and with zero, one and many items. Review them together. A size's type style can outweigh the state rule, so check the active weight at each size. |
 | Themes and layers | White and Gray 100 at minimum. `Layer` nested to level 3. |
 | Right to left | Test with `dir="rtl"`, using sample values that read differently when reversed ("3 / 4", never "3 / 3"),, `dir="ltr"` and no `dir`. Forward and back icons mirror. Inline-axis arrow keys swap. Time and progress run toward the inline end. Add a row to `e2e/rtl.test.ts`. |
-| Forced colors | Chromium with `forced-colors: active`. Draw rings only on the focused or selected item; a ring on every cell hides which one is active. Structural edges, such as a card's 1 px border or a field's resting box, stay: without them a field or card disappears in forced colors. The focus ring is wider than those edges so it stands out. Show selection with a `Highlight` border; forced colors remove background fills. Draw lines with `CanvasText`. Draw progress as an element with a system color; forced colors remove `background-image`. `forced-color-adjust: none` inherits, so set it on one element only. Add a row to `e2e/forced-colors.test.ts`. |
+| Forced colors | Chromium with `forced-colors: active`. Draw rings only on the focused or selected item; a ring on every cell hides which one is active. Structural edges, such as a card's 1 px border or a field's resting box, stay: without them a field or card disappears in forced colors. The focus ring is wider than those edges so it stands out. A picture's frame, such as a flag's or a swatch's, is part of the picture, not an edge: the layout sweep's nested-edge check skips images and `forced-color-adjust: none` elements ([#5858](https://github.com/carbon-design-system/carbon-components-svelte/pull/5858)). Show selection with a `Highlight` border; forced colors remove background fills. Draw lines with `CanvasText`. Draw progress as an element with a system color; forced colors remove `background-image`. `forced-color-adjust: none` inherits, so set it on one element only. An item that opts out to paint `Highlight` and `HighlightText` sets `transition: none` in that forced rule. Its `background-color` or `color` transition starts from the unforced Carbon color, so for a few frames the selected text is unreadable ([#5860](https://github.com/carbon-design-system/carbon-components-svelte/pull/5860), [#5861](https://github.com/carbon-design-system/carbon-components-svelte/pull/5861)). Add a row to `e2e/forced-colors.test.ts`. For a state change, read the first frame after it, not a polled final value, as the `firstFrames` rows do. |
 | Narrow containers and long text | 320 px viewport, a narrow panel, and long words, URLs and log lines. Render the component in fixed-width boxes (240, 320 and 480 px) and in rows that shrink: a flex row, and an `auto` grid track beside `minmax(0, 1fr)` text. Check both ways: nothing spills past its column, and no word that fits its row is broken across lines. See `e2e/long-words.test.ts`, `e2e/pagination-fit.test.ts` and `e2e/reflow.test.ts`. |
 | Adjacent components | Render beside related components at each size. Heights and baselines must align. |
 | Consumer overrides | A consumer rule with one class overrides the library rule. See `e2e/consumer-override.test.ts`. |
