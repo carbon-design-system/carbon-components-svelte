@@ -437,12 +437,15 @@
   // Forced colors drop the selected result's fill, so the keyboard
   // highlight in HeaderSearch's results vanished. It fills with
   // `Highlight` and opts out of forcing, as a highlighted SearchMenu row
-  // does.
+  // does. It does not transition: its fill and text would start from the
+  // unforced values, so a just-selected result flashed `HighlightText` on a
+  // light fill.
   @media (forced-colors: active) {
     .#{$prefix}--header-search-menu-item.#{$prefix}--header-search-menu-item--selected {
       forced-color-adjust: none;
       background-color: Highlight;
       color: HighlightText;
+      transition: none;
     }
 
     .#{$prefix}--header-search-menu-item--selected

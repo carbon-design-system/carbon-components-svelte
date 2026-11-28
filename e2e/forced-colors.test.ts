@@ -466,6 +466,19 @@ test.describe("forced colors", () => {
         ),
     },
     {
+      name: "a selected HeaderSearch result",
+      prepare: async (page) => {
+        await page.click(".bx--header__search .bx--header-search-button");
+        await expect(
+          page.locator(".bx--header-search-menu-item").first(),
+        ).toBeVisible();
+      },
+      target:
+        ".bx--header-search-menu-item:not(.bx--header-search-menu-item--selected)",
+      settled: ".bx--header-search-menu-item--selected",
+      act: (page) => page.keyboard.press("ArrowDown"),
+    },
+    {
       name: "a focused OverflowMenu option",
       target: ".bx--overflow-menu-options__btn",
       settled: ".bx--overflow-menu-options__btn:focus",
@@ -1523,12 +1536,10 @@ test.describe("forced colors", () => {
     await page.click(".bx--header__search .bx--header-search-button");
     await page.keyboard.press("ArrowDown");
     const result = ".bx--header-search-menu-item--selected";
-    await expect
-      .poll(() => style(page, result), { message: result })
-      .toMatchObject({
-        background: system.Highlight,
-        color: system.HighlightText,
-      });
+    expect.soft(await style(page, result), result).toMatchObject({
+      background: system.Highlight,
+      color: system.HighlightText,
+    });
     expect.soft(await flatness(page, result), result).toBeLessThan(0.95);
   });
 
