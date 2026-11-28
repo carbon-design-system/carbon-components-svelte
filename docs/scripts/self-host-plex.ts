@@ -10,12 +10,10 @@
  * Plex Mono", so IBM's footer and TrustArc's cookie banner, which set
  * those names, use the same files.
  *
- * Bun inlines a font a stylesheet's `url()` names as base64, whatever its
- * loader, which would add 2 MB to the sheet. So the build points the
- * sheets at `PLEX_URL`, marks it external, and copies the fonts there
- * (`copyPlexFonts`); the path is versioned since the copies aren't
- * content-hashed. The dev server keeps them inline, from paths relative
- * to each sheet.
+ * The sheets point at `PLEX_URL` (`carbon-sheets.ts`). The build copies
+ * the fonts there (`copyPlexFonts`), and the dev server serves them from
+ * the packages; the path is versioned since the copies aren't
+ * content-hashed.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -38,35 +36,27 @@ export function rewritePlexUrls(
   );
 }
 
-export function selfHostPlex(options: {
-  nodeModules: string;
-  build: boolean;
-}): BunPlugin {
-  const pkg = (family: string) =>
-    path.join(options.nodeModules, `@ibm/plex-${family}`);
-  return {
-    name: "self-host-plex",
-    setup(build) {
-      build.onLoad({ filter: /[\\/]css[\\/][^\\/]+\.css$/ }, (args) => {
-        const css = fs.readFileSync(args.path, "utf8");
-        const out = rewritePlexUrls(css, (family) =>
-          options.build
-            ? `${PLEX_URL}/${family}/fonts/`
-            : `${path.relative(path.dirname(args.path), pkg(family)).split(path.sep).join("/")}/fonts/`,
-        );
-        return out === css ? undefined : { contents: out, loader: "css" };
-      });
-      if (!options.build) return;
-      // Bun would resolve each preload to a hashed copy of its own.
-      // `copyPlexFonts` restores the `href`.
-      build.onLoad({ filter: /[\\/]docs[\\/]index\.html$/ }, (args) => ({
-        contents: fs
-          .readFileSync(args.path, "utf8")
-          .replace(PRELOAD_RE, `data-plex-href="${PLEX_URL}/$1/`),
-        loader: "html",
-      }));
-    },
-  };
+/**
+ * Leaves the page's Plex preloads for `copyPlexFonts`: Bun would resolve
+ * each to a hashed copy of its own, which the sheets don't name. The dev
+ * server has none.
+ */
+export const selfHostPlex: BunPlugin = {
+  name: "self-host-plex",
+  setup(build) {
+    build.onLoad({ filter: /[\\/]docs[\\/]index\.html$/ }, (args) => ({
+      contents: fs
+        .readFileSync(args.path, "utf8")
+        .replace(PRELOAD_RE, `data-plex-href="${PLEX_URL}/$1/`),
+      loader: "html",
+    }));
+  },
+};
+
+/** A Plex file under `PLEX_URL`, in its package. */
+export function plexFile(nodeModules: string, font: string): string {
+  const [family, ...rest] = font.split("/");
+  return path.join(nodeModules, `@ibm/plex-${family}`, ...rest);
 }
 
 /**
@@ -91,10 +81,9 @@ export function copyPlexFonts(
     }
   }
   for (const font of fonts) {
-    const [family, ...rest] = font.split("/");
     const to = path.join(outdir, PLEX_URL, font);
     fs.mkdirSync(path.dirname(to), { recursive: true });
-    fs.copyFileSync(path.join(nodeModules, `@ibm/plex-${family}`, ...rest), to);
+    fs.copyFileSync(plexFile(nodeModules, font), to);
   }
   return fonts.size;
 }

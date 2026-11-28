@@ -8,15 +8,12 @@
  *   cold load of a deep link waits on the entry, then `App`, then the
  *   page's chunk, then its imports.
  * - The library's theme sheets ship as `build:css` wrote them, in one
- *   file linked ahead of the bundle's. They're minified already, and
- *   Bun's CSS minifier would merge their selectors into `:is()` and then
- *   lower each one to a `:-webkit-any()` copy, adding 240 kB.
+ *   file linked ahead of the bundle's (`carbon-sheets.ts`).
  * - `public/` is copied as is, as the site's root.
  */
 import fs from "node:fs";
 import path from "node:path";
 import { styleText } from "node:util";
-import type { BunPlugin } from "bun";
 import { page } from "bun-plugin-page";
 import { svelte } from "svelte-bun";
 import { buildRoutes, FRAMED_PREFIX } from "../src/routes.ts";
@@ -26,12 +23,8 @@ import {
   componentMdSizes,
   importMetaGlob,
 } from "./bun-plugins.ts";
-import {
-  copyPlexFonts,
-  PLEX_URL,
-  rewritePlexUrls,
-  selfHostPlex,
-} from "./self-host-plex.ts";
+import { noCarbonSheetImports, readCarbonSheets } from "./carbon-sheets.ts";
+import { copyPlexFonts, PLEX_URL, selfHostPlex } from "./self-host-plex.ts";
 import { siteModule } from "./site-module.ts";
 import { options } from "./svelte.ts";
 
@@ -39,39 +32,9 @@ const DOCS = path.resolve(import.meta.dirname, "..");
 const PAGES = path.join(DOCS, "src/pages");
 const OUTDIR = path.join(DOCS, "dist");
 const NODE_MODULES = path.join(DOCS, "node_modules");
-const CARBON_CSS = path.resolve(DOCS, "../css");
-/** The theme sheets `src/index.ts` imports, in its order. */
-const CARBON_SHEETS = [
-  "all.css",
-  "prose.css",
-  "syntax-tokens.css",
-  "syntax.css",
-].map((file) => path.join(CARBON_CSS, file));
-
-/** Leaves the theme sheets out of the bundle: the build links them. */
-const carbonSheets: BunPlugin = {
-  name: "carbon-sheets",
-  setup(build) {
-    build.onLoad({ filter: /[\\/]css[\\/][^\\/]+\.css$/ }, (args) => {
-      if (path.dirname(args.path) !== CARBON_CSS) return undefined;
-      if (!CARBON_SHEETS.includes(args.path)) {
-        throw new Error(
-          `${path.basename(args.path)}: add it to CARBON_SHEETS, in the order src/index.ts imports it`,
-        );
-      }
-      return { contents: "", loader: "css" };
-    });
-  },
-};
-
 /** Writes the theme sheets as one hashed file, and links it first. */
 function linkCarbonSheets(indexFile: string) {
-  const css = CARBON_SHEETS.map((file) =>
-    rewritePlexUrls(
-      fs.readFileSync(file, "utf8"),
-      (family) => `${PLEX_URL}/${family}/fonts/`,
-    ),
-  ).join("\n");
+  const css = readCarbonSheets().join("\n");
   const name = `assets/carbon-${Bun.hash(css).toString(36).slice(0, 8)}.css`;
   fs.writeFileSync(path.join(OUTDIR, name), css);
   const html = fs.readFileSync(indexFile, "utf8");
@@ -128,9 +91,9 @@ const result = await Bun.build({
     componentApi,
     componentMdSizes,
     siteModule({ dev: false }),
-    carbonSheets,
+    noCarbonSheetImports,
     svelte({ ...options, production: true }),
-    selfHostPlex({ nodeModules: NODE_MODULES, build: true }),
+    selfHostPlex,
     page({
       routes: {
         entries: routeEntries,
