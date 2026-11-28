@@ -1,19 +1,19 @@
-import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { highlight } from "../src/syntax/index.js";
-import { PAGE_EXTENSION } from "./scripts/constants.ts";
-import { exampleSource, isInstanceScript } from "./scripts/example-source.ts";
-import { createFormatter, formatterVersion } from "./scripts/format.ts";
-import type { Node as MdastNode } from "./scripts/markdown.ts";
-import { compilePage } from "./scripts/page.ts";
-import { requireLeadingHeading } from "./scripts/require-leading-heading.ts";
-import { rehypeSlug } from "./scripts/slug.ts";
-import { stripDocsOnly } from "./scripts/strip-docs-only.ts";
-import { visit } from "./scripts/visit.ts";
+import { svelte, type SvelteBunOptions } from "svelte-bun";
+import { highlight } from "../../src/syntax/index.js";
+import { PAGE_EXTENSION } from "./constants.ts";
+import { exampleSource, isInstanceScript } from "./example-source.ts";
+import { createFormatter } from "./format.ts";
+import type { Node as MdastNode } from "./markdown.ts";
+import { compilePage } from "./page.ts";
+import { requireLeadingHeading } from "./require-leading-heading.ts";
+import { rehypeSlug } from "./slug.ts";
+import { stripDocsOnly } from "./strip-docs-only.ts";
+import { visit } from "./visit.ts";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const DOCS = path.resolve(import.meta.dirname, "..");
 
 const NODE_MODULES_REGEX = /node_modules/;
 const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
@@ -29,17 +29,6 @@ const DOC_KBD_IMPORT_RE = /import\s+DocKbd\s+from/;
 const DOC_KBD_USAGE_RE = /<DocKbd\b/;
 
 const SKIP_PREVIEW_FORMAT = process.env.NODE_ENV === "development";
-
-const previewCodeCache = new Map<string, string>();
-
-const PREVIEW_CODE_CACHE_DIR = path.join(
-  __dirname,
-  "node_modules/.cache/ccs-docs-preview-code",
-);
-
-function hashKey(s: string): string {
-  return createHash("sha256").update(s, "utf8").digest("hex").slice(0, 32);
-}
 
 function escapeHtmlText(str: string): string {
   return str
@@ -69,67 +58,12 @@ function highlightCodeBlock(code: string, lang: string | null): string {
 
 const formatSvelte = createFormatter("svelte");
 
-const PREVIEW_CODE_CACHE_SALT = formatterVersion();
-
-async function readPreviewCodeCache(file: string, key: string) {
-  try {
-    const entry = JSON.parse(await fs.promises.readFile(file, "utf8"));
-    if (entry?.key === key && typeof entry.formattedCode === "string") {
-      return entry.formattedCode as string;
-    }
-  } catch {}
-  return undefined;
-}
-
-let previewCodeCacheDirReady: Promise<unknown> | undefined;
-
-async function writePreviewCodeCache(
-  file: string,
-  key: string,
-  formattedCode: string,
-) {
-  // Rename a temp file so parallel builds never see a partial entry.
-  const tmp = `${file}.${process.pid}.${Math.random().toString(36).slice(2)}.tmp`;
-  try {
-    previewCodeCacheDirReady ??= fs.promises.mkdir(PREVIEW_CODE_CACHE_DIR, {
-      recursive: true,
-    });
-    await previewCodeCacheDirReady;
-    await fs.promises.writeFile(tmp, JSON.stringify({ key, formattedCode }));
-    await fs.promises.rename(tmp, file);
-  } catch {
-    await fs.promises.rm(tmp, { force: true }).catch(() => {});
-  }
-}
-
-async function formatSvelteCached(source: string) {
-  const key = createHash("sha256")
-    .update(PREVIEW_CODE_CACHE_SALT, "utf8")
-    .update("\0")
-    .update(source, "utf8")
-    .digest("hex");
-  const file = path.join(PREVIEW_CODE_CACHE_DIR, `${key}.json`);
-  const cached = await readPreviewCodeCache(file, key);
-  if (cached !== undefined) return cached;
-
-  const formattedCode = await formatSvelte(source);
-  await writePreviewCodeCache(file, key, formattedCode);
-  return formattedCode;
-}
-
 /**
  * `Preview` highlights in the browser, which keeps the highlighted markup,
  * most of a page's size, out of the bundle.
  */
-async function formatPreviewCode(source: string) {
-  if (SKIP_PREVIEW_FORMAT) return source;
-  const cacheKey = hashKey(source);
-  let formatted = previewCodeCache.get(cacheKey);
-  if (formatted === undefined) {
-    formatted = await formatSvelteCached(source);
-    previewCodeCache.set(cacheKey, formatted);
-  }
-  return formatted;
+function formatPreviewCode(source: string): Promise<string> {
+  return SKIP_PREVIEW_FORMAT ? Promise.resolve(source) : formatSvelte(source);
 }
 
 function plugin() {
@@ -166,7 +100,7 @@ function plugin() {
       const srcMatch = node.value.match(FILE_SOURCE_SRC_REGEX);
       const src = srcMatch ? srcMatch[1] : "";
 
-      const filePath = path.join(__dirname, "src/pages", `${src}.svelte`);
+      const filePath = path.join(DOCS, "src/pages", `${src}.svelte`);
       const sourceCode = stripDocsOnly(fs.readFileSync(filePath, "utf-8"));
       const formattedCode = await formatPreviewCode(sourceCode);
 
@@ -198,7 +132,7 @@ function plugin() {
 
 function importGuideHelpers(code: string, filename: string): string {
   const dir = path
-    .relative(path.dirname(filename), path.join(__dirname, "src/components"))
+    .relative(path.dirname(filename), path.join(DOCS, "src/components"))
     .split(path.sep)
     .join("/");
   const imports: string[] = [];
@@ -370,7 +304,62 @@ function tocHeadings(html: string) {
   }));
 }
 
-export default {
+/** The local modules `file` imports, and theirs, by path. */
+function localImports(file: string, seen = new Set<string>()): Set<string> {
+  const transpiler = new Bun.Transpiler({ loader: "ts" });
+  for (const { path: spec } of transpiler.scanImports(
+    fs.readFileSync(file, "utf8"),
+  )) {
+    if (!spec.startsWith(".")) continue;
+    const dep = path.resolve(path.dirname(file), spec);
+    if (seen.has(dep) || !fs.existsSync(dep)) continue;
+    seen.add(dep);
+    if (/\.[jt]s$/.test(dep)) localImports(dep, seen);
+  }
+  return seen;
+}
+
+/**
+ * What the preprocessing reads: this module, the modules it imports, such
+ * as the page compiler and the highlighter, and the bun that formats
+ * preview code.
+ */
+const PREPROCESS_INPUTS = Bun.hash(
+  [
+    fileURLToPath(import.meta.url),
+    ...localImports(fileURLToPath(import.meta.url)),
+  ]
+    .sort()
+    .map((file) => `${file}\0${fs.readFileSync(file, "utf8")}`)
+    .concat(Bun.version)
+    .join("\0"),
+).toString(16);
+
+const FILE_SOURCE_RE = /<FileSource\s+src="([^"]+)"/g;
+
+/**
+ * svelte-bun's `cacheKey`: the inputs above, and for a page, each framed
+ * example a `<FileSource>` inlines.
+ */
+function cacheKey(file: string, source: string): string {
+  if (!file.endsWith(PAGE_EXTENSION)) return PREPROCESS_INPUTS;
+  const framed = Array.from(source.matchAll(FILE_SOURCE_RE), ([, src]) => {
+    const example = path.join(DOCS, "src/pages", `${src}.svelte`);
+    return fs.existsSync(example) ? fs.readFileSync(example, "utf8") : "";
+  });
+  return [PREPROCESS_INPUTS, ...framed].join("\0");
+}
+
+/**
+ * svelte-bun's options: the dev server loads this module from
+ * `bunfig.toml`, and the build and the example render spread `options`
+ * with their own `production` and `side`. svelte-bun reads them from the
+ * plugin, so there's no `svelte.config.*`.
+ */
+export const options = {
+  root: DOCS,
+  cache: true,
+  cacheKey,
   extensions: [".svelte", PAGE_EXTENSION],
   preprocess: [
     {
@@ -388,8 +377,8 @@ export default {
             remarkPlugins: [requireLeadingHeading, plugin, carbonify],
             rehypePlugins: [rehypeSlug, rehypeHeadingAnchors],
             layouts: {
-              guide: path.join(__dirname, "src/layouts/GuideLayout.svelte"),
-              _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
+              guide: path.join(DOCS, "src/layouts/GuideLayout.svelte"),
+              _: path.join(DOCS, "src/layouts/ComponentLayout.svelte"),
             },
           }),
         };
@@ -441,4 +430,6 @@ export default {
       },
     },
   ],
-};
+} satisfies SvelteBunOptions;
+
+export default svelte(options);

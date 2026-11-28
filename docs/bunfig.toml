@@ -7,4 +7,4 @@ peer = false
 [serve.static]
 # The site's own plugins first, so they resolve `carbon-components-svelte`
 # and the virtual modules before svelte-bun looks at them.
-plugins = ["./scripts/dev-plugin.ts", "svelte-bun"]
+plugins = ["./scripts/dev-plugin.ts", "./scripts/svelte.ts"]

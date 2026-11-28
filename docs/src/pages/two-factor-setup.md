@@ -1,7 +1,7 @@
 ---
 title: Two-factor setup
 layout: guide
-description: A recipe for enrolling a user in authenticator-app two-factor authentication: scan a QR code or type the key, confirm a six-digit code, and save recovery codes.
+description: "A recipe for enrolling a user in authenticator-app two-factor authentication: scan a QR code or type the key, confirm a six-digit code, and save recovery codes."
 ---
 
 ## Try it

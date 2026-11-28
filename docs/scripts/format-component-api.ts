@@ -1,14 +1,14 @@
-import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { createFormatter } from "./format.ts";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const outFile = path.join(__dirname, "../src/COMPONENT_API.json");
-const cacheFile = path.join(__dirname, "../src/.COMPONENT_API_FORMAT_CACHE");
+const outFile = path.join(import.meta.dir, "../src/COMPONENT_API.json");
+const cacheFile = path.join(
+  import.meta.dir,
+  "../src/.COMPONENT_API_FORMAT_CACHE",
+);
 
-const hash = (value: string) => createHash("sha1").update(value).digest("hex");
+const hash = (value: string) => Bun.hash(value).toString(16);
 
 const cachedHash = fs.existsSync(cacheFile)
   ? fs.readFileSync(cacheFile, "utf8").trim()
