@@ -22,6 +22,7 @@ import type {
   queryParam,
   rovingFocus,
   setTranslateContext,
+  sticky,
   themeScript,
   ThemeZone as BarrelThemeZone,
   trapFocus,
@@ -81,6 +82,7 @@ import type {
   FloatingPositionResult,
 } from "carbon-components-svelte/src/utils/floating-position.js";
 import type { RovingFocusOptions } from "carbon-components-svelte/src/utils/roving-focus.js";
+import type { StickyOptions } from "carbon-components-svelte/src/utils/sticky.js";
 import {
   highlight,
   highlightCode,
@@ -159,6 +161,8 @@ type _FormReset = ReturnType<typeof formReset>;
 type _PreserveFocusSelection = ReturnType<typeof preserveFocusSelection>;
 type _RovingFocus = ReturnType<typeof rovingFocus>;
 type _RovingFocusOptions = RovingFocusOptions;
+type _Sticky = ReturnType<typeof sticky>;
+type _StickyOptions = StickyOptions;
 type _TrapFocus = ReturnType<typeof trapFocus>;
 type _CreateIdScope = ReturnType<typeof createIdScope>;
 type _UseId = ReturnType<typeof useId>;
