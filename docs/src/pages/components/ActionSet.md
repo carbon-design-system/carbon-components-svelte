@@ -72,6 +72,11 @@ actions stay visible.
   </ActionSet>
 </Box>
 
+Bind `stuck` to know when the set is pinned to the bottom with content
+scrolling under it. Once the container scrolls to the end, the set sits in
+its place and `stuck` is `false`. While stuck, the set also has the
+`bx--action-set--stuck` class.
+
 ## Disable stacking
 
 Set `disableStacking` to `true` to force a horizontal layout even at a size that would normally stack.
