@@ -347,6 +347,21 @@ test.describe("forced colors", () => {
           .first()
           .click(),
     },
+    {
+      name: "a selected chat quick action",
+      target:
+        ".bx--chat-btn--quick-action:not(.bx--chat-btn--quick-action--selected):not([disabled])",
+      settled: ".bx--chat-btn--quick-action--selected",
+      // The fixture's chips are static, so apply the state they take.
+      act: (page) =>
+        page.evaluate(() =>
+          document
+            .querySelector(
+              ".bx--chat-btn--quick-action:not(.bx--chat-btn--quick-action--selected):not([disabled])",
+            )
+            ?.classList.add("bx--chat-btn--quick-action--selected"),
+        ),
+    },
   ];
 
   for (const scheme of ["light", "dark"] as const) {
