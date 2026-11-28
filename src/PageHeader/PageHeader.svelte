@@ -60,6 +60,15 @@
   export let stickyOffset = 0;
 
   /**
+   * Read whether the `sticky` header is stuck: pinned at `stickyOffset`
+   * while content scrolls under it. Always `false` on the server and until
+   * the header sticks. While stuck, the header has the
+   * `bx--page-header--stuck` class.
+   * @bindable readonly
+   */
+  export let stuck = false;
+
+  /**
    * Set the header background using a Carbon layer token. Use `"layer-01"`
    * to set the header apart from a `"background"` page body.
    * @type {"background" | "layer-01" | "layer-02"}
@@ -94,10 +103,11 @@
    */
   export let ref = null;
 
-  import { setContext } from "svelte";
+  import { onMount, setContext } from "svelte";
   import Box from "../Box/Box.svelte";
   import Heading from "../Heading/Heading.svelte";
   import Text from "../Text/Text.svelte";
+  import { sticky as stickyAction } from "../utils/sticky.js";
   import PageHeaderBody from "./PageHeaderBody.svelte";
 
   /**
@@ -140,6 +150,31 @@
     getTabs: () => tabsContext,
   });
 
+  /** @type {undefined | ReturnType<typeof stickyAction>} */
+  let stickyHandle;
+
+  /** @param {boolean} value */
+  function handleStuck(value) {
+    stuck = value;
+  }
+
+  // `Box` renders the root, so the action runs here on its element. It
+  // reads the offset from the element, since `Box` maps scale steps to
+  // classes.
+  onMount(() => {
+    stickyHandle = stickyAction(/** @type {HTMLElement} */ (ref), {
+      enabled: sticky,
+      onChange: handleStuck,
+    });
+    return () => stickyHandle?.destroy();
+  });
+
+  $: {
+    // The action reads a new `stickyOffset` once it has rendered.
+    stickyOffset;
+    stickyHandle?.update({ enabled: sticky, onChange: handleStuck });
+  }
+
   $: containerTabs = tabsType === "container";
 
   $: pageHeaderClass = [
@@ -148,6 +183,7 @@
     // divider would cut between them.
     !hideDivider && !containerTabs && "bx--page-header--divider",
     containerTabs && "bx--page-header--container-tabs",
+    stuck && "bx--page-header--stuck",
     size === "sm" && "bx--page-header--sm",
     grid && "bx--page-header--grid",
     grid === "full-width" && "bx--page-header--grid-full-width",
