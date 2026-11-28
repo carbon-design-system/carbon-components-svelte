@@ -30,11 +30,21 @@
    */
   export let stickyOffset = undefined;
 
+  /**
+   * Read whether the `sticky` toolbar is stuck: pinned at `stickyOffset`
+   * while content scrolls under it. Always `false` on the server and until
+   * the toolbar sticks. While stuck, the toolbar has the
+   * `bx--table-toolbar--stuck` class.
+   * @bindable readonly
+   */
+  export let stuck = false;
+
   import { getContext, setContext } from "svelte";
   import { writable } from "svelte/store";
   import { isHeaderRendered } from "../UIShell/nav-store.js";
   import { toCssLength } from "../utils/css-length.js";
   import { normalizeToolbarSize } from "../utils/size-aliases.js";
+  import { sticky as stickyAction } from "../utils/sticky.js";
 
   // Matches `.bx--header`'s fixed height (`mini-units(6)` in
   // _header.scss); Header has no prop to override it.
@@ -89,6 +99,11 @@
     if (ref) ref.style.overflow = visible ? "visible" : "inherit";
   }
 
+  /** @param {boolean} value */
+  function handleStuck(value) {
+    stuck = value;
+  }
+
   setContext("carbon:Toolbar", {
     overflowVisible,
     setOverflowVisible,
@@ -108,9 +123,15 @@
   class:bx--table-toolbar--small={effectiveSize === "sm"}
   class:bx--table-toolbar--normal={effectiveSize === "default"}
   class:bx--table-toolbar--sticky={sticky}
+  class:bx--table-toolbar--stuck={stuck}
   style:z-index={1}
   style:top={sticky ? toCssLength(effectiveStickyOffset) : undefined}
   {...$$restProps}
+  use:stickyAction={{
+    enabled: sticky,
+    offset: effectiveStickyOffset,
+    onChange: handleStuck,
+  }}
 >
   <slot />
 </section>
