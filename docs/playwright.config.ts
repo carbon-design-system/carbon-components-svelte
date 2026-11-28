@@ -19,7 +19,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "bun run preview -p 4175",
+    command: "bun run preview -p 4175 --quiet",
     port: 4175,
     reuseExistingServer: false,
   },
