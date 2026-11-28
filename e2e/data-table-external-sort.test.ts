@@ -72,7 +72,16 @@ test.describe("DataTable externalSort", () => {
         .first()
         .click({ force: true });
 
-      const results = await new AxeBuilder({ page }).include("#app").analyze();
+      const axe = new AxeBuilder({ page }).include("#app");
+      if (mode === "forced-colors") {
+        // axe reads text from -webkit-text-fill-color, which Chromium leaves
+        // at the author color while it forces `color`. A dark forced palette
+        // (the host follows the OS, so a Mac in dark mode) then fails gray
+        // author text on a black Canvas the user never sees. The forced
+        // pairs are read in forced-colors.test.ts.
+        axe.disableRules(["color-contrast"]);
+      }
+      const results = await axe.analyze();
       expect(results.violations).toEqual([]);
     });
   }
