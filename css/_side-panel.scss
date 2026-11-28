@@ -267,6 +267,62 @@ $ccs-side-panel-sizes: (
     @include ccs-inset-inline($start: $carbon--spacing-02);
   }
 
+  // With `headerActions`, the corner is as wide as its buttons, so a fixed
+  // inline-end padding can't keep the title clear of it. The header becomes
+  // a grid with the corner in its own column, still 8px (4px for large
+  // buttons) from the panel's top and inline-end edges.
+  .#{$prefix}--side-panel__header--actions {
+    display: grid;
+    align-items: start;
+    column-gap: $carbon--spacing-03;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .#{$prefix}--side-panel__header--actions > * {
+    grid-column: 1;
+  }
+
+  .#{$prefix}--side-panel__header--actions > .#{$prefix}--side-panel__toolbar {
+    grid-column: 1 / -1;
+  }
+
+  .#{$prefix}--side-panel__header--actions > .#{$prefix}--side-panel__corner {
+    position: static;
+    margin-top: $carbon--spacing-03 - $carbon--spacing-05;
+    grid-column: 2;
+    // Across the label, title and subtitle rows, so a short label row
+    // doesn't grow to the buttons' height.
+    grid-row: 1 / span 3;
+    margin-inline-end: $carbon--spacing-03 - $carbon--spacing-05;
+  }
+
+  .#{$prefix}--side-panel__header--actions.#{$prefix}--side-panel__header--back
+    > .#{$prefix}--side-panel__corner {
+    margin-top: $carbon--spacing-03 - $carbon--spacing-09;
+  }
+
+  .#{$prefix}--side-panel__header--actions.#{$prefix}--side-panel__header--lg
+    > .#{$prefix}--side-panel__corner {
+    margin-top: $carbon--spacing-02 - $carbon--spacing-05;
+    margin-inline-end: $carbon--spacing-02 - $carbon--spacing-05;
+  }
+
+  .#{$prefix}--side-panel__header--actions.#{$prefix}--side-panel__header--lg.#{$prefix}--side-panel__header--back
+    > .#{$prefix}--side-panel__corner {
+    margin-top: $carbon--spacing-02 - $carbon--spacing-09;
+  }
+
+  .#{$prefix}--side-panel__header--actions .#{$prefix}--side-panel__label,
+  .#{$prefix}--side-panel__header--actions .#{$prefix}--side-panel__title,
+  .#{$prefix}--side-panel__header--actions .#{$prefix}--side-panel__subtitle {
+    padding-inline-end: 0;
+  }
+
+  .#{$prefix}--side-panel__header-actions {
+    display: flex;
+    align-items: center;
+  }
+
   .#{$prefix}--side-panel__back .#{$prefix}--btn__icon {
     @include ccs-mirror-rtl;
   }
