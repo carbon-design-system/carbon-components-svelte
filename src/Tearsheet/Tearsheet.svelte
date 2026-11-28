@@ -76,6 +76,15 @@
   export let selectorPrimaryFocus = "[data-modal-primary-focus]";
 
   /**
+   * Specify an element, or a function returning one, to focus when the
+   * tearsheet closes, instead of the element that opened it. A function
+   * runs once per close. Focus returns to the opener when it resolves to
+   * no element in the page.
+   * @type {HTMLElement | (() => HTMLElement | null) | null}
+   */
+  export let returnFocusTo = null;
+
+  /**
    * Set an id for the dialog.
    * The title and description ids derive from it as `{id}-title` and
    * `{id}-description`.
@@ -137,7 +146,7 @@
     preventCloseOnClickOutside: () => preventCloseOnClickOutside,
     passive: () => !$$slots.actions,
     saveFocusReturn: focusReturn.save,
-    restoreFocusReturn: () => focusReturn.restore(ref),
+    restoreFocusReturn: () => focusReturn.restore(ref, returnFocusTo),
     getContainer: () => ref,
     focus: () => focus(),
     getOpen: () => open,

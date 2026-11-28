@@ -28,6 +28,8 @@ Set `size` to `"narrow"` for a single column. The default is `"wide"`, which spa
 
 ## Closing
 
+When the tearsheet closes, focus returns to the trigger. Set `returnFocusTo` to an element, or a function returning one, to focus that element instead. To fall back only when the trigger has unmounted, return the trigger while it is still connected. See Modal's [return focus to another element](/components/Modal#return-focus-to-another-element) example.
+
 ### Passive
 
 Without `actions`, a tearsheet shows a close button and closes on an outside click. Set `preventCloseOnClickOutside` to `true` to keep it open.

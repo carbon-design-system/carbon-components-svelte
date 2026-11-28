@@ -18,6 +18,7 @@
   export let hideCloseButton: Props["hideCloseButton"] = undefined;
   export let preventCloseOnClickOutside: boolean | undefined = undefined;
   export let selectorPrimaryFocus: Props["selectorPrimaryFocus"] = undefined;
+  export let returnFocusTo: Props["returnFocusTo"] = null;
   export let field = false;
   export let section = false;
   export let onClose: ((trigger: string) => boolean | undefined) | undefined =
@@ -25,6 +26,7 @@
 </script>
 
 <button type="button" on:click={() => (open = true)}>Open tearsheet</button>
+<button type="button">Next item</button>
 <Section level={section ? 3 : 1} tag="div">
   <Tearsheet
     bind:open
@@ -35,6 +37,7 @@
     {hideCloseButton}
     {preventCloseOnClickOutside}
     {selectorPrimaryFocus}
+    {returnFocusTo}
     on:close={(event) => {
       if (onClose?.(event.detail.trigger) === false) event.preventDefault();
     }}
