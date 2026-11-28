@@ -39,6 +39,7 @@ import TagInput from "carbon-components-svelte/TagInput/TagInput.svelte";
 import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
 import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
+import ThemeContentSwitcher from "carbon-components-svelte/Theme/ThemeContentSwitcher.svelte";
 import ThemeDropdown from "carbon-components-svelte/Theme/ThemeDropdown.svelte";
 import ThemeSelect from "carbon-components-svelte/Theme/ThemeSelect.svelte";
 import ThemeToggle from "carbon-components-svelte/Theme/ThemeToggle.svelte";
@@ -456,6 +457,11 @@ export const forms: AriaEntry[] = [
     name: "ThemeDropdown",
     render: (attrs) => render(ThemeDropdown, { props: attrs }),
     target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "ThemeContentSwitcher",
+    render: (attrs) => render(ThemeContentSwitcher, { props: attrs }),
+    target: () => screen.getByRole("tablist"),
   },
   {
     name: "FormGroup",

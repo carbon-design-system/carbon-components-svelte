@@ -284,6 +284,7 @@ export { default as TextInput } from "./TextInput/TextInput.svelte";
 export { default as TextInputSkeleton } from "./TextInput/TextInputSkeleton.svelte";
 export { createTheme } from "./Theme/create-theme.js";
 export { default as Theme } from "./Theme/Theme.svelte";
+export { default as ThemeContentSwitcher } from "./Theme/ThemeContentSwitcher.svelte";
 export { default as ThemeDropdown } from "./Theme/ThemeDropdown.svelte";
 export { default as ThemeSelect } from "./Theme/ThemeSelect.svelte";
 export { default as ThemeToggle } from "./Theme/ThemeToggle.svelte";
