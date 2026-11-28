@@ -541,6 +541,10 @@
 // `Canvas`, so it opts out of forcing and reads `CanvasText`, or `GrayText`
 // when disabled. The rules that hide it next to a selected, focused or
 // hovered switch outrank these and keep it transparent.
+//
+// The selected switch does not transition: its fill and text would start
+// from the unforced values, so a just-selected switch flashed
+// `HighlightText` on a light fill.
 
 /// Selected content switcher in forced-colors mode.
 /// @access private
@@ -569,6 +573,7 @@
       forced-color-adjust: none;
       background-color: Highlight;
       color: HighlightText;
+      transition: none;
     }
 
     .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected:not(:disabled)::after {

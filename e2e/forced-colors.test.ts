@@ -362,6 +362,18 @@ test.describe("forced colors", () => {
             ?.classList.add("bx--chat-btn--quick-action--selected"),
         ),
     },
+    {
+      name: "a selected ContentSwitcher switch",
+      target: ".bx--content-switcher-btn:not(.bx--content-switcher--selected)",
+      settled: ".bx--content-switcher--selected",
+      act: (page) =>
+        page
+          .locator(
+            ".bx--content-switcher-btn:not(.bx--content-switcher--selected)",
+          )
+          .first()
+          .click(),
+    },
   ];
 
   for (const scheme of ["light", "dark"] as const) {
