@@ -7,15 +7,9 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [["list"], ["github"]] : "list",
   use: { baseURL: "http://localhost:4175" },
+  // WebKit only: it has no scroll anchoring, so it's where the page moves.
   // After the device: its own viewport is shorter than the pages need.
   projects: [
-    {
-      name: "chromium",
-      use: {
-        ...devices["Desktop Chrome"],
-        viewport: { width: 1400, height: 900 },
-      },
-    },
     {
       name: "webkit",
       use: {

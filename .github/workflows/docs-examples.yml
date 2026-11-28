@@ -22,26 +22,21 @@ env:
   IBM_TELEMETRY_DISABLED: true
 
 jobs:
-  lint:
+  # One job: each install costs about as much as the checks.
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       # `bun lint`, which svelte-lint also runs, is only in canary builds.
+      # The scroll job builds the site on stable.
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         with:
           bun-version: canary
       - run: bun ci --ignore-scripts
-      - run: bun lint docs
-      - run: bun run lint:svelte docs
-
-  typecheck:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-      - run: bun ci --ignore-scripts
       - run: bun ci --ignore-scripts
         working-directory: docs
+      - run: bun lint docs
+      - run: bun run lint:svelte docs
 
       # Scans `docs/src` for type helper classes the CSS no longer emits. It
       # compiles the Sass itself, so no build step is needed.
@@ -69,8 +64,9 @@ jobs:
         working-directory: docs
 
   # The built site's scroll behavior: lazily rendered examples, code views
-  # and the API section must never move the page, in Chromium and in
-  # WebKit, which has no scroll anchoring. See `docs/e2e/scroll.test.ts`.
+  # and the API section must never move the page. WebKit only: it has no
+  # scroll anchoring, so a regression shows there first. See
+  # `docs/e2e/scroll.test.ts`.
   scroll:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -87,10 +83,10 @@ jobs:
         id: browsers
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-chromium-webkit
-      - name: Install Chromium and WebKit
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-webkit
+      - name: Install WebKit
         if: steps.browsers.outputs.cache-hit != 'true'
-        run: bunx playwright install chromium webkit
+        run: bunx playwright install webkit
       # WebKit's system libraries aren't in the browser cache.
       - name: Install WebKit's dependencies
         run: bunx playwright install-deps webkit
