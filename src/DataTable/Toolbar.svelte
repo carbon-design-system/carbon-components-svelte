@@ -26,7 +26,12 @@
    * If unset, defaults to `0`, or to the fixed UI Shell header height
    * (48px) when a `Header` is rendered on the page, so the toolbar doesn't
    * stick underneath it. Set explicitly (including `0`) to opt out.
-   * @type {number | string | undefined}
+   *
+   * Set to `"stack"` to stick below the `Header` (when the page scrolls)
+   * and every sticky `PageHeader`, `Toolbar` or `sticky` action element
+   * above it in the same scroll container. The offset is measured after
+   * mount, so the server renders none.
+   * @type {"stack" | number | string | undefined}
    */
   export let stickyOffset = undefined;
 
@@ -41,14 +46,13 @@
 
   import { getContext, setContext } from "svelte";
   import { writable } from "svelte/store";
-  import { isHeaderRendered } from "../UIShell/nav-store.js";
+  import {
+    isHeaderRendered,
+    UI_SHELL_HEADER_HEIGHT,
+  } from "../UIShell/nav-store.js";
   import { toCssLength } from "../utils/css-length.js";
   import { normalizeToolbarSize } from "../utils/size-aliases.js";
   import { sticky as stickyAction } from "../utils/sticky.js";
-
-  // Matches `.bx--header`'s fixed height (`mini-units(6)` in
-  // _header.scss); Header has no prop to override it.
-  const UI_SHELL_HEADER_HEIGHT = 48;
 
   /** @type {null | HTMLElement} */
   let ref = null;
@@ -125,7 +129,9 @@
   class:bx--table-toolbar--sticky={sticky}
   class:bx--table-toolbar--stuck={stuck}
   style:z-index={1}
-  style:top={sticky ? toCssLength(effectiveStickyOffset) : undefined}
+  style:top={sticky && stickyOffset !== "stack"
+    ? toCssLength(effectiveStickyOffset)
+    : undefined}
   {...$$restProps}
   use:stickyAction={{
     enabled: sticky,
