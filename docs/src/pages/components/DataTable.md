@@ -857,6 +857,8 @@ Set `size` on the toolbar to override the size inherited from the DataTable. Her
 
 Set `sticky` on `Toolbar` to keep it pinned while the page or its scroll container scrolls, so batch actions stay reachable on a long table. Set `stickyOffset` to the distance from the top edge while stuck; a number is treated as pixels and a string can be any CSS length. When a UI Shell `Header` is on the page, the offset defaults to the header's 48px height so the toolbar does not slide under it. Pass `stickyOffset={0}` to opt out.
 
+Set `stickyOffset="stack"` to stick the toolbar below the `Header` and any sticky bar above it, such as a sticky `PageHeader`; see [Sticky bars](/sticky#offsets-that-stack).
+
 Bind `stuck` on `Toolbar` to know when it is pinned with rows scrolling under it. While stuck, the toolbar also has the `bx--table-toolbar--stuck` class.
 
 <FileSource src="/framed/DataTable/DataTableStickyToolbar" />

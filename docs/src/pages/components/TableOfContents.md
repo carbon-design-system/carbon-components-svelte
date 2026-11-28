@@ -525,7 +525,7 @@ Give every item a leading icon to show the status of each section, such as the p
 
 | Do | Why |
 | --- | --- |
-| Give the scroller a `scroll-padding-top` equal to the height of a sticky header, or set `scrollOffset` and a matching `scroll-margin-top` on the sections. | `scrollOffset` defaults to the scroller's `scroll-padding-top`, so one CSS value moves both the line a section must cross to become active and where a clicked section lands. |
+| Give the scroller `scroll-padding-top: var(--ccs-sticky-offset)` under sticky library bars, or a `scroll-padding-top` equal to the height of your own sticky header, or set `scrollOffset` and a matching `scroll-margin-top` on the sections. | `scrollOffset` defaults to the larger of the scroller's `scroll-padding-top` and the [`--ccs-sticky-offset`](/sticky#links-that-clear-the-bars) its sticky bars publish, so one value moves both the line a section must cross to become active and where a clicked section lands. |
 | Lay the page out with `Grid`, `Row`, and `Column`, giving the table of contents 4 of 16 columns on large screens and hiding it on small ones with `sm={0}`. | It lines up with the rest of the page's grid, and a sidebar on a small screen leaves the content too narrow. |
 | Raise `activationLine` when sections are short or headings sit low on the page. | A section otherwise only activates once its top reaches the top, so its heading can be in view while the previous section stays highlighted. |
 | Give a long table of contents a sticky sidebar with `overflow-y: auto`. | The active item scrolls into view within the sidebar as the reader moves through the page, without moving the page. |
