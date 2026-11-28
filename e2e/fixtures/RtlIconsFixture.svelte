@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
     AILabel,
+    Button,
     Card,
     CardBody,
     Carousel,
@@ -14,6 +15,8 @@
     Tabs,
   } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
+  import ChevronLeft from "carbon-icons-svelte/lib/ChevronLeft.svelte";
+  import ChevronRight from "carbon-icons-svelte/lib/ChevronRight.svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 </script>
 
@@ -66,8 +69,26 @@
     <ArrowRight class="bx--icon--mirror-rtl" />
     <Launch />
   </div>
+  <div data-testid="own-button-icon">
+    <Button
+      kind="ghost"
+      icon={ChevronLeft}
+      iconProps={{ class: "bx--icon--mirror-rtl" }}
+      iconDescription="Previous"
+    />
+    <Button kind="ghost">
+      Next
+      <ChevronRight slot="icon" class="bx--icon--mirror-rtl" />
+    </Button>
+  </div>
   <LayoutDirection dir="ltr" data-testid="ltr-island">
     <ArrowRight class="bx--icon--mirror-rtl" />
+    <Button
+      kind="ghost"
+      icon={ChevronLeft}
+      iconProps={{ class: "bx--icon--mirror-rtl" }}
+      iconDescription="Previous"
+    />
     <PaginationNav total={3} />
   </LayoutDirection>
 </div>
