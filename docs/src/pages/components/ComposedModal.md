@@ -22,7 +22,7 @@ Control how focus moves when the composed modal opens, and override the default 
 
 The `ModalHeader` close button shows `iconDescription` in a tooltip on hover and focus. When the modal opens with focus on the close button, the tooltip stays closed until the next hover or focus. While the tooltip shows, <DocKbd label="Escape" /> hides it first. The next <DocKbd label="Escape" /> closes the modal.
 
-Set `returnFocusTo` to an element, or a function returning one, to focus instead of the trigger when it has unmounted while the modal was open. See Modal's [return focus to a fallback element](/components/Modal#return-focus-to-a-fallback-element) example.
+When the modal closes, focus returns to the trigger. Set `returnFocusTo` to an element, or a function returning one, to focus that element instead. To fall back only when the trigger has unmounted, return the trigger while it is still connected. See Modal's [return focus to another element](/components/Modal#return-focus-to-another-element) example.
 
 ### Custom focus
 
