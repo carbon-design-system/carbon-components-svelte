@@ -371,6 +371,8 @@ Title a new-example commit after the example's exact heading:
 | `docs/src/pages/components/{Component}.md` | Main component page (for example `Button.md`): prose + examples |
 | `docs/src/pages/framed/{Component}/{Example}.svelte` | Interactive demos referenced by `<FileSource>` |
 
+Name a page `.md`. The site compiles only `.svelte` and `.md` pages, so a page with another extension builds with no route, and the sidebar links to a 404. [`docs/scripts/pages.test.ts`](docs/scripts/pages.test.ts) fails on one ([#5855](https://github.com/carbon-design-system/carbon-components-svelte/pull/5855)). Drafts from before the move to `.md` use `.svx`: rename the page when you revive one.
+
 The router picks up new pages under `docs/src/pages` automatically. The docs config and scripts read the extension from `PAGE_EXTENSION` in [`docs/scripts/constants.ts`](docs/scripts/constants.ts), so change it there. [`docs/scripts/index-docs.ts`](docs/scripts/index-docs.ts) indexes each page and its `##` headings for search. The sidebar is built from [`docs/src/component-categories.ts`](docs/src/component-categories.ts): add new pages to a category there, or they land under "Other". Record the first release in [`docs/src/component-since-versions.ts`](docs/src/component-since-versions.ts) for the "new" badge and the component index.
 
 Prose conventions: see [Prose and inline code](#prose-and-inline-code) and [Markdown page gotchas](#markdown-page-gotchas).
@@ -621,6 +623,22 @@ The docs site defers work a page doesn't need yet. Keep to these when changing p
 7. Add a catalog thumbnail at `thumbnails/{component-name}.svg` and its `carbon.yml` entry. CI runs `bun run thumbnails catalog`, which fails when either is missing. See [`thumbnails/README.md`](thumbnails/README.md) for the design principles and recipe
 8. Add an aria-forwarding case in `tests/aria-forwarding/cases/`, or an exemption with the reason. `tests/aria-forwarding/coverage.test.ts` fails for an interactive component that has neither
 
+#### Reviving an old draft
+
+A draft branch from before a rule landed passes its own tests and fails CI on master. Rebase it (see [Keep your branch current](#keep-your-branch-current)), work through the [New component checklist](#new-component-checklist), whose since version (step 5) and aria-forwarding case (step 8) old drafts often lack, then check what else master requires:
+
+| Master requires | See |
+| --- | --- |
+| An `id` from `useId`, a parent's `createIdScope`, and a compound component in `tests/IdScope/families.ts` | [Code style](#code-style), [Stable ids](COMPONENT_GUIDELINES.md#server-rendering-and-layout-shift) |
+| Announcements through `announce()`, not a live region of its own | [Announcements and contrast](COMPONENT_GUIDELINES.md#announcements-and-contrast) |
+| Every string a prop, listed in `i18n/strings.json` | [API](COMPONENT_GUIDELINES.md#api), [Checks](#checks) |
+| A docs page named `.md`, not `.svx` | [Where docs live](#where-docs-live) |
+| Carbon v11 tokens (`$layer`, `$text-primary`), not `$ui-01` | [Conventions](#conventions) |
+| A [collection prop contract](#what-to-test) case for each array prop | `tests/collection-prop-contract/cases.ts` |
+| An `e2e/ssr-layout.test.ts` case, a `*.hydrate.test.ts` and an `e2e/a11y-<component>.test.ts` | [Server rendering and layout shift](COMPONENT_GUIDELINES.md#server-rendering-and-layout-shift), [Testing](COMPONENT_GUIDELINES.md#testing) |
+
+Run the type checks in [Checks](#checks) before you push: several revived PRs passed their unit tests locally and failed one of them in CI.
+
 ### Custom styles (patching Carbon v10)
 
 The library vendors the Carbon v10 SCSS (inlined from `carbon-components@10.58.15` under [`css/vendor/carbon-components/`](css/vendor/carbon-components/README.md); it is no longer an npm dependency, and `@import "carbon-components/..."` resolves there via the build's sass load path). When a style fix or feature from newer Carbon is missing from the v10 SCSS, or when the Svelte components need a tweak Carbon does not provide, put the patch in a hand-authored SCSS partial under `css/`. These compile into the shipped theme stylesheets. Use them instead of per-component `<style>` blocks for anything that should be themeable.
@@ -828,7 +846,10 @@ The shortest loop, in order:
 | Run the unit tests your branch can reach | `bun run test:changed` | Plans in under a second, then runs Vitest on the selection |
 | Rerun only the unit tests that just failed | `bun run test:failed` | Reads the last run's results. Use it to tell a real failure from one that only fails under load |
 | Type-check tests after an API change | `bun build:docs && bun test:types` | `build:docs` refreshes the generated `.d.ts` |
-| Type-check the docs site after changing `docs/` | `bun run test:docs-types` | Runs svelte-typecheck over `docs/`, as CI does for a docs change |
+| Type-check `src/` itself | `bun build:docs && bun test:src-types && bun test:src-svelte` | `static-checks` runs both on every PR, and unit tests don't catch what they report |
+| Regenerate the string table after adding or changing a string | `bun build:docs && bun run build:strings` | It reads `COMPONENT_API.json`, which `build:docs` writes. `tests/scripts/strings.test.ts` fails on a stale `i18n/strings.json` |
+| Type-check tests on Svelte 3 and 4 | `cd tests-svelte3 && bun ci && bun run test:types`, then the same in `tests-svelte4` | After `build:docs`. Each checks against its harness's own `node_modules/svelte`, which `bun ci` installs from its lockfile |
+| Type-check the docs site after changing `docs/` | `bun build:docs && bun run test:docs-types && (cd docs && bun run typecheck:examples)` | The docs-examples workflow runs both on a docs change. `typecheck:examples` checks the examples in each page against the library's generated `.d.ts` |
 | Run the E2E tests your branch can reach | `bun run test:changed:e2e` | Chromium only, as in CI. About 7 s more to plan when `css/` changed |
 | See what CI will run | `bun run test:plan` | Same plan as CI, with the reason for any full run. `bunx bivium why <test>` shows why a test was picked |
 
@@ -970,6 +991,7 @@ Check [`tests/utils/`](tests/utils/) before writing a helper:
 | [`virtualWindowLayer`](tests/utils/virtual-window-layer.ts) | The element that holds a virtualized list's rendered rows, narrowed |
 | [`renderSSR`](tests/utils/ssr.ts) | Server-render a component to normalized HTML and a queryable `document` (see [Server rendering tests](#server-rendering-tests)) |
 | [`storage-mocks`](tests/utils/storage-mocks.ts) | A `storage` event mock for cross-tab tests |
+| [`countReads`, `expectLinear`](tests/utils/fuzz.ts) | Characters a parser reads, and a check that 4 times the input reads at most 5 times as many |
 
 Component folders keep their own `helpers.ts` for queries such as `getBodyRows` in [`tests/DataTable/helpers.ts`](tests/DataTable/helpers.ts) and `openMenu` in [`tests/MultiSelect/helpers.ts`](tests/MultiSelect/helpers.ts).
 
@@ -1005,6 +1027,8 @@ Skip or avoid:
 - A case another test already covers. Search the component's folder before adding one, since behaviors such as close events often have a dedicated file (`OverflowMenuClose.test.ts`) beside the main one. Extend the existing test or add a row to its table instead.
 - A compiled-CSS test for a CSS-only change. See [What belongs in tests/css](#what-belongs-in-testscss).
 - `toBeEmptyDOMElement` to test that an element is empty. Svelte 3 and 4 keep whitespace text nodes in an element that looks empty. Use `expectNoContent`, or `el.matches(":empty")` when the CSS `:empty` selector is what the test is about.
+- A wall-clock limit on how long code takes. It fails under load: a 1,000 ms limit took 1,064 ms on a busy machine ([#5841](https://github.com/carbon-design-system/carbon-components-svelte/pull/5841)). Assert the work done instead: `countReads` and `expectLinear` in [`fuzz.ts`](tests/utils/fuzz.ts) count the characters a parser reads, and [Counting redundant work](#counting-redundant-work) counts calls.
+- A string literal for `Intl` output. ICU data differs between engines and CI images: Bun and Node name `zh-Hans` differently, ICU versions capitalize "portugués" differently ([#5374](https://github.com/carbon-design-system/carbon-components-svelte/pull/5374)), and only some engines list the `Etc/GMT+N` zones ([#5372](https://github.com/carbon-design-system/carbon-components-svelte/pull/5372)). Build the expected value with the same `Intl` call, such as `languageName("en", tag)`, or compare only what every engine agrees on, such as the name in lower case.
 
 Add tests proportional to the change. A fix gets one test that fails without it, or none if nothing meaningful can be asserted. Watch it fail before you open the pull request: for a CSS fix, check out the old partial (`git show HEAD~1:css/_long-words.scss > css/_long-words.scss`), run `bun run build:css` and the e2e test, then restore the file and rebuild. Leave out negative twins of a positive test and rows that run the same code path as another row. Not every prop variant needs its own case. When cases differ only in their inputs (sizes, counts, close triggers), write one `it.each` table instead of copies.
 
@@ -1245,6 +1269,7 @@ Between tests the host unmounts the fixture and resets what a fresh page would n
 | Keep `goto(` out of e2e comments | The test selector reads it as a navigation and makes the file depend on every page. |
 | Add new markup at the end of a shared fixture (`ForcedColorsFixture.svelte`, `RtlFixture.svelte`), and scope broad selectors | `style(page, ".bx--popover-contents")` reads the first match. A Toggletip added above the plain Popover changed what the caret test measured. |
 | In an RTL check, measure every part that has a physical margin or offset, such as an icon, not only the text | ProgressStep's label passed while its icon kept its gap on the wrong side, and the label touched the icon. |
+| Give an open overlay (a modal, a tearsheet) its own fixture, not a place in one that other cases share | It covers the page and takes the pointer. The open Tearsheet in `SsrLayoutFixture.svelte` made the picker cases start their menus open instead of clicking them ([#5859](https://github.com/carbon-design-system/carbon-components-svelte/pull/5859)). |
 | Keep text in `RtlFixture.svelte` short enough to fit at 320px | Its open SideNav covers the content at 672px and 320px, so the layout sweep's hover lands on the nav. A truncated label there fails `no full text`, even when the component sets a `title`. |
 | Revert the fix and check that a new fixture case fails | Nothing type-checks `e2e/fixtures/`. A misspelled prop (`spaceEqual` for `spaceEqually`) renders the default and the check passes for the wrong reason. |
 | Run `bun build:css` after you switch branches, before e2e | The compiled `css/all.css` is not committed. A sheet left from another branch fails tests that pass in CI. |
@@ -1272,7 +1297,7 @@ Each test pays for its setup: a remount on the host, or a page load (about 300 t
 | `expectAligned(locators, { edge, ink })` | Elements share one edge: `inline-start`, `inline-end`, `top`, `bottom`, `center-x`, `center-y`, `baseline` or `cap-center`. Inline edges follow each element's direction. `baseline` is the first line's text baseline, or the value's baseline in an input or select. `cap-center` is the middle of the first line's cap height, or the center of the icons' ink in an element with no text. Inline edges measure the ink (the text's Range rects and the icons' svg boxes) of an element with its own text, such as a heading, a label or a button, and the box of any other. `ink: true` measures the ink on every edge; `ink: false` measures the box. |
 | `expectOnePitch(rows, { skip })` | Repeated rows have one top-to-top pitch, and it is a multiple of 4 px. Frozen rows (`sticky` or `fixed`), rows under `aria-hidden`, rows with no text, icon or control (a spacer, a selection overlay) and rows that match `skip` are left out. |
 | `expectTextFits(scope)` | No text overflows its box or a clipping ancestor. Text cut by an ellipsis keeps its full value in a `title`, an `aria-label` or a tooltip, and does not stop inside a number, date or time. Cut-off text with no full value at rest is hovered, so a `title` set on hover (`titleWhenTruncated`), a tooltip in a portal (`AnchoredTooltip`) and a box that grows to fit on hover (the SideNav rail) count. The pointer ends in the bottom-right corner, and the tooltip it opened closes before the next hover. Inline text raised off the baseline (a footnote `sup`) may leave its paragraph's box. Text hidden on purpose is skipped: under `clip`, `clip-path` or `.bx--visually-hidden`, or in a box with no area in view. |
-| `expectNoNestedBorders(scope)` | No box with an edge sits inside another one on the same background. An edge is a border on all four sides, an outline, or a box-shadow ring with no offset or blur. Form controls' borders and the focused element's outline are skipped. Run it under forced colors too. |
+| `expectNoNestedBorders(scope)` | No box with an edge sits inside another one on the same background. An edge is a border on all four sides, an outline, or a box-shadow ring with no offset or blur. Form controls' borders and the focused element's outline are skipped, and so are images and elements drawn in their own colors (`forced-color-adjust: none`), whose frame is part of the picture. Run it under forced colors too. |
 | `expectNoPageOverflow(page, { vertical })` | The page does not scroll sideways. `vertical: true` also checks that it does not scroll down. |
 | `expectSingleRing(scope, { skip })` | Under forced colors, each element the scope matches holds at most one focus or selection ring. Call it with at most one item focused or selected. A ring is an outline wider than the resting edge (1 px, or 2 px on an unfocused field), or an outline or border in `Highlight`. An element and its pseudo-elements count once. Hidden elements, such as a closed tooltip, are skipped, and so are elements inside `skip`, for child components the scope does not own. For one selection shown in two panes, pass a locator that matches both panes. |
 
@@ -1612,8 +1637,10 @@ The following applies only to project maintainers.
 
 | Do | Why |
 | --- | --- |
-| Merge one PR at a time, and wait for master's run to pass before the next | A PR runs only the tests its changes select; master runs every suite. One PR per run means a failure names the PR that caused it. |
-| After a stacked PR's base merges, rebase the next PR onto master and retarget it | The rebase merge gives the base's commits new hashes, so the next PR would otherwise list them again. |
+| Merge in batches of PRs that touch different files. Check the combined result locally: apply the batch to a branch off master and run the [Checks](#checks). Then merge it back to back, and wait for master's run to pass before the next batch | A PR runs only the tests its changes select; master runs every suite. One batch per run means a failure names the few PRs that could have caused it. |
+| Expect no master run for a docs-only PR | `checks.yml` skips Markdown and `docs/**`, apart from the docs files tests import, on master as on a PR. It can merge at any time. |
+| After a stacked PR's parent merges, replay only the child's own commits onto master (`git rebase --onto origin/master <old-parent-head> <child-branch>`) and push it before merging | GitHub retargets the child to master, but the rebase merge gave the parent's commits new hashes, so the child would otherwise list them again. |
+| Recreate a PR whose branch is on a personal fork as a branch on this repository, and open a replacement PR that says `Supersedes #N` | A stacked PR can only target a branch in this repository, and whether a maintainer can push a rebase to a fork depends on the fork's settings. |
 
 ### Release
 
