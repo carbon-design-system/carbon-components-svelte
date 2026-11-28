@@ -1746,6 +1746,57 @@ test.describe("right-to-left buttons", () => {
     );
   });
 
+  test("puts a batch action's icon gap and the divider at the inline start", async ({
+    page,
+  }) => {
+    const measure = () =>
+      page.evaluate(() => {
+        const bar = document.querySelector("[data-testid=batch-actions]");
+        const button = bar?.querySelector(".bx--action-list .bx--btn");
+        const icon = button?.querySelector(".bx--btn__icon");
+        const cancel = bar?.querySelector(".bx--batch-summary__cancel");
+        if (!button || !icon || !cancel) throw new Error("no batch actions");
+        const walker = document.createTreeWalker(button, NodeFilter.SHOW_TEXT);
+        let node = walker.nextNode();
+        while (node && !node.textContent?.trim()) node = walker.nextNode();
+        const range = document.createRange();
+        range.selectNodeContents(node ?? button);
+        const text = range.getBoundingClientRect();
+        const iconBox = icon.getBoundingClientRect();
+        const divider = getComputedStyle(cancel, "::before");
+        // `left` resolves against the padding box.
+        const left = Number.parseFloat(divider.left);
+        return {
+          // The icon follows the text, or leads it in RTL, 8px away.
+          gap: Math.round(
+            iconBox.left >= text.right
+              ? iconBox.left - text.right
+              : text.left - iconBox.right,
+          ),
+          iconAfterText: iconBox.left >= text.right,
+          dividerFromStart: Math.round(left),
+          dividerFromEnd: Math.round(
+            cancel.clientWidth - (left + Number.parseFloat(divider.width)),
+          ),
+        };
+      });
+
+    const ltr = await measure();
+    expect(ltr).toMatchObject({
+      gap: 8,
+      iconAfterText: true,
+      dividerFromStart: 0,
+    });
+
+    await setDirection(page, "rtl");
+    const rtl = await measure();
+    expect(rtl).toMatchObject({
+      gap: 8,
+      iconAfterText: false,
+      dividerFromEnd: 0,
+    });
+  });
+
   test("seats the modal close button at the inline end, clear of the heading", async ({
     page,
   }) => {

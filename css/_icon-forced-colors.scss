@@ -30,6 +30,7 @@
       .#{$prefix}--copy-btn:focus
       .#{$prefix}--snippet__icon,
     .#{$prefix}--copy-input__field-wrapper .#{$prefix}--copy-btn:hover .#{$prefix}--snippet__icon,
+    .#{$prefix}--action-list .#{$prefix}--btn .#{$prefix}--btn__icon,
     .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon svg,
     .#{$prefix}--content-switcher--low-contrast
       .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon
@@ -69,6 +70,7 @@
     .#{$prefix}--copy-input__field-wrapper
       .#{$prefix}--copy-btn:disabled
       .#{$prefix}--snippet__icon,
+    .#{$prefix}--action-list .#{$prefix}--btn:disabled .#{$prefix}--btn__icon,
     .#{$prefix}--snippet--disabled .#{$prefix}--snippet__icon,
     .#{$prefix}--snippet--disabled
       .#{$prefix}--snippet-btn--expand

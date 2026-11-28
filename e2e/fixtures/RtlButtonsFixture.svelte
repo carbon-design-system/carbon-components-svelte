@@ -8,8 +8,11 @@
     MenuButton,
     MenuItem,
     Modal,
+    Toolbar,
+    ToolbarBatchActions,
   } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 
   const kinds = [
     "primary",
@@ -108,6 +111,14 @@
     primaryButtonText="Deploy"
     secondaryButtons={[{ text: "Cancel" }, { text: "Save draft" }]}
   />
+</div>
+
+<div data-testid="batch-actions" class="batch">
+  <Toolbar>
+    <ToolbarBatchActions active>
+      <Button icon={TrashCan}>Delete</Button>
+    </ToolbarBatchActions>
+  </Toolbar>
 </div>
 
 <style>

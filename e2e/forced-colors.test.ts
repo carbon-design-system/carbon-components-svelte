@@ -1650,6 +1650,11 @@ test.describe("forced colors", () => {
     ],
     [".bx--tile__chevron svg", "ButtonText"],
     ["[data-testid=icons] .bx--toggle-button svg", "ButtonText"],
+    ["[data-testid=batch-actions] .bx--btn__icon", "ButtonText"],
+    [
+      "[data-testid=batch-actions] .bx--btn:disabled .bx--btn__icon",
+      "GrayText",
+    ],
     ["[data-testid=icons] .bx--tree-node__icon", "ButtonText"],
     ["[data-testid=icons] .bx--tree-parent-node__toggle-icon", "ButtonText"],
     [
