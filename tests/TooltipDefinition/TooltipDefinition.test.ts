@@ -480,4 +480,18 @@ describe("TooltipDefinition", () => {
 
     expect(screen.getByTestId("blur-count")).toHaveTextContent("1");
   });
+
+  it.each([false, true])(
+    "sets tooltipClass on the tooltip with portalTooltip: %s",
+    (portalTooltip) => {
+      render(TooltipDefinition, {
+        props: { open: true, portalTooltip, tooltipClass: "panel-tooltip" },
+      });
+
+      expect(screen.getByRole("tooltip", { hidden: true })).toHaveClass(
+        "bx--assistive-text",
+        "panel-tooltip",
+      );
+    },
+  );
 });

@@ -230,4 +230,14 @@ describe("HeaderGlobalAction", () => {
     expect(button).not.toHaveClass("bx--tooltip__trigger");
     expect(button).not.toHaveClass("bx--tooltip--a11y");
   });
+
+  it("sets tooltipClass on the icon-only tooltip", () => {
+    render(HeaderActionClose, { props: { tooltipClass: "panel-tooltip" } });
+
+    expect(
+      screen
+        .getByRole("button", { name: "Switcher" })
+        .querySelector(".bx--assistive-text"),
+    ).toHaveClass("panel-tooltip");
+  });
 });

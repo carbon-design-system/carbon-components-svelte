@@ -102,6 +102,13 @@
    */
   export let portalTooltip = undefined;
 
+  /**
+   * Specify a class for the tooltip, to style one icon's tooltip. The
+   * class is also applied when the tooltip opens in a portal.
+   * @type {string | undefined}
+   */
+  export let tooltipClass = undefined;
+
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
 
@@ -376,7 +383,11 @@
   }}
 >
   {#if !effectivePortalTooltip}
-    <span bind:this={tooltipRef} {id} class:bx--assistive-text={true}>
+    <span
+      bind:this={tooltipRef}
+      {id}
+      class={["bx--assistive-text", tooltipClass].filter(Boolean).join(" ")}
+    >
       <slot name="tooltipChildren"
         ><slot name="tooltipText">{tooltipText}</slot></slot
       >
@@ -392,6 +403,7 @@
     open={portalOpen}
     text={tooltipText}
     tooltipType="icon"
+    contentClass={tooltipClass}
     horizontalGapLeft={portalHorizontalGapLeft}
     horizontalGapRight={portalHorizontalGapRight}
     gapTop={portalGapTop}

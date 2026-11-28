@@ -8,6 +8,7 @@
   export let onClose: (e: CustomEvent<{ trigger: string }>) => void = () => {};
   export let customCloseIcon = false;
   export let withInput = false;
+  export let tooltipClass: string | undefined = undefined;
   export let onOpen: (e: CustomEvent<{ trigger: string }>) => void = () => {};
 
   $: closeIconProps = customCloseIcon ? { closeIcon: Help } : {};
@@ -20,6 +21,7 @@
       {preventCloseOnClickOutside}
       transition={false}
       iconDescription="Switcher"
+      {tooltipClass}
       {...closeIconProps}
       on:open={onOpen}
       on:close={onClose}

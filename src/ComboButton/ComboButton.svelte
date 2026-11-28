@@ -124,6 +124,13 @@
   export let tooltipAlignment = "center";
 
   /**
+   * Specify a class for the icon-only trigger's tooltip. The class is
+   * also applied when the tooltip opens in a portal.
+   * @type {string | undefined}
+   */
+  export let tooltipClass = undefined;
+
+  /**
    * Obtain a reference to the outer HTML element.
    * @bindable readonly
    * @type {null | HTMLDivElement}
@@ -271,6 +278,7 @@
     hideTooltip={open}
     tooltipPosition={effectiveTooltipPosition}
     tooltipAlignment={effectiveTooltipAlignment}
+    {tooltipClass}
     class="bx--combo-button__trigger {open
       ? 'bx--combo-button__trigger--open'
       : ''}"

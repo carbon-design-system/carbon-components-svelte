@@ -615,4 +615,18 @@ describe("TooltipIcon", () => {
       expectTypeOf<GenericProps["icon"]>().toEqualTypeOf<any>();
     });
   });
+
+  it.each([false, true])(
+    "sets tooltipClass on the tooltip with portalTooltip: %s",
+    (portalTooltip) => {
+      render(TooltipIcon, {
+        props: { open: true, portalTooltip, tooltipClass: "panel-tooltip" },
+      });
+
+      const tooltip = portalTooltip
+        ? openTooltips()[0]
+        : screen.getByRole("button").querySelector(".bx--assistive-text");
+      expect(tooltip).toHaveClass("panel-tooltip");
+    },
+  );
 });

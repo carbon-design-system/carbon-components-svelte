@@ -5,6 +5,7 @@
 
   export let portalTooltip: ComponentProps<CopyButton>["portalTooltip"] =
     undefined;
+  export let tooltipClass: string | undefined = undefined;
   export let onCopy = () => {};
   export let onCustomCopy = (_text: string) => {};
   export let onCopyError = (_detail: { error: unknown }) => {};
@@ -14,6 +15,7 @@
   text="text"
   iconDescription="Basic"
   {portalTooltip}
+  {tooltipClass}
   on:copy={onCopy}
   on:copy:error={(event) => onCopyError(event.detail)}
 />

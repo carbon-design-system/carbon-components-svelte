@@ -591,4 +591,23 @@ describe("Tooltip", () => {
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
   });
+
+  it.each([false, true])(
+    "sets tooltipClass on the tooltip with portalTooltip: %s",
+    async (portalTooltip) => {
+      render(Tooltip, {
+        props: {
+          open: true,
+          portalTooltip,
+          iconDescription: "Information",
+          tooltipClass: "panel-tooltip",
+        },
+      });
+      await tick();
+
+      expect(screen.getByRole("dialog").closest(".bx--tooltip")).toHaveClass(
+        "panel-tooltip",
+      );
+    },
+  );
 });

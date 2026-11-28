@@ -519,4 +519,24 @@ describe("CopyButton", () => {
       ).not.toBeInTheDocument();
     });
   });
+
+  it("sets tooltipClass on the inline feedback", () => {
+    render(CopyButton, {
+      props: { portalTooltip: false, tooltipClass: "panel-tooltip" },
+    });
+
+    expect(
+      screen
+        .getByRole("button", { name: "Basic" })
+        .querySelector(".bx--copy-btn__feedback"),
+    ).toHaveClass("panel-tooltip");
+  });
+
+  it("sets tooltipClass on the portalled tooltip", async () => {
+    render(CopyButton, { props: { tooltipClass: "panel-tooltip" } });
+
+    await user.hover(screen.getByRole("button", { name: "Basic" }));
+    await waitFor(() => expect(openTooltips()).toHaveLength(1));
+    expect(openTooltips()[0]).toHaveClass("panel-tooltip");
+  });
 });

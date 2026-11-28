@@ -68,6 +68,13 @@
   export let hideTooltip = false;
 
   /**
+   * Specify a class for the icon-only tooltip, to style one action's
+   * tooltip.
+   * @type {string | undefined}
+   */
+  export let tooltipClass = undefined;
+
+  /**
    * Obtain a reference to the button HTML element.
    * @bindable readonly
    * @type {null | HTMLButtonElement}
@@ -238,7 +245,9 @@
   }}
 >
   {#if hasIconOnly}
-    <span class:bx--assistive-text={true}>{iconDescription}</span>
+    <span class={["bx--assistive-text", tooltipClass].filter(Boolean).join(" ")}
+      >{iconDescription}</span
+    >
   {/if}
   {#if isOpen}
     <slot name="closeIcon">

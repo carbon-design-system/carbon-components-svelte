@@ -12,6 +12,7 @@
   export let triggerContent = "Tooltip trigger";
   export let portalTooltip: ComponentProps<TooltipDefinition>["portalTooltip"] =
     undefined;
+  export let tooltipClass: string | undefined = undefined;
   export let enterDelayMs = 0;
   export let leaveDelayMs = 0;
   export let tabindex: number | undefined = undefined;
@@ -30,6 +31,7 @@
     {id}
     {clickToOpen}
     {portalTooltip}
+    {tooltipClass}
     {enterDelayMs}
     {leaveDelayMs}
     {tabindex}
