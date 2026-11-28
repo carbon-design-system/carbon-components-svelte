@@ -534,6 +534,8 @@
 // and opts out of forcing (forced content sits on a `Canvas` backplate). The
 // focus styling that unforcing brings back is replaced: the HCM focus rule's
 // `Highlight` text would vanish on the fill.
+// It does not transition: the fill would start from the unforced one, so a
+// just-selected button flashed `HighlightText` on a light fill.
 
 /// Selected icon-only button in forced-colors mode.
 /// @access private
@@ -548,6 +550,7 @@
       background-color: Highlight;
       box-shadow: none;
       color: HighlightText;
+      transition: none;
     }
 
     .#{$prefix}--btn--icon-only.#{$prefix}--btn--selected .#{$prefix}--btn__icon,
