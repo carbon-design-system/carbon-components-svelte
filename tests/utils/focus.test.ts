@@ -119,86 +119,94 @@ describe("restoreFocus", () => {
     expect(document.activeElement).toBe(other);
   });
 
-  describe("fallback", () => {
-    function saveThenRemoveTrigger() {
+  describe("returnTo", () => {
+    function saveTrigger() {
       const trigger = document.createElement("button");
       document.body.appendChild(trigger);
       trigger.focus();
 
       const focusReturn = restoreFocus();
       focusReturn.save();
-      trigger.remove();
-      return focusReturn;
+      return { trigger, focusReturn };
     }
 
-    it("focuses the fallback when the saved element is disconnected", () => {
-      const focusReturn = saveThenRemoveTrigger();
-      const fallbackTarget = document.createElement("button");
-      document.body.appendChild(fallbackTarget);
+    function appendButton() {
+      const button = document.createElement("button");
+      document.body.appendChild(button);
+      return button;
+    }
 
-      focusReturn.restore(undefined, () => fallbackTarget);
-      expect(document.activeElement).toBe(fallbackTarget);
+    it("focuses returnTo instead of the saved element", () => {
+      const { focusReturn } = saveTrigger();
+      const target = appendButton();
+
+      focusReturn.restore(undefined, () => target);
+      expect(document.activeElement).toBe(target);
     });
 
-    it("accepts the fallback as an element", () => {
-      const focusReturn = saveThenRemoveTrigger();
-      const fallbackTarget = document.createElement("button");
-      document.body.appendChild(fallbackTarget);
+    it("accepts returnTo as an element", () => {
+      const { focusReturn } = saveTrigger();
+      const target = appendButton();
 
-      focusReturn.restore(undefined, fallbackTarget);
-      expect(document.activeElement).toBe(fallbackTarget);
+      focusReturn.restore(undefined, target);
+      expect(document.activeElement).toBe(target);
     });
 
-    it("is a no-op when the fallback is disconnected", () => {
-      const focusReturn = saveThenRemoveTrigger();
-      const other = document.createElement("button");
-      document.body.appendChild(other);
-      other.focus();
+    it("focuses returnTo when the saved element is disconnected", () => {
+      const { trigger, focusReturn } = saveTrigger();
+      trigger.remove();
+      const target = appendButton();
+
+      focusReturn.restore(undefined, () => target);
+      expect(document.activeElement).toBe(target);
+    });
+
+    it("focuses the saved element when returnTo resolves to nothing in the page", () => {
+      const { trigger, focusReturn } = saveTrigger();
+      appendButton().focus();
 
       focusReturn.restore(undefined, () => document.createElement("button"));
-      expect(document.activeElement).toBe(other);
-    });
-
-    it("prefers the saved element while it is still connected", () => {
-      const trigger = document.createElement("button");
-      document.body.appendChild(trigger);
-      trigger.focus();
-
-      const focusReturn = restoreFocus();
-      focusReturn.save();
-
-      const other = document.createElement("button");
-      document.body.appendChild(other);
-      other.focus();
-
-      const fallbackTarget = document.createElement("button");
-      document.body.appendChild(fallbackTarget);
-
-      focusReturn.restore(undefined, () => fallbackTarget);
       expect(document.activeElement).toBe(trigger);
     });
 
-    it("runs the fallback once per save", () => {
-      const focusReturn = saveThenRemoveTrigger();
-      const fallback = vi.fn(() => null);
+    it("is a no-op when neither returnTo nor the saved element is connected", () => {
+      const { trigger, focusReturn } = saveTrigger();
+      trigger.remove();
+      const other = appendButton();
+      other.focus();
 
-      focusReturn.restore(undefined, fallback);
-      focusReturn.restore(undefined, fallback);
-      expect(fallback).toHaveBeenCalledTimes(1);
+      focusReturn.restore(undefined, () => null);
+      expect(document.activeElement).toBe(other);
+    });
+
+    it("runs returnTo once per save", () => {
+      const { focusReturn } = saveTrigger();
+      const returnTo = vi.fn(() => null);
+
+      focusReturn.restore(undefined, returnTo);
+      focusReturn.restore(undefined, returnTo);
+      expect(returnTo).toHaveBeenCalledTimes(1);
     });
 
     it("leaves focus alone when it already left the region", () => {
-      const focusReturn = saveThenRemoveTrigger();
-      const region = document.createElement("div");
-      document.body.appendChild(region);
-      const other = document.createElement("button");
-      document.body.appendChild(other);
+      const { focusReturn } = saveTrigger();
+      const region = document.body.appendChild(document.createElement("div"));
+      const other = appendButton();
       other.focus();
-      const fallbackTarget = document.createElement("button");
-      document.body.appendChild(fallbackTarget);
+      const target = appendButton();
 
-      focusReturn.restore(region, () => fallbackTarget);
+      focusReturn.restore(region, () => target);
       expect(document.activeElement).toBe(other);
+    });
+
+    it("moves on from the saved element a native dialog already focused", () => {
+      const { trigger, focusReturn } = saveTrigger();
+      const region = document.body.appendChild(document.createElement("div"));
+      const target = appendButton();
+      trigger.focus();
+
+      focusReturn.restore(region, () => target);
+      expect(document.activeElement).toBe(target);
     });
   });
 });

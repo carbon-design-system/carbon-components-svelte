@@ -3,7 +3,7 @@ import { tick } from "svelte";
 import { selectorTabbable } from "./trap-focus.js";
 
 /**
- * @typedef {HTMLElement | null | undefined | (() => HTMLElement | null | undefined)} FocusFallback
+ * @typedef {HTMLElement | null | undefined | (() => HTMLElement | null | undefined)} FocusReturnTarget
  */
 
 const selectorFirstInput =
@@ -135,17 +135,18 @@ export function isPointerFocus(node) {
  * is still connected. With nothing focused, it saves the control a pointer
  * last pressed (Safari does not focus a clicked button). Pass the overlay as
  * `region` to skip the restore when focus has already moved outside it (e.g. a
- * close handler opened another dialog). Pass `fallback`, an element or a
- * function returning one, to focus instead when the saved element has left the
- * DOM, for example a deleted row.
+ * close handler opened another dialog). Pass `returnTo`, an element or a
+ * function returning one, to focus instead of the saved element. A function
+ * runs once per restore. When `returnTo` resolves to no element in the page,
+ * focus goes to the saved element.
  *
- * @returns {{ save: () => void; restore: (region?: Element | null, fallback?: FocusFallback) => void }}
+ * @returns {{ save: () => void; restore: (region?: Element | null, returnTo?: FocusReturnTarget) => void }}
  */
 export function restoreFocus() {
   /** @type {HTMLElement | null} */
   let prevFocus = null;
   // A restore runs once per save: a later one (the closing transition's
-  // timer after `transitionend`) must not run the fallback again.
+  // timer after `transitionend`) must not run `returnTo` again.
   let saved = false;
   return {
     save() {
@@ -165,18 +166,20 @@ export function restoreFocus() {
           prevFocus = pressed;
       }
     },
-    restore(region, fallback) {
+    restore(region, returnTo) {
       if (!saved) return;
       saved = false;
       const previous = prevFocus;
       prevFocus = null;
-      const target = previous?.isConnected
-        ? previous
-        : typeof fallback === "function"
-          ? fallback()
-          : fallback;
+      const preferred = typeof returnTo === "function" ? returnTo() : returnTo;
+      const target = preferred?.isConnected ? preferred : previous;
       if (!target?.isConnected) return;
-      if (region === undefined || focusIsFree(region)) focusQuietly(target);
+      // A native `<dialog>` puts focus back on its opener before `close`
+      // fires, so focus on the saved element is still free for `returnTo`.
+      const onPrevious =
+        target !== previous && document.activeElement === previous;
+      if (region === undefined || onPrevious || focusIsFree(region))
+        focusQuietly(target);
     },
   };
 }

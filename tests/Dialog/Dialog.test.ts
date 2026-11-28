@@ -240,6 +240,36 @@ describe("Dialog", () => {
     expect(screen.getByTestId("fallback")).toHaveFocus();
   });
 
+  it("focuses returnFocusTo instead of the opener, once per open", async () => {
+    const returnFocusTo = vi.fn(() => screen.getByTestId("fallback"));
+    render(Dialog, { props: { modal: true, returnFocusTo } });
+    const opener = screen.getByTestId("opener");
+    async function openAndClose() {
+      await user.click(opener);
+      await tick();
+      await user.click(screen.getByTestId("close-button"));
+      await tick();
+      expect(screen.getByTestId("fallback")).toHaveFocus();
+    }
+
+    await openAndClose();
+    await openAndClose();
+
+    expect(returnFocusTo).toHaveBeenCalledTimes(2);
+  });
+
+  it("returns focus to the opener when returnFocusTo resolves to nothing", async () => {
+    render(Dialog, { props: { modal: true, returnFocusTo: () => null } });
+
+    const opener = screen.getByTestId("opener");
+    await user.click(opener);
+    await tick();
+    await user.click(screen.getByTestId("close-button"));
+    await tick();
+
+    expect(opener).toHaveFocus();
+  });
+
   it("leaves focus alone without returnFocusTo when the opener unmounted", async () => {
     render(Dialog, { props: { modal: true } });
 

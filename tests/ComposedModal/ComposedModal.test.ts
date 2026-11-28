@@ -460,7 +460,26 @@ describe("ComposedModal", () => {
       await tick();
     }
 
-    it("focuses the fallback when the trigger unmounted while open", async () => {
+    it("focuses returnFocusTo instead of the trigger, once per open", async () => {
+      const returnFocusTo = vi.fn(getElsewhere);
+      const { container } = render(ComposedModalFocusReturnTest, {
+        props: { returnFocusTo },
+      });
+      const trigger = screen.getByRole("button", { name: "Open Modal" });
+      async function openAndClose() {
+        await user.click(trigger);
+        await tick();
+        await closeAndFinish(container);
+        expect(getElsewhere()).toHaveFocus();
+      }
+
+      await openAndClose();
+      await openAndClose();
+
+      expect(returnFocusTo).toHaveBeenCalledTimes(2);
+    });
+
+    it("focuses returnFocusTo when the trigger unmounted while open", async () => {
       const { container } = render(ComposedModalFocusReturnTest, {
         props: { returnFocusTo: getElsewhere },
       });
@@ -471,7 +490,20 @@ describe("ComposedModal", () => {
       expect(getElsewhere()).toHaveFocus();
     });
 
-    it("leaves focus alone without a fallback", async () => {
+    it("returns focus to the trigger when returnFocusTo resolves to nothing", async () => {
+      const { container } = render(ComposedModalFocusReturnTest, {
+        props: { returnFocusTo: () => null },
+      });
+      const trigger = screen.getByRole("button", { name: "Open Modal" });
+      await user.click(trigger);
+      await tick();
+
+      await closeAndFinish(container);
+
+      expect(trigger).toHaveFocus();
+    });
+
+    it("leaves focus alone without returnFocusTo when the trigger unmounted", async () => {
       const { container } = render(ComposedModalFocusReturnTest);
       await openThenRemoveTrigger();
 
