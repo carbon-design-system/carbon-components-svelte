@@ -97,7 +97,8 @@ export function isApplePlatform() {
  * const script = `<script>${platformScript()}</script>`;
  */
 export function platformScript() {
-  // docs/index.html inlines a copy of this script: change both.
+  // docs/index.html and docs/framed.html inline a copy of this script:
+  // change all three.
   return `(()=>{const n=navigator,p=(n.userAgentData&&n.userAgentData.platform)||n.platform||n.userAgent;document.documentElement.setAttribute("data-ccs-platform",${APPLE_PLATFORM}.test(p)?"apple":"other")})()`;
 }
 

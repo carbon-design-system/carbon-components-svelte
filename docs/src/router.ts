@@ -1,13 +1,7 @@
 import type { Component } from "svelte";
 import { derived, get, writable } from "svelte/store";
 import { route } from "./current-route";
-import {
-  buildRoutes,
-  FRAMED_PREFIX,
-  framedRoute,
-  normalizePath as normalize,
-  type Route,
-} from "./routes";
+import { buildRoutes, normalizePath as normalize, type Route } from "./routes";
 
 export type { Route };
 
@@ -21,29 +15,18 @@ const pages = import.meta.glob<{ default: Component }>([
 
 const { routes, notFound } = buildRoutes(Object.keys(pages));
 
-const framedRoutes = new Map<string, Route>();
-
 /**
- * A framed example's route comes from its path, and `loadPage` checks it
- * against its file.
+ * A framed path never reaches the site's router: `index.ts` mounts the
+ * example without it, and an unknown one gets the not-found page.
  */
 export function matchRoute(pathname: string): Route | undefined {
-  const path = normalize(pathname);
-  if (!path.startsWith(FRAMED_PREFIX)) return routes.get(path) ?? notFound;
-  let framed = framedRoutes.get(path);
-  if (!framed) {
-    framed = framedRoute(path);
-    framedRoutes.set(path, framed);
-  }
-  return framed;
+  return routes.get(normalize(pathname)) ?? notFound;
 }
 
 export async function loadPage(
   route: Route,
 ): Promise<{ route: Route; component: Component } | undefined> {
-  const load = route.path.startsWith(FRAMED_PREFIX)
-    ? (await import("./framed-pages")).framedPages[route.file]
-    : pages[route.file];
+  const load = pages[route.file];
   if (load) return { route, component: (await load()).default };
   if (notFound && route !== notFound) return loadPage(notFound);
   return undefined;

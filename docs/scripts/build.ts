@@ -24,6 +24,7 @@ import {
   carbonAlias,
   componentApi,
   componentMdSizes,
+  framedStart,
   importMetaGlob,
 } from "./bun-plugins.ts";
 import {
@@ -128,6 +129,7 @@ const result = await Bun.build({
     componentApi,
     componentMdSizes,
     siteModule({ dev: false }),
+    framedStart({ dev: false }),
     carbonSheets,
     svelte({ ...options, production: true }),
     selfHostPlex({ nodeModules: NODE_MODULES, build: true }),

@@ -153,6 +153,28 @@ export const componentMdSizes: BunPlugin = {
   },
 };
 
+/**
+ * `virtual:framed-start`: `src/start-framed.ts` in the build. The dev
+ * server serves framed examples from `framed.html`, so `index.html` gets a
+ * stub there and doesn't compile them.
+ */
+export function framedStart({ dev }: { dev: boolean }): BunPlugin {
+  return {
+    name: "framed-start",
+    setup(build) {
+      build.onResolve({ filter: /^virtual:framed-start$/ }, () =>
+        dev
+          ? { path: "framed-start", namespace: "framed-start" }
+          : { path: path.join(DOCS, "src/start-framed.ts") },
+      );
+      build.onLoad({ filter: /.*/, namespace: "framed-start" }, () => ({
+        contents: "export const startFramed = async () => false;",
+        loader: "js",
+      }));
+    },
+  };
+}
+
 /** Runs several plugins as one, for bunfig's `[serve.static]`. */
 export function combine(name: string, plugins: BunPlugin[]): BunPlugin {
   return {

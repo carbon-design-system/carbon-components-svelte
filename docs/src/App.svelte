@@ -2,7 +2,6 @@
   import type { Component } from "svelte";
   import { onMount, tick } from "svelte";
   import RootLayout from "./pages/_module.svelte";
-  import FramedLayout from "./pages/framed/_module.svelte";
   import {
     eagerContent,
     loadPage,
@@ -45,9 +44,5 @@
 </script>
 
 {#if Page}
-  {#if $route?.path.startsWith("/framed/")}
-    <FramedLayout><svelte:component this={Page} /></FramedLayout>
-  {:else}
-    <RootLayout><svelte:component this={Page} /></RootLayout>
-  {/if}
+  <RootLayout><svelte:component this={Page} /></RootLayout>
 {/if}
