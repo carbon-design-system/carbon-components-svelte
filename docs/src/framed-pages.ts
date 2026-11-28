@@ -1,5 +1,3 @@
-/// <reference types="vite/client" />
-
 /** Its own chunk, so the main chunk doesn't carry 668 unused entries. */
 import type { Component } from "svelte";
 

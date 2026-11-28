@@ -1,30 +1,30 @@
 {
   "private": true,
   "scripts": {
-    "dev": "bun run format-component-api && bun run --parallel index-docs dev:vite",
-    "dev:vite": "vite dev",
-    "build": "bun run format-component-api && bun run --parallel build:index-docs build:sitemap && bun run build:md-docs && bun run build:vite",
+    "dev": "bun run format-component-api && bun run --parallel index-docs dev:server",
+    "dev:server": "bun scripts/dev.ts",
+    "build": "bun run format-component-api && bun run --parallel build:index-docs build:sitemap && bun run build:md-docs && bun run build:site",
     "index-docs": "bun scripts/index-docs.ts",
     "build:index-docs": "bun scripts/index-docs.ts",
     "build:md-docs": "bun scripts/generate-md-docs.ts",
     "build:sitemap": "bun scripts/generate-sitemap.ts",
     "format-component-api": "bun scripts/format-component-api.ts",
-    "build:vite": "vite build",
+    "build:site": "bun scripts/build.ts",
     "typecheck:examples": "bun scripts/typecheck-examples.ts",
     "render:examples": "bun scripts/render-examples.ts",
     "eval:search": "bun scripts/index-docs.ts && bun scripts/search-eval.ts",
-    "preview": "vite preview",
+    "preview": "deserved dist --spa",
     "test:e2e": "playwright test"
   },
   "devDependencies": {
     "@ibm/plex-mono": "1.1.0",
     "@ibm/plex-sans": "1.1.0",
-    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "bun-plugin-page": "^0.3.1",
     "carbon-icons-svelte": "^13.18.2",
     "carbon-pictograms-svelte": "^13.21.1",
-    "svelte": "^5.57.3",
+    "deserved": "^0.6.1",
     "svelte-ast": "^0.12.0",
-    "vite": "^8.3.5"
+    "svelte-bun": "^0.3.0"
   },
   "type": "module"
 }

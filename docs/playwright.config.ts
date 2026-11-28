@@ -25,7 +25,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "bunx vite preview --port 4175 --strictPort",
+    command: "bun run preview -p 4175",
     port: 4175,
     reuseExistingServer: false,
   },

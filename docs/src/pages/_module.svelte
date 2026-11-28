@@ -31,6 +31,7 @@
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import { onMount } from "svelte";
+  import { DEV, VERSION } from "virtual:site";
   import {
     assertCategoriesCover,
     COMPONENT_CATEGORIES,
@@ -124,7 +125,7 @@
     (child) => !deprecated.includes(child.name),
   );
 
-  $: if (import.meta.env.DEV && componentChildren.length) {
+  $: if (DEV && componentChildren.length) {
     assertCategoriesCover(componentChildren.map((child) => child.name));
   }
 
@@ -152,7 +153,7 @@
   })();
 
   // IBM's footer and analytics, in production only.
-  onMount(() => (import.meta.env.DEV ? undefined : loadIbmScripts()));
+  onMount(() => (DEV ? undefined : loadIbmScripts()));
 
   onMount(() =>
     beforeNavigate(() => {
@@ -216,7 +217,7 @@
 
     <span slot="platform" class="platform-name" class:hidden={active}>
       Carbon<span class="platform-name-full">&nbsp;Components</span>&nbsp;Svelte
-      &nbsp;<code class="code-01 platform-name-version">v{__PKG_VERSION}</code>
+      &nbsp;<code class="code-01 platform-name-version">v{VERSION}</code>
     </span>
     <HeaderNav aria-label="Carbon Svelte sections">
       <HeaderNavItem href="/" text="Components" isSelected />
