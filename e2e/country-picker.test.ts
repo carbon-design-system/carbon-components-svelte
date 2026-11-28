@@ -85,6 +85,57 @@ test.describe("CountryPicker", () => {
     expect(await badge.boundingBox()).toMatchObject({ width: 24, height: 18 });
   });
 
+  // The box fills with `$layer-accent`, which is the selected row's own
+  // `$layer-selected` in White and Gray 100, and a step from the hovered
+  // row's: only the code showed.
+  test("sets the code box apart from a selected or hovered row", async ({
+    page,
+  }) => {
+    for (const theme of ["white", "g100"]) {
+      // biome-ignore lint/performance/noAwaitInLoops: one theme at a time
+      await page.goto(`/country-picker.html?theme=${theme}`);
+      await open(page, "Badge");
+      const selected = page.locator(".bx--list-box__menu-item--active");
+      const hovered = selected.locator("xpath=following-sibling::*[1]");
+      await hovered.hover();
+      // Read the rows once their background transitions end.
+      await expect
+        .poll(() =>
+          page.evaluate(
+            () =>
+              document
+                .querySelector(".bx--list-box__menu")
+                ?.getAnimations({ subtree: true }).length,
+          ),
+        )
+        .toBe(0);
+
+      for (const [state, row] of [
+        ["selected", selected],
+        ["hovered", hovered],
+      ] as const) {
+        // biome-ignore lint/performance/noAwaitInLoops: one row at a time
+        const ratio = await row.evaluate((node) => {
+          const luminance = (color: string) => {
+            const [r, g, b] = (color.match(/[\d.]+/g) ?? []).map((c) => {
+              const v = Number(c) / 255;
+              return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+            });
+            return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+          };
+          const badge = node.querySelector(".bx--flag--badge");
+          if (!badge) throw new Error("no badge");
+          const [a, b] = [
+            getComputedStyle(node).backgroundColor,
+            getComputedStyle(badge).backgroundColor,
+          ].map(luminance);
+          return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+        });
+        expect.soft(ratio, `${theme}, ${state}`).toBeGreaterThan(1.1);
+      }
+    }
+  });
+
   test("draws a flag where there is one, and a box of the same size where there is not", async ({
     page,
   }) => {

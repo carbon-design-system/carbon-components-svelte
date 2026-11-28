@@ -65,14 +65,38 @@
     font-size: to-rem(14px);
   }
 
-  @media (forced-colors: active) {
-    .#{$prefix}--flag {
-      outline-color: CanvasText;
-    }
+  // A selected list box row fills with `$layer-selected`, the same color as
+  // `$layer-accent` and `$border-subtle`, so the box and a flag's outline
+  // vanished into it and only the code showed. There the box takes the
+  // menu's own surface, and the outline the border Carbon sets on a
+  // selected layer. A hovered row is a step from the box, so it takes the
+  // surface too.
+  .#{$prefix}--list-box__menu-item--active .#{$prefix}--flag {
+    outline-color: $border-subtle-selected;
+  }
 
-    .#{$prefix}--flag--badge {
-      background-color: Canvas;
-      color: CanvasText;
+  .#{$prefix}--list-box__menu-item--active .#{$prefix}--flag--badge {
+    background-color: $layer;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--list-box__menu-item:hover .#{$prefix}--flag--badge {
+      background-color: $layer;
+    }
+  }
+
+  // The box is text, not artwork, so it takes forcing like any other text:
+  // `Canvas` behind `CanvasText` on every row, whatever fill the row's state
+  // gives it. A flag keeps its colors, and its outline ties the selected
+  // row's rule and wins on order.
+  .#{$prefix}--flag--badge {
+    forced-color-adjust: auto;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--flag,
+    .#{$prefix}--list-box__menu-item--active .#{$prefix}--flag {
+      outline-color: CanvasText;
     }
   }
 }
