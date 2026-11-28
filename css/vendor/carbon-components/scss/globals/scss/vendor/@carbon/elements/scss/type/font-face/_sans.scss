@@ -7,6 +7,19 @@
 
 @import 'settings';
 
+/// The characters the complete Sans files have and no split file
+/// covers. A complete face without a `unicode-range` covers every
+/// character, so text in a script Plex lacks, such as CJK or emoji,
+/// downloaded a complete file only to find no glyph in it. Read from
+/// the files' cmaps, Plex 1.1.0, the same for every weight and style,
+/// with gaps of under 768 code points closed: a character in a gap only
+/// costs the download it did before.
+/// @access private
+/// @group @carbon/type
+$carbon--font-face-sans-complete-range: unquote(
+  "U+02BB-0525, U+2000-2236, U+F6D7-F6D8, U+FEFF-FFFD"
+);
+
 /// Sans `@font-face`'s
 /// @access public
 /// @group @carbon/type
@@ -19,6 +32,7 @@
     src: local('IBM Plex Sans Italic'), local('IBMPlexSans-Italic'),
       url('https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Sans/fonts/complete/woff2/IBMPlexSans-Italic.woff2')
         format('woff2');
+    unicode-range: $carbon--font-face-sans-complete-range;
   }
   @font-face {
     font-display: $carbon--font-display;
@@ -99,6 +113,7 @@
     src: local('IBM Plex Sans Light'), local('IBMPlexSans-Light'),
       url('https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Sans/fonts/complete/woff2/IBMPlexSans-Light.woff2')
         format('woff2');
+    unicode-range: $carbon--font-face-sans-complete-range;
   }
   @font-face {
     font-display: $carbon--font-display;
@@ -179,6 +194,7 @@
     src: local('IBM Plex Sans Light Italic'), local('IBMPlexSans-LightItalic'),
       url('https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Sans/fonts/complete/woff2/IBMPlexSans-LightItalic.woff2')
         format('woff2');
+    unicode-range: $carbon--font-face-sans-complete-range;
   }
   @font-face {
     font-display: $carbon--font-display;
@@ -259,6 +275,7 @@
     src: local('IBM Plex Sans'), local('IBMPlexSans'),
       url('https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Sans/fonts/complete/woff2/IBMPlexSans-Regular.woff2')
         format('woff2');
+    unicode-range: $carbon--font-face-sans-complete-range;
   }
   @font-face {
     font-display: $carbon--font-display;
@@ -339,6 +356,7 @@
     src: local('IBM Plex Sans SmBld'), local('IBMPlexSans-SmBld'),
       url('https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Sans/fonts/complete/woff2/IBMPlexSans-SemiBold.woff2')
         format('woff2');
+    unicode-range: $carbon--font-face-sans-complete-range;
   }
   @font-face {
     font-display: $carbon--font-display;
@@ -419,6 +437,7 @@
     src: local('IBM Plex Sans SmBld Italic'), local('IBMPlexSans-SmBldItalic'),
       url('https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Sans/fonts/complete/woff2/IBMPlexSans-SemiBoldItalic.woff2')
         format('woff2');
+    unicode-range: $carbon--font-face-sans-complete-range;
   }
   @font-face {
     font-display: $carbon--font-display;

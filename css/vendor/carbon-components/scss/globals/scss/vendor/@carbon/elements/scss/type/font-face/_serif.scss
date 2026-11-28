@@ -11,6 +11,17 @@
 /// files: serif text is rare, so no unicode-range split.
 /// @access public
 /// @group @carbon/type
+/// What the Serif files cover: without a `unicode-range`, text in a
+/// script Plex lacks, such as CJK or emoji, downloaded a file only to
+/// find no glyph in it. Read from the files' cmaps, Plex 1.1.0, the same
+/// for every weight and style, with gaps of under 768 code points closed:
+/// a character in a gap only costs the download it did before.
+/// @access private
+/// @group @carbon/type
+$carbon--font-face-serif-range: unquote(
+  "U+0000-0525, U+0E3F, U+1E80-2265, U+25CA-274C, U+2B0E-2B11, U+ECE0-EFCC, U+F6D7-F6D8, U+FB01-FB02, U+FEFF-FFFD"
+);
+
 @mixin carbon--font-face-serif {
   $base: "https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Serif/fonts/complete/woff2";
   $faces: (
@@ -32,6 +43,7 @@
         local("IBM Plex Serif #{$local}"),
         local("IBMPlexSerif-#{$file}"),
         url("#{$base}/IBMPlexSerif-#{$file}.woff2") format("woff2");
+      unicode-range: $carbon--font-face-serif-range;
     }
   }
 }
