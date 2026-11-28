@@ -72,6 +72,14 @@
   export let portalTooltip = undefined;
 
   /**
+   * Specify a class for the tooltip and the "Copied!" feedback, to
+   * style one button's. The class is also applied when they open in a
+   * portal.
+   * @type {string | undefined}
+   */
+  export let tooltipClass = undefined;
+
+  /**
    * Set the tooltip placement in floating-ui form: the side, then `start`
    * or `end` along it, as Popover's `align` takes. Above and below,
    * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
@@ -365,8 +373,9 @@
   {#if !feedbackPortalled}
     <span
       aria-hidden="true"
-      class:bx--assistive-text={true}
-      class:bx--copy-btn__feedback={true}
+      class={["bx--assistive-text bx--copy-btn__feedback", tooltipClass]
+        .filter(Boolean)
+        .join(" ")}
     >
       {feedbackText}
     </span>
@@ -385,6 +394,7 @@
     text={tooltipText}
     animation={portalAnimation}
     tooltipType="icon"
+    contentClass={tooltipClass}
     direction={effectiveTooltipPosition}
     intrinsicAlign={effectiveTooltipAlignment}
     horizontalGapLeft={portalGaps.horizontalGapLeft}

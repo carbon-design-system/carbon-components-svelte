@@ -13,6 +13,7 @@
   export let size = 16;
   export let portalTooltip: ComponentProps<TooltipIcon>["portalTooltip"] =
     undefined;
+  export let tooltipClass: string | undefined = undefined;
   export let enterDelayMs = 0;
   export let leaveDelayMs = 0;
   export let onOpen: () => void = () => {};
@@ -31,6 +32,7 @@
   {icon}
   {size}
   {portalTooltip}
+  {tooltipClass}
   {enterDelayMs}
   {leaveDelayMs}
   on:click

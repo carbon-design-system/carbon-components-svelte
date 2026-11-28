@@ -67,6 +67,13 @@
    */
   export let portalTooltip = undefined;
 
+  /**
+   * Specify a class for the tooltip, to style one definition's tooltip. The
+   * class is also applied when the tooltip opens in a portal.
+   * @type {string | undefined}
+   */
+  export let tooltipClass = undefined;
+
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
@@ -289,7 +296,7 @@
       bind:this={tooltipRef}
       role="tooltip"
       {id}
-      class:bx--assistive-text={true}
+      class={["bx--assistive-text", tooltipClass].filter(Boolean).join(" ")}
     >
       <slot name="tooltip">{tooltipText}</slot>
     </div>
@@ -322,8 +329,9 @@
         use:slideIntoWindow
         {id}
         role="tooltip"
-        class:bx--tooltip-portal__content={true}
-        class:bx--assistive-text={true}
+        class={["bx--tooltip-portal__content bx--assistive-text", tooltipClass]
+          .filter(Boolean)
+          .join(" ")}
         dir={portalRtl ? "rtl" : undefined}
       >
         <slot name="tooltip">{tooltipText}</slot>

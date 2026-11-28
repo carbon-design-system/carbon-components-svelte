@@ -295,4 +295,14 @@ describe("ComboButton menu placement", () => {
       expect(trigger).toHaveFocus();
     },
   );
+
+  it("sets tooltipClass on the trigger's tooltip", () => {
+    render(ComboButtonFixture, { props: { tooltipClass: "panel-tooltip" } });
+
+    expect(
+      screen
+        .getByRole("button", { name: "Additional actions" })
+        .querySelector(".bx--assistive-text"),
+    ).toHaveClass("panel-tooltip");
+  });
 });

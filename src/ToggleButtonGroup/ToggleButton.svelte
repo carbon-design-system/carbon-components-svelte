@@ -65,6 +65,13 @@
   export let hideTooltip = false;
 
   /**
+   * Specify a class for the tooltip of an icon-only button, to style
+   * one button's tooltip. The tooltip opens in a portal.
+   * @type {string | undefined}
+   */
+  export let tooltipClass = undefined;
+
+  /**
    * Obtain a reference to the HTML element.
    * @type {null | HTMLButtonElement}
    * @bindable readonly
@@ -218,6 +225,7 @@
     open={$tooltipOpen}
     text={iconDescription}
     tooltipType="icon"
+    contentClass={tooltipClass}
     intrinsicAlign={effectiveTooltipAlignment}
     horizontalGapLeft={portalGaps.horizontalGapLeft}
     horizontalGapRight={portalGaps.horizontalGapRight}

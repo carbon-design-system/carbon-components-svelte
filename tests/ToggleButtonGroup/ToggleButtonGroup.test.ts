@@ -266,4 +266,19 @@ describe("ToggleButtonGroup", () => {
     await fireEvent.blur(button);
     expect(button).toBeInTheDocument();
   });
+
+  it("sets tooltipClass on the portalled tooltip", async () => {
+    render(ToggleButton, {
+      props: {
+        value: "bold",
+        icon: TextBold,
+        iconDescription: "Bold",
+        tooltipClass: "panel-tooltip",
+      },
+    });
+
+    await fireEvent.focus(screen.getByRole("button", { name: "Bold" }));
+    await tick();
+    expect(openTooltips()[0]).toHaveClass("panel-tooltip");
+  });
 });

@@ -130,6 +130,13 @@
   export let portalTooltip = undefined;
 
   /**
+   * Specify a class for the tooltip, to style one tooltip's box. The class
+   * is also applied when the tooltip opens in a portal.
+   * @type {string | undefined}
+   */
+  export let tooltipClass = undefined;
+
+  /**
    * Animate the tooltip as it appears and leaves. Set to `true` for Carbon's
    * fade (`fast01`), to fade params (e.g., `{ duration: "fast02" }`) to
    * customize it, or to `{ fn }` to use another transition. The tooltip does
@@ -271,6 +278,8 @@
   /** @type {null | HTMLDivElement} */
   let refFloating = null;
   $: refTooltip = effectivePortalTooltip ? refFloating : refInPlace;
+
+  $: boxClass = ["bx--tooltip", tooltipClass].filter(Boolean).join(" ");
 
   setContext("carbon:Tooltip", { tooltipOpen, openedByHover });
 
@@ -735,7 +744,7 @@
       bind:this={refInPlace}
       id={resolvedTooltipId}
       data-floating-menu-direction={placement}
-      class:bx--tooltip={true}
+      class={boxClass}
       class:bx--tooltip--shown={true}
       class:bx--tooltip--top={placement === "top"}
       class:bx--tooltip--right={placement === "right"}
@@ -766,7 +775,7 @@
       bind:this={refInPlace}
       id={resolvedTooltipId}
       data-floating-menu-direction={placement}
-      class:bx--tooltip={true}
+      class={boxClass}
       class:bx--tooltip--shown={open}
       class:bx--tooltip--top={placement === "top"}
       class:bx--tooltip--right={placement === "right"}
@@ -811,7 +820,7 @@
           bind:this={refPortalTooltip}
           id={resolvedTooltipId}
           data-floating-menu-direction={actualDirection}
-          class:bx--tooltip={true}
+          class={boxClass}
           class:bx--tooltip--shown={true}
           class:bx--tooltip--top={actualDirection === "top"}
           class:bx--tooltip--right={actualDirection === "right"}
@@ -844,7 +853,7 @@
           bind:this={refPortalTooltip}
           id={resolvedTooltipId}
           data-floating-menu-direction={actualDirection}
-          class:bx--tooltip={true}
+          class={boxClass}
           class:bx--tooltip--shown={open}
           class:bx--tooltip--top={actualDirection === "top"}
           class:bx--tooltip--right={actualDirection === "right"}
