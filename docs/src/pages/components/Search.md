@@ -85,6 +85,14 @@ This site already uses <DocKbd label="/" /> and <DocKbd shortcut="mod+k" /> for 
 
 Let users turn off a single-key shortcut such as `/`, or add a modifier to it. Speech input and stray key presses fire it by accident, and WCAG 2.1.4 asks for a way to turn it off or remap it.
 
+### Several shortcuts
+
+Pass an array to `shortcut` to bind more than one, such as <DocKbd label="/" /> and <DocKbd shortcut="mod+k" /> together. Each focuses the field, and the input announces them all. The first shows as the hint, so list the one to teach first.
+
+```svelte
+<Search shortcut={["mod+k", "/"]} placeholder="Search components" />
+```
+
 ## Expandable
 
 Enable the expandable variant to show a compact search icon that expands on focus. While collapsed, the input is marked `inert` and removed from the tab order, hiding it from assistive technology until it expands — only the search icon button is reachable. That icon renders as a `<button>`, so pressing <DocKbd label="Enter" /> opens the field without a pointer. Pressing <DocKbd label="Escape" /> clears a non-empty value first, then collapses the field on the next press.
