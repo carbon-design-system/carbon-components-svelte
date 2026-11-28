@@ -329,7 +329,8 @@ test.describe("forced colors", () => {
   // one (a menu option); `settled` matches it once the state applies.
   const firstFrames: {
     name: string;
-    open?: string;
+    // Runs before the sample starts, to reach the state before the change.
+    prepare?: (page: Page) => Promise<unknown>;
     target: string;
     settled: string;
     act: (page: Page) => Promise<unknown>;
@@ -397,6 +398,29 @@ test.describe("forced colors", () => {
           .first()
           .click(),
     },
+    {
+      name: "a selected icon-only Button",
+      // The fixture's button is static: take its state off, let any
+      // transition finish, and put it back.
+      prepare: (page) =>
+        page.evaluate(async () => {
+          const el = document.querySelector(
+            ".bx--btn--icon-only.bx--btn--selected",
+          );
+          el?.setAttribute("data-first-frame", "");
+          el?.classList.remove("bx--btn--selected");
+          await new Promise(requestAnimationFrame);
+          await Promise.all(el?.getAnimations().map((a) => a.finished) ?? []);
+        }),
+      target: ".bx--btn--icon-only[data-first-frame]",
+      settled: ".bx--btn--selected",
+      act: (page) =>
+        page.evaluate(() =>
+          document
+            .querySelector(".bx--btn--icon-only[data-first-frame]")
+            ?.classList.add("bx--btn--selected"),
+        ),
+    },
   ];
 
   for (const scheme of ["light", "dark"] as const) {
@@ -410,11 +434,11 @@ test.describe("forced colors", () => {
         await page.emulateMedia({ colorScheme: null });
       });
 
-      for (const { name, open, target, settled, act } of firstFrames) {
+      for (const { name, prepare, target, settled, act } of firstFrames) {
         test(`${name} fills with Highlight on the first frame`, async ({
           page,
         }) => {
-          if (open) await page.goto(open);
+          await prepare?.(page);
           await page.evaluate(
             ([target, settled]) => {
               const marked = document.querySelector(target);
