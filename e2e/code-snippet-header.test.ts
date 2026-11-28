@@ -107,6 +107,28 @@ test.describe("CodeSnippet header", () => {
     );
   });
 
+  test("drops the copy button's room from the code under a header", async ({
+    page,
+  }) => {
+    const inline = (testId: string) =>
+      page.getByTestId(testId).evaluate((root) => {
+        const pre = getComputedStyle(root.querySelector("pre") as Element);
+        return [pre.paddingLeft, pre.paddingRight];
+      });
+
+    for (const dir of ["ltr", "rtl"]) {
+      await page.evaluate((value) => {
+        document.documentElement.dir = value;
+      }, dir);
+      expect(await inline("snippet-title"), dir).toEqual(["0px", "0px"]);
+      expect(await inline("snippet-files"), dir).toEqual(["0px", "0px"]);
+      // Without a header, the room stays on the copy button's side.
+      expect(await inline("snippet-plain"), dir).toEqual(
+        dir === "rtl" ? ["40px", "0px"] : ["0px", "40px"],
+      );
+    }
+  });
+
   test("marks the selected tab by more than color in forced colors", async ({
     page,
   }) => {

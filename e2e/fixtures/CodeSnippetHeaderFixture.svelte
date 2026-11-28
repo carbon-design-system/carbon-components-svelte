@@ -42,6 +42,10 @@
   />
 </div>
 
+<div data-testid="plain">
+  <CodeSnippet type="multi" code={files[0].code} data-testid="snippet-plain" />
+</div>
+
 <div data-testid="syntax" use:highlightCode={languages[coloredId]}>
   <CodeSnippet
     type="multi"
