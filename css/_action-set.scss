@@ -224,7 +224,7 @@
     box-shadow: 0 to-rem(-1px) 0 0 $button-separator;
   }
 
-  &:first-child:not(:focus) {
+  &:is(:first-child, [data-ccs-sticky-sentinel] + *):not(:focus) {
     box-shadow: inherit;
   }
 
@@ -252,22 +252,26 @@
 /// @group components
 @mixin action-set-fit {
   // As specific as the per-count and per-size widths above, which apply
-  // once the set has counted its buttons, and later, so it wins.
+  // once the set has counted its buttons, and later, so it wins. The first
+  // button is `:first-child` or the one right after the `sticky` action's
+  // sentinel, which a sticky set in a flex or grid parent holds first.
+  // `:is()` takes its most specific argument, so this is as specific as
+  // plain `:first-child`.
   $set: ".#{$prefix}--action-set.#{$prefix}--btn-set:not(.#{$prefix}--action-set--disable-stacking)";
 
   #{$set}.#{$prefix}--action-set--md
-    > .#{$prefix}--btn:first-child:nth-last-child(n + 3),
+    > .#{$prefix}--btn:is(:first-child, [data-ccs-sticky-sentinel] + *):nth-last-child(n + 3),
   #{$set}.#{$prefix}--action-set--md
-    > .#{$prefix}--btn:first-child:nth-last-child(n + 3)
+    > .#{$prefix}--btn:is(:first-child, [data-ccs-sticky-sentinel] + *):nth-last-child(n + 3)
     ~ .#{$prefix}--btn {
     @include action-set-stacked-buttons;
   }
 
   @each $count, $width in (2: to-rem(320px), 3: to-rem(480px), 4: to-rem(640px)) {
     @container #{$prefix}--action-set (width < #{$width}) {
-      #{$set} > .#{$prefix}--btn:first-child:nth-last-child(n + #{$count}),
+      #{$set} > .#{$prefix}--btn:is(:first-child, [data-ccs-sticky-sentinel] + *):nth-last-child(n + #{$count}),
       #{$set}
-        > .#{$prefix}--btn:first-child:nth-last-child(n + #{$count})
+        > .#{$prefix}--btn:is(:first-child, [data-ccs-sticky-sentinel] + *):nth-last-child(n + #{$count})
         ~ .#{$prefix}--btn {
         @include action-set-stacked-buttons;
       }

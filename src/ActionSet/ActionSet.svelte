@@ -86,9 +86,19 @@
    */
   export let sticky = false;
 
+  /**
+   * Read whether the `sticky` action set is stuck: pinned to the bottom
+   * while content scrolls under it. Always `false` on the server and until
+   * the set sticks. While stuck, the set has the `bx--action-set--stuck`
+   * class.
+   * @bindable readonly
+   */
+  export let stuck = false;
+
   import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import ButtonSet from "../Button/ButtonSet.svelte";
+  import { sticky as stickyAction } from "../utils/sticky.js";
 
   /** @type {import("svelte/store").Writable<"small" | "field" | "default" | "lg" | "xl">} */
   const buttonSize = writable(BUTTON_SIZES[size]);
@@ -104,8 +114,26 @@
   let actionKinds = [];
 
   function syncActionCount() {
-    actionKinds = Array.from(ref?.children ?? [], kindOf);
+    actionKinds = Array.from(ref?.children ?? [])
+      // In a flex or grid parent, `sticky`'s sentinel is a child of the set.
+      .filter((child) => !child.hasAttribute("data-ccs-sticky-sentinel"))
+      .map(kindOf);
   }
+
+  /** @type {undefined | ReturnType<typeof stickyAction>} */
+  let stickyHandle;
+
+  /** @param {boolean} value */
+  function handleStuck(value) {
+    stuck = value;
+  }
+
+  $: stickyHandle?.update({
+    enabled: sticky,
+    edge: "bottom",
+    offset: 0,
+    onChange: handleStuck,
+  });
 
   // Children are real, consumer-placed <Button>s, not a data array, so
   // stacking's action count has to be measured from the DOM rather than
@@ -115,7 +143,16 @@
     syncActionCount();
     const observer = new MutationObserver(syncActionCount);
     observer.observe(/** @type {HTMLDivElement} */ (ref), { childList: true });
-    return () => observer.disconnect();
+    stickyHandle = stickyAction(/** @type {HTMLDivElement} */ (ref), {
+      enabled: sticky,
+      edge: "bottom",
+      offset: 0,
+      onChange: handleStuck,
+    });
+    return () => {
+      observer.disconnect();
+      stickyHandle?.destroy();
+    };
   });
 
   $: actionCount = actionKinds.length;
@@ -134,6 +171,7 @@
     `bx--action-set--${size}`,
     stacking && "bx--action-set--stacking",
     sticky && "bx--action-set--sticky",
+    stuck && "bx--action-set--stuck",
     disableStacking && "bx--action-set--disable-stacking",
     !stacking && actionCount === 1 && "bx--action-set--row-single",
     !stacking && actionCount === 2 && "bx--action-set--row-double",
