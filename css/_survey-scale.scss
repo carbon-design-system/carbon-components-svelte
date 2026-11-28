@@ -278,7 +278,9 @@ $survey-scale-label-points: (3, 4, 5, 6, 7, 8, 9);
   // Forced colors repaint the fill, which leaves a checked option looking
   // like the rest. It fills with `Highlight` and opts out of forcing, so the
   // fill, its border and the check all stay, and the label keeps
-  // `HighlightText`.
+  // `HighlightText`. It does not transition: the fill and the label would
+  // start from their unforced values, so a just-picked face flashed
+  // `HighlightText` on a light fill.
   @media (forced-colors: active) {
     .#{$prefix}--survey-scale__input:checked
       + .#{$prefix}--survey-scale__content {
@@ -286,6 +288,7 @@ $survey-scale-label-points: (3, 4, 5, 6, 7, 8, 9);
       background-color: Highlight;
       color: HighlightText;
       forced-color-adjust: none;
+      transition: none;
     }
 
     .#{$prefix}--survey-scale__input:disabled:checked
