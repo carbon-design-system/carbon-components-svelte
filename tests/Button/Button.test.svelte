@@ -32,9 +32,17 @@
 />
 
 <Button
+  data-testid="btn-icon-tooltip-class"
+  icon={Add}
+  tooltipClass="panel-tooltip"
+  iconDescription="Close panel"
+/>
+
+<Button
   data-testid="btn-icon-portal"
   icon={Add}
   portalTooltip
+  tooltipClass="panel-tooltip"
   tooltipPosition="top"
   tooltipAlignment="center"
   iconDescription="Portal tooltip text"

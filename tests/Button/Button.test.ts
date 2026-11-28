@@ -314,6 +314,16 @@ describe("Button", () => {
     );
   });
 
+  it("sets tooltipClass on the tooltip", () => {
+    render(Button);
+
+    expect(
+      screen
+        .getByTestId("btn-icon-tooltip-class")
+        .querySelector(".bx--assistive-text"),
+    ).toHaveClass("panel-tooltip");
+  });
+
   describe("portalTooltip", () => {
     beforeEach(() => {
       vi.useFakeTimers();
@@ -339,6 +349,10 @@ describe("Button", () => {
       expect(portal).toBeInTheDocument();
       expect(portal).toHaveAttribute("data-tooltip-type", "icon");
       expect(portal).toHaveTextContent("Portal tooltip text");
+      expect(portal?.querySelector(".bx--tooltip-portal__content")).toHaveClass(
+        "bx--assistive-text",
+        "panel-tooltip",
+      );
 
       await fireEvent.mouseLeave(button);
       await vi.advanceTimersByTimeAsync(300);
