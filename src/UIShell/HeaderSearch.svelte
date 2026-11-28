@@ -86,9 +86,11 @@
 
   /**
    * Specify a keyboard shortcut that opens the search and focuses it, such
-   * as `"mod+k"` or `"/"`. `mod` is Command on Apple platforms and Ctrl
-   * elsewhere. The closed search button shows the keys in its tooltip and
-   * gets `aria-keyshortcuts`.
+   * as `"mod+k"` or `"/"`, or several, such as `["mod+k", "/"]`. `mod` is
+   * Command on Apple platforms and Ctrl elsewhere. The closed search button
+   * shows the first shortcut beside its icon and gets `aria-keyshortcuts`
+   * for all of them.
+   * @type {string | ReadonlyArray<string>}
    */
   export let shortcut = "";
 
@@ -219,8 +221,11 @@
     ref?.focus();
   }
 
-  // The closed search shows its shortcut beside the icon.
-  $: hasShortcutHint = Boolean(shortcut) && !active;
+  // The closed search shows its shortcut beside the icon, the first of
+  // several.
+  $: hintShortcut =
+    typeof shortcut === "string" ? shortcut : (shortcut?.find(Boolean) ?? "");
+  $: hasShortcutHint = Boolean(hintShortcut) && !active;
 
   /** @type {boolean | undefined} */
   let prevActive;
@@ -543,7 +548,7 @@
       <svelte:component this={icon} size={20} />
       {#if hasShortcutHint}
         <span class:bx--header__search-shortcut={true}>
-          <Kbd {shortcut} variant="muted" aria-hidden="true" />
+          <Kbd shortcut={hintShortcut} variant="muted" aria-hidden="true" />
         </span>
       {/if}
     </button>
@@ -789,6 +794,6 @@
 
 <!-- Only while a shortcut is set, so a field without one leaves the binding,
      and with carbon-preprocess-svelte the parser, out of the app. -->
-{#if shortcut && searchButtonRef}
+{#if hintShortcut && searchButtonRef}
   <ShortcutBinding node={searchButtonRef} {shortcut} run={runShortcut} />
 {/if}

@@ -24,4 +24,7 @@
 <div data-testid="header">
   <HeaderSearch shortcut="ctrl+k" />
 </div>
+<div data-testid="header-several">
+  <HeaderSearch shortcut={["mod+i", "i"]} />
+</div>
 <input data-testid="other" />
