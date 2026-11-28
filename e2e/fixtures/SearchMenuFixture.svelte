@@ -1,10 +1,17 @@
 <script lang="ts">
   import {
+    Link,
     SearchMenu,
     SearchMenuGroup,
     SearchMenuItem,
   } from "carbon-components-svelte";
   import Time from "carbon-icons-svelte/lib/Time.svelte";
+
+  const params = new URLSearchParams(location.search);
+  // `?action` gives the recent searches group a header action.
+  const withAction = params.has("action");
+  // The menu renders in a portal, so the direction goes on the page.
+  if (params.has("rtl")) document.documentElement.dir = "rtl";
 
   let value = "";
   let lastSelect = "";
@@ -30,6 +37,9 @@
   on:submit={(e) => (lastSubmit = e.detail.value)}
 >
   <SearchMenuGroup label="Recent searches" filter={false}>
+    <svelte:fragment slot="action">
+      {#if withAction}<Link href="#clear">Clear</Link>{/if}
+    </svelte:fragment>
     <SearchMenuItem text="recent vpc" icon={Time} />
   </SearchMenuGroup>
 

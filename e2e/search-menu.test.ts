@@ -91,3 +91,25 @@ test.describe("SearchMenu", () => {
     await expect(link).toHaveAttribute("href", "#carbon-docs");
   });
 });
+
+// The action sits at the header's end, so its margin goes on its
+// inline-start side, toward the label, in either direction.
+test("SearchMenuGroup spaces its action from the label in LTR and RTL", async ({
+  page,
+}) => {
+  const margins = async () => {
+    await page.getByTestId("search-input").click();
+    return page.locator(".bx--search-menu-group__action").evaluate((el) => {
+      const { marginLeft, marginRight } = getComputedStyle(el);
+      return [document.documentElement.dir || "ltr", marginLeft, marginRight];
+    });
+  };
+  await page.goto("/search-menu.html?action");
+  const ltr = await margins();
+  await page.goto("/search-menu.html?action&rtl");
+  const rtl = await margins();
+  expect([ltr, rtl]).toEqual([
+    ["ltr", "16px", "0px"],
+    ["rtl", "0px", "16px"],
+  ]);
+});

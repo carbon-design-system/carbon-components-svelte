@@ -199,7 +199,7 @@
 
   .#{$prefix}--search-menu-group__action {
     flex: 0 0 auto;
-    margin-left: $carbon--spacing-05;
+    margin-inline-start: $carbon--spacing-05;
     @include type-style("label-01");
   }
 
