@@ -2,6 +2,7 @@
   import { ChatLog, ChatMessage } from "carbon-components-svelte";
 
   export let reply = { text: "", done: false };
+  export let history = [];
 </script>
 
 <ChatLog labelText="Assistant">
@@ -9,4 +10,7 @@
   <ChatMessage author="Assistant" streaming={!reply.done}>
     {reply.text}
   </ChatMessage>
+  {#each history as message}
+    <ChatMessage {...message}>{message.text}</ChatMessage>
+  {/each}
 </ChatLog>

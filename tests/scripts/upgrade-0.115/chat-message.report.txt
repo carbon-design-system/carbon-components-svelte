@@ -1,1 +1,2 @@
-9:3 chat-message A streaming ChatMessage is no longer read as it grows. Screen readers hear streamStartedDescription and streamCompleteDescription, and reach the text by moving to the message
+10:3 chat-message A streaming ChatMessage is no longer read as it grows. Screen readers hear streamStartedDescription and streamCompleteDescription, and reach the text by moving to the message
+14:5 chat-message A streaming ChatMessage is no longer read as it grows, and a spread here may set `streaming`. Screen readers hear streamStartedDescription and streamCompleteDescription, and reach the text by moving to the message

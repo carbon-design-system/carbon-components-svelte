@@ -543,12 +543,12 @@ function checkComponent(context, node, name, ancestors, imports, fieldClasses) {
     );
   }
 
-  if (name === "ChatMessage" && has("streaming")) {
+  if (name === "ChatMessage" && (has("streaming") || hasSpread)) {
     note(
       context,
       node.start,
       "chat-message",
-      "A streaming ChatMessage is no longer read as it grows. Screen readers hear streamStartedDescription and streamCompleteDescription, and reach the text by moving to the message",
+      `A streaming ChatMessage is no longer read as it grows${has("streaming") ? "" : ", and a spread here may set `streaming`"}. Screen readers hear streamStartedDescription and streamCompleteDescription, and reach the text by moving to the message`,
     );
   }
 
